@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html><head><title>CancellationToken.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(32);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/CancellationToken.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\CancellationToken.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public struct</b> <a id="fa175ac8b5b4fbf8" href="../../../../../R/fa175ac8b5b4fbf8.html" target="n" data-glyph="108,0" class="t t"><span id="303fc8a67a70e8b9">CancellationToken</span></a>
+    {
+        <b>readonly</b> <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="99a0c2df25a5cec2" href="../../../../../R/99a0c2df25a5cec2.html" target="n" data-glyph="46,1" class="i field">source</a>;
+ 
+        <b>public static readonly</b> <a href="#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <a id="f626daeb6e2dfb37" href="../../../../../R/f626daeb6e2dfb37.html" target="n" data-glyph="42,1" class="i field">Empty</a> = <b>new</b> <a href="#03432bf21b87b13f" class="t constructor">CancellationToken</a>(<b>null</b>);
+ 
+        <b>public</b> <a id="03432bf21b87b13f" href="../../../../../R/03432bf21b87b13f.html" target="n" data-glyph="72,1" class="i constructor">CancellationToken</a>(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r0 rd" class="r0 r">source</span>)
+        {
+            <a href="#fa175ac8b5b4fbf8" class="k">this</a>.<a href="#99a0c2df25a5cec2" class="i field">source</a> = <span class="r0 r">source</span>;
+        }
+ 
+        <b>public bool</b> <a id="ced6051dabbc4491" href="../../../../../R/ced6051dabbc4491.html" target="n" data-glyph="102,1" class="i property">IsCancellationRequested</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> (<a href="#99a0c2df25a5cec2" class="i field">source</a> == <b>null</b>) ? <b>false</b> : <a href="#99a0c2df25a5cec2" class="i field">source</a>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>;
+            }
+        }
+ 
+        <b>public void</b> <a id="8733a4749c8a02bd" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ThrowIfCancellationRequested</a>()
+        {
+            <b>if</b> (<a href="#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#1697b6f5143e8f94" class="t constructor">OperationCanceledException</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

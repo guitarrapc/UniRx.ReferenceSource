@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html><head><title>Catch.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(217);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/Catch.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\Catch.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="541b61eaa5cbf84d" href="../../../../../R/541b61eaa5cbf84d.html" target="n" data-glyph="2,0" class="t t">CatchObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>, <span id="r1 rd t" class="r1 r t">TException</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+        <b>where</b> <span class="r1 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="eeadc7663e6b5bdb" href="../../../../../R/eeadc7663e6b5bdb.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r1 r t">TException</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <a id="7021758dc8e94485" href="../../../../../R/7021758dc8e94485.html" target="n" data-glyph="46,1" class="i field">errorHandler</a>;
+ 
+        <b>public</b> <a id="4197f0477b068d19" href="../../../../../R/4197f0477b068d19.html" target="n" data-glyph="72,1" class="i constructor">CatchObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r2 rd" class="r2 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r1 r t">TException</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <span id="r3 rd" class="r3 r">errorHandler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r2 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#541b61eaa5cbf84d" class="k">this</a>.<a href="#eeadc7663e6b5bdb" class="i field">source</a> = <span class="r2 r">source</span>;
+            <a href="#541b61eaa5cbf84d" class="k">this</a>.<a href="#7021758dc8e94485" class="i field">errorHandler</a> = <span class="r3 r">errorHandler</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="6d542149422af97c" href="../../../../../R/6d542149422af97c.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#310663a5d20e1f68" class="t constructor">Catch</a>(<a href="#541b61eaa5cbf84d" class="k">this</a>, <span class="r4 r">observer</span>, <span class="r5 r">cancel</span>).<a href="#2de7d18675f2a71f" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="3db8064955b27a14" href="../../../../../R/3db8064955b27a14.html" target="n" data-glyph="4,1" class="t t">Catch</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#541b61eaa5cbf84d" class="t t">CatchObservable</a>&lt;<span class="r0 r t">T</span>, <span class="r1 r t">TException</span>&gt; <a id="bea1b48d2cd83be7" href="../../../../../R/bea1b48d2cd83be7.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <a href="../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t t">SerialDisposable</a> <a id="711a5e24017cd288" href="../../../../../R/711a5e24017cd288.html" target="n" data-glyph="46,2" class="i field">serialDisposable</a>;
+ 
+            <b>public</b> <a id="310663a5d20e1f68" href="../../../../../R/310663a5d20e1f68.html" target="n" data-glyph="72,2" class="i constructor">Catch</a>(<a href="#541b61eaa5cbf84d" class="t t">CatchObservable</a>&lt;<span class="r0 r t">T</span>, <span class="r1 r t">TException</span>&gt; <span id="r6 rd" class="r6 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r7 rd" class="r7 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r8 rd" class="r8 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r7 r">observer</span>, <span class="r8 r">cancel</span>)
+            {
+                <a href="#3db8064955b27a14" class="k">this</a>.<a href="#bea1b48d2cd83be7" class="i field">parent</a> = <span class="r6 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="2de7d18675f2a71f" href="../../../../../R/2de7d18675f2a71f.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#3db8064955b27a14" class="k">this</a>.<a href="#711a5e24017cd288" class="i field">serialDisposable</a> = <b>new</b> <a href="../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+                <a href="#3db8064955b27a14" class="k">this</a>.<a href="#711a5e24017cd288" class="i field">serialDisposable</a>.<a href="../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <a href="#bea1b48d2cd83be7" class="i field">parent</a>.<a href="#eeadc7663e6b5bdb" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#3db8064955b27a14" class="k">this</a>);
+ 
+                <b>return</b> <a href="#711a5e24017cd288" class="i field">serialDisposable</a>;
+            }
+ 
+            <b>public override void</b> <a id="8c974244f56e9648" href="../../../../../R/8c974244f56e9648.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r9 rd" class="r9 r">value</span>)
+            {
+                <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r9 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="306b88233d1f6c8b" href="../../../../../R/306b88233d1f6c8b.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r10 rd" class="r10 r">error</span>)
+            {
+                <span class="r1 r t">var</span> <span id="r11 rd" class="r11 r">e</span> = <span class="r10 r">error</span> <b>as</b> <span class="r1 r t">TException</span>;
+                <b>if</b> (<span class="r11 r">e</span> != <b>null</b>)
+                {
+                    <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r12 rd" class="r12 r">next</span>;
+                    <b>try</b>
+                    {
+                        <b>if</b> (<a href="#bea1b48d2cd83be7" class="i field">parent</a>.<a href="#7021758dc8e94485" class="i field">errorHandler</a> == <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#e46336e8d6facd7b" class="i method">CatchIgnore</a>&lt;<span class="r0 r t">T</span>&gt;)
+                        {
+                            <span class="r12 r">next</span> = <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="r0 r t">T</span>&gt;(); <span class="c">// for avoid iOS AOT</span>
+                        }
+                        <b>else</b>
+                        {
+                            <span class="r12 r">next</span> = <a href="#bea1b48d2cd83be7" class="i field">parent</a>.<a href="#7021758dc8e94485" class="i field">errorHandler</a>(<span class="r11 r">e</span>);
+                        }
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r13 rd" class="r13 r">ex</span>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r13 r">ex</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                        <b>return</b>;
+                    }
+ 
+                    <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r14 rd" class="r14 r">d</span> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                    <a href="#711a5e24017cd288" class="i field">serialDisposable</a>.<a href="../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r14 r">d</span>;
+                    <span class="r14 r">d</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r12 r">next</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>);
+                }
+                <b>else</b>
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r10 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                    <b>return</b>;
+                }
+            }
+ 
+            <b>public override void</b> <a id="880e6c48ac3b3684" href="../../../../../R/880e6c48ac3b3684.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+            }
+        }
+    }
+ 
+ 
+    <b>internal class</b> <a id="544fffc5f01340d6" href="../../../../../R/544fffc5f01340d6.html" target="n" data-glyph="2,0" class="t t">CatchObservable</a>&lt;<span id="r15 rd t" class="r15 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r15 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r15 r t">T</span>&gt;&gt; <a id="a2e574d607ea653c" href="../../../../../R/a2e574d607ea653c.html" target="n" data-glyph="46,1" class="i field">sources</a>;
+ 
+        <b>public</b> <a id="4b8339c9161aae8e" href="../../../../../R/4b8339c9161aae8e.html" target="n" data-glyph="72,1" class="i constructor">CatchObservable</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r15 r t">T</span>&gt;&gt; <span id="r16 rd" class="r16 r">sources</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>true</b>)
+        {
+            <a href="#544fffc5f01340d6" class="k">this</a>.<a href="#a2e574d607ea653c" class="i field">sources</a> = <span class="r16 r">sources</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="08bdc31d46d7d430" href="../../../../../R/08bdc31d46d7d430.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r17 rd" class="r17 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r18 rd" class="r18 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#39f379bd1030bf33" class="t constructor">Catch</a>(<a href="#544fffc5f01340d6" class="k">this</a>, <span class="r17 r">observer</span>, <span class="r18 r">cancel</span>).<a href="#4e4f1194b951fecd" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="90a364a29a09700f" href="../../../../../R/90a364a29a09700f.html" target="n" data-glyph="4,1" class="t t">Catch</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r15 r t">T</span>, <span class="r15 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#544fffc5f01340d6" class="t t">CatchObservable</a>&lt;<span class="r15 r t">T</span>&gt; <a id="fefe9270d60dc9bb" href="../../../../../R/fefe9270d60dc9bb.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="9603d31497cf3e51" href="../../../../../R/9603d31497cf3e51.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>bool</b> <a id="508988f5ed2299dd" href="../../../../../R/508988f5ed2299dd.html" target="n" data-glyph="46,2" class="i field">isDisposed</a>;
+            <a href="@0@mscorlib/A.html#893e8cdebffde2da" class="t t">IEnumerator</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r15 r t">T</span>&gt;&gt; <a id="7518a85eff9bacae" href="../../../../../R/7518a85eff9bacae.html" target="n" data-glyph="46,2" class="i field">e</a>;
+            <a href="../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t t">SerialDisposable</a> <a id="1c05bf3a1614bc1d" href="../../../../../R/1c05bf3a1614bc1d.html" target="n" data-glyph="46,2" class="i field">subscription</a>;
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="8c134df9440dd0d7" href="../../../../../R/8c134df9440dd0d7.html" target="n" data-glyph="46,2" class="i field">lastException</a>;
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="ba16ea768ef87199" href="../../../../../R/ba16ea768ef87199.html" target="n" data-glyph="46,2" class="i field">nextSelf</a>;
+ 
+            <b>public</b> <a id="39f379bd1030bf33" href="../../../../../R/39f379bd1030bf33.html" target="n" data-glyph="72,2" class="i constructor">Catch</a>(<a href="#544fffc5f01340d6" class="t t">CatchObservable</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r19 rd" class="r19 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r20 rd" class="r20 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r21 rd" class="r21 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r20 r">observer</span>, <span class="r21 r">cancel</span>)
+            {
+                <a href="#90a364a29a09700f" class="k">this</a>.<a href="#fefe9270d60dc9bb" class="i field">parent</a> = <span class="r19 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="4e4f1194b951fecd" href="../../../../../R/4e4f1194b951fecd.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#508988f5ed2299dd" class="i field">isDisposed</a> = <b>false</b>;
+                <a href="#7518a85eff9bacae" class="i field">e</a> = <a href="#fefe9270d60dc9bb" class="i field">parent</a>.<a href="#a2e574d607ea653c" class="i field">sources</a>.<a href="@0@mscorlib/A.html#a242475701b655b2" class="i method">GetEnumerator</a>();
+                <a href="#1c05bf3a1614bc1d" class="i field">subscription</a> = <b>new</b> <a href="../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r22 rd" class="r22 r">schedule</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#602b63e6223fbed8" class="i property">TailRecursion</a>.<a href="../Schedulers/Scheduler.cs.html#be7c256ff6e2e24d" class="i method">Schedule</a>(<a href="#9772b6f8e7a6b435" class="i method">RecursiveRun</a>);
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#53510a8871897d70" class="i method">Create</a>(<span class="r22 r">schedule</span>, <a href="#1c05bf3a1614bc1d" class="i field">subscription</a>, <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(() =&gt;
+                {
+                    <b>lock</b> (<a href="#9603d31497cf3e51" class="i field">gate</a>)
+                    {
+                        <a href="#90a364a29a09700f" class="k">this</a>.<a href="#508988f5ed2299dd" class="i field">isDisposed</a> = <b>true</b>;
+                        <a href="#90a364a29a09700f" class="k">this</a>.<a href="#7518a85eff9bacae" class="i field">e</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    }
+                }));
+            }
+ 
+            <b>void</b> <a id="9772b6f8e7a6b435" href="../../../../../R/9772b6f8e7a6b435.html" target="n" data-glyph="76,2" class="i method">RecursiveRun</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r23 rd" class="r23 r">self</span>)
+            {
+                <b>lock</b> (<a href="#9603d31497cf3e51" class="i field">gate</a>)
+                {
+                    <a href="#ba16ea768ef87199" class="i field">nextSelf</a> = <span class="r23 r">self</span>;
+                    <b>if</b> (<a href="#508988f5ed2299dd" class="i field">isDisposed</a>) <b>return</b>;
+ 
+                    <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r24 rd" class="r24 r">current</span> = <b>default</b>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r15 r t">T</span>&gt;);
+                    <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r25 rd" class="r25 r">hasNext</span> = <b>false</b>;
+                    <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="k">var</a> <span id="r26 rd" class="r26 r">ex</span> = <b>default</b>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>);
+ 
+                    <b>try</b>
+                    {
+                        <span class="r25 r">hasNext</span> = <a href="#7518a85eff9bacae" class="i field">e</a>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <b>if</b> (<span class="r25 r">hasNext</span>)
+                        {
+                            <span class="r24 r">current</span> = <a href="#7518a85eff9bacae" class="i field">e</a>.<a href="@0@mscorlib/A.html#d231e5618becae91" class="i property">Current</a>;
+                            <b>if</b> (<span class="r24 r">current</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;sequence is null.&quot;</span>);
+                        }
+                        <b>else</b>
+                        {
+                            <a href="#7518a85eff9bacae" class="i field">e</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                        }
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r27 rd" class="r27 r">exception</span>)
+                    {
+                        <span class="r26 r">ex</span> = <span class="r27 r">exception</span>;
+                        <a href="#7518a85eff9bacae" class="i field">e</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    }
+ 
+                    <b>if</b> (<span class="r26 r">ex</span> != <b>null</b>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r26 r">ex</span>); }
+                        <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        <b>return</b>;
+                    }
+ 
+                    <b>if</b> (!<span class="r25 r">hasNext</span>)
+                    {
+                        <b>if</b> (<a href="#8c134df9440dd0d7" class="i field">lastException</a> != <b>null</b>)
+                        {
+                            <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<a href="#8c134df9440dd0d7" class="i field">lastException</a>); }
+                            <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        }
+                        <b>else</b>
+                        {
+                            <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                            <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        }
+                        <b>return</b>;
+                    }
+ 
+                    <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r28 rd" class="r28 r">source</span> = <span class="r24 r">current</span>;
+                    <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r29 rd" class="r29 r">d</span> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                    <a href="#1c05bf3a1614bc1d" class="i field">subscription</a>.<a href="../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r29 r">d</span>;
+                    <span class="r29 r">d</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r28 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#90a364a29a09700f" class="k">this</a>);
+                }
+            }
+ 
+            <b>public override void</b> <a id="06f76757e1c0967e" href="../../../../../R/06f76757e1c0967e.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r15 r t">T</span> <span id="r30 rd" class="r30 r">value</span>)
+            {
+                <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r30 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="9070886c268b823f" href="../../../../../R/9070886c268b823f.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r31 rd" class="r31 r">error</span>)
+            {
+                <a href="#8c134df9440dd0d7" class="i field">lastException</a> = <span class="r31 r">error</span>;
+                <a href="#ba16ea768ef87199" class="i field">nextSelf</a>();
+            }
+ 
+            <b>public override void</b> <a id="d7824f3573cf6063" href="../../../../../R/d7824f3573cf6063.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                <b>return</b>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

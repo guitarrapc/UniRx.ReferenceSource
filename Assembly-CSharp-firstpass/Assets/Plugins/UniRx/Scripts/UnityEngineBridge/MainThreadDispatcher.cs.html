@@ -1,0 +1,672 @@
+﻿<!DOCTYPE html>
+<html><head><title>MainThreadDispatcher.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(663);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/MainThreadDispatcher.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\MainThreadDispatcher.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+<span class="k preprocess">#</span><span class="k preprocess">define</span> <span class="i">SupportCustomYieldInstruction</span>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Reflection</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="84b62633a19a03a2" href="../../../../../R/84b62633a19a03a2.html" target="n" data-glyph="0,0" class="t t"><span id="98a4dead28568453">MainThreadDispatcher</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public enum</b> <a id="e1a1b59b867573cf" href="../../../../../R/e1a1b59b867573cf.html" target="n" data-glyph="18,1" class="t t"><span id="e7f2d91d9d8ce028">CullingMode</span></a>
+        {
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Won&#39;t remove any MainThreadDispatchers.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <a id="88fcc8c28b45ccaa" href="../../../../../R/88fcc8c28b45ccaa.html" target="n" data-glyph="24,2" class="i field">Disabled</a>,
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Checks if there is an existing MainThreadDispatcher on Awake(). If so, the new dispatcher removes itself.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <a id="f5e2fae6bedc4d3c" href="../../../../../R/f5e2fae6bedc4d3c.html" target="n" data-glyph="24,2" class="i field">Self</a>,
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Search for excess MainThreadDispatchers and removes them all on Awake().</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <a id="cd6e3e48ea6d8da6" href="../../../../../R/cd6e3e48ea6d8da6.html" target="n" data-glyph="24,2" class="i field">All</a>
+        }
+ 
+        <b>public static</b> <a href="#e1a1b59b867573cf" class="t t">CullingMode</a> <a id="613e106d82018537" href="../../../../../R/613e106d82018537.html" target="n" data-glyph="42,1" class="i field">cullingMode</a> = <a href="#e1a1b59b867573cf" class="t t">CullingMode</a>.<a href="#f5e2fae6bedc4d3c" class="i field">Self</a>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+ 
+        <span class="c">// In UnityEditor&#39;s EditorMode can&#39;t instantiate and work MonoBehaviour.Update.</span>
+        <span class="c">// EditorThreadDispatcher use EditorApplication.update instead of MonoBehaviour.Update.</span>
+        <b>class</b> <a id="bb626ba39bd738b2" href="../../../../../R/bb626ba39bd738b2.html" target="n" data-glyph="4,1" class="t t">EditorThreadDispatcher</a>
+        {
+            <b>static object</b> <a id="9dfe5aef1154302f" href="../../../../../R/9dfe5aef1154302f.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>static</b> <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a> <a id="c0d76ce821068e57" href="../../../../../R/c0d76ce821068e57.html" target="n" data-glyph="46,2" class="i field">instance</a>;
+ 
+            <b>public static</b> <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a> <a id="b0ed1732262419d3" href="../../../../../R/b0ed1732262419d3.html" target="n" data-glyph="102,2" class="i property">Instance</a>
+            {
+                <b>get</b>
+                {
+                    <span class="c">// Activate EditorThreadDispatcher is dangerous, completely Lazy.</span>
+                    <b>lock</b> (<a href="#9dfe5aef1154302f" class="i field">gate</a>)
+                    {
+                        <b>if</b> (<a href="#c0d76ce821068e57" class="i field">instance</a> == <b>null</b>)
+                        {
+                            <a href="#c0d76ce821068e57" class="i field">instance</a> = <b>new</b> <a href="#32a077339e260743" class="t constructor">EditorThreadDispatcher</a>();
+                        }
+ 
+                        <b>return</b> <a href="#c0d76ce821068e57" class="i field">instance</a>;
+                    }
+                }
+            }
+ 
+            <a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#5ccbc181fcffc992" class="t t">ThreadSafeQueueWorker</a> <a id="41c3c69075e5a5ca" href="../../../../../R/41c3c69075e5a5ca.html" target="n" data-glyph="46,2" class="i field">editorQueueWorker</a> = <b>new</b> <a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#5ccbc181fcffc992" class="t constructor">ThreadSafeQueueWorker</a>();
+ 
+            <a id="32a077339e260743" href="../../../../../R/32a077339e260743.html" target="n" data-glyph="76,2" class="i constructor">EditorThreadDispatcher</a>()
+            {
+                <span class="i">UnityEditor</span>.<span class="i">EditorApplication</span>.<span class="i">update</span> += <span class="i">Update</span>;
+            }
+ 
+            <b>public void</b> <a id="10c1065ebc57f049" href="../../../../../R/10c1065ebc57f049.html" target="n" data-glyph="72,2" class="i method">Enqueue</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <span id="r0 rd" class="r0 r">action</span>, <b>object</b> <span id="r1 rd" class="r1 r">state</span>)
+            {
+                <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span class="r0 r">action</span>, <span class="r1 r">state</span>);
+            }
+ 
+            <b>public void</b> <a id="090d500d1bc67889" href="../../../../../R/090d500d1bc67889.html" target="n" data-glyph="72,2" class="i method">UnsafeInvoke</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r2 rd" class="r2 r">action</span>)
+            {
+                <b>try</b>
+                {
+                    <span class="r2 r">action</span>();
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r3 rd" class="r3 r">ex</span>)
+                {
+                    <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r3 r">ex</span>);
+                }
+            }
+ 
+            <b>public void</b> <a id="247cb62b0ee72214" href="../../../../../R/247cb62b0ee72214.html" target="n" data-glyph="72,2" class="i method">UnsafeInvoke</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r5 rd" class="r5 r">action</span>, <span class="r4 r t">T</span> <span id="r6 rd" class="r6 r">state</span>)
+            {
+                <b>try</b>
+                {
+                    <span class="r5 r">action</span>(<span class="r6 r">state</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r7 rd" class="r7 r">ex</span>)
+                {
+                    <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r7 r">ex</span>);
+                }
+            }
+ 
+            <b>public void</b> <a id="07b2f15eebce25b8" href="../../../../../R/07b2f15eebce25b8.html" target="n" data-glyph="72,2" class="i method">PseudoStartCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r8 rd" class="r8 r">routine</span>)
+            {
+                <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span id="r9 rd" class="r9 r">_</span> =&gt; <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<span class="r8 r">routine</span>), <b>null</b>);
+            }
+ 
+            <b>void</b> <a id="901ab8cfbb9ed4f0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,2" class="i method">Update</a>()
+            {
+                <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<span class="i">ExecuteAll</span>(<span id="r10 rd" class="r10 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r10 r">x</span>));
+            }
+ 
+            <b>void</b> <a id="dc6b5c937c9a5fc4" href="../../../../../R/dc6b5c937c9a5fc4.html" target="n" data-glyph="76,2" class="i method">ConsumeEnumerator</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r11 rd" class="r11 r">routine</span>)
+            {
+                <b>if</b> (<span class="r11 r">routine</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>())
+                {
+                    <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r12 rd" class="r12 r">current</span> = <span class="r11 r">routine</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                    <b>if</b> (<span class="r12 r">current</span> == <b>null</b>)
+                    {
+                        <b>goto</b> <span class="i">ENQUEUE</span>;
+                    }
+ 
+                    <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="k">var</a> <span id="r13 rd" class="r13 r">type</span> = <span class="r12 r">current</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>();
+                    <b>if</b> (<span class="r13 r">type</span> == <b>typeof</b>(<span class="i">WWW</span>))
+                    {
+                        <b>var</b> <span id="r14 rd" class="r14 r">www</span> = (<span class="i">WWW</span>)<span class="r12 r">current</span>;
+                        <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span id="r15 rd" class="r15 r">_</span> =&gt; <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<a href="#2440c1b2138cbec4" class="i method">UnwrapWaitWWW</a>(<span class="r14 r">www</span>, <span class="r11 r">routine</span>)), <b>null</b>);
+                        <b>return</b>;
+                    }
+                    <b>else if</b> (<span class="r13 r">type</span> == <b>typeof</b>(<span class="i">AsyncOperation</span>))
+                    {
+                        <b>var</b> <span id="r16 rd" class="r16 r">asyncOperation</span> = (<span class="i">AsyncOperation</span>)<span class="r12 r">current</span>;
+                        <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span id="r17 rd" class="r17 r">_</span> =&gt; <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<a href="#a28e52e157032c66" class="i method">UnwrapWaitAsyncOperation</a>(<span class="r16 r">asyncOperation</span>, <span class="r11 r">routine</span>)), <b>null</b>);
+                        <b>return</b>;
+                    }
+                    <b>else if</b> (<span class="r13 r">type</span> == <b>typeof</b>(<span class="i">WaitForSeconds</span>))
+                    {
+                        <b>var</b> <span id="r18 rd" class="r18 r">waitForSeconds</span> = (<span class="i">WaitForSeconds</span>)<span class="r12 r">current</span>;
+                        <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r19 rd" class="r19 r">accessor</span> = <b>typeof</b>(<span class="i">WaitForSeconds</span>).<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="s">&quot;m_Seconds&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#3cd29d73949adaa3" class="i field">GetField</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+                        <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r20 rd" class="r20 r">second</span> = (<b>float</b>)<span class="r19 r">accessor</span>.<span class="i">GetValue</span>(<span class="r18 r">waitForSeconds</span>);
+                        <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span id="r21 rd" class="r21 r">_</span> =&gt; <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<a href="#8aa4eef9c9bd3af5" class="i method">UnwrapWaitForSeconds</a>(<span class="r20 r">second</span>, <span class="r11 r">routine</span>)), <b>null</b>);
+                        <b>return</b>;
+                    }
+                    <b>else if</b> (<span class="r13 r">type</span> == <b>typeof</b>(<span class="i">Coroutine</span>))
+                    {
+                        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Can&#39;t wait coroutine on UnityEditor&quot;</span>);
+                        <b>goto</b> <span class="i">ENQUEUE</span>;
+                    }
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+                    <b>else if</b> (<span class="r12 r">current</span> <b>is</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>)
+                    {
+                        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r22 rd" class="r22 r">enumerator</span> = (<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>)<span class="r12 r">current</span>;
+                        <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span id="r23 rd" class="r23 r">_</span> =&gt; <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<a href="#dac9348d9bbfbdca" class="i method">UnwrapEnumerator</a>(<span class="r22 r">enumerator</span>, <span class="r11 r">routine</span>)), <b>null</b>);
+                        <b>return</b>;
+                    }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+                    <span class="i">ENQUEUE</span>:
+                    <a href="#41c3c69075e5a5ca" class="i field">editorQueueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span id="r24 rd" class="r24 r">_</span> =&gt; <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<span class="r11 r">routine</span>), <b>null</b>); <span class="c">// next update</span>
+                }
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="2440c1b2138cbec4" href="../../../../../R/2440c1b2138cbec4.html" target="n" data-glyph="76,2" class="i method">UnwrapWaitWWW</a>(<span class="i">WWW</span> <span id="r25 rd" class="r25 r">www</span>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r26 rd" class="r26 r">continuation</span>)
+            {
+                <b>while</b> (!<span class="r25 r">www</span>.<span class="i">isDone</span>)
+                {
+                    <b>yield return null</b>;
+                }
+                <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<span class="r26 r">continuation</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="a28e52e157032c66" href="../../../../../R/a28e52e157032c66.html" target="n" data-glyph="76,2" class="i method">UnwrapWaitAsyncOperation</a>(<span class="i">AsyncOperation</span> <span id="r27 rd" class="r27 r">asyncOperation</span>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r28 rd" class="r28 r">continuation</span>)
+            {
+                <b>while</b> (!<span class="r27 r">asyncOperation</span>.<span class="i">isDone</span>)
+                {
+                    <b>yield return null</b>;
+                }
+                <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<span class="r28 r">continuation</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="8aa4eef9c9bd3af5" href="../../../../../R/8aa4eef9c9bd3af5.html" target="n" data-glyph="76,2" class="i method">UnwrapWaitForSeconds</a>(<b>float</b> <span id="r29 rd" class="r29 r">second</span>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r30 rd" class="r30 r">continuation</span>)
+            {
+                <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r31 rd" class="r31 r">startTime</span> = <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a>.<a href="@0@mscorlib/A.html#04abe0cac293ebd0" class="i property">UtcNow</a>;
+                <b>while</b> (<b>true</b>)
+                {
+                    <b>yield return null</b>;
+ 
+                    <a href="@0@mscorlib/A.html#1a65cbdb09544ba1" class="k">var</a> <span id="r32 rd" class="r32 r">elapsed</span> = (<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a>.<a href="@0@mscorlib/A.html#04abe0cac293ebd0" class="i property">UtcNow</a> - <span class="r31 r">startTime</span>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>if</b> (<span class="r32 r">elapsed</span> &gt;= <span class="r29 r">second</span>)
+                    {
+                        <b>break</b>;
+                    }
+                };
+                <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<span class="r30 r">continuation</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="dac9348d9bbfbdca" href="../../../../../R/dac9348d9bbfbdca.html" target="n" data-glyph="76,2" class="i method">UnwrapEnumerator</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r33 rd" class="r33 r">enumerator</span>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r34 rd" class="r34 r">continuation</span>)
+            {
+                <b>while</b> (<span class="r33 r">enumerator</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>())
+                {
+                    <b>yield return null</b>;
+                }
+                <a href="#dc6b5c937c9a5fc4" class="i method">ConsumeEnumerator</a>(<span class="r34 r">continuation</span>);
+            }
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Dispatch Asyncrhonous action.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="d176d21fa1796741" href="../../../../../R/d176d21fa1796741.html" target="n" data-glyph="72,1" class="i method">Post</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <span id="r35 rd" class="r35 r">action</span>, <b>object</b> <span id="r36 rd" class="r36 r">state</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#10c1065ebc57f049" class="i method">Enqueue</a>(<span class="r35 r">action</span>, <span class="r36 r">state</span>); <b>return</b>; }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <a href="#84b62633a19a03a2" class="k">var</a> <span id="r37 rd" class="r37 r">dispatcher</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+            <b>if</b> (!<a href="#c51ad0404444ad8c" class="i field">isQuitting</a> &amp;&amp; !<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r37 r">dispatcher</span>, <b>null</b>))
+            {
+                <span class="r37 r">dispatcher</span>.<a href="#a20ab9f8d82d99ed" class="i field">queueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#4eed7a4f6a9125d2" class="i method">Enqueue</a>(<span class="r35 r">action</span>, <span class="r36 r">state</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Dispatch Synchronous action if possible.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="a27765aea03baae0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Send</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <span id="r38 rd" class="r38 r">action</span>, <b>object</b> <span id="r39 rd" class="r39 r">state</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#10c1065ebc57f049" class="i method">Enqueue</a>(<span class="r38 r">action</span>, <span class="r39 r">state</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <b>if</b> (<a href="#56274fd2af047e80" class="i field">mainThreadToken</a> != <b>null</b>)
+            {
+                <b>try</b>
+                {
+                    <span class="r38 r">action</span>(<span class="r39 r">state</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r40 rd" class="r40 r">ex</span>)
+                {
+                    <a href="#84b62633a19a03a2" class="k">var</a> <span id="r41 rd" class="r41 r">dispatcher</span> = <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="#5da0e7b081e24189" class="i property">Instance</a>;
+                    <b>if</b> (<span class="r41 r">dispatcher</span> != <b>null</b>)
+                    {
+                        <span class="r41 r">dispatcher</span>.<a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r40 r">ex</span>);
+                    }
+                }
+            }
+            <b>else</b>
+            {
+                <a href="#d176d21fa1796741" class="i method">Post</a>(<span class="r38 r">action</span>, <span class="r39 r">state</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Run Synchronous action.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="8a3ac0df0ad04341" href="../../../../../R/8a3ac0df0ad04341.html" target="n" data-glyph="72,1" class="i method">UnsafeSend</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r42 rd" class="r42 r">action</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#090d500d1bc67889" class="i method">UnsafeInvoke</a>(<span class="r42 r">action</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <b>try</b>
+            {
+                <span class="r42 r">action</span>();
+            }
+            <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r43 rd" class="r43 r">ex</span>)
+            {
+                <a href="#84b62633a19a03a2" class="k">var</a> <span id="r44 rd" class="r44 r">dispatcher</span> = <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="#5da0e7b081e24189" class="i property">Instance</a>;
+                <b>if</b> (<span class="r44 r">dispatcher</span> != <b>null</b>)
+                {
+                    <span class="r44 r">dispatcher</span>.<a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r43 r">ex</span>);
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Run Synchronous action.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="ff540c3725041161" href="../../../../../R/ff540c3725041161.html" target="n" data-glyph="72,1" class="i method">UnsafeSend</a>&lt;<span id="r45 rd t" class="r45 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r45 r t">T</span>&gt; <span id="r46 rd" class="r46 r">action</span>, <span class="r45 r t">T</span> <span id="r47 rd" class="r47 r">state</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#247cb62b0ee72214" class="i method">UnsafeInvoke</a>(<span class="r46 r">action</span>, <span class="r47 r">state</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <b>try</b>
+            {
+                <span class="r46 r">action</span>(<span class="r47 r">state</span>);
+            }
+            <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r48 rd" class="r48 r">ex</span>)
+            {
+                <a href="#84b62633a19a03a2" class="k">var</a> <span id="r49 rd" class="r49 r">dispatcher</span> = <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="#5da0e7b081e24189" class="i property">Instance</a>;
+                <b>if</b> (<span class="r49 r">dispatcher</span> != <b>null</b>)
+                {
+                    <span class="r49 r">dispatcher</span>.<a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r48 r">ex</span>);
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">ThreadSafe StartCoroutine.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="4132c4557cdb710f" href="../../../../../R/4132c4557cdb710f.html" target="n" data-glyph="72,1" class="i method">SendStartCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r50 rd" class="r50 r">routine</span>)
+        {
+            <b>if</b> (<a href="#56274fd2af047e80" class="i field">mainThreadToken</a> != <b>null</b>)
+            {
+                <a href="#9ec383d3102b14f7" class="i method">StartCoroutine</a>(<span class="r50 r">routine</span>);
+            }
+            <b>else</b>
+            {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+                <span class="c">// call from other thread</span>
+                <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#07b2f15eebce25b8" class="i method">PseudoStartCoroutine</a>(<span class="r50 r">routine</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+                <a href="#84b62633a19a03a2" class="k">var</a> <span id="r51 rd" class="r51 r">dispatcher</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+                <b>if</b> (!<a href="#c51ad0404444ad8c" class="i field">isQuitting</a> &amp;&amp; !<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r51 r">dispatcher</span>, <b>null</b>))
+                {
+                    <span class="r51 r">dispatcher</span>.<a href="#a20ab9f8d82d99ed" class="i field">queueWorker</a>.<span class="i">Enqueue</span>(<span id="r52 rd" class="r52 r">_</span> =&gt;
+                    {
+                        <a href="#84b62633a19a03a2" class="k">var</a> <span id="r53 rd" class="r53 r">distpacher2</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+                        <b>if</b> (<span class="r53 r">distpacher2</span> != <b>null</b>)
+                        {
+                            <span class="r53 r">distpacher2</span>.<span class="i">StartCoroutine_Auto</span>(<span class="r50 r">routine</span>);
+                        }
+                    }, <b>null</b>);
+                }
+            }
+        }
+ 
+        <b>public static void</b> <a id="3d266550a8e4457b" href="../../../../../R/3d266550a8e4457b.html" target="n" data-glyph="72,1" class="i method">StartUpdateMicroCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r54 rd" class="r54 r">routine</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#07b2f15eebce25b8" class="i method">PseudoStartCoroutine</a>(<span class="r54 r">routine</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <a href="#84b62633a19a03a2" class="k">var</a> <span id="r55 rd" class="r55 r">dispatcher</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+            <b>if</b> (<span class="r55 r">dispatcher</span> != <b>null</b>)
+            {
+                <span class="r55 r">dispatcher</span>.<a href="#245289f016cd16da" class="i field">updateMicroCoroutine</a>.<a href="../InternalUtil/MicroCoroutine.cs.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r54 r">routine</span>);
+            }
+        }
+ 
+        <b>public static void</b> <a id="ab8482527980dc38" href="../../../../../R/ab8482527980dc38.html" target="n" data-glyph="72,1" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r56 rd" class="r56 r">routine</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#07b2f15eebce25b8" class="i method">PseudoStartCoroutine</a>(<span class="r56 r">routine</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <a href="#84b62633a19a03a2" class="k">var</a> <span id="r57 rd" class="r57 r">dispatcher</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+            <b>if</b> (<span class="r57 r">dispatcher</span> != <b>null</b>)
+            {
+                <span class="r57 r">dispatcher</span>.<a href="#e1d2702c207cc7b0" class="i field">fixedUpdateMicroCoroutine</a>.<a href="../InternalUtil/MicroCoroutine.cs.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r56 r">routine</span>);
+            }
+        }
+ 
+        <b>public static void</b> <a id="5d311e91b36ed9de" href="../../../../../R/5d311e91b36ed9de.html" target="n" data-glyph="72,1" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r58 rd" class="r58 r">routine</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#07b2f15eebce25b8" class="i method">PseudoStartCoroutine</a>(<span class="r58 r">routine</span>); <b>return</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <a href="#84b62633a19a03a2" class="k">var</a> <span id="r59 rd" class="r59 r">dispatcher</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+            <b>if</b> (<span class="r59 r">dispatcher</span> != <b>null</b>)
+            {
+                <span class="r59 r">dispatcher</span>.<a href="#47c4f6c425e8b57c" class="i field">endOfFrameMicroCoroutine</a>.<a href="../InternalUtil/MicroCoroutine.cs.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r58 r">routine</span>);
+            }
+        }
+ 
+        <b>new</b> <b>public static</b> <span class="i">Coroutine</span> <a id="9ec383d3102b14f7" href="../../../../../R/9ec383d3102b14f7.html" target="n" data-glyph="72,1" class="i method">StartCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r60 rd" class="r60 r">routine</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+            <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) { <a href="#bb626ba39bd738b2" class="t t">EditorThreadDispatcher</a>.<a href="#b0ed1732262419d3" class="i property">Instance</a>.<a href="#07b2f15eebce25b8" class="i method">PseudoStartCoroutine</a>(<span class="r60 r">routine</span>); <b>return null</b>; }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <a href="#84b62633a19a03a2" class="k">var</a> <span id="r61 rd" class="r61 r">dispatcher</span> = <a href="#5da0e7b081e24189" class="i property">Instance</a>;
+            <b>if</b> (<span class="r61 r">dispatcher</span> != <b>null</b>)
+            {
+                <b>return</b> <span class="r61 r">dispatcher</span>.<span class="i">StartCoroutine_Auto</span>(<span class="r60 r">routine</span>);
+            }
+            <b>else</b>
+            {
+                <b>return null</b>;
+            }
+        }
+ 
+        <b>public static void</b> <a id="b066370b8d4abeae" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">RegisterUnhandledExceptionCallback</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r62 rd" class="r62 r">exceptionCallback</span>)
+        {
+            <b>if</b> (<span class="r62 r">exceptionCallback</span> == <b>null</b>)
+            {
+                <span class="c">// do nothing</span>
+                <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a> = <a href="../Observer.cs.html#10d1a1078e46e0ad" class="t t">Stubs</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt;.<a href="../Observer.cs.html#684108159c25604a" class="i field">Ignore</a>;
+            }
+            <b>else</b>
+            {
+                <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a> = <span class="r62 r">exceptionCallback</span>;
+            }
+        }
+ 
+        <a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#5ccbc181fcffc992" class="t t">ThreadSafeQueueWorker</a> <a id="a20ab9f8d82d99ed" href="../../../../../R/a20ab9f8d82d99ed.html" target="n" data-glyph="46,1" class="i field">queueWorker</a> = <b>new</b> <a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#5ccbc181fcffc992" class="t constructor">ThreadSafeQueueWorker</a>();
+        <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <a id="09dec218d4756909" href="../../../../../R/09dec218d4756909.html" target="n" data-glyph="46,1" class="i field">unhandledExceptionCallback</a> = <span id="r63 rd" class="r63 r">ex</span> =&gt; <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r63 r">ex</span>); <span class="c">// default</span>
+ 
+        <a href="../InternalUtil/MicroCoroutine.cs.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <a id="245289f016cd16da" href="../../../../../R/245289f016cd16da.html" target="n" data-glyph="46,1" class="i field">updateMicroCoroutine</a> = <b>null</b>;
+        <a href="../InternalUtil/MicroCoroutine.cs.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <a id="e1d2702c207cc7b0" href="../../../../../R/e1d2702c207cc7b0.html" target="n" data-glyph="46,1" class="i field">fixedUpdateMicroCoroutine</a> = <b>null</b>;
+        <a href="../InternalUtil/MicroCoroutine.cs.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <a id="47c4f6c425e8b57c" href="../../../../../R/47c4f6c425e8b57c.html" target="n" data-glyph="46,1" class="i field">endOfFrameMicroCoroutine</a> = <b>null</b>;
+ 
+        <b>static</b> <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a> <a id="e56561f4ad0dde86" href="../../../../../R/e56561f4ad0dde86.html" target="n" data-glyph="46,1" class="i field">instance</a>;
+        <b>static bool</b> <a id="720c738b8ad85f42" href="../../../../../R/720c738b8ad85f42.html" target="n" data-glyph="46,1" class="i field">initialized</a>;
+        <b>static bool</b> <a id="c51ad0404444ad8c" href="../../../../../R/c51ad0404444ad8c.html" target="n" data-glyph="46,1" class="i field">isQuitting</a> = <b>false</b>;
+ 
+        <b>public static string</b> <a id="614a7b9ab6088cd8" href="../../../../../R/614a7b9ab6088cd8.html" target="n" data-glyph="102,1" class="i property">InstanceName</a>
+        {
+            <b>get</b>
+            {
+                <b>if</b> (<a href="#e56561f4ad0dde86" class="i field">instance</a> == <b>null</b>)
+                {
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#9f48ddc15bcc3f0f" class="t constructor">NullReferenceException</a>(<span class="s">&quot;MainThreadDispatcher is not initialized.&quot;</span>);
+                }
+                <b>return</b> <a href="#e56561f4ad0dde86" class="i field">instance</a>.<span class="i">name</span>;
+            }
+        }
+ 
+        <b>public static bool</b> <a id="417ff0ea05b310d8" href="../../../../../R/417ff0ea05b310d8.html" target="n" data-glyph="102,1" class="i property">IsInitialized</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#720c738b8ad85f42" class="i field">initialized</a> &amp;&amp; <a href="#e56561f4ad0dde86" class="i field">instance</a> != <b>null</b>; }
+        }
+ 
+        [<a href="@0@mscorlib/A.html#b0c23fc7e6f66cf4" class="t constructor">ThreadStatic</a>]
+        <b>static object</b> <a id="56274fd2af047e80" href="../../../../../R/56274fd2af047e80.html" target="n" data-glyph="46,1" class="i field">mainThreadToken</a>;
+ 
+        <b>static</b> <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a> <a id="5da0e7b081e24189" href="../../../../../R/5da0e7b081e24189.html" target="n" data-glyph="106,1" class="i property">Instance</a>
+        {
+            <b>get</b>
+            {
+                <a href="#7fadb0cbf628eece" class="i method">Initialize</a>();
+                <b>return</b> <a href="#e56561f4ad0dde86" class="i field">instance</a>;
+            }
+        }
+ 
+        <b>public static void</b> <a id="7fadb0cbf628eece" href="../../../../../R/7fadb0cbf628eece.html" target="n" data-glyph="72,1" class="i method">Initialize</a>()
+        {
+            <b>if</b> (!<a href="#720c738b8ad85f42" class="i field">initialized</a>)
+            {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+                <span class="c">// Don&#39;t try to add a GameObject when the scene is not playing. Only valid in the Editor, EditorView.</span>
+                <b>if</b> (!<a href="ScenePlaybackDetector.cs.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="ScenePlaybackDetector.cs.html#5b83026a1fd44639" class="i property">IsPlaying</a>) <b>return</b>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a> <span id="r64 rd" class="r64 r">dispatcher</span> = <b>null</b>;
+ 
+                <b>try</b>
+                {
+                    <span class="r64 r">dispatcher</span> = <span class="i">GameObject</span>.<span class="i">FindObjectOfType</span>&lt;<a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>&gt;();
+                }
+                <b>catch</b>
+                {
+                    <span class="c">// Throw exception when calling from a worker thread.</span>
+                    <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="k">var</a> <span id="r65 rd" class="r65 r">ex</span> = <b>new</b> <a href="@0@mscorlib/A.html#df2d82d91ca29e40" class="t constructor">Exception</a>(<span class="s">&quot;UniRx requires a MainThreadDispatcher component created on the main thread. Make sure it is added to the scene before calling UniRx from a worker thread.&quot;</span>);
+                    <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r65 r">ex</span>);
+                    <b>throw</b> <span class="r65 r">ex</span>;
+                }
+ 
+                <b>if</b> (<a href="#c51ad0404444ad8c" class="i field">isQuitting</a>)
+                {
+                    <span class="c">// don&#39;t create new instance after quitting</span>
+                    <span class="c">// avoid &quot;Some objects were not cleaned up when closing the scene find target&quot; error.</span>
+                    <b>return</b>;
+                }
+ 
+                <b>if</b> (<span class="r64 r">dispatcher</span> == <b>null</b>)
+                {
+                    <span class="c">// awake call immediately from UnityEngine</span>
+                    <b>new</b> <span class="i">GameObject</span>(<span class="s">&quot;MainThreadDispatcher&quot;</span>).<span class="i">AddComponent</span>&lt;<a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>&gt;();
+                }
+                <b>else</b>
+                {
+                    <span class="r64 r">dispatcher</span>.<a href="#f9c41b11b230b010" class="i method">Awake</a>(); <span class="c">// force awake</span>
+                }
+            }
+        }
+ 
+        <b>void</b> <a id="f9c41b11b230b010" href="../../../../../R/f9c41b11b230b010.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <b>if</b> (<a href="#e56561f4ad0dde86" class="i field">instance</a> == <b>null</b>)
+            {
+                <a href="#e56561f4ad0dde86" class="i field">instance</a> = <a href="#84b62633a19a03a2" class="k">this</a>;
+                <a href="#56274fd2af047e80" class="i field">mainThreadToken</a> = <b>new</b> <b>object</b>();
+                <a href="#720c738b8ad85f42" class="i field">initialized</a> = <b>true</b>;
+ 
+                <a href="#245289f016cd16da" class="i field">updateMicroCoroutine</a> = <b>new</b> <a href="../InternalUtil/MicroCoroutine.cs.html#9ae1cfa971857447" class="t constructor">MicroCoroutine</a>(<span id="r66 rd" class="r66 r">ex</span> =&gt; <a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r66 r">ex</span>));
+                <a href="#e1d2702c207cc7b0" class="i field">fixedUpdateMicroCoroutine</a> = <b>new</b> <a href="../InternalUtil/MicroCoroutine.cs.html#9ae1cfa971857447" class="t constructor">MicroCoroutine</a>(<span id="r67 rd" class="r67 r">ex</span> =&gt; <a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r67 r">ex</span>));
+                <a href="#47c4f6c425e8b57c" class="i field">endOfFrameMicroCoroutine</a> = <b>new</b> <a href="../InternalUtil/MicroCoroutine.cs.html#9ae1cfa971857447" class="t constructor">MicroCoroutine</a>(<span id="r68 rd" class="r68 r">ex</span> =&gt; <a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r68 r">ex</span>));
+ 
+                <span class="i">StartCoroutine_Auto</span>(<a href="#f7dc64e7e217e78b" class="i method">RunUpdateMicroCoroutine</a>());
+                <span class="i">StartCoroutine_Auto</span>(<a href="#b8c438040e7b8b65" class="i method">RunFixedUpdateMicroCoroutine</a>());
+                <span class="i">StartCoroutine_Auto</span>(<a href="#adb9b99f3a23a76e" class="i method">RunEndOfFrameMicroCoroutine</a>());
+ 
+                <span class="i">DontDestroyOnLoad</span>(<span class="i">gameObject</span>);
+            }
+            <b>else</b>
+            {
+                <b>if</b> (<a href="#84b62633a19a03a2" class="k">this</a> != <a href="#e56561f4ad0dde86" class="i field">instance</a>)
+                {
+                    <b>if</b> (<a href="#613e106d82018537" class="i field">cullingMode</a> == <a href="#e1a1b59b867573cf" class="t t">CullingMode</a>.<a href="#f5e2fae6bedc4d3c" class="i field">Self</a>)
+                    {
+                        <span class="c">// Try to destroy this dispatcher if there&#39;s already one in the scene.</span>
+                        <span class="i">Debug</span>.<span class="i">LogWarning</span>(<span class="s">&quot;There is already a MainThreadDispatcher in the scene. Removing myself...&quot;</span>);
+                        <a href="#2bd0a4f4926b635c" class="i method">DestroyDispatcher</a>(<a href="#84b62633a19a03a2" class="k">this</a>);
+                    }
+                    <b>else if</b> (<a href="#613e106d82018537" class="i field">cullingMode</a> == <a href="#e1a1b59b867573cf" class="t t">CullingMode</a>.<a href="#cd6e3e48ea6d8da6" class="i field">All</a>)
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogWarning</span>(<span class="s">&quot;There is already a MainThreadDispatcher in the scene. Cleaning up all excess dispatchers...&quot;</span>);
+                        <a href="#aab269eeaefeda33" class="i method">CullAllExcessDispatchers</a>();
+                    }
+                    <b>else</b>
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogWarning</span>(<span class="s">&quot;There is already a MainThreadDispatcher in the scene.&quot;</span>);
+                    }
+                }
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="f7dc64e7e217e78b" href="../../../../../R/f7dc64e7e217e78b.html" target="n" data-glyph="76,1" class="i method">RunUpdateMicroCoroutine</a>()
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return null</b>;
+                <a href="#245289f016cd16da" class="i field">updateMicroCoroutine</a>.<a href="../InternalUtil/MicroCoroutine.cs.html#20107e2078f9d8d5" class="i method">Run</a>();
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="b8c438040e7b8b65" href="../../../../../R/b8c438040e7b8b65.html" target="n" data-glyph="76,1" class="i method">RunFixedUpdateMicroCoroutine</a>()
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return</b> <a href="YieldInstructionCache.cs.html#3865d34220438442" class="t t">YieldInstructionCache</a>.<a href="YieldInstructionCache.cs.html#bb206827e46853da" class="i field">WaitForFixedUpdate</a>;
+                <a href="#e1d2702c207cc7b0" class="i field">fixedUpdateMicroCoroutine</a>.<a href="../InternalUtil/MicroCoroutine.cs.html#20107e2078f9d8d5" class="i method">Run</a>();
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="adb9b99f3a23a76e" href="../../../../../R/adb9b99f3a23a76e.html" target="n" data-glyph="76,1" class="i method">RunEndOfFrameMicroCoroutine</a>()
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return</b> <a href="YieldInstructionCache.cs.html#3865d34220438442" class="t t">YieldInstructionCache</a>.<a href="YieldInstructionCache.cs.html#2132b2692f79ba9e" class="i field">WaitForEndOfFrame</a>;
+                <a href="#47c4f6c425e8b57c" class="i field">endOfFrameMicroCoroutine</a>.<a href="../InternalUtil/MicroCoroutine.cs.html#20107e2078f9d8d5" class="i method">Run</a>();
+            }
+        }
+ 
+        <b>static void</b> <a id="2bd0a4f4926b635c" href="../../../../../R/2bd0a4f4926b635c.html" target="n" data-glyph="76,1" class="i method">DestroyDispatcher</a>(<a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a> <span id="r69 rd" class="r69 r">aDispatcher</span>)
+        {
+            <b>if</b> (<span class="r69 r">aDispatcher</span> != <a href="#e56561f4ad0dde86" class="i field">instance</a>)
+            {
+                <span class="c">// Try to remove game object if it&#39;s empty</span>
+                <b>var</b> <span id="r70 rd" class="r70 r">components</span> = <span class="r69 r">aDispatcher</span>.<span class="i">gameObject</span>.<span class="i">GetComponents</span>&lt;<span class="i">Component</span>&gt;();
+                <b>if</b> (<span class="r69 r">aDispatcher</span>.<span class="i">gameObject</span>.<span class="i">transform</span>.<span class="i">childCount</span> == 0 &amp;&amp; <span class="r70 r">components</span>.<span class="i">Length</span> == 2)
+                {
+                    <b>if</b> (<span class="r70 r">components</span>[0] <b>is</b> <span class="i">Transform</span> &amp;&amp; <span class="r70 r">components</span>[1] <b>is</b> <a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>)
+                    {
+                        <span class="i">Destroy</span>(<span class="r69 r">aDispatcher</span>.<span class="i">gameObject</span>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <span class="c">// Remove component</span>
+                    <span class="i">MonoBehaviour</span>.<span class="i">Destroy</span>(<span class="r69 r">aDispatcher</span>);
+                }
+            }
+        }
+ 
+        <b>public static void</b> <a id="aab269eeaefeda33" href="../../../../../R/aab269eeaefeda33.html" target="n" data-glyph="72,1" class="i method">CullAllExcessDispatchers</a>()
+        {
+            <b>var</b> <span id="r71 rd" class="r71 r">dispatchers</span> = <span class="i">GameObject</span>.<span class="i">FindObjectsOfType</span>&lt;<a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>&gt;();
+            <b>for</b> (<b>int</b> <span id="r72 rd" class="r72 r">i</span> = 0; <span class="r72 r">i</span> &lt; <span class="r71 r">dispatchers</span>.<span class="i">Length</span>; <span class="r72 r">i</span>++)
+            {
+                <span class="i">DestroyDispatcher</span>(<span class="r71 r">dispatchers</span>[<span class="r72 r">i</span>]);
+            }
+        }
+ 
+        <b>void</b> <a id="de0d9fb2f3ecb3a6" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnDestroy</a>()
+        {
+            <b>if</b> (<a href="#e56561f4ad0dde86" class="i field">instance</a> == <a href="#84b62633a19a03a2" class="k">this</a>)
+            {
+                <a href="#e56561f4ad0dde86" class="i field">instance</a> = <span class="i">GameObject</span>.<span class="i">FindObjectOfType</span>&lt;<a href="#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>&gt;();
+                <a href="#720c738b8ad85f42" class="i field">initialized</a> = <a href="#e56561f4ad0dde86" class="i field">instance</a> != <b>null</b>;
+ 
+                <span class="c">/*
+                // Although `this` still refers to a gameObject, it won&#39;t be found.
+                var foundDispatcher = GameObject.FindObjectOfType&lt;MainThreadDispatcher&gt;();
+ 
+                if (foundDispatcher != null)
+                {
+                    // select another game object
+                    Debug.Log(&quot;new instance: &quot; + foundDispatcher.name);
+                    instance = foundDispatcher;
+                    initialized = true;
+                }
+                */</span>
+            }
+        }
+ 
+        <b>void</b> <a id="fa0f6cce5caf777b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Update</a>()
+        {
+            <b>if</b> (<a href="#3294345b452bb519" class="i field">update</a> != <b>null</b>)
+            {
+                <b>try</b>
+                {
+                    <a href="#3294345b452bb519" class="i field">update</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r73 rd" class="r73 r">ex</span>)
+                {
+                    <a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>(<span class="r73 r">ex</span>);
+                }
+            }
+            <a href="#a20ab9f8d82d99ed" class="i field">queueWorker</a>.<a href="../InternalUtil/ThreadSafeQueueWorker.cs.html#9aa546401878d5fb" class="i method">ExecuteAll</a>(<a href="#09dec218d4756909" class="i field">unhandledExceptionCallback</a>);
+        }
+ 
+        <span class="c">// for Lifecycle Management</span>
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="3294345b452bb519" href="../../../../../R/3294345b452bb519.html" target="n" data-glyph="46,1" class="i field">update</a>;
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="c4376aea05b491eb" href="../../../../../R/c4376aea05b491eb.html" target="n" data-glyph="72,1" class="i method">UpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#3294345b452bb519" class="i field">update</a> ?? (<a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#3294345b452bb519" class="i field">update</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ab5380a34700c296" href="../../../../../R/ab5380a34700c296.html" target="n" data-glyph="46,1" class="i field">lateUpdate</a>;
+ 
+        <b>void</b> <a id="d57823c2c72fd5ec" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">LateUpdate</a>()
+        {
+            <b>if</b> (<a href="#ab5380a34700c296" class="i field">lateUpdate</a> != <b>null</b>) <a href="#ab5380a34700c296" class="i field">lateUpdate</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="99756af4e4001c07" href="../../../../../R/99756af4e4001c07.html" target="n" data-glyph="72,1" class="i method">LateUpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#ab5380a34700c296" class="i field">lateUpdate</a> ?? (<a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#ab5380a34700c296" class="i field">lateUpdate</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>bool</b>&gt; <a id="0fd30dc862d2f73b" href="../../../../../R/0fd30dc862d2f73b.html" target="n" data-glyph="46,1" class="i field">onApplicationFocus</a>;
+ 
+        <b>void</b> <a id="ecaeeb8ff854c82b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnApplicationFocus</a>(<b>bool</b> <span id="r74 rd" class="r74 r">focus</span>)
+        {
+            <b>if</b> (<a href="#0fd30dc862d2f73b" class="i field">onApplicationFocus</a> != <b>null</b>) <a href="#0fd30dc862d2f73b" class="i field">onApplicationFocus</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r74 r">focus</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="c4a7b1a8105cde4a" href="../../../../../R/c4a7b1a8105cde4a.html" target="n" data-glyph="72,1" class="i method">OnApplicationFocusAsObservable</a>()
+        {
+            <b>return</b> <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#0fd30dc862d2f73b" class="i field">onApplicationFocus</a> ?? (<a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#0fd30dc862d2f73b" class="i field">onApplicationFocus</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>bool</b>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>bool</b>&gt; <a id="78ac39a03eea9664" href="../../../../../R/78ac39a03eea9664.html" target="n" data-glyph="46,1" class="i field">onApplicationPause</a>;
+ 
+        <b>void</b> <a id="c3f87126ab87fa9c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnApplicationPause</a>(<b>bool</b> <span id="r75 rd" class="r75 r">pause</span>)
+        {
+            <b>if</b> (<a href="#78ac39a03eea9664" class="i field">onApplicationPause</a> != <b>null</b>) <a href="#78ac39a03eea9664" class="i field">onApplicationPause</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r75 r">pause</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="fc086ef78983a242" href="../../../../../R/fc086ef78983a242.html" target="n" data-glyph="72,1" class="i method">OnApplicationPauseAsObservable</a>()
+        {
+            <b>return</b> <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#78ac39a03eea9664" class="i field">onApplicationPause</a> ?? (<a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#78ac39a03eea9664" class="i field">onApplicationPause</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>bool</b>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="8a291c698fc04358" href="../../../../../R/8a291c698fc04358.html" target="n" data-glyph="46,1" class="i field">onApplicationQuit</a>;
+ 
+        <b>void</b> <a id="16ce9d49a04d0f9b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnApplicationQuit</a>()
+        {
+            <a href="#c51ad0404444ad8c" class="i field">isQuitting</a> = <b>true</b>;
+            <b>if</b> (<a href="#8a291c698fc04358" class="i field">onApplicationQuit</a> != <b>null</b>) <a href="#8a291c698fc04358" class="i field">onApplicationQuit</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="9a6813ff918a4d25" href="../../../../../R/9a6813ff918a4d25.html" target="n" data-glyph="72,1" class="i method">OnApplicationQuitAsObservable</a>()
+        {
+            <b>return</b> <a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#8a291c698fc04358" class="i field">onApplicationQuit</a> ?? (<a href="#5da0e7b081e24189" class="i property">Instance</a>.<a href="#8a291c698fc04358" class="i field">onApplicationQuit</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+    }
+}</pre></td></tr></table></div></body></html>

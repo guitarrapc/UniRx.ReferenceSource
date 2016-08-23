@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableTriggerExtensions.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(362);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTriggerExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    <span class="c">// for GameObject</span>
+    <b>public static</b> <a href="../../../../../../P/495fb92c6e5138af.html" target="s" class="k">partial</a> <b>class</b> <a id="495fb92c6e5138af" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ObservableTriggerExtensions</a>
+    {
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableAnimatorTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for setting up animation IK (inverse kinematics).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="6fff7f8febad08c2" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnAnimatorIKAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r0 rd" class="r0 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r0 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableAnimatorTrigger.cs.html#25e3563ffec89ab5" class="t t">ObservableAnimatorTrigger</a>&gt;(<span class="r0 r">gameObject</span>).<a href="ObservableAnimatorTrigger.cs.html#c1ffcfa9c7d77f99" class="i method">OnAnimatorIKAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for processing animation movements for modifying root motion.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="641b6245ca4c229c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnAnimatorMoveAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r1 rd" class="r1 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r1 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableAnimatorTrigger.cs.html#25e3563ffec89ab5" class="t t">ObservableAnimatorTrigger</a>&gt;(<span class="r1 r">gameObject</span>).<a href="ObservableAnimatorTrigger.cs.html#c47401546a3a91ee" class="i method">OnAnimatorMoveAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableCollision2DTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when an incoming collider makes contact with this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="96e5231e8a456d9d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCollisionEnter2DAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r2 rd" class="r2 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r2 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collision2D</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCollision2DTrigger.cs.html#6c5c5749406b21a6" class="t t">ObservableCollision2DTrigger</a>&gt;(<span class="r2 r">gameObject</span>).<a href="ObservableCollision2DTrigger.cs.html#69a8772ca5a72afe" class="i method">OnCollisionEnter2DAsObservable</a>();
+        }
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when a collider on another object stops touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="0edfd65a22a19c0c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCollisionExit2DAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r3 rd" class="r3 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r3 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collision2D</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCollision2DTrigger.cs.html#6c5c5749406b21a6" class="t t">ObservableCollision2DTrigger</a>&gt;(<span class="r3 r">gameObject</span>).<a href="ObservableCollision2DTrigger.cs.html#d95114d4e0b96d88" class="i method">OnCollisionExit2DAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where a collider on another object is touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="de95a1a321b50e0c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCollisionStay2DAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r4 rd" class="r4 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r4 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collision2D</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCollision2DTrigger.cs.html#6c5c5749406b21a6" class="t t">ObservableCollision2DTrigger</a>&gt;(<span class="r4 r">gameObject</span>).<a href="ObservableCollision2DTrigger.cs.html#16a0594f72164b4e" class="i method">OnCollisionStay2DAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableCollisionTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="4a19b650026e57d3" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCollisionEnterAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r5 rd" class="r5 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r5 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collision</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCollisionTrigger.cs.html#a3d41e89f83e7565" class="t t">ObservableCollisionTrigger</a>&gt;(<span class="r5 r">gameObject</span>).<a href="ObservableCollisionTrigger.cs.html#32eadc87c8c41bfe" class="i method">OnCollisionEnterAsObservable</a>();
+        }
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionExit is called when this collider/rigidbody has stopped touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="9b33f23803ab32fc" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCollisionExitAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r6 rd" class="r6 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r6 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collision</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCollisionTrigger.cs.html#a3d41e89f83e7565" class="t t">ObservableCollisionTrigger</a>&gt;(<span class="r6 r">gameObject</span>).<a href="ObservableCollisionTrigger.cs.html#e6f6fc1fb92ac638" class="i method">OnCollisionExitAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionStay is called once per frame for every collider/rigidbody that is touching rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="69ce13d45431d9bb" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCollisionStayAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r7 rd" class="r7 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r7 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collision</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCollisionTrigger.cs.html#a3d41e89f83e7565" class="t t">ObservableCollisionTrigger</a>&gt;(<span class="r7 r">gameObject</span>).<a href="ObservableCollisionTrigger.cs.html#744b659c16215e9b" class="i method">OnCollisionStayAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableDestroyTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="2cc26e21827ed2c8" href="../../../../../../R/2cc26e21827ed2c8.html" target="n" data-glyph="220,1" class="i method">OnDestroyAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r8 rd" class="r8 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r8 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <span class="c">// send destroy message</span>
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableDestroyTrigger.cs.html#6c749f109a8ae545" class="t t">ObservableDestroyTrigger</a>&gt;(<span class="r8 r">gameObject</span>).<a href="ObservableDestroyTrigger.cs.html#d99d66b16d06a3c4" class="i method">OnDestroyAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableEnableTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the object becomes enabled and active.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="bdf55a5c5c2d7279" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnEnableAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r9 rd" class="r9 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r9 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableEnableTrigger.cs.html#cedec2b6a1619ffc" class="t t">ObservableEnableTrigger</a>&gt;(<span class="r9 r">gameObject</span>).<a href="ObservableEnableTrigger.cs.html#5f8f873bdef33f3b" class="i method">OnEnableAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the behaviour becomes disabled () or inactive.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="dca5da840f213a62" href="../../../../../../R/dca5da840f213a62.html" target="n" data-glyph="220,1" class="i method">OnDisableAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r10 rd" class="r10 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r10 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableEnableTrigger.cs.html#cedec2b6a1619ffc" class="t t">ObservableEnableTrigger</a>&gt;(<span class="r10 r">gameObject</span>).<a href="ObservableEnableTrigger.cs.html#705c014656546466" class="i method">OnDisableAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableFixedUpdateTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called every fixed framerate frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="50ac1390ef25ecf4" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">FixedUpdateAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r11 rd" class="r11 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r11 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableFixedUpdateTrigger.cs.html#07b33acd1c5d2ca8" class="t t">ObservableFixedUpdateTrigger</a>&gt;(<span class="r11 r">gameObject</span>).<a href="ObservableFixedUpdateTrigger.cs.html#ee36581eb6510a45" class="i method">FixedUpdateAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableLateUpdateTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">LateUpdate is called every frame, if the Behaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="89c16fd8b24b1c20" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">LateUpdateAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r12 rd" class="r12 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r12 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableLateUpdateTrigger.cs.html#0ab89b18d3209254" class="t t">ObservableLateUpdateTrigger</a>&gt;(<span class="r12 r">gameObject</span>).<a href="ObservableLateUpdateTrigger.cs.html#d76039772d12d995" class="i method">LateUpdateAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableMouseTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDown is called when the user has pressed the mouse button while over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="cbd44283923a161d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseDownAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r13 rd" class="r13 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r13 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r13 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#7b35e1813e4333c0" class="i method">OnMouseDownAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDrag is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="8afd728cfa1dca7a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseDragAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r14 rd" class="r14 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r14 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r14 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#1e7138bc4d09faa2" class="i method">OnMouseDragAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseEnter is called when the mouse entered the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="f7005a4ac191c3c9" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseEnterAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r15 rd" class="r15 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r15 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r15 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#25ebcd3d52a1c41f" class="i method">OnMouseEnterAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseExit is called when the mouse is not any longer over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="242b05a8fb4b2d8a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseExitAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r16 rd" class="r16 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r16 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r16 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#0ee4699ea9fc4f30" class="i method">OnMouseExitAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseOver is called every frame while the mouse is over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="d4a97a12d96b0684" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseOverAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r17 rd" class="r17 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r17 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r17 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#e33763df164165cf" class="i method">OnMouseOverAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUp is called when the user has released the mouse button.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b00095e5e349a000" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseUpAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r18 rd" class="r18 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r18 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r18 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#bd484079858582a5" class="i method">OnMouseUpAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUpAsButton is only called when the mouse is released over the same GUIElement or Collider as it was pressed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="58586e81a70bd860" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnMouseUpAsButtonAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r19 rd" class="r19 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r19 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableMouseTrigger.cs.html#0246d779d4a89f18" class="t t">ObservableMouseTrigger</a>&gt;(<span class="r19 r">gameObject</span>).<a href="ObservableMouseTrigger.cs.html#107e37c116526852" class="i method">OnMouseUpAsButtonAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableTrigger2DTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object enters a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="6e094d9305e82e9b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTriggerEnter2DAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r20 rd" class="r20 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r20 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collider2D</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTrigger2DTrigger.cs.html#b9c0b85bb1322a9b" class="t t">ObservableTrigger2DTrigger</a>&gt;(<span class="r20 r">gameObject</span>).<a href="ObservableTrigger2DTrigger.cs.html#cecbb459820f94ac" class="i method">OnTriggerEnter2DAsObservable</a>();
+        }
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object leaves a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="b41f20131d607e97" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTriggerExit2DAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r21 rd" class="r21 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r21 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collider2D</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTrigger2DTrigger.cs.html#b9c0b85bb1322a9b" class="t t">ObservableTrigger2DTrigger</a>&gt;(<span class="r21 r">gameObject</span>).<a href="ObservableTrigger2DTrigger.cs.html#fd93a6f9cb5445d3" class="i method">OnTriggerExit2DAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where another object is within a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="81aa8d08138dd666" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTriggerStay2DAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r22 rd" class="r22 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r22 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collider2D</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTrigger2DTrigger.cs.html#b9c0b85bb1322a9b" class="t t">ObservableTrigger2DTrigger</a>&gt;(<span class="r22 r">gameObject</span>).<a href="ObservableTrigger2DTrigger.cs.html#b17b3bd71d99d4c0" class="i method">OnTriggerStay2DAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableTriggerTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerEnter is called when the Collider other enters the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="31a6da1efdaf899f" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTriggerEnterAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r23 rd" class="r23 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r23 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collider</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTriggerTrigger.cs.html#bd3b9f6ae06c6b94" class="t t">ObservableTriggerTrigger</a>&gt;(<span class="r23 r">gameObject</span>).<a href="ObservableTriggerTrigger.cs.html#d04ee656d7e19405" class="i method">OnTriggerEnterAsObservable</a>();
+        }
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerExit is called when the Collider other has stopped touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="5c8bc510c566b188" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTriggerExitAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r24 rd" class="r24 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r24 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collider</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTriggerTrigger.cs.html#bd3b9f6ae06c6b94" class="t t">ObservableTriggerTrigger</a>&gt;(<span class="r24 r">gameObject</span>).<a href="ObservableTriggerTrigger.cs.html#e1dcf378430961cc" class="i method">OnTriggerExitAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerStay is called once per frame for every Collider other that is touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="29e0dc54c6d8e1bc" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTriggerStayAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r25 rd" class="r25 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r25 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">Collider</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTriggerTrigger.cs.html#bd3b9f6ae06c6b94" class="t t">ObservableTriggerTrigger</a>&gt;(<span class="r25 r">gameObject</span>).<a href="ObservableTriggerTrigger.cs.html#b20ab738a00a1915" class="i method">OnTriggerStayAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableUpdateTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Update is called every frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="89cf9afb5ef15b3c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">UpdateAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r26 rd" class="r26 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r26 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableUpdateTrigger.cs.html#079224f3a33363b7" class="t t">ObservableUpdateTrigger</a>&gt;(<span class="r26 r">gameObject</span>).<a href="ObservableUpdateTrigger.cs.html#eb80856856cf746b" class="i method">UpdateAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableVisibleTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameInvisible is called when the renderer is no longer visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="438d5ccc6e6077c0" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnBecameInvisibleAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r27 rd" class="r27 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r27 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableVisibleTrigger.cs.html#5f3622d10dd7bd71" class="t t">ObservableVisibleTrigger</a>&gt;(<span class="r27 r">gameObject</span>).<a href="ObservableVisibleTrigger.cs.html#dbfecc0bf695d1b4" class="i method">OnBecameInvisibleAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameVisible is called when the renderer became visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b28c0188626aee65" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnBecameVisibleAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r28 rd" class="r28 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r28 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableVisibleTrigger.cs.html#5f3622d10dd7bd71" class="t t">ObservableVisibleTrigger</a>&gt;(<span class="r28 r">gameObject</span>).<a href="ObservableVisibleTrigger.cs.html#b2d13f99c0273531" class="i method">OnBecameVisibleAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableTransformChangedTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback sent to the graphic before a Transform parent change occurs.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="97fa87127e5a7144" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnBeforeTransformParentChangedAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r29 rd" class="r29 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r29 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTransformChangedTrigger.cs.html#8386ed68bf57a6a0" class="t t">ObservableTransformChangedTrigger</a>&gt;(<span class="r29 r">gameObject</span>).<a href="ObservableTransformChangedTrigger.cs.html#00159f4b5a09b20b" class="i method">OnBeforeTransformParentChangedAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the parent property of the transform of the GameObject has changed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="87a3779639afc90c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTransformParentChangedAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r30 rd" class="r30 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r30 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTransformChangedTrigger.cs.html#8386ed68bf57a6a0" class="t t">ObservableTransformChangedTrigger</a>&gt;(<span class="r30 r">gameObject</span>).<a href="ObservableTransformChangedTrigger.cs.html#f533440abacaa71f" class="i method">OnTransformParentChangedAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the list of children of the transform of the GameObject has changed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="9ce1afc1320d55fe" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnTransformChildrenChangedAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r31 rd" class="r31 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r31 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableTransformChangedTrigger.cs.html#8386ed68bf57a6a0" class="t t">ObservableTransformChangedTrigger</a>&gt;(<span class="r31 r">gameObject</span>).<a href="ObservableTransformChangedTrigger.cs.html#5e87d0062b6bc780" class="i method">OnTransformChildrenChangedAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableCanvasGroupChangedTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback that is sent if the canvas group is changed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="7fe2a3d0accde903" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnCanvasGroupChangedAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r32 rd" class="r32 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r32 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableCanvasGroupChangedTrigger.cs.html#08106465c98af9b3" class="t t">ObservableCanvasGroupChangedTrigger</a>&gt;(<span class="r32 r">gameObject</span>).<a href="ObservableCanvasGroupChangedTrigger.cs.html#e80d949d7850c6ae" class="i method">OnCanvasGroupChangedAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableRectTransformTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback that is sent if an associated RectTransform has it&#39;s dimensions changed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4109420e2de0c93e" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnRectTransformDimensionsChangeAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r33 rd" class="r33 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r33 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableRectTransformTrigger.cs.html#8ee593628a341a90" class="t t">ObservableRectTransformTrigger</a>&gt;(<span class="r33 r">gameObject</span>).<a href="ObservableRectTransformTrigger.cs.html#dfaa6442224ad1ca" class="i method">OnRectTransformDimensionsChangeAsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback that is sent if an associated RectTransform is removed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="22a1683a19f27b7b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnRectTransformRemovedAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r34 rd" class="r34 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r34 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableRectTransformTrigger.cs.html#8ee593628a341a90" class="t t">ObservableRectTransformTrigger</a>&gt;(<span class="r34 r">gameObject</span>).<a href="ObservableRectTransformTrigger.cs.html#8e41451833da0dca" class="i method">OnRectTransformRemovedAsObservable</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ObservableParticleTrigger
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnParticleCollision is called when a particle hits a collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">GameObject</span>&gt; <a id="fc36568c1c26efd2" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnParticleCollisionAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r35 rd" class="r35 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r35 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="i">GameObject</span>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableParticleTrigger.cs.html#cef60c15b651f752" class="t t">ObservableParticleTrigger</a>&gt;(<span class="r35 r">gameObject</span>).<a href="ObservableParticleTrigger.cs.html#185330c13a62a302" class="i method">OnParticleCollisionAsObservable</a>();
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_5_4_OR_NEWER</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnParticleTrigger is called when any particles in a particle system meet the conditions in the trigger module.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a47084d154e82bfb" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnParticleTriggerAsObservable</a>(<b>this</b> <span class="i">GameObject</span> <span id="r36 rd" class="r36 r">gameObject</span>)
+        {
+            <b>if</b> (<span class="r36 r">gameObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#2bb58736ac6133be" class="i method">GetOrAddComponent</a>&lt;<a href="ObservableParticleTrigger.cs.html#cef60c15b651f752" class="t t">ObservableParticleTrigger</a>&gt;(<span class="r36 r">gameObject</span>).<a href="ObservableParticleTrigger.cs.html#2be7e5aadf3c3c01" class="i method">OnParticleTriggerAsObservable</a>();
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+ 
+        <b>static</b> <span class="r37 r t">T</span> <a id="2bb58736ac6133be" href="../../../../../../R/2bb58736ac6133be.html" target="n" data-glyph="76,1" class="i method">GetOrAddComponent</a>&lt;<span id="r37 rd t" class="r37 r t">T</span>&gt;(<span class="i">GameObject</span> <span id="r38 rd" class="r38 r">gameObject</span>)
+            <b>where</b> <span class="r37 r t">T</span> : <span class="i">Component</span>
+        {
+            <b>var</b> <span id="r39 rd" class="r39 r">component</span> = <span class="r38 r">gameObject</span>.<span class="i">GetComponent</span>&lt;<span class="r37 r t">T</span>&gt;();
+            <b>if</b> (<span class="r39 r">component</span> == <b>null</b>)
+            {
+                <span class="r39 r">component</span> = <span class="r38 r">gameObject</span>.<span class="i">AddComponent</span>&lt;<span class="r37 r t">T</span>&gt;();
+            }
+ 
+            <b>return</b> <span class="r39 r">component</span>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

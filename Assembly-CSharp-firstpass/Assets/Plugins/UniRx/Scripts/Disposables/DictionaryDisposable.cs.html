@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html><head><title>DictionaryDisposable.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(256);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Disposables/DictionaryDisposable.cs" target="_top">Assets\Plugins\UniRx\Scripts\Disposables\DictionaryDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="03a44a4c4076263d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">DictionaryDisposable</a>&lt;<span id="r0 rd t" class="r0 r t">TKey</span>, <span id="r1 rd t" class="r1 r t">TValue</span>&gt; : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="@0@mscorlib/A.html#20343df0c96b629b" class="t t">IDictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;
+        <b>where</b> <span class="r1 r t">TValue</span> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        <b>bool</b> <a id="83c97bb562774bf1" href="../../../../../R/83c97bb562774bf1.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = <b>false</b>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt; <a id="d122465b3952a354" href="../../../../../R/d122465b3952a354.html" target="n" data-glyph="46,1" class="i field">inner</a>;
+ 
+        <b>public</b> <a id="4903d9fdfb5a4d55" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">DictionaryDisposable</a>()
+        {
+            <a href="#d122465b3952a354" class="i field">inner</a> = <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;();
+        }
+ 
+        <b>public</b> <a id="cfceb9ca3acbca63" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">DictionaryDisposable</a>(<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r0 r t">TKey</span>&gt; <span id="r2 rd" class="r2 r">comparer</span>)
+        {
+            <a href="#d122465b3952a354" class="i field">inner</a> = <b>new</b> <a href="@0@mscorlib/A.html#05d4a216235a779c" class="t constructor">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;(<span class="r2 r">comparer</span>);
+        }
+ 
+        <b>public</b> <span class="r1 r t">TValue</span> <a id="21ba035bfb3d1211" href="../../../../../R/21ba035bfb3d1211.html" target="n" data-glyph="102,1" class="k">this</a>[<span class="r0 r t">TKey</span> <span id="r3 rd" class="r3 r">key</span>]
+        {
+            <b>get</b>
+            {
+                <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <b>return</b> <a href="#d122465b3952a354" class="i field">inner</a><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><span class="r3 r">key</span>];
+                }
+            }
+ 
+            <b>set</b>
+            {
+                <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <b>if</b> (<a href="#83c97bb562774bf1" class="i field">isDisposed</a>) <b>value</b>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+ 
+                    <span class="r1 r t">TValue</span> <span id="r4 rd" class="r4 r">oldValue</span>;
+                    <b>if</b> (<a href="#06bccdaf1355ecf9" class="i method">TryGetValue</a>(<span class="r3 r">key</span>, <b>out</b> <span class="r4 r">oldValue</span>))
+                    {
+                        <span class="r4 r">oldValue</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                        <a href="#d122465b3952a354" class="i field">inner</a><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><span class="r3 r">key</span>] = <b>value</b>;
+                    }
+                    <b>else</b>
+                    {
+                        <a href="#d122465b3952a354" class="i field">inner</a><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><span class="r3 r">key</span>] = <b>value</b>;
+                    }
+                }
+            }
+        }
+ 
+        <b>public int</b> <a id="810d7def49a88218" href="../../../../../R/810d7def49a88218.html" target="n" data-glyph="102,1" class="i property">Count</a>
+        {
+            <b>get</b>
+            {
+                <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <b>return</b> <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#12b9bba2a1f9c3e2" class="i property">Count</a>;
+                }
+            }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;.<a href="@0@mscorlib/A.html#1f44a1d07202e410" class="t t">KeyCollection</a> <a id="3183deaf62bfab24" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Keys</a>
+        {
+            <b>get</b>
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#3d3c2c03118be4f8" class="t constructor">NotSupportedException</a>(<span class="s">&quot;please use .Select(x =&gt; x.Key).ToArray()&quot;</span>);
+            }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;.<a href="@0@mscorlib/A.html#c86f0825c2db4ec0" class="t t">ValueCollection</a> <a id="02cf605621cfc7c6" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Values</a>
+        {
+            <b>get</b>
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#3d3c2c03118be4f8" class="t constructor">NotSupportedException</a>(<span class="s">&quot;please use .Select(x =&gt; x.Value).ToArray()&quot;</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="086eb34e65660c12" href="../../../../../R/086eb34e65660c12.html" target="n" data-glyph="72,1" class="i method">Add</a>(<span class="r0 r t">TKey</span> <span id="r5 rd" class="r5 r">key</span>, <span class="r1 r t">TValue</span> <span id="r6 rd" class="r6 r">value</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>if</b> (<a href="#83c97bb562774bf1" class="i field">isDisposed</a>)
+                {
+                    <span class="r6 r">value</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <b>return</b>;
+                }
+ 
+                <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#a7861da7aaa500fe" class="i method">Add</a>(<span class="r5 r">key</span>, <span class="r6 r">value</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="56f93f36e895a5df" href="../../../../../R/56f93f36e895a5df.html" target="n" data-glyph="72,1" class="i method">Clear</a>()
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>foreach</b> (<a href="@0@mscorlib/A.html#8585965bb176a426" class="k">var</a> <span id="r7 rd" class="r7 r">item</span> <b>in</b> <a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <span class="r7 r">item</span>.<a href="@0@mscorlib/A.html#38c0e86cc4b30170" class="i property">Value</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+                <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#36b30e4c0708a88c" class="i method">Clear</a>();
+            }
+        }
+ 
+        <b>public bool</b> <a id="79418f400869d1e9" href="../../../../../R/79418f400869d1e9.html" target="n" data-glyph="72,1" class="i method">Remove</a>(<span class="r0 r t">TKey</span> <span id="r8 rd" class="r8 r">key</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <span class="r1 r t">TValue</span> <span id="r9 rd" class="r9 r">oldValue</span>;
+                <b>if</b> (<a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<span class="r8 r">key</span>, <b>out</b> <span class="r9 r">oldValue</span>))
+                {
+                    <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r10 rd" class="r10 r">isSuccessRemove</span> = <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#a6db5ffdec557169" class="i method">Remove</a>(<span class="r8 r">key</span>);
+                    <b>if</b> (<span class="r10 r">isSuccessRemove</span>)
+                    {
+                        <span class="r9 r">oldValue</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    }
+                    <b>return</b> <span class="r10 r">isSuccessRemove</span>;
+                }
+                <b>else</b>
+                {
+                    <b>return false</b>;
+                }
+            }
+        }
+ 
+        <b>public bool</b> <a id="9153015c5fb39e8d" href="../../../../../R/9153015c5fb39e8d.html" target="n" data-glyph="72,1" class="i method">ContainsKey</a>(<span class="r0 r t">TKey</span> <span id="r11 rd" class="r11 r">key</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>return</b> <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#22fd7cd7408aed6e" class="i method">ContainsKey</a>(<span class="r11 r">key</span>);
+            }
+        }
+ 
+        <b>public bool</b> <a id="06bccdaf1355ecf9" href="../../../../../R/06bccdaf1355ecf9.html" target="n" data-glyph="72,1" class="i method">TryGetValue</a>(<span class="r0 r t">TKey</span> <span id="r12 rd" class="r12 r">key</span>, <b>out</b> <span class="r1 r t">TValue</span> <span id="r13 rd" class="r13 r">value</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>return</b> <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<span class="r12 r">key</span>, <b>out</b> <span class="r13 r">value</span>);
+            }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;.<a href="@0@mscorlib/A.html#582570d1db5b1584" class="t t">Enumerator</a> <a id="f00fea51815283fd" href="../../../../../R/f00fea51815283fd.html" target="n" data-glyph="72,1" class="i method">GetEnumerator</a>()
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>return</b> <b>new</b> <a href="@0@mscorlib/A.html#6009e5bfe5f70341" class="t constructor">Dictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;(<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#dc88893199dea317" class="i method">GetEnumerator</a>();
+            }
+        }
+ 
+        <b>bool</b> <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;.<a href="@0@mscorlib/A.html#30768a81e456ea74" class="i property">IsReadOnly</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> ((<a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;)<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#30768a81e456ea74" class="i property">IsReadOnly</a>;
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<span class="r0 r t">TKey</span>&gt; <a href="@0@mscorlib/A.html#20343df0c96b629b" class="t t">IDictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;.<a href="@0@mscorlib/A.html#6141d2484c7e5c1a" class="i property">Keys</a>
+        {
+            <b>get</b>
+            {
+                <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <b>return</b> <b>new</b> <a href="@0@mscorlib/A.html#d2ac2c19c9cf1d44" class="t constructor">List</a>&lt;<span class="r0 r t">TKey</span>&gt;(<a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#9a3c0cb5c149c9f7" class="i property">Keys</a>);
+                }
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<span class="r1 r t">TValue</span>&gt; <a href="@0@mscorlib/A.html#20343df0c96b629b" class="t t">IDictionary</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;.<a href="@0@mscorlib/A.html#81fedd966b885f90" class="i property">Values</a>
+        {
+            <b>get</b>
+            {
+                <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <b>return</b> <b>new</b> <a href="@0@mscorlib/A.html#d2ac2c19c9cf1d44" class="t constructor">List</a>&lt;<span class="r1 r t">TValue</span>&gt;(<a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#4367dd1e300ae797" class="i property">Values</a>);
+                }
+            }
+        }
+ 
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UNITY_METRO</span>
+ 
+        <b>public void</b> <a id="b8e8ca75aa02f0dc" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">GetObjectData</a>(<span class="i n">System</span>.<span class="i n">Runtime</span>.<span class="i n">Serialization</span>.<a href="@0@mscorlib/A.html#4ade46c59f4e07b4" class="t t">SerializationInfo</a> <span id="r14 rd" class="r14 r">info</span>, <span class="i n">System</span>.<span class="i n">Runtime</span>.<span class="i n">Serialization</span>.<a href="@0@mscorlib/A.html#b8ef3c3075d2cf28" class="t t">StreamingContext</a> <span id="r15 rd" class="r15 r">context</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                ((<span class="i n">System</span>.<span class="i n">Runtime</span>.<span class="i n">Serialization</span>.<a href="@0@mscorlib/A.html#c9596feeaa062d60" class="t t">ISerializable</a>)<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#434ab798850f67fd" class="i method">GetObjectData</a>(<span class="r14 r">info</span>, <span class="r15 r">context</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="6249c1307bb21e12" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDeserialization</a>(<b>object</b> <span id="r16 rd" class="r16 r">sender</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                ((<span class="i n">System</span>.<span class="i n">Runtime</span>.<span class="i n">Serialization</span>.<a href="@0@mscorlib/A.html#64eb464fa9f5fa63" class="t t">IDeserializationCallback</a>)<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#9646ad823db4f240" class="i method">OnDeserialization</a>(<span class="r16 r">sender</span>);
+            }
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <b>void</b> <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;.<a href="@0@mscorlib/A.html#a9319db8c62ae453" class="i method">Add</a>(<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt; <span id="r17 rd" class="r17 r">item</span>)
+        {
+            <a href="#086eb34e65660c12" class="i method">Add</a>((<span class="r0 r t">TKey</span>)<span class="r17 r">item</span>.<a href="@0@mscorlib/A.html#f9d1c04feb1af032" class="i property">Key</a>, (<span class="r1 r t">TValue</span>)<span class="r17 r">item</span>.<a href="@0@mscorlib/A.html#38c0e86cc4b30170" class="i property">Value</a>);
+        }
+ 
+        <b>bool</b> <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;.<a href="@0@mscorlib/A.html#8f74065d140cfe04" class="i method">Contains</a>(<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt; <span id="r18 rd" class="r18 r">item</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>return</b> ((<a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;)<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#8f74065d140cfe04" class="i method">Contains</a>(<span class="r18 r">item</span>);
+            }
+        }
+ 
+        <b>void</b> <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;.<a href="@0@mscorlib/A.html#e60f08f14be7e099" class="i method">CopyTo</a>(<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;[] <span id="r19 rd" class="r19 r">array</span>, <b>int</b> <span id="r20 rd" class="r20 r">arrayIndex</span>)
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                ((<a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;)<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#e60f08f14be7e099" class="i method">CopyTo</a>(<span class="r19 r">array</span>, <span class="r20 r">arrayIndex</span>);
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#893e8cdebffde2da" class="t t">IEnumerator</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt; <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;.<a href="@0@mscorlib/A.html#a242475701b655b2" class="i method">GetEnumerator</a>()
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>return</b> <b>new</b> <a href="@0@mscorlib/A.html#d2ac2c19c9cf1d44" class="t constructor">List</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;((<a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;)<a href="#d122465b3952a354" class="i field">inner</a>).<a href="@0@mscorlib/A.html#5d3accf5b217bdbf" class="i method">GetEnumerator</a>();
+            }
+        }
+ 
+        <span class="i n">System</span>.<span class="i n">Collections</span>.<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span class="i n">System</span>.<span class="i n">Collections</span>.<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>()
+        {
+            <b>return</b> <a href="#f00fea51815283fd" class="i method">GetEnumerator</a>();
+        }
+ 
+        <b>bool</b> <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt;&gt;.<a href="@0@mscorlib/A.html#12ab6cfa5ca2ceec" class="i method">Remove</a>(<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TValue</span>&gt; <span id="r21 rd" class="r21 r">item</span>)
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#ab0acd5f99886747" class="t constructor">NotSupportedException</a>();
+        }
+ 
+        <b>public void</b> <a id="f74b6deee9b35f19" href="../../../../../R/f74b6deee9b35f19.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>lock</b> (<a href="#d122465b3952a354" class="i field">inner</a>)
+            {
+                <b>if</b> (<a href="#83c97bb562774bf1" class="i field">isDisposed</a>) <b>return</b>;
+                <a href="#83c97bb562774bf1" class="i field">isDisposed</a> = <b>true</b>;
+ 
+                <b>foreach</b> (<a href="@0@mscorlib/A.html#8585965bb176a426" class="k">var</a> <span id="r22 rd" class="r22 r">item</span> <b>in</b> <a href="#d122465b3952a354" class="i field">inner</a>)
+                {
+                    <span class="r22 r">item</span>.<a href="@0@mscorlib/A.html#38c0e86cc4b30170" class="i property">Value</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+                <a href="#d122465b3952a354" class="i field">inner</a>.<a href="@0@mscorlib/A.html#36b30e4c0708a88c" class="i method">Clear</a>();
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

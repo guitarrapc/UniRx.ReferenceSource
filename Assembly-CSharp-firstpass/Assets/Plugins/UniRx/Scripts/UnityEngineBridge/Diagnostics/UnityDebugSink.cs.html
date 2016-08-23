@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnityDebugSink.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(73);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Diagnostics/UnityDebugSink.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Diagnostics\UnityDebugSink.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>
+{
+    <b>public class</b> <a id="cc2c7dfa750cd223" href="../../../../../../R/cc2c7dfa750cd223.html" target="n" data-glyph="0,0" class="t t"><span id="0a9b6ab9950acbba">UnityDebugSink</span></a> : <a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="LogEntry.cs.html#31ba9896acb11547" class="t t">LogEntry</a>&gt;
+    {
+        <b>public void</b> <a id="77ecd38b61c0fa20" href="../../../../../../R/77ecd38b61c0fa20.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <span class="c">// do nothing</span>
+        }
+ 
+        <b>public void</b> <a id="63d2d00c4a3fa0be" href="../../../../../../R/63d2d00c4a3fa0be.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r0 rd" class="r0 r">error</span>)
+        {
+            <span class="c">// do nothing</span>
+        }
+ 
+        <b>public void</b> <a id="5f0175c5cba14ed8" href="../../../../../../R/5f0175c5cba14ed8.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<a href="LogEntry.cs.html#31ba9896acb11547" class="t t">LogEntry</a> <span id="r1 rd" class="r1 r">value</span>)
+        {
+            <span class="c">// avoid multithread exception.</span>
+            <span class="c">// (value.Context == null) can only be called from the main thread.</span>
+            <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r2 rd" class="r2 r">ctx</span> = (<span class="i n">System</span>.<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>)<span class="r1 r">value</span>.<a href="LogEntry.cs.html#c100c98a92328e76" class="i property">Context</a>;
+ 
+            <b>switch</b> (<span class="r1 r">value</span>.<a href="LogEntry.cs.html#5a2c592b41d3b76a" class="i property">LogType</a>)
+            {
+                <b>case</b> <span class="i">LogType</span>.<span class="i">Error</span>:
+                    <b>if</b> (<span class="r2 r">ctx</span> == <b>null</b>)
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogError</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#0275a19b78bb29f7" class="i property">Message</a>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogError</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#0275a19b78bb29f7" class="i property">Message</a>, <span class="r1 r">value</span>.<a href="LogEntry.cs.html#c100c98a92328e76" class="i property">Context</a>);
+                    }
+                    <b>break</b>;
+                <b>case</b> <span class="i">LogType</span>.<span class="i">Exception</span>:
+                    <b>if</b> (<span class="r2 r">ctx</span> == <b>null</b>)
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#e8c8ed6cc8b74937" class="i property">Exception</a>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#e8c8ed6cc8b74937" class="i property">Exception</a>, <span class="r1 r">value</span>.<a href="LogEntry.cs.html#c100c98a92328e76" class="i property">Context</a>);
+                    }
+                    <b>break</b>;
+                <b>case</b> <span class="i">LogType</span>.<span class="i">Log</span>:
+                    <b>if</b> (<span class="r2 r">ctx</span> == <b>null</b>)
+                    {
+                        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#0275a19b78bb29f7" class="i property">Message</a>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#0275a19b78bb29f7" class="i property">Message</a>, <span class="r1 r">value</span>.<a href="LogEntry.cs.html#c100c98a92328e76" class="i property">Context</a>);
+                    }
+                    <b>break</b>;
+                <b>case</b> <span class="i">LogType</span>.<span class="i">Warning</span>:
+                    <b>if</b> (<span class="r2 r">ctx</span> == <b>null</b>)
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogWarning</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#0275a19b78bb29f7" class="i property">Message</a>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="i">Debug</span>.<span class="i">LogWarning</span>(<span class="r1 r">value</span>.<a href="LogEntry.cs.html#0275a19b78bb29f7" class="i property">Message</a>, <span class="r1 r">value</span>.<a href="LogEntry.cs.html#c100c98a92328e76" class="i property">Context</a>);
+                    }
+                    <b>break</b>;
+                <b>default</b>:
+                    <b>break</b>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html><head><title>Notification</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">3 types derived from Notification</div><div class="rA">UniRx (3)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Notification.cs (3)</div>
+<a href="../Notification.cs.html#124"><b>124</b>internal sealed class OnNextNotification : <i>Notification</i>&lt;T&gt;</a>
+<a href="../Notification.cs.html#258"><b>258</b>internal sealed class OnErrorNotification : <i>Notification</i>&lt;T&gt;</a>
+<a href="../Notification.cs.html#388"><b>388</b>internal sealed class OnCompletedNotification : <i>Notification</i>&lt;T&gt;</a>
+</div>
+</div>
+<div class="rH">45 references to Notification</div><div class="rA">UniRx (26)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Notification.cs (16)</div>
+<a href="../Notification.cs.html#78"><b>78</b>public abstract class Notification&lt;T&gt; : IEquatable&lt;<i>Notification</i>&lt;T&gt;&gt;</a>
+<a href="../Notification.cs.html#167"><b>167</b>public override bool Equals(<i>Notification</i>&lt;T&gt; other)</a>
+<a href="../Notification.cs.html#301"><b>301</b>public override bool Equals(<i>Notification</i>&lt;T&gt; other)</a>
+<a href="../Notification.cs.html#428"><b>428</b>public override bool Equals(<i>Notification</i>&lt;T&gt; other)</a>
+<a href="../Notification.cs.html#518"><b>518</b>public abstract bool Equals(<i>Notification</i>&lt;T&gt; other);</a>
+<a href="../Notification.cs.html#531"><b>531</b>public static bool operator ==(<i>Notification</i>&lt;T&gt; left, <i>Notification</i>&lt;T&gt; right)</a>
+<a href="../Notification.cs.html#553"><b>553</b>public static bool operator !=(<i>Notification</i>&lt;T&gt; left, <i>Notification</i>&lt;T&gt; right)</a>
+<a href="../Notification.cs.html#570"><b>570</b>return Equals(obj as <i>Notification</i>&lt;T&gt;);</a>
+<a href="../Notification.cs.html#644"><b>644</b>public static <i>Notification</i>&lt;T&gt; CreateOnNext&lt;T&gt;(T value)</a>
+<a href="../Notification.cs.html#646"><b>646</b>return new <i>Notification</i>&lt;T&gt;.OnNextNotification(value);</a>
+<a href="../Notification.cs.html#656"><b>656</b>public static <i>Notification</i>&lt;T&gt; CreateOnError&lt;T&gt;(Exception error)</a>
+<a href="../Notification.cs.html#661"><b>661</b>return new <i>Notification</i>&lt;T&gt;.OnErrorNotification(error);</a>
+<a href="../Notification.cs.html#669"><b>669</b>public static <i>Notification</i>&lt;T&gt; CreateOnCompleted&lt;T&gt;()</a>
+<a href="../Notification.cs.html#671"><b>671</b>return new <i>Notification</i>&lt;T&gt;.OnCompletedNotification();</a>
+</div>
+<div class="rF"><div class="rN">Observable.cs (2)</div>
+<a href="../Observable.cs.html#188"><b>188</b>public static IObservable&lt;<i>Notification</i>&lt;T&gt;&gt; Materialize&lt;T&gt;(this IObservable&lt;T&gt; source)</a>
+<a href="../Observable.cs.html#193"><b>193</b>public static IObservable&lt;T&gt; Dematerialize&lt;T&gt;(this IObservable&lt;<i>Notification</i>&lt;T&gt;&gt; source)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Dematerialize.cs (4)</div>
+<a href="../Operators/Dematerialize.cs.html#7"><b>7</b>readonly IObservable&lt;<i>Notification</i>&lt;T&gt;&gt; source;</a>
+<a href="../Operators/Dematerialize.cs.html#9"><b>9</b>public DematerializeObservable(IObservable&lt;<i>Notification</i>&lt;T&gt;&gt; source)</a>
+<a href="../Operators/Dematerialize.cs.html#20"><b>20</b>class Dematerialize : OperatorObserverBase&lt;<i>Notification</i>&lt;T&gt;, T&gt;</a>
+<a href="../Operators/Dematerialize.cs.html#35"><b>35</b>public override void OnNext(<i>Notification</i>&lt;T&gt; value)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Materialize.cs (4)</div>
+<a href="../Operators/Materialize.cs.html#5"><b>5</b>internal class MaterializeObservable&lt;T&gt; : OperatorObservableBase&lt;<i>Notification</i>&lt;T&gt;&gt;</a>
+<a href="../Operators/Materialize.cs.html#15"><b>15</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Notification</i>&lt;T&gt;&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/Materialize.cs.html#20"><b>20</b>class Materialize : OperatorObserverBase&lt;T, <i>Notification</i>&lt;T&gt;&gt;</a>
+<a href="../Operators/Materialize.cs.html#24"><b>24</b>public Materialize(MaterializeObservable&lt;T&gt; parent, IObserver&lt;<i>Notification</i>&lt;T&gt;&gt; observer, IDisposable cancel)</a>
+</div>
+</div>
+<div class="rA">UniRx.Tests (19)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">Observable.ConcurrencyTest.cs (1)</div>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#23"><b>23</b>var list = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Observable.PagingTest.cs (16)</div>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#259"><b>259</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#325"><b>325</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#394"><b>394</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#431"><b>431</b>l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#473"><b>473</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#522"><b>522</b>l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#552"><b>552</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#597"><b>597</b>l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#609"><b>609</b>l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#658"><b>658</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#704"><b>704</b>l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#716"><b>716</b>l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#789"><b>789</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#805"><b>805</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#906"><b>906</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#929"><b>929</b>var l = new List&lt;<i>Notification</i>&lt;int&gt;&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Tools\TestUtil.cs (2)</div>
+<a href="../../UniRx.Tests/Tools/TestUtil.cs.html#29"><b>29</b>public List&lt;<i>Notification</i>&lt;T&gt;&gt; Notifications { get; set; }</a>
+<a href="../../UniRx.Tests/Tools/TestUtil.cs.html#35"><b>35</b>this.Notifications = new List&lt;<i>Notification</i>&lt;T&gt;&gt;();</a>
+</div>
+</div>
+</body></html>

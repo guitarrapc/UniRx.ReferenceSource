@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Data.Entity.targets</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(14);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Data.Entity.targets" target="_top">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.Data.Entity.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+   &lt;!--</span><span class="c"> 
+        With MSBuild 12, we&#39;ve changed MSBuildToolsPath to for the first time point to a directory
+        outside of the .NET Framework.  As a result of this, there were several targets files, of which 
+        this was one, that were being referenced as out of MSBuildToolsPath that are now no longer there.  
+ 
+        Thus, we are shimming those targets files so that they do still appear in MSBuildToolsPath, so that 
+        consumers of them are not broken, but since the targets files themselves are still part of .NET, 
+        the shim will internally simply redirect to the real copy of the targets file in the .NET Framework. 
+   </span><span class="xd">--&gt;</span><span class="xd">
+ 
+   &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/Windows/Microsoft.NET/Framework64/v4.0.30319/Microsoft.Data.Entity.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildFrameworkToolsPath.html" target="n" class="msbuildlink">MSBuildFrameworkToolsPath</a>)\Microsoft.Data.Entity.targets</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span></pre></td></tr></table></div></body></html>

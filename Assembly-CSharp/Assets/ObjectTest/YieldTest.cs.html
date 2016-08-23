@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html><head><title>YieldTest.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(42);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/YieldTest.cs" target="_top">Assets\ObjectTest\YieldTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>public class</b> <a id="a27f1960dec61f75" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="28751bb7deb794ba">YieldTest</span></a> : <span class="i">MonoBehaviour</span>
+{
+    <b>public void</b> <a id="e3c86bdc59a30953" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>()
+    {
+        <span class="c">//Observable.Create&lt;Unit&gt;(observer =&gt;</span>
+        <span class="c">//{</span>
+        <span class="c">//    observer.OnNext(Unit.Default);</span>
+        <span class="c">//    observer.OnCompleted();</span>
+        <span class="c">//    return Disposable.Empty;</span>
+        <span class="c">//})</span>
+        <span class="c">//Observable.ReturnUnit()</span>
+        <span class="c">//    .Finally(() =&gt;</span>
+        <span class="c">//    {</span>
+        <span class="c">//        Debug.Log(&quot;finally&quot;);</span>
+        <span class="c">//    })</span>
+        <span class="c">//    .Subscribe(_ =&gt;</span>
+        <span class="c">//    {</span>
+        <span class="c">//        Debug.Log(&quot;onnext&quot;);</span>
+        <span class="c">//    }, () =&gt; Debug.Log(&quot;comp&quot;));</span>
+        <a href="#a27f1960dec61f75" class="k">this</a>.<span class="i">StartCoroutine</span>(<a href="#a27f1960dec61f75" class="k">this</a>.<a href="#f78ff8017925e244" class="i method">SomeCoroutine</a>());
+    }
+ 
+    <b>private</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="f78ff8017925e244" href="../../R/f78ff8017925e244.html" target="n" data-glyph="76,1" class="i method">SomeCoroutine</a>()
+    {
+        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;begin SomeCoroutine&quot;</span>);
+        <b>yield return</b> <a href="#a27f1960dec61f75" class="k">this</a>.<a href="#2c9f143666e213fa" class="i method">SomeObservable</a>().<a href="/Assembly-CSharp-firstpass/A.html#4d086d3d434aea81" class="i method">StartAsCoroutine</a>();
+        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;end SomeCoroutine&quot;</span>); <span class="c">//not called!</span>
+    }
+ 
+    <b>private</b> <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="/Assembly-CSharp-firstpass/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="2c9f143666e213fa" href="../../R/2c9f143666e213fa.html" target="n" data-glyph="76,1" class="i method">SomeObservable</a>()
+    {
+        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;begin SomeObservable&quot;</span>);
+        <b>return</b> <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#5a94a3189575c5a6" class="i method">ReturnUnit</a>()
+            .<span class="i">Do</span>(<span id="r0 rd" class="r0 r">_</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;end SomeObservable&quot;</span>));
+    }
+}
+</pre></td></tr></table></div></body></html>

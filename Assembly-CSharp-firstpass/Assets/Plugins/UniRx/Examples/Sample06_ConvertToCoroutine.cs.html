@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample06_ConvertToCoroutine.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(68);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample06_ConvertToCoroutine.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample06_ConvertToCoroutine.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="c375ff88e8706b60" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="4b6cc4f6e40ebf37">Sample06_ConvertToCoroutine</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <span class="c">// convert IObservable to Coroutine</span>
+        <b>void</b> <a id="e4c32e95d57ba20b" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="i">StartCoroutine</span>(<a href="#d2691e6e5e8c0423" class="i method">ComplexCoroutineTest</a>());
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="d2691e6e5e8c0423" href="../../../../R/d2691e6e5e8c0423.html" target="n" data-glyph="76,1" class="i method">ComplexCoroutineTest</a>()
+        {
+            <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>(1);
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r0 rd" class="r0 r">v</span> = <b>default</b>(<b>int</b>);
+            <b>yield return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Creation.cs.html#72da3db51047e6df" class="i method">Range</a>(1, 10).<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#c8325cf4290eb880" class="i method">StartAsCoroutine</a>(<span id="r1 rd" class="r1 r">x</span> =&gt; <span class="r0 r">v</span> = <span class="r1 r">x</span>);
+ 
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r0 r">v</span>); <span class="c">// 10(callback is last value)</span>
+            <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>(3);
+ 
+            <b>yield return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Creation.cs.html#2843d6a6f424ac6b" class="i method">Return</a>(100).<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#c8325cf4290eb880" class="i method">StartAsCoroutine</a>(<span id="r2 rd" class="r2 r">x</span> =&gt; <span class="r0 r">v</span> = <span class="r2 r">x</span>);
+ 
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r0 r">v</span>); <span class="c">// 100</span>
+        }
+ 
+        <span class="c">// like WWW.text/error, LazyTask is awaitable value container</span>
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="bc5ccdf03f046eec" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">LazyTaskTest</a>()
+        {
+            <span class="c">// IObservable&lt;T&gt; to LazyTask</span>
+            <a href="../Scripts/UnityEngineBridge/LazyTask.cs.html#3aa64a7907508101" class="k">var</a> <span id="r3 rd" class="r3 r">task</span> = <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Creation.cs.html#4b9eec812b962b8f" class="i method">Start</a>(() =&gt; 100).<a href="../Scripts/UnityEngineBridge/LazyTask.cs.html#272fd9bd77455f0e" class="i method">ToLazyTask</a>();
+ 
+            <b>yield return</b> <span class="r3 r">task</span>.<a href="../Scripts/UnityEngineBridge/LazyTask.cs.html#448607533b42ce3c" class="i method">Start</a>(); <span class="c">// wait for OnCompleted</span>
+ 
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r3 r">task</span>.<a href="../Scripts/UnityEngineBridge/LazyTask.cs.html#81c3985a5df919e5" class="i property">Result</a>); <span class="c">// or task.Exception</span>
+        }
+ 
+        <span class="c">// Note:ToAwaitableEnumerator/StartAsCoroutine/LazyTask are obsolete way on Unity 5.3</span>
+        <span class="c">// You can use ToYieldInstruction.</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="881f67df9953a0e1" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">TestNewCustomYieldInstruction</a>()
+        {
+            <span class="c">// wait Rx Observable.</span>
+            <b>yield return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Time.cs.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)).<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#34e860c379f74e5d" class="i method">ToYieldInstruction</a>();
+ 
+            <span class="c">// you can change the scheduler(this is ignore Time.scale)</span>
+            <b>yield return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Time.cs.html#08e19f452b85bc58" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1), <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Scripts/UnityEngineBridge/MainThreadScheduler.cs.html#bdeedf80c84f0a5d" class="i property">MainThreadIgnoreTimeScale</a>).<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#34e860c379f74e5d" class="i method">ToYieldInstruction</a>();
+ 
+            <span class="c">// get return value from ObservableYieldInstruction</span>
+            <a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#f022e54f47b94101" class="k">var</a> <span id="r4 rd" class="r4 r">o</span> = <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://unity3d.com/&quot;</span>).<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#844fa5055b7c6485" class="i method">ToYieldInstruction</a>(<span class="r5 r">throwOnError</span>: <b>false</b>);
+            <b>yield return</b> <span class="r4 r">o</span>;
+ 
+            <b>if</b> (<span class="r4 r">o</span>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#b187a8b914995945" class="i property">HasError</a>) { <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r4 r">o</span>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#28a94baf7e5d5e9e" class="i property">Error</a>.<a href="@0@mscorlib/A.html#e2e19f4ed8da81aa" class="i method">ToString</a>()); }
+            <b>if</b> (<span class="r4 r">o</span>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#1c0099e9931a7f61" class="i property">HasResult</a>) { <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r4 r">o</span>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#404ce87cc82f24ec" class="i property">Result</a>); }
+ 
+            <span class="c">// other sample(wait until transform.position.y &gt;= 100) </span>
+            <b>yield return</b> <a href="#c375ff88e8706b60" class="k">this</a>.<span class="i">ObserveEveryValueChanged</span>(<span id="r6 rd" class="r6 r">x</span> =&gt; <span class="r6 r">x</span>.<span class="i">transform</span>).<span class="i">FirstOrDefault</span>(<span id="r7 rd" class="r7 r">x</span> =&gt; <span class="r7 r">x</span>.<span class="i">position</span>.<span class="i">y</span> &gt;= 100).<span class="i">ToYieldInstruction</span>();
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+    }
+}</pre></td></tr></table></div></body></html>

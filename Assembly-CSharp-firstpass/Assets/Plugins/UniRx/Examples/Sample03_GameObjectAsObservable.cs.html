@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample03_GameObjectAsObservable.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(23);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample03_GameObjectAsObservable.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample03_GameObjectAsObservable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>; <span class="c">// for enable gameObject.EventAsObservbale()</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="f82c5ccbbbfa9fec" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="d5716bcc6d276190">Sample03_GameObjectAsObservable</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>void</b> <a id="cf2973f8f99efeea" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// All events can subscribe by ***AsObservable if enables UniRx.Triggers</span>
+            <a href="#f82c5ccbbbfa9fec" class="k">this</a>.<span class="i">OnMouseDownAsObservable</span>()
+                .<span class="i">SelectMany</span>(<span id="r0 rd" class="r0 r">_</span> =&gt; <a href="#f82c5ccbbbfa9fec" class="k">this</a>.<span class="i">gameObject</span>.<span class="i">UpdateAsObservable</span>())
+                .<span class="i">TakeUntil</span>(<a href="#f82c5ccbbbfa9fec" class="k">this</a>.<span class="i">gameObject</span>.<span class="i">OnMouseUpAsObservable</span>())
+                .<span class="i">Select</span>(<span id="r1 rd" class="r1 r">_</span> =&gt; <span class="i">Input</span>.<span class="i">mousePosition</span>)
+                .<span class="i">RepeatUntilDestroy</span>(<a href="#f82c5ccbbbfa9fec" class="k">this</a>)
+                .<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r2 r">x</span>), ()=&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;!!!&quot;</span> + <span class="s">&quot;complete&quot;</span>));
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

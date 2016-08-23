@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html><head><title>Pair.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(59);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Pair.cs" target="_top">Pair.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">// Pair is used for Observable.Pairwise</span>
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="60a1cd66893078a8" href="R/60a1cd66893078a8.html" target="n" data-glyph="108,0" class="t t"><span id="89011c720f90d067">Pair</span></a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#60a1cd66893078a8" class="t t">Pair</a>&lt;<span class="r0 r t">T</span>&gt;&gt;
+    {
+        <b>readonly</b> <span class="r0 r t">T</span> <a id="e4d9a6a5dc5bb0ac" href="R/e4d9a6a5dc5bb0ac.html" target="n" data-glyph="46,1" class="i field">previous</a>;
+        <b>readonly</b> <span class="r0 r t">T</span> <a id="206d249b815d94de" href="R/206d249b815d94de.html" target="n" data-glyph="46,1" class="i field">current</a>;
+ 
+        <b>public</b> <span class="r0 r t">T</span> <a id="216f94560c3fc5cd" href="R/216f94560c3fc5cd.html" target="n" data-glyph="102,1" class="i property">Previous</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#e4d9a6a5dc5bb0ac" class="i field">previous</a>; }
+        }
+ 
+        <b>public</b> <span class="r0 r t">T</span> <a id="06b9b3c1218479aa" href="R/06b9b3c1218479aa.html" target="n" data-glyph="102,1" class="i property">Current</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#206d249b815d94de" class="i field">current</a>; }
+        }
+ 
+        <b>public</b> <a id="9972f0f043fc46d2" href="R/9972f0f043fc46d2.html" target="n" data-glyph="72,1" class="i constructor">Pair</a>(<span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">previous</span>, <span class="r0 r t">T</span> <span id="r2 rd" class="r2 r">current</span>)
+        {
+            <a href="#60a1cd66893078a8" class="k">this</a>.<a href="#e4d9a6a5dc5bb0ac" class="i field">previous</a> = <span class="r1 r">previous</span>;
+            <a href="#60a1cd66893078a8" class="k">this</a>.<a href="#206d249b815d94de" class="i field">current</a> = <span class="r2 r">current</span>;
+        }
+ 
+        <b>public override int</b> <a id="1f3100f017891669" href="R/1f3100f017891669.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r3 rd" class="r3 r">comparer</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r4 rd" class="r4 r">h0</span>;
+            <span class="r4 r">h0</span> = <span class="r3 r">comparer</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#e4d9a6a5dc5bb0ac" class="i field">previous</a>);
+            <span class="r4 r">h0</span> = (<span class="r4 r">h0</span> &lt;&lt; 5) + <span class="r4 r">h0</span> ^ <span class="r3 r">comparer</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#206d249b815d94de" class="i field">current</a>);
+            <b>return</b> <span class="r4 r">h0</span>;
+        }
+ 
+        <b>public override bool</b> <a id="4a5b8ac2c2e0a7f2" href="R/4a5b8ac2c2e0a7f2.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r5 rd" class="r5 r">obj</span>)
+        {
+            <b>if</b> (!(<span class="r5 r">obj</span> <b>is</b> <a href="#60a1cd66893078a8" class="t t">Pair</a>&lt;<span class="r0 r t">T</span>&gt;)) <b>return false</b>;
+ 
+            <b>return</b> <a href="#fea7dfa9d5a28c87" class="i method">Equals</a>((<a href="#60a1cd66893078a8" class="t t">Pair</a>&lt;<span class="r0 r t">T</span>&gt;)<span class="r5 r">obj</span>);
+        }
+ 
+        <b>public bool</b> <a id="fea7dfa9d5a28c87" href="R/fea7dfa9d5a28c87.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#60a1cd66893078a8" class="t t">Pair</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r6 rd" class="r6 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r7 rd" class="r7 r">comparer</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r7 r">comparer</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#e4d9a6a5dc5bb0ac" class="i field">previous</a>, <span class="r6 r">other</span>.<a href="#216f94560c3fc5cd" class="i property">Previous</a>) &amp;&amp;
+                <span class="r7 r">comparer</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#206d249b815d94de" class="i field">current</a>, <span class="r6 r">other</span>.<a href="#06b9b3c1218479aa" class="i property">Current</a>);
+        }
+ 
+        <b>public override string</b> <a id="d9a5400c4f0d8cea" href="R/d9a5400c4f0d8cea.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;({0}, {1})&quot;</span>, <a href="#e4d9a6a5dc5bb0ac" class="i field">previous</a>, <a href="#206d249b815d94de" class="i field">current</a>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

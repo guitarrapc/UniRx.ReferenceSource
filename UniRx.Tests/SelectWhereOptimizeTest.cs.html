@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html><head><title>SelectWhereOptimizeTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(75);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/SelectWhereOptimizeTest.cs" target="_top">SelectWhereOptimizeTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<span class="i n">Tasks</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="958ccb45ff06fccc" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="697f193d69867ce4">SelectWhereOptimizeTest</span></a>
+    {
+        <span class="c">// Combine selector currently disabled.</span>
+        <span class="c">//[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod]</span>
+        <span class="c">//public void SelectSelect()</span>
+        <span class="c">//{</span>
+        <span class="c">//    var selectselect = Observable.Range(1, 10)</span>
+        <span class="c">//        .Select(x =&gt; x)</span>
+        <span class="c">//        .Select(x =&gt; x * -1);</span>
+        <span class="c">//}</span>
+ 
+        [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="d601572adc2f7e3c" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhereWhere</a>()
+        {
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r0 rd" class="r0 r">wherewhere</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                .<a href="/UniRx/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r1 rd" class="r1 r">x</span> =&gt; <span class="r1 r">x</span> % 2 == 0)
+                .<a href="/UniRx/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r2 rd" class="r2 r">x</span> =&gt; <span class="r2 r">x</span> &gt; 5);
+ 
+            <span class="r0 r">wherewhere</span>.<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(6, 8, 10);
+ 
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r3 rd" class="r3 r">wherewhere2</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                .<a href="/UniRx/A.html#75e9640dab899788" class="i method">Where</a>((<span id="r4 rd" class="r4 r">x</span>, <span id="r5 rd" class="r5 r">i</span>) =&gt; <span class="r4 r">x</span> % 2 == 0)
+                .<a href="/UniRx/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r6 rd" class="r6 r">x</span> =&gt; <span class="r6 r">x</span> &gt; 5);
+ 
+            <span class="r3 r">wherewhere2</span>.<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(6, 8, 10);
+        }
+ 
+        [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="03d12cca94732c24" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">SelectWhere</a>()
+        {
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r7 rd" class="r7 r">selectWhere</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r8 rd" class="r8 r">x</span> =&gt; <span class="r8 r">x</span> * <span class="r8 r">x</span>)
+                .<a href="/UniRx/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r9 rd" class="r9 r">x</span> =&gt; <span class="r9 r">x</span> % 2 == 0);
+ 
+            <span class="r7 r">selectWhere</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>.<a href="@0@mscorlib/A.html#428c5c9954dea844" class="i method">Contains</a>(<span class="s">&quot;SelectWhere&quot;</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r7 r">selectWhere</span>.<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(4, 16, 36, 64, 100);
+ 
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r10 rd" class="r10 r">selectWhere2</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                .<a href="/UniRx/A.html#b9b74e96a91b54c1" class="i method">Select</a>((<span id="r11 rd" class="r11 r">x</span>, <span id="r12 rd" class="r12 r">i</span>) =&gt; <span class="r11 r">x</span> * <span class="r11 r">x</span>)
+                .<a href="/UniRx/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r13 rd" class="r13 r">x</span> =&gt; <span class="r13 r">x</span> % 2 == 0);
+ 
+            <span class="r10 r">selectWhere2</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>.<a href="@0@mscorlib/A.html#428c5c9954dea844" class="i method">Contains</a>(<span class="s">&quot;SelectWhere&quot;</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r10 r">selectWhere2</span>.<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(4, 16, 36, 64, 100);
+        }
+ 
+        [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="029716690e1e63fe" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhereSelect</a>()
+        {
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r14 rd" class="r14 r">whereSelect</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                .<a href="/UniRx/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r15 rd" class="r15 r">x</span> =&gt; <span class="r15 r">x</span> % 2 == 0)
+                .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r16 rd" class="r16 r">x</span> =&gt; <span class="r16 r">x</span> * <span class="r16 r">x</span>);
+ 
+            <span class="r14 r">whereSelect</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>.<a href="@0@mscorlib/A.html#428c5c9954dea844" class="i method">Contains</a>(<span class="s">&quot;WhereSelect&quot;</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r14 r">whereSelect</span>.<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(4, 16, 36, 64, 100);
+ 
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r17 rd" class="r17 r">whereSelect2</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                .<a href="/UniRx/A.html#75e9640dab899788" class="i method">Where</a>((<span id="r18 rd" class="r18 r">x</span>, <span id="r19 rd" class="r19 r">i</span>) =&gt; <span class="r18 r">x</span> % 2 == 0)
+                .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r20 rd" class="r20 r">x</span> =&gt; <span class="r20 r">x</span> * <span class="r20 r">x</span>);
+ 
+            <span class="r17 r">whereSelect2</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>.<a href="@0@mscorlib/A.html#428c5c9954dea844" class="i method">Contains</a>(<span class="s">&quot;WhereSelect&quot;</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r17 r">whereSelect2</span>.<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(4, 16, 36, 64, 100);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

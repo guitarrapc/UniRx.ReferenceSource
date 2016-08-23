@@ -1,0 +1,686 @@
+﻿<!DOCTYPE html>
+<html><head><title>Notification.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(677);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Notification.cs" target="_top">Assets\Plugins\UniRx\Scripts\Notification.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// original code from rx.codeplex.com</span>
+<span class="c">// some modified.</span>
+ 
+<span class="c">/* ------------------ */</span>
+ 
+<span class="c">// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.</span>
+ 
+<b>using</b> <span class="i n">System</span>.<span class="i n">Diagnostics</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Globalization</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">disable</span> 0659
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">disable</span> 0661
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Provides a mechanism for receiving push-based notifications and returning a response.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r t">TValue</span><span class="c">&quot;</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> The type of the elements received by the observer.</span>
+    <span class="c">///</span><span class="c"> This type parameter is contravariant. That is, you can use either the type you specified or any type that is less derived. For more information about covariance and contravariance, see Covariance and Contravariance in Generics.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r t">TResult</span><span class="c">&quot;</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> The type of the result returned from the observer&#39;s notification handlers.</span>
+    <span class="c">///</span><span class="c"> This type parameter is covariant. That is, you can use either the type you specified or any type that is more derived. For more information about covariance and contravariance, see Covariance and Contravariance in Generics.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+    <b>public interface</b> <a id="6df013349ba64de3" href="../../../../R/6df013349ba64de3.html" target="n" data-glyph="48,0" class="t t">IObserver</a>&lt;<span id="r0 rd t" class="r0 r t">TValue</span>, <span id="r1 rd t" class="r1 r t">TResult</span>&gt;
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Notifies the observer of a new element in the sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r2 r">value</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The new element in the sequence.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result returned upon observation of a new element.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="r1 r t">TResult</span> <a id="d3fb6fd1ff22f3e4" href="../../../../R/d3fb6fd1ff22f3e4.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">TValue</span> <span id="r2 rd" class="r2 r">value</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Notifies the observer that an exception has occurred.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r3 r">exception</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The exception that occurred.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result returned upon observation of an error.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="r1 r t">TResult</span> <a id="380a5bb0418a9ca5" href="../../../../R/380a5bb0418a9ca5.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r3 rd" class="r3 r">exception</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Notifies the observer of the end of the sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result returned upon observation of the sequence completion.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="r1 r t">TResult</span> <a id="ab319a6f42fb1abe" href="../../../../R/ab319a6f42fb1abe.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>();
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Indicates the type of a notification.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public enum</b> <a id="be022d92a7194ada" href="../../../../R/be022d92a7194ada.html" target="n" data-glyph="18,0" class="t t"><span id="d9dea8538c1b4b2b">NotificationKind</span></a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an OnNext notification.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="9139ce6ebab6850e" href="../../../../R/9139ce6ebab6850e.html" target="n" data-glyph="24,1" class="i field">OnNext</a>,
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an OnError notification.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="625f6dd05d0656c3" href="../../../../R/625f6dd05d0656c3.html" target="n" data-glyph="24,1" class="i field">OnError</a>,
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an OnCompleted notification.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="af824cc690aabef9" href="../../../../R/af824cc690aabef9.html" target="n" data-glyph="24,1" class="i field">OnCompleted</a>
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Represents a notification to an observer.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r t">T</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The type of the elements received by the observer.</span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public abstract class</b> <a id="3775560f59260a8c" href="../../../../R/3775560f59260a8c.html" target="n" data-glyph="0,0" class="t t">Notification</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt;&gt;
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Default constructor used by derived types.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected internal</b> <a id="56eec2f4ab4056af" href="../../../../R/../../0000000000.html" target="n" data-glyph="75,1" class="i constructor">Notification</a>()
+        {
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns the value of an OnNext notification or throws an exception.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public abstract</b> <span class="r4 r t">T</span> <a id="627feef6f006e18a" href="../../../../R/627feef6f006e18a.html" target="n" data-glyph="102,1" class="i property">Value</a>
+        {
+            <b>get</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns a value that indicates whether the notification has a value.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public abstract bool</b> <a id="4e58d82892a79613" href="../../../../R/4e58d82892a79613.html" target="n" data-glyph="102,1" class="i property">HasValue</a>
+        {
+            <b>get</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns the exception of an OnError notification or returns null.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public abstract</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="7c4c05ec52e35b79" href="../../../../R/7c4c05ec52e35b79.html" target="n" data-glyph="102,1" class="i property">Exception</a>
+        {
+            <b>get</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Gets the kind of notification that is represented.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public abstract</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a> <a id="30da0e55bb60c517" href="../../../../R/30da0e55bb60c517.html" target="n" data-glyph="102,1" class="i property">Kind</a>
+        {
+            <b>get</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an OnNext notification to an observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        [<a href="@0@mscorlib/A.html#761078d4519dc54e" class="t constructor">DebuggerDisplay</a>(<span class="s">&quot;OnNext({Value})&quot;</span>)]
+        [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+        <b>internal sealed class</b> <a id="291d7515f2a9d589" href="../../../../R/291d7515f2a9d589.html" target="n" data-glyph="2,1" class="t t">OnNextNotification</a> : <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt;
+        {
+            <span class="r4 r t">T</span> <a id="8ffb790789639b12" href="../../../../R/8ffb790789639b12.html" target="n" data-glyph="46,2" class="i field">value</a>;
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Constructs a notification of a new value.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public</b> <a id="97b549762cc1036b" href="../../../../R/97b549762cc1036b.html" target="n" data-glyph="72,2" class="i constructor">OnNextNotification</a>(<span class="r4 r t">T</span> <span id="r5 rd" class="r5 r">value</span>)
+            {
+                <a href="#291d7515f2a9d589" class="k">this</a>.<a href="#8ffb790789639b12" class="i field">value</a> = <span class="r5 r">value</span>;
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns the value of an OnNext notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r4 r t">T</span> <a id="98981e8d6dcdb948" href="../../../../R/98981e8d6dcdb948.html" target="n" data-glyph="102,2" class="i property">Value</a> { <b>get</b> { <b>return</b> <a href="#8ffb790789639b12" class="i field">value</a>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns null.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="8dd29aa83c81a2d6" href="../../../../R/8dd29aa83c81a2d6.html" target="n" data-glyph="102,2" class="i property">Exception</a> { <b>get</b> { <b>return null</b>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns true.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override bool</b> <a id="f7deb0f21cd855a9" href="../../../../R/f7deb0f21cd855a9.html" target="n" data-glyph="102,2" class="i property">HasValue</a> { <b>get</b> { <b>return true</b>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns NotificationKind.OnNext.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a> <a id="52d373718d4c5cdc" href="../../../../R/52d373718d4c5cdc.html" target="n" data-glyph="102,2" class="i property">Kind</a> { <b>get</b> { <b>return</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#9139ce6ebab6850e" class="i field">OnNext</a>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns the hash code for this instance.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override int</b> <a id="2888cecd1093f25b" href="../../../../R/2888cecd1093f25b.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>()
+            {
+                <b>return</b> <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r4 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#98981e8d6dcdb948" class="i property">Value</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Indicates whether this instance and a specified object are equal.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override bool</b> <a id="c505d1e6296fce5f" href="../../../../R/c505d1e6296fce5f.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r6 rd" class="r6 r">other</span>)
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<a href="#291d7515f2a9d589" class="k">this</a>, <span class="r6 r">other</span>))
+                    <b>return true</b>;
+                <b>if</b> (<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r6 r">other</span>, <b>null</b>))
+                    <b>return false</b>;
+                <b>if</b> (<span class="r6 r">other</span>.<a href="#30da0e55bb60c517" class="i property">Kind</a> != <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#9139ce6ebab6850e" class="i field">OnNext</a>)
+                    <b>return false</b>;
+                <b>return</b> <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r4 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#98981e8d6dcdb948" class="i property">Value</a>, <span class="r6 r">other</span>.<a href="#627feef6f006e18a" class="i property">Value</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns a string representation of this instance.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override string</b> <a id="ad24f21e6c2db07f" href="../../../../R/ad24f21e6c2db07f.html" target="n" data-glyph="72,2" class="i method">ToString</a>()
+            {
+                <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#691a34e179b91fdb" class="i method">Format</a>(<a href="@0@mscorlib/A.html#e319c6636909012f" class="t t">CultureInfo</a>.<a href="@0@mscorlib/A.html#1f5907384ac6bb55" class="i property">CurrentCulture</a>, <span class="s">&quot;OnNext({0})&quot;</span>, <a href="#98981e8d6dcdb948" class="i property">Value</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r7 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <b>public override void</b> <a id="9d86f03e6bf391c7" href="../../../../R/9d86f03e6bf391c7.html" target="n" data-glyph="72,2" class="i method">Accept</a>(<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r7 rd" class="r7 r">observer</span>)
+            {
+                <b>if</b> (<span class="r7 r">observer</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <span class="r7 r">observer</span>.<a href="System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="#98981e8d6dcdb948" class="i property">Value</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification and returns the produced result.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r8 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r9 r t">TResult</span> <a id="30acf48c4fe0d8d9" href="../../../../R/30acf48c4fe0d8d9.html" target="n" data-glyph="72,2" class="i method">Accept</a>&lt;<span id="r9 rd t" class="r9 r t">TResult</span>&gt;(<a href="#6df013349ba64de3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>, <span class="r9 r t">TResult</span>&gt; <span id="r8 rd" class="r8 r">observer</span>)
+            {
+                <b>if</b> (<span class="r8 r">observer</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <b>return</b> <span class="r8 r">observer</span>.<a href="#d3fb6fd1ff22f3e4" class="i method">OnNext</a>(<a href="#98981e8d6dcdb948" class="i property">Value</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r10 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r11 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r12 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <b>public override void</b> <a id="7cd0e95ef2c6e365" href="../../../../R/7cd0e95ef2c6e365.html" target="n" data-glyph="72,2" class="i method">Accept</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r10 rd" class="r10 r">onNext</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r11 rd" class="r11 r">onError</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r12 rd" class="r12 r">onCompleted</span>)
+            {
+                <b>if</b> (<span class="r10 r">onNext</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onNext&quot;</span>);
+                <b>if</b> (<span class="r11 r">onError</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onError&quot;</span>);
+                <b>if</b> (<span class="r12 r">onCompleted</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onCompleted&quot;</span>);
+ 
+                <span class="r10 r">onNext</span>(<a href="#98981e8d6dcdb948" class="i property">Value</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification and returns the produced result.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r13 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r14 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r15 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r16 r t">TResult</span> <a id="6f9fb970133848af" href="../../../../R/6f9fb970133848af.html" target="n" data-glyph="72,2" class="i method">Accept</a>&lt;<span id="r16 rd t" class="r16 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r4 r t">T</span>, <span class="r16 r t">TResult</span>&gt; <span id="r13 rd" class="r13 r">onNext</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>, <span class="r16 r t">TResult</span>&gt; <span id="r14 rd" class="r14 r">onError</span>, <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r16 r t">TResult</span>&gt; <span id="r15 rd" class="r15 r">onCompleted</span>)
+            {
+                <b>if</b> (<span class="r13 r">onNext</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onNext&quot;</span>);
+                <b>if</b> (<span class="r14 r">onError</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onError&quot;</span>);
+                <b>if</b> (<span class="r15 r">onCompleted</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onCompleted&quot;</span>);
+ 
+                <b>return</b> <span class="r13 r">onNext</span>(<a href="#98981e8d6dcdb948" class="i property">Value</a>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an OnError notification to an observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">NO_DEBUGGER_ATTRIBUTES</span>
+        [<a href="@0@mscorlib/A.html#761078d4519dc54e" class="t constructor">DebuggerDisplay</a>(<span class="s">&quot;OnError({Exception})&quot;</span>)]
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">NO_SERIALIZABLE</span>
+        [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        <b>internal sealed class</b> <a id="9f05a23b9e1174fc" href="../../../../R/9f05a23b9e1174fc.html" target="n" data-glyph="2,1" class="t t">OnErrorNotification</a> : <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt;
+        {
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="e0a8b74ff0255b8b" href="../../../../R/e0a8b74ff0255b8b.html" target="n" data-glyph="46,2" class="i field">exception</a>;
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Constructs a notification of an exception.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public</b> <a id="1c4ac23b0c57a774" href="../../../../R/1c4ac23b0c57a774.html" target="n" data-glyph="72,2" class="i constructor">OnErrorNotification</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r17 rd" class="r17 r">exception</span>)
+            {
+                <a href="#9f05a23b9e1174fc" class="k">this</a>.<a href="#e0a8b74ff0255b8b" class="i field">exception</a> = <span class="r17 r">exception</span>;
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Throws the exception.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r4 r t">T</span> <a id="56f5a2ead8970332" href="../../../../R/56f5a2ead8970332.html" target="n" data-glyph="102,2" class="i property">Value</a> { <b>get</b> { <b>throw</b> <a href="#e0a8b74ff0255b8b" class="i field">exception</a>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns the exception.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="185120a458cc9ee3" href="../../../../R/185120a458cc9ee3.html" target="n" data-glyph="102,2" class="i property">Exception</a> { <b>get</b> { <b>return</b> <a href="#e0a8b74ff0255b8b" class="i field">exception</a>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns false.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override bool</b> <a id="c5ec256d43ae0d05" href="../../../../R/c5ec256d43ae0d05.html" target="n" data-glyph="102,2" class="i property">HasValue</a> { <b>get</b> { <b>return false</b>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns NotificationKind.OnError.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a> <a id="1b1efb3bc4254eed" href="../../../../R/1b1efb3bc4254eed.html" target="n" data-glyph="102,2" class="i property">Kind</a> { <b>get</b> { <b>return</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#625f6dd05d0656c3" class="i field">OnError</a>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns the hash code for this instance.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override int</b> <a id="b70096730ffde529" href="../../../../R/b70096730ffde529.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>()
+            {
+                <b>return</b> <a href="#185120a458cc9ee3" class="i property">Exception</a>.<a href="@0@mscorlib/A.html#4de9cf234d0d8b16" class="i method">GetHashCode</a>();
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Indicates whether this instance and other are equal.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override bool</b> <a id="983b81db83528968" href="../../../../R/983b81db83528968.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r18 rd" class="r18 r">other</span>)
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<a href="#9f05a23b9e1174fc" class="k">this</a>, <span class="r18 r">other</span>))
+                    <b>return true</b>;
+                <b>if</b> (<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r18 r">other</span>, <b>null</b>))
+                    <b>return false</b>;
+                <b>if</b> (<span class="r18 r">other</span>.<a href="#30da0e55bb60c517" class="i property">Kind</a> != <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#625f6dd05d0656c3" class="i field">OnError</a>)
+                    <b>return false</b>;
+                <b>return</b> <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<a href="#185120a458cc9ee3" class="i property">Exception</a>, <span class="r18 r">other</span>.<a href="#7c4c05ec52e35b79" class="i property">Exception</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns a string representation of this instance.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override string</b> <a id="b18445c86cd4c92d" href="../../../../R/b18445c86cd4c92d.html" target="n" data-glyph="72,2" class="i method">ToString</a>()
+            {
+                <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#691a34e179b91fdb" class="i method">Format</a>(<a href="@0@mscorlib/A.html#e319c6636909012f" class="t t">CultureInfo</a>.<a href="@0@mscorlib/A.html#1f5907384ac6bb55" class="i property">CurrentCulture</a>, <span class="s">&quot;OnError({0})&quot;</span>, <a href="#185120a458cc9ee3" class="i property">Exception</a>.<a href="@0@mscorlib/A.html#cf7a3679f8b67db4" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#976443bb39dc37cd" class="i property">FullName</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r19 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <b>public override void</b> <a id="9d88ad626de14001" href="../../../../R/9d88ad626de14001.html" target="n" data-glyph="72,2" class="i method">Accept</a>(<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r19 rd" class="r19 r">observer</span>)
+            {
+                <b>if</b> (<span class="r19 r">observer</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <span class="r19 r">observer</span>.<a href="System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<a href="#185120a458cc9ee3" class="i property">Exception</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification and returns the produced result.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r20 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r21 r t">TResult</span> <a id="0e57d895c0508252" href="../../../../R/0e57d895c0508252.html" target="n" data-glyph="72,2" class="i method">Accept</a>&lt;<span id="r21 rd t" class="r21 r t">TResult</span>&gt;(<a href="#6df013349ba64de3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>, <span class="r21 r t">TResult</span>&gt; <span id="r20 rd" class="r20 r">observer</span>)
+            {
+                <b>if</b> (<span class="r20 r">observer</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <b>return</b> <span class="r20 r">observer</span>.<a href="#380a5bb0418a9ca5" class="i method">OnError</a>(<a href="#185120a458cc9ee3" class="i property">Exception</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r22 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r23 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r24 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <b>public override void</b> <a id="bfe38bad0857fb43" href="../../../../R/bfe38bad0857fb43.html" target="n" data-glyph="72,2" class="i method">Accept</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r22 rd" class="r22 r">onNext</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r23 rd" class="r23 r">onError</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r24 rd" class="r24 r">onCompleted</span>)
+            {
+                <b>if</b> (<span class="r22 r">onNext</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onNext&quot;</span>);
+                <b>if</b> (<span class="r23 r">onError</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onError&quot;</span>);
+                <b>if</b> (<span class="r24 r">onCompleted</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onCompleted&quot;</span>);
+ 
+                <span class="r23 r">onError</span>(<a href="#185120a458cc9ee3" class="i property">Exception</a>);
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification and returns the produced result.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r25 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r26 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r27 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r28 r t">TResult</span> <a id="a948469d855bdc12" href="../../../../R/a948469d855bdc12.html" target="n" data-glyph="72,2" class="i method">Accept</a>&lt;<span id="r28 rd t" class="r28 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r4 r t">T</span>, <span class="r28 r t">TResult</span>&gt; <span id="r25 rd" class="r25 r">onNext</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>, <span class="r28 r t">TResult</span>&gt; <span id="r26 rd" class="r26 r">onError</span>, <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r28 r t">TResult</span>&gt; <span id="r27 rd" class="r27 r">onCompleted</span>)
+            {
+                <b>if</b> (<span class="r25 r">onNext</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onNext&quot;</span>);
+                <b>if</b> (<span class="r26 r">onError</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onError&quot;</span>);
+                <b>if</b> (<span class="r27 r">onCompleted</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onCompleted&quot;</span>);
+ 
+                <b>return</b> <span class="r26 r">onError</span>(<a href="#185120a458cc9ee3" class="i property">Exception</a>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an OnCompleted notification to an observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        [<a href="@0@mscorlib/A.html#761078d4519dc54e" class="t constructor">DebuggerDisplay</a>(<span class="s">&quot;OnCompleted()&quot;</span>)]
+        [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+        <b>internal sealed class</b> <a id="ecd8c11e75da9e9a" href="../../../../R/ecd8c11e75da9e9a.html" target="n" data-glyph="2,1" class="t t">OnCompletedNotification</a> : <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt;
+        {
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Constructs a notification of the end of a sequence.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public</b> <a id="8b6a36c07e276c08" href="../../../../R/8b6a36c07e276c08.html" target="n" data-glyph="72,2" class="i constructor">OnCompletedNotification</a>()
+            {
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Throws an InvalidOperationException.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r4 r t">T</span> <a id="2b6c6ff76800929d" href="../../../../R/2b6c6ff76800929d.html" target="n" data-glyph="102,2" class="i property">Value</a> { <b>get</b> { <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;No Value&quot;</span>); } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns null.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="b2999f8911dd550c" href="../../../../R/b2999f8911dd550c.html" target="n" data-glyph="102,2" class="i property">Exception</a> { <b>get</b> { <b>return null</b>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns false.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override bool</b> <a id="1f3d26e3f757db4a" href="../../../../R/1f3d26e3f757db4a.html" target="n" data-glyph="102,2" class="i property">HasValue</a> { <b>get</b> { <b>return false</b>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns NotificationKind.OnCompleted.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a> <a id="a1685289def2d426" href="../../../../R/a1685289def2d426.html" target="n" data-glyph="102,2" class="i property">Kind</a> { <b>get</b> { <b>return</b> <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#af824cc690aabef9" class="i field">OnCompleted</a>; } }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns the hash code for this instance.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override int</b> <a id="26d33fea75439c8d" href="../../../../R/26d33fea75439c8d.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>()
+            {
+                <b>return typeof</b>(<span class="r4 r t">T</span>).<a href="@0@mscorlib/A.html#e8937d5bb4bb6af3" class="i method">GetHashCode</a>() ^ 8510;
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Indicates whether this instance and other are equal.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override bool</b> <a id="87448570e1acec9b" href="../../../../R/87448570e1acec9b.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r29 rd" class="r29 r">other</span>)
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<a href="#ecd8c11e75da9e9a" class="k">this</a>, <span class="r29 r">other</span>))
+                    <b>return true</b>;
+                <b>if</b> (<a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="t t">Object</a>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r29 r">other</span>, <b>null</b>))
+                    <b>return false</b>;
+                <b>return</b> <span class="r29 r">other</span>.<a href="#30da0e55bb60c517" class="i property">Kind</a> == <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#af824cc690aabef9" class="i field">OnCompleted</a>;
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Returns a string representation of this instance.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <b>public override string</b> <a id="a04347b4b1e268f7" href="../../../../R/a04347b4b1e268f7.html" target="n" data-glyph="72,2" class="i method">ToString</a>()
+            {
+                <b>return</b> <span class="s">&quot;OnCompleted()&quot;</span>;
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r30 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <b>public override void</b> <a id="c842ecebeb0f8e1c" href="../../../../R/c842ecebeb0f8e1c.html" target="n" data-glyph="72,2" class="i method">Accept</a>(<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r30 rd" class="r30 r">observer</span>)
+            {
+                <b>if</b> (<span class="r30 r">observer</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <span class="r30 r">observer</span>.<a href="System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification and returns the produced result.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r31 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r32 r t">TResult</span> <a id="2b6a3742ceb47ed9" href="../../../../R/2b6a3742ceb47ed9.html" target="n" data-glyph="72,2" class="i method">Accept</a>&lt;<span id="r32 rd t" class="r32 r t">TResult</span>&gt;(<a href="#6df013349ba64de3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>, <span class="r32 r t">TResult</span>&gt; <span id="r31 rd" class="r31 r">observer</span>)
+            {
+                <b>if</b> (<span class="r31 r">observer</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <b>return</b> <span class="r31 r">observer</span>.<a href="#ab319a6f42fb1abe" class="i method">OnCompleted</a>();
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r33 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r34 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r35 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <b>public override void</b> <a id="82515e9599e83981" href="../../../../R/82515e9599e83981.html" target="n" data-glyph="72,2" class="i method">Accept</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r33 rd" class="r33 r">onNext</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r34 rd" class="r34 r">onError</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r35 rd" class="r35 r">onCompleted</span>)
+            {
+                <b>if</b> (<span class="r33 r">onNext</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onNext&quot;</span>);
+                <b>if</b> (<span class="r34 r">onError</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onError&quot;</span>);
+                <b>if</b> (<span class="r35 r">onCompleted</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onCompleted&quot;</span>);
+ 
+                <span class="r35 r">onCompleted</span>();
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification and returns the produced result.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r36 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r37 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r38 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+            <b>public override</b> <span class="r39 r t">TResult</span> <a id="4f301206ef5942ce" href="../../../../R/4f301206ef5942ce.html" target="n" data-glyph="72,2" class="i method">Accept</a>&lt;<span id="r39 rd t" class="r39 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r4 r t">T</span>, <span class="r39 r t">TResult</span>&gt; <span id="r36 rd" class="r36 r">onNext</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>, <span class="r39 r t">TResult</span>&gt; <span id="r37 rd" class="r37 r">onError</span>, <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r39 r t">TResult</span>&gt; <span id="r38 rd" class="r38 r">onCompleted</span>)
+            {
+                <b>if</b> (<span class="r36 r">onNext</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onNext&quot;</span>);
+                <b>if</b> (<span class="r37 r">onError</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onError&quot;</span>);
+                <b>if</b> (<span class="r38 r">onCompleted</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;onCompleted&quot;</span>);
+ 
+                <b>return</b> <span class="r38 r">onCompleted</span>();
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether the current Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> object has the same observer message payload as a specified Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> value.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r40 r">other</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">An object to compare to the current Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> object.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if both Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects have the same observer message payload; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Equality of Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).</span>
+        <span class="c">///</span><span class="c"> This means two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects can be equal even though they don&#39;t represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.</span>
+        <span class="c">///</span><span class="c"> In case one wants to determine whether two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public abstract bool</b> <a id="2c35a612db94d0f1" href="../../../../R/2c35a612db94d0f1.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r40 rd" class="r40 r">other</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether the two specified Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects have the same observer message payload.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r41 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> to compare, or null.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r42 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> to compare, or null.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the first Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> value has the same observer message payload as the second Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> value; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Equality of Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).</span>
+        <span class="c">///</span><span class="c"> This means two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects can be equal even though they don&#39;t represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.</span>
+        <span class="c">///</span><span class="c"> In case one wants to determine whether two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> ==(<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r41 rd" class="r41 r">left</span>, <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r42 rd" class="r42 r">right</span>)
+        {
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r41 r">left</span>, <span class="r42 r">right</span>))
+                <b>return true</b>;
+ 
+            <b>if</b> ((<b>object</b>)<span class="r41 r">left</span> == <b>null</b> || (<b>object</b>)<span class="r42 r">right</span> == <b>null</b>)
+                <b>return false</b>;
+ 
+            <b>return</b> <span class="r41 r">left</span>.<a href="#2c35a612db94d0f1" class="i method">Equals</a>(<span class="r42 r">right</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether the two specified Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects have a different observer message payload.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r43 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> to compare, or null.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r44 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> to compare, or null.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the first Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> value has a different observer message payload as the second Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> value; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Equality of Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).</span>
+        <span class="c">///</span><span class="c"> This means two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects can be equal even though they don&#39;t represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.</span>
+        <span class="c">///</span><span class="c"> In case one wants to determine whether two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects represent a different observer method call, use Object.ReferenceEquals identity equality instead.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> !=(<a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r43 rd" class="r43 r">left</span>, <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r44 rd" class="r44 r">right</span>)
+        {
+            <b>return</b> !(<span class="r43 r">left</span> == <span class="r44 r">right</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether the specified System.Object is equal to the current Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c">.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r45 r">obj</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The System.Object to compare with the current Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c">.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the specified System.Object is equal to the current Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c">; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Equality of Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).</span>
+        <span class="c">///</span><span class="c"> This means two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects can be equal even though they don&#39;t represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.</span>
+        <span class="c">///</span><span class="c"> In case one wants to determine whether two Notification</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span><span class="c"> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public override bool</b> <a id="6415cd33721355ff" href="../../../../R/6415cd33721355ff.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r45 rd" class="r45 r">obj</span>)
+        {
+            <b>return</b> <a href="#2c35a612db94d0f1" class="i method">Equals</a>(<span class="r45 r">obj</span> <b>as</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r4 r t">T</span>&gt;);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r46 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public abstract void</b> <a id="b46b826cbccac3e2" href="../../../../R/b46b826cbccac3e2.html" target="n" data-glyph="72,1" class="i method">Accept</a>(<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r46 rd" class="r46 r">observer</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Invokes the observer&#39;s method corresponding to the notification and returns the produced result.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r47 r t">TResult</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The type of the result returned from the observer&#39;s notification handlers.</span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r48 r">observer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Observer to invoke the notification on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public abstract</b> <span class="r47 r t">TResult</span> <a id="d56910e819210f7d" href="../../../../R/d56910e819210f7d.html" target="n" data-glyph="72,1" class="i method">Accept</a>&lt;<span id="r47 rd t" class="r47 r t">TResult</span>&gt;(<a href="#6df013349ba64de3" class="t t">IObserver</a>&lt;<span class="r4 r t">T</span>, <span class="r47 r t">TResult</span>&gt; <span id="r48 rd" class="r48 r">observer</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r49 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r50 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r51 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public abstract void</b> <a id="5459866201f75dfa" href="../../../../R/5459866201f75dfa.html" target="n" data-glyph="72,1" class="i method">Accept</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r49 rd" class="r49 r">onNext</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r50 rd" class="r50 r">onError</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r51 rd" class="r51 r">onCompleted</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Invokes the delegate corresponding to the notification and returns the produced result.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r52 r t">TResult</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The type of the result returned from the notification handler delegates.</span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r53 r">onNext</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnNext notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r54 r">onError</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnError notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r55 r">onCompleted</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Delegate to invoke for an OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Result produced by the observation.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public abstract</b> <span class="r52 r t">TResult</span> <a id="b04f47cfbe3fda57" href="../../../../R/b04f47cfbe3fda57.html" target="n" data-glyph="72,1" class="i method">Accept</a>&lt;<span id="r52 rd t" class="r52 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r4 r t">T</span>, <span class="r52 r t">TResult</span>&gt; <span id="r53 rd" class="r53 r">onNext</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>, <span class="r52 r t">TResult</span>&gt; <span id="r54 rd" class="r54 r">onError</span>, <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r52 r t">TResult</span>&gt; <span id="r55 rd" class="r55 r">onCompleted</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns an observable sequence with a single notification, using the immediate scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The observable sequence that surfaces the behavior of the notification upon subscription.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <a id="855464c9aa4c9983" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ToObservable</a>()
+        {
+            <b>return</b> <a href="#3775560f59260a8c" class="k">this</a>.<a href="#019e2cdcdab898fe" class="i method">ToObservable</a>(<a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns an observable sequence with a single notification.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r56 r">scheduler</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Scheduler to send out the notification calls on.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The observable sequence that surfaces the behavior of the notification upon subscription.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <a id="019e2cdcdab898fe" href="../../../../R/019e2cdcdab898fe.html" target="n" data-glyph="72,1" class="i method">ToObservable</a>(<a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r56 rd" class="r56 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r56 r">scheduler</span> == <b>null</b>)
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;scheduler&quot;</span>);
+ 
+            <b>return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#0351c4239e8e6646" class="i method">Create</a>&lt;<span class="r4 r t">T</span>&gt;(<span id="r57 rd" class="r57 r">observer</span> =&gt; <span class="r56 r">scheduler</span>.<a href="Schedulers/IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt;
+            {
+                <a href="#3775560f59260a8c" class="k">this</a>.<a href="#b46b826cbccac3e2" class="i method">Accept</a>(<span class="r57 r">observer</span>);
+                <b>if</b> (<a href="#3775560f59260a8c" class="k">this</a>.<a href="#30da0e55bb60c517" class="i property">Kind</a> == <a href="#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="#9139ce6ebab6850e" class="i field">OnNext</a>)
+                    <span class="r57 r">observer</span>.<a href="System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }));
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Provides a set of static methods for constructing notifications.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public static class</b> <a id="5dee4dc35c2a497b" href="../../../../R/5dee4dc35c2a497b.html" target="n" data-glyph="0,0" class="t t">Notification</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates an object that represents an OnNext notification to an observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r58 r t">T</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The type of the elements received by the observer. Upon dematerialization of the notifications into an observable sequence, this type is used as the element type for the sequence.</span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r59 r">value</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The value contained in the notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The OnNext notification containing the value.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r58 r t">T</span>&gt; <a id="a9834d248cc676f8" href="../../../../R/a9834d248cc676f8.html" target="n" data-glyph="72,1" class="i method">CreateOnNext</a>&lt;<span id="r58 rd t" class="r58 r t">T</span>&gt;(<span class="r58 r t">T</span> <span id="r59 rd" class="r59 r">value</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r58 r t">T</span>&gt;.<a href="#97b549762cc1036b" class="t constructor">OnNextNotification</a>(<span class="r59 r">value</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates an object that represents an OnError notification to an observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r60 r t">T</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The type of the elements received by the observer. Upon dematerialization of the notifications into an observable sequence, this type is used as the element type for the sequence.</span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r61 r">error</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The exception contained in the notification.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The OnError notification containing the exception.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">exception</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="@0@mscorlib/A.html#c742289497493bb8" class="t t">ArgumentNullException</a><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">&lt;</span><span class="c">paramref</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r61 r">error</span><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> is null.</span><span class="c">&lt;/</span><span class="c">exception</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r60 r t">T</span>&gt; <a id="7aa2b74025782e1e" href="../../../../R/7aa2b74025782e1e.html" target="n" data-glyph="72,1" class="i method">CreateOnError</a>&lt;<span id="r60 rd t" class="r60 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r61 rd" class="r61 r">error</span>)
+        {
+            <b>if</b> (<span class="r61 r">error</span> == <b>null</b>)
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;error&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r60 r t">T</span>&gt;.<a href="#1c4ac23b0c57a774" class="t constructor">OnErrorNotification</a>(<span class="r61 r">error</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates an object that represents an OnCompleted notification to an observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">typeparam</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r62 r t">T</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The type of the elements received by the observer. Upon dematerialization of the notifications into an observable sequence, this type is used as the element type for the sequence.</span><span class="c">&lt;/</span><span class="c">typeparam</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The OnCompleted notification.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r62 r t">T</span>&gt; <a id="666b714bee5c2880" href="../../../../R/666b714bee5c2880.html" target="n" data-glyph="72,1" class="i method">CreateOnCompleted</a>&lt;<span id="r62 rd t" class="r62 r t">T</span>&gt;()
+        {
+            <b>return</b> <b>new</b> <a href="#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r62 r t">T</span>&gt;.<a href="#8b6a36c07e276c08" class="t constructor">OnCompletedNotification</a>();
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">restore</span> 0659
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">restore</span> 0661</pre></td></tr></table></div></body></html>

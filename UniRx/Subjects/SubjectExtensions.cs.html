@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html><head><title>SubjectExtensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(61);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Subjects/SubjectExtensions.cs" target="_top">Subjects\SubjectExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static class</b> <a id="574e683f91380395" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">SubjectExtensions</a>
+    {
+        <b>public static</b> <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r0 r t">T</span>&gt; <a id="de89131eb3e94f50" href="../R/de89131eb3e94f50.html" target="n" data-glyph="220,1" class="i method">Synchronize</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">subject</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#9a85e82354e2b9e1" class="t constructor">AnonymousSubject</a>&lt;<span class="r0 r t">T</span>&gt;((<span class="r1 r">subject</span> <b>as</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;).<a href="../Observer.cs.html#c0a16fa78b5a21af" class="i method">Synchronize</a>(), <span class="r1 r">subject</span>);
+        }
+ 
+        <b>public static</b> <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r2 r t">T</span>&gt; <a id="134b36cd85e12d65" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Synchronize</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;(<b>this</b> <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r3 rd" class="r3 r">subject</span>, <b>object</b> <span id="r4 rd" class="r4 r">gate</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#9a85e82354e2b9e1" class="t constructor">AnonymousSubject</a>&lt;<span class="r2 r t">T</span>&gt;((<span class="r3 r">subject</span> <b>as</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r2 r t">T</span>&gt;).<a href="../Observer.cs.html#29bafb8fbf823909" class="i method">Synchronize</a>(<span class="r4 r">gate</span>), <span class="r3 r">subject</span>);
+        }
+ 
+        <b>class</b> <a id="909feab66fbae3e8" href="../R/909feab66fbae3e8.html" target="n" data-glyph="4,1" class="t t">AnonymousSubject</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>, <span id="r6 rd t" class="r6 r t">U</span>&gt; : <a href="ISubject.cs.html#27627e11420b5e9d" class="t t">ISubject</a>&lt;<span class="r5 r t">T</span>, <span class="r6 r t">U</span>&gt;
+        {
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r5 r t">T</span>&gt; <a id="b5cb42482441b62f" href="../R/b5cb42482441b62f.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r6 r t">U</span>&gt; <a id="f7812e129b5b3e7f" href="../R/f7812e129b5b3e7f.html" target="n" data-glyph="46,2" class="i field">observable</a>;
+ 
+            <b>public</b> <a id="cf47064f85765dc7" href="../R/cf47064f85765dc7.html" target="n" data-glyph="72,2" class="i constructor">AnonymousSubject</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r5 r t">T</span>&gt; <span id="r7 rd" class="r7 r">observer</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r6 r t">U</span>&gt; <span id="r8 rd" class="r8 r">observable</span>)
+            {
+                <a href="#909feab66fbae3e8" class="k">this</a>.<a href="#b5cb42482441b62f" class="i field">observer</a> = <span class="r7 r">observer</span>;
+                <a href="#909feab66fbae3e8" class="k">this</a>.<a href="#f7812e129b5b3e7f" class="i field">observable</a> = <span class="r8 r">observable</span>;
+            }
+ 
+            <b>public void</b> <a id="27859b0fec4ac4cb" href="../R/27859b0fec4ac4cb.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="#b5cb42482441b62f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+ 
+            <b>public void</b> <a id="b828bf6d42e3dc26" href="../R/b828bf6d42e3dc26.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r9 rd" class="r9 r">error</span>)
+            {
+                <b>if</b> (<span class="r9 r">error</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;error&quot;</span>);
+ 
+                <a href="#b5cb42482441b62f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r9 r">error</span>);
+            }
+ 
+            <b>public void</b> <a id="7e79b8d1615a9bb2" href="../R/7e79b8d1615a9bb2.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r5 r t">T</span> <span id="r10 rd" class="r10 r">value</span>)
+            {
+                <a href="#b5cb42482441b62f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r10 r">value</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="be62352e08ac65d8" href="../R/be62352e08ac65d8.html" target="n" data-glyph="72,2" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r6 r t">U</span>&gt; <span id="r11 rd" class="r11 r">observer</span>)
+            {
+                <b>if</b> (<span class="r11 r">observer</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+                <b>return</b> <a href="#f7812e129b5b3e7f" class="i field">observable</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r11 r">observer</span>);
+            }
+        }
+ 
+        <b>class</b> <a id="caf40c088bff0969" href="../R/caf40c088bff0969.html" target="n" data-glyph="4,1" class="t t">AnonymousSubject</a>&lt;<span id="r12 rd t" class="r12 r t">T</span>&gt; : <a href="#909feab66fbae3e8" class="t t">AnonymousSubject</a>&lt;<span class="r12 r t">T</span>, <span class="r12 r t">T</span>&gt;, <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r12 r t">T</span>&gt;
+        {
+            <b>public</b> <a id="9a85e82354e2b9e1" href="../R/9a85e82354e2b9e1.html" target="n" data-glyph="72,2" class="i constructor">AnonymousSubject</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r12 r t">T</span>&gt; <span id="r13 rd" class="r13 r">observer</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r12 r t">T</span>&gt; <span id="r14 rd" class="r14 r">observable</span>)
+                : <a href="#cf47064f85765dc7" class="k">base</a>(<span class="r13 r">observer</span>, <span class="r14 r">observable</span>)
+            {
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

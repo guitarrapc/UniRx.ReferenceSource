@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableTriggerTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(67);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTriggerTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="bd3b9f6ae06c6b94" href="../../../../../../R/bd3b9f6ae06c6b94.html" target="n" data-glyph="0,0" class="t t"><span id="b0ffe0fb8c477578">ObservableTriggerTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>
+    {
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider</span>&gt; <a id="b00cf7285730f7e3" href="../../../../../../R/b00cf7285730f7e3.html" target="n" data-glyph="46,1" class="i field">onTriggerEnter</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerEnter is called when the Collider other enters the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="3fecceff08a81dae" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnTriggerEnter</a>(<span class="i">Collider</span> <span id="r0 rd" class="r0 r">other</span>)
+        {
+            <b>if</b> (<a href="#b00cf7285730f7e3" class="i field">onTriggerEnter</a> != <b>null</b>) <a href="#b00cf7285730f7e3" class="i field">onTriggerEnter</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r0 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerEnter is called when the Collider other enters the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="d04ee656d7e19405" href="../../../../../../R/d04ee656d7e19405.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#b00cf7285730f7e3" class="i field">onTriggerEnter</a> ?? (<a href="#b00cf7285730f7e3" class="i field">onTriggerEnter</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider</span>&gt; <a id="ae8cd3aaafa21715" href="../../../../../../R/ae8cd3aaafa21715.html" target="n" data-glyph="46,1" class="i field">onTriggerExit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerExit is called when the Collider other has stopped touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="4bc8b64f27f6af4e" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnTriggerExit</a>(<span class="i">Collider</span> <span id="r1 rd" class="r1 r">other</span>)
+        {
+            <b>if</b> (<a href="#ae8cd3aaafa21715" class="i field">onTriggerExit</a> != <b>null</b>) <a href="#ae8cd3aaafa21715" class="i field">onTriggerExit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r1 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerExit is called when the Collider other has stopped touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="e1dcf378430961cc" href="../../../../../../R/e1dcf378430961cc.html" target="n" data-glyph="72,1" class="i method">OnTriggerExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#ae8cd3aaafa21715" class="i field">onTriggerExit</a> ?? (<a href="#ae8cd3aaafa21715" class="i field">onTriggerExit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider</span>&gt; <a id="25d4f2efc3b81589" href="../../../../../../R/25d4f2efc3b81589.html" target="n" data-glyph="46,1" class="i field">onTriggerStay</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerStay is called once per frame for every Collider other that is touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="dcd13ee9c3bf3e3c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnTriggerStay</a>(<span class="i">Collider</span> <span id="r2 rd" class="r2 r">other</span>)
+        {
+            <b>if</b> (<a href="#25d4f2efc3b81589" class="i field">onTriggerStay</a> != <b>null</b>) <a href="#25d4f2efc3b81589" class="i field">onTriggerStay</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerStay is called once per frame for every Collider other that is touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="b20ab738a00a1915" href="../../../../../../R/b20ab738a00a1915.html" target="n" data-glyph="72,1" class="i method">OnTriggerStayAsObservable</a>()
+        {
+            <b>return</b> <a href="#25d4f2efc3b81589" class="i field">onTriggerStay</a> ?? (<a href="#25d4f2efc3b81589" class="i field">onTriggerStay</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider</span>&gt;());
+        }
+        
+        <b>protected override void</b> <a id="05bea33bca63d7e5" href="../../../../../../R/05bea33bca63d7e5.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#b00cf7285730f7e3" class="i field">onTriggerEnter</a> != <b>null</b>)
+            {
+                <a href="#b00cf7285730f7e3" class="i field">onTriggerEnter</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#ae8cd3aaafa21715" class="i field">onTriggerExit</a> != <b>null</b>)
+            {
+                <a href="#ae8cd3aaafa21715" class="i field">onTriggerExit</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#25d4f2efc3b81589" class="i field">onTriggerStay</a> != <b>null</b>)
+            {
+                <a href="#25d4f2efc3b81589" class="i field">onTriggerStay</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

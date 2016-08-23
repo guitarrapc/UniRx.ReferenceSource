@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html><head><title>DiagnosticVerifier.Helper.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(171);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer.Test/Helpers/DiagnosticVerifier.Helper.cs" target="_top">Helpers\DiagnosticVerifier.Helper.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer.Test" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer.Test\UniRxAnalyzer.Test.csproj</a> (UniRxAnalyzer.Test)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CSharp</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Diagnostics</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Text</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Immutable</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+ 
+<b>namespace</b> <span class="i n">TestHelper</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Class for turning strings into documents and getting the diagnostics on them</span>
+    <span class="c">///</span><span class="c"> All methods are static</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract</b> <a href="../P/59516b4495d86dfd.html" target="s" class="k">partial</a> <b>class</b> <a id="59516b4495d86dfd" href="../R/59516b4495d86dfd.html" target="n" data-glyph="0,0" class="t t"><span id="3a60ce3983f57f50">DiagnosticVerifier</span></a>
+    {
+        <b>private static readonly</b> <span class="i">MetadataReference</span> <a id="c6a1b617f188097f" href="../R/c6a1b617f188097f.html" target="n" data-glyph="46,1" class="i field">CorlibReference</a> = <span class="i">MetadataReference</span>.<span class="i">CreateFromFile</span>(<b>typeof</b>(<b>object</b>).<a href="@0@mscorlib/A.html#e87d536bd07fab01" class="i property">Assembly</a>.<a href="@0@mscorlib/A.html#3faa3e0e41d8868b" class="i property">Location</a>);
+        <b>private static readonly</b> <span class="i">MetadataReference</span> <a id="9d10b2173f001408" href="../R/9d10b2173f001408.html" target="n" data-glyph="46,1" class="i field">SystemCoreReference</a> = <span class="i">MetadataReference</span>.<span class="i">CreateFromFile</span>(<b>typeof</b>(<a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>).<a href="@0@mscorlib/A.html#e87d536bd07fab01" class="i property">Assembly</a>.<a href="@0@mscorlib/A.html#3faa3e0e41d8868b" class="i property">Location</a>);
+        <b>private static readonly</b> <span class="i">MetadataReference</span> <a id="88993b9f372e8759" href="../R/88993b9f372e8759.html" target="n" data-glyph="46,1" class="i field">CSharpSymbolsReference</a> = <span class="i">MetadataReference</span>.<span class="i">CreateFromFile</span>(<b>typeof</b>(<span class="i">CSharpCompilation</span>).<a href="@0@mscorlib/A.html#e87d536bd07fab01" class="i property">Assembly</a>.<a href="@0@mscorlib/A.html#3faa3e0e41d8868b" class="i property">Location</a>);
+        <b>private static readonly</b> <span class="i">MetadataReference</span> <a id="23d062a3bfe2aa25" href="../R/23d062a3bfe2aa25.html" target="n" data-glyph="46,1" class="i field">CodeAnalysisReference</a> = <span class="i">MetadataReference</span>.<span class="i">CreateFromFile</span>(<b>typeof</b>(<span class="i">Compilation</span>).<a href="@0@mscorlib/A.html#e87d536bd07fab01" class="i property">Assembly</a>.<a href="@0@mscorlib/A.html#3faa3e0e41d8868b" class="i property">Location</a>);
+ 
+        <b>internal static string</b> <a id="c6b3fd97a6cfe1cd" href="../R/c6b3fd97a6cfe1cd.html" target="n" data-glyph="44,1" class="i field">DefaultFilePathPrefix</a> = <span class="s">&quot;Test&quot;</span>;
+        <b>internal static string</b> <a id="f3780814acd1261a" href="../R/f3780814acd1261a.html" target="n" data-glyph="44,1" class="i field">CSharpDefaultFileExt</a> = <span class="s">&quot;cs&quot;</span>;
+        <b>internal static string</b> <a id="95ce3a187577ecd5" href="../R/95ce3a187577ecd5.html" target="n" data-glyph="44,1" class="i field">VisualBasicDefaultExt</a> = <span class="s">&quot;vb&quot;</span>;
+        <b>internal static string</b> <a id="659969e532a360aa" href="../R/659969e532a360aa.html" target="n" data-glyph="44,1" class="i field">TestProjectName</a> = <span class="s">&quot;TestProject&quot;</span>;
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span>  Get Diagnostics
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Given classes in the form of strings, their language, and an IDiagnosticAnlayzer to apply to it, return the diagnostics found in the string after converting it to a document.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">sources</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Classes in the form of strings</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r">language</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The language the source classes are in</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r2 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer to be run on the sources</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">An IEnumerable of Diagnostics that surfaced in the source code, sorted by Location</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <span class="i">Diagnostic</span>[] <a id="5070ff51bd3170b6" href="../R/5070ff51bd3170b6.html" target="n" data-glyph="76,1" class="i method">GetSortedDiagnostics</a>(<b>string</b>[] <span id="r0 rd" class="r0 r">sources</span>, <b>string</b> <span id="r1 rd" class="r1 r">language</span>, <span class="i">DiagnosticAnalyzer</span> <span id="r2 rd" class="r2 r">analyzer</span>)
+        {
+            <b>return</b> <a href="#d8033cc98ce28c0f" class="i method">GetSortedDiagnosticsFromDocuments</a>(<span class="r2 r">analyzer</span>, <a href="#abd6b178dc7acad0" class="i method">GetDocuments</a>(<span class="r0 r">sources</span>, <span class="r1 r">language</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.</span>
+        <span class="c">///</span><span class="c"> The returned diagnostics are then ordered by location in the source document.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r3 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer to run on the documents</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r">documents</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Documents that the analyzer will be run on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">An IEnumerable of Diagnostics that surfaced in the source code, sorted by Location</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>protected static</b> <span class="i">Diagnostic</span>[] <a id="d8033cc98ce28c0f" href="../R/d8033cc98ce28c0f.html" target="n" data-glyph="75,1" class="i method">GetSortedDiagnosticsFromDocuments</a>(<span class="i">DiagnosticAnalyzer</span> <span id="r3 rd" class="r3 r">analyzer</span>, <span class="i">Document</span>[] <span id="r4 rd" class="r4 r">documents</span>)
+        {
+            <a href="@0@System.Core/A.html#2d265edc718b158b" class="k">var</a> <span id="r5 rd" class="r5 r">projects</span> = <b>new</b> <a href="@0@System.Core/A.html#eca9ea30fa3b2c28" class="t constructor">HashSet</a>&lt;<span class="i">Project</span>&gt;();
+            <b>foreach</b> (<b>var</b> <span id="r6 rd" class="r6 r">document</span> <b>in</b> <span class="r4 r">documents</span>)
+            {
+                <span class="r5 r">projects</span>.<span class="i">Add</span>(<span class="r6 r">document</span>.<span class="i">Project</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r7 rd" class="r7 r">diagnostics</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<span class="i">Diagnostic</span>&gt;();
+            <b>foreach</b> (<b>var</b> <span id="r8 rd" class="r8 r">project</span> <b>in</b> <span class="r5 r">projects</span>)
+            {
+                <b>var</b> <span id="r9 rd" class="r9 r">compilationWithAnalyzers</span> = <span class="r8 r">project</span>.<span class="i">GetCompilationAsync</span>().<span class="i">Result</span>.<span class="i">WithAnalyzers</span>(<span class="t t">ImmutableArray</span>.<span class="i">Create</span>(<span class="r3 r">analyzer</span>));
+                <b>var</b> <span id="r10 rd" class="r10 r">diags</span> = <span class="r9 r">compilationWithAnalyzers</span>.<span class="i">GetAnalyzerDiagnosticsAsync</span>().<span class="i">Result</span>;
+                <b>foreach</b> (<b>var</b> <span id="r11 rd" class="r11 r">diag</span> <b>in</b> <span class="r10 r">diags</span>)
+                {
+                    <b>if</b> (<span class="r11 r">diag</span>.<span class="i">Location</span> == <span class="i">Location</span>.<span class="i">None</span> || <span class="r11 r">diag</span>.<span class="i">Location</span>.<span class="i">IsInMetadata</span>)
+                    {
+                        <span class="r7 r">diagnostics</span>.<span class="i">Add</span>(<span class="r11 r">diag</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <b>for</b> (<b>int</b> <span id="r12 rd" class="r12 r">i</span> = 0; <span class="r12 r">i</span> &lt; <span class="r4 r">documents</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r12 r">i</span>++)
+                        {
+                            <b>var</b> <span id="r13 rd" class="r13 r">document</span> = <span class="r4 r">documents</span>[<span class="r12 r">i</span>];
+                            <b>var</b> <span id="r14 rd" class="r14 r">tree</span> = <span class="r13 r">document</span>.<span class="i">GetSyntaxTreeAsync</span>().<span class="i">Result</span>;
+                            <b>if</b> (<span class="r14 r">tree</span> == <span class="r11 r">diag</span>.<span class="i">Location</span>.<span class="i">SourceTree</span>)
+                            {
+                                <span class="r7 r">diagnostics</span>.<span class="i">Add</span>(<span class="r11 r">diag</span>);
+                            }
+                        }
+                    }
+                }
+            }
+ 
+            <b>var</b> <span id="r15 rd" class="r15 r">results</span> = <a href="#2bc2d5160fc21260" class="i method">SortDiagnostics</a>(<span class="r7 r">diagnostics</span>);
+            <span class="r7 r">diagnostics</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <b>return</b> <span class="r15 r">results</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Sort diagnostics by location in source document</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r16 r">diagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The list of Diagnostics to be sorted</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">An IEnumerable containing the Diagnostics in order of Location</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <span class="i">Diagnostic</span>[] <a id="2bc2d5160fc21260" href="../R/2bc2d5160fc21260.html" target="n" data-glyph="76,1" class="i method">SortDiagnostics</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="i">Diagnostic</span>&gt; <span id="r16 rd" class="r16 r">diagnostics</span>)
+        {
+            <b>return</b> <span class="r16 r">diagnostics</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r17 rd" class="r17 r">d</span> =&gt; <span class="r17 r">d</span>.<span class="i">Location</span>.<span class="i">SourceSpan</span>.<span class="i">Start</span>).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Set up compilation and documents
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Given an array of strings as sources and a language, turn them into a project and return the documents and spans of it.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r18 r">sources</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Classes in the form of strings</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r19 r">language</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The language the source code is in</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A Tuple containing the Documents produced from the sources and their TextSpans if relevant</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <span class="i">Document</span>[] <a id="abd6b178dc7acad0" href="../R/abd6b178dc7acad0.html" target="n" data-glyph="76,1" class="i method">GetDocuments</a>(<b>string</b>[] <span id="r18 rd" class="r18 r">sources</span>, <b>string</b> <span id="r19 rd" class="r19 r">language</span>)
+        {
+            <b>if</b> (<span class="r19 r">language</span> != <span class="i">LanguageNames</span>.<span class="i">CSharp</span> &amp;&amp; <span class="r19 r">language</span> != <span class="i">LanguageNames</span>.<span class="i">VisualBasic</span>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;Unsupported Language&quot;</span>);
+            }
+ 
+            <b>var</b> <span id="r20 rd" class="r20 r">project</span> = <a href="#b513a8f4471d7633" class="i method">CreateProject</a>(<span class="r18 r">sources</span>, <span class="r19 r">language</span>);
+            <b>var</b> <span id="r21 rd" class="r21 r">documents</span> = <span class="r20 r">project</span>.<span class="i">Documents</span>.<span class="i">ToArray</span>();
+ 
+            <b>if</b> (<span class="r18 r">sources</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> != <span class="r21 r">documents</span>.<span class="i">Length</span>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#38aa21140ca79104" class="t constructor">SystemException</a>(<span class="s">&quot;Amount of sources did not match amount of Documents created&quot;</span>);
+            }
+ 
+            <b>return</b> <span class="r21 r">documents</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create a Document from a string through creating a project that contains it.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r22 r">source</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Classes in the form of a string</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r23 r">language</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The language the source code is in</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A Document created from the source string</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>protected static</b> <span class="i">Document</span> <a id="969951cdf10d4843" href="../R/969951cdf10d4843.html" target="n" data-glyph="75,1" class="i method">CreateDocument</a>(<b>string</b> <span id="r22 rd" class="r22 r">source</span>, <b>string</b> <span id="r23 rd" class="r23 r">language</span> = <span class="i">LanguageNames</span>.<span class="i">CSharp</span>)
+        {
+            <b>return</b> <a href="#b513a8f4471d7633" class="i method">CreateProject</a>(<b>new</b>[] { <span class="r22 r">source</span> }, <span class="r23 r">language</span>).<span class="i">Documents</span>.<span class="i">First</span>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create a project using the inputted strings as sources.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r24 r">sources</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Classes in the form of strings</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r25 r">language</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The language the source code is in</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A Project created out of the Documents created from the source strings</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <span class="i">Project</span> <a id="b513a8f4471d7633" href="../R/b513a8f4471d7633.html" target="n" data-glyph="76,1" class="i method">CreateProject</a>(<b>string</b>[] <span id="r24 rd" class="r24 r">sources</span>, <b>string</b> <span id="r25 rd" class="r25 r">language</span> = <span class="i">LanguageNames</span>.<span class="i">CSharp</span>)
+        {
+            <b>string</b> <span id="r26 rd" class="r26 r">fileNamePrefix</span> = <a href="#c6b3fd97a6cfe1cd" class="i field">DefaultFilePathPrefix</a>;
+            <b>string</b> <span id="r27 rd" class="r27 r">fileExt</span> = <span class="r25 r">language</span> == <span class="i">LanguageNames</span>.<span class="i">CSharp</span> ? <a href="#f3780814acd1261a" class="i field">CSharpDefaultFileExt</a> : <a href="#95ce3a187577ecd5" class="i field">VisualBasicDefaultExt</a>;
+ 
+            <b>var</b> <span id="r28 rd" class="r28 r">projectId</span> = <span class="i">ProjectId</span>.<span class="i">CreateNewId</span>(<span class="i">debugName</span>: <a href="#659969e532a360aa" class="i field">TestProjectName</a>);
+ 
+            <b>var</b> <span id="r29 rd" class="r29 r">solution</span> = <b>new</b> <span class="i">AdhocWorkspace</span>()
+                .<span class="i">CurrentSolution</span>
+                .<span class="i">AddProject</span>(<span class="r28 r">projectId</span>, <a href="#659969e532a360aa" class="i field">TestProjectName</a>, <a href="#659969e532a360aa" class="i field">TestProjectName</a>, <span class="r25 r">language</span>)
+                .<span class="i">AddMetadataReference</span>(<span class="r28 r">projectId</span>, <a href="#c6a1b617f188097f" class="i field">CorlibReference</a>)
+                .<span class="i">AddMetadataReference</span>(<span class="r28 r">projectId</span>, <a href="#9d10b2173f001408" class="i field">SystemCoreReference</a>)
+                .<span class="i">AddMetadataReference</span>(<span class="r28 r">projectId</span>, <a href="#88993b9f372e8759" class="i field">CSharpSymbolsReference</a>)
+                .<span class="i">AddMetadataReference</span>(<span class="r28 r">projectId</span>, <a href="#23d062a3bfe2aa25" class="i field">CodeAnalysisReference</a>);
+ 
+            <b>int</b> <span id="r30 rd" class="r30 r">count</span> = 0;
+            <b>foreach</b> (<a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r31 rd" class="r31 r">source</span> <b>in</b> <span class="r24 r">sources</span>)
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r32 rd" class="r32 r">newFileName</span> = <span class="r26 r">fileNamePrefix</span> + <span class="r30 r">count</span> + <span class="s">&quot;.&quot;</span> + <span class="r27 r">fileExt</span>;
+                <b>var</b> <span id="r33 rd" class="r33 r">documentId</span> = <span class="i">DocumentId</span>.<span class="i">CreateNewId</span>(<span class="r28 r">projectId</span>, <span class="i">debugName</span>: <span class="r32 r">newFileName</span>);
+                <span class="r29 r">solution</span> = <span class="r29 r">solution</span>.<span class="i">AddDocument</span>(<span class="r33 r">documentId</span>, <span class="r32 r">newFileName</span>, <span class="i">SourceText</span>.<span class="i">From</span>(<span class="r31 r">source</span>));
+                <span class="r30 r">count</span>++;
+            }
+            <b>return</b> <span class="r29 r">solution</span>.<span class="i">GetProject</span>(<span class="r28 r">projectId</span>);
+        }
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+    }
+}
+ 
+</pre></td></tr></table></div></body></html>

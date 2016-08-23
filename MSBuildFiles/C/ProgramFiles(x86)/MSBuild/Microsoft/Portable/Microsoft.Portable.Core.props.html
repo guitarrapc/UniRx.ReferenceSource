@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Portable.Core.props</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/Microsoft.Portable.Core.props" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\Microsoft.Portable.Core.props</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.Portable.Core.props
+ 
+Contains common properties that are shared by all portable library projects regardless of version.
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/VisualStudio/v14.0/Microsoft.Portable.CurrentVersion.props.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">VisualStudio\v$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)\Microsoft.Portable.CurrentVersion.props</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">Exists(&#39;VisualStudio\v$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)\Microsoft.Portable.CurrentVersion.props&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a></span><span class="xd">&gt;</span>Portable<span class="xd">&lt;/</span><span class="xn">TargetPlatformIdentifier</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetFrameworkIdentifier.html" target="n" class="msbuildlink">TargetFrameworkIdentifier</a></span><span class="xd">&gt;</span>.NETPortable<span class="xd">&lt;/</span><span class="xn">TargetFrameworkIdentifier</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetFrameworkMonikerDisplayName.html" target="n" class="msbuildlink">TargetFrameworkMonikerDisplayName</a></span><span class="xd">&gt;</span>.NET Portable Subset<span class="xd">&lt;/</span><span class="xn">TargetFrameworkMonikerDisplayName</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;!--</span><span class="c"> Automatically reference all assemblies in the target framework </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImplicitlyExpandTargetFramework.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFramework</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetFramework.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFramework</a>)&#39; == &#39;&#39; AND &#39;$(<a href="/MSBuildProperties/R/PortableNuGetMode.html" target="n" class="msbuildlink">PortableNuGetMode</a>)&#39; != &#39;true&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ImplicitlyExpandTargetFramework</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Redefine AssemblySearchPaths to exclude {AssemblyFolders} and {GAC}, these represent .NET-specific locations </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AssemblySearchPaths.html" target="n" class="msbuildlink">AssemblySearchPaths</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/AssemblySearchPaths.html" target="n" class="msbuildlink">AssemblySearchPaths</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>
+            {CandidateAssemblyFiles};
+            $(<a href="/MSBuildProperties/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>);
+            {HintPathFromItem};
+            {TargetFrameworkDirectory};
+            {Registry:$(<a href="/MSBuildProperties/R/FrameworkRegistryBase.html" target="n" class="msbuildlink">FrameworkRegistryBase</a>),$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>),$(<a href="/MSBuildProperties/R/AssemblyFoldersSuffix.html" target="n" class="msbuildlink">AssemblyFoldersSuffix</a>)$(<a href="/MSBuildProperties/R/AssemblyFoldersExConditions.html" target="n" class="msbuildlink">AssemblyFoldersExConditions</a>)};
+            {RawFileName};
+            $(<a href="/MSBuildProperties/R/OutDir.html" target="n" class="msbuildlink">OutDir</a>)
+        <span class="xd">&lt;/</span><span class="xn">AssemblySearchPaths</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

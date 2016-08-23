@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html><head><title>Logger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(139);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Diagnostics/Logger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Diagnostics\Logger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>
+{
+    <b>public</b> <b>partial</b> <b>class</b> <a id="5edfe68a15b571a3" href="../../../../../../R/5edfe68a15b571a3.html" target="n" data-glyph="0,0" class="t t">Logger</a>
+    {
+        <b>static bool</b> <a id="6dd142b935e42ce5" href="../../../../../../R/6dd142b935e42ce5.html" target="n" data-glyph="46,1" class="i field">isInitialized</a> = <b>false</b>;
+        <b>static bool</b> <a id="14c8025575df5bb2" href="../../../../../../R/14c8025575df5bb2.html" target="n" data-glyph="46,1" class="i field">isDebugBuild</a> = <b>false</b>;
+ 
+        <b>public string</b> <a id="20a611710baf8603" href="../../../../../../R/20a611710baf8603.html" target="n" data-glyph="102,1" class="i property">Name</a> { <b>get</b>; <b>private set</b>; }
+        <b>protected readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="LogEntry.cs.html#31ba9896acb11547" class="t t">LogEntry</a>&gt; <a id="d6a3ea81bc041c83" href="../../../../../../R/d6a3ea81bc041c83.html" target="n" data-glyph="45,1" class="i field">logPublisher</a>;
+ 
+        <b>public</b> <a id="1b18fc7f400182b9" href="../../../../../../R/1b18fc7f400182b9.html" target="n" data-glyph="72,1" class="i constructor">Logger</a>(<b>string</b> <span id="r0 rd" class="r0 r">loggerName</span>)
+        {
+            <a href="#5edfe68a15b571a3" class="k">this</a>.<a href="#20a611710baf8603" class="i property">Name</a> = <span class="r0 r">loggerName</span>;
+            <a href="#5edfe68a15b571a3" class="k">this</a>.<a href="#d6a3ea81bc041c83" class="i field">logPublisher</a> = <a href="ObservableLogger.cs.html#84ef72fca7011312" class="t t">ObservableLogger</a>.<a href="ObservableLogger.cs.html#aadef05f23c4ea0e" class="i method">RegisterLogger</a>(<a href="#5edfe68a15b571a3" class="k">this</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Output LogType.Log but only enables isDebugBuild</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="205c071f6f2206e9" href="../../../../../../R/205c071f6f2206e9.html" target="n" data-glyph="72,1" class="i method">Debug</a>(<b>object</b> <span id="r1 rd" class="r1 r">message</span>, <span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r2 rd" class="r2 r">context</span> = <b>null</b>)
+        {
+            <b>if</b> (!<a href="#6dd142b935e42ce5" class="i field">isInitialized</a>)
+            {
+                <a href="#6dd142b935e42ce5" class="i field">isInitialized</a> = <b>true</b>;
+                <a href="#14c8025575df5bb2" class="i field">isDebugBuild</a> = <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">isDebugBuild</span>;
+            }
+ 
+            <b>if</b> (<a href="#14c8025575df5bb2" class="i field">isDebugBuild</a>)
+            {
+                <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                    <span class="i">message</span>: (<span class="r1 r">message</span> != <b>null</b>) ? <span class="r1 r">message</span>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>() : <span class="s">&quot;&quot;</span>,
+                    <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Log</span>,
+                    <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                    <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                    <span class="i">context</span>: <span class="r2 r">context</span>));
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Output LogType.Log but only enables isDebugBuild</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="72a5d03c9b5d2cb9" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DebugFormat</a>(<b>string</b> <span id="r3 rd" class="r3 r">format</span>, <b>params object</b>[] <span id="r4 rd" class="r4 r">args</span>)
+        {
+            <b>if</b> (!<a href="#6dd142b935e42ce5" class="i field">isInitialized</a>)
+            {
+                <a href="#6dd142b935e42ce5" class="i field">isInitialized</a> = <b>true</b>;
+                <a href="#14c8025575df5bb2" class="i field">isDebugBuild</a> = <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">isDebugBuild</span>;
+            }
+ 
+            <b>if</b> (<a href="#14c8025575df5bb2" class="i field">isDebugBuild</a>)
+            {
+                <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                    <span class="i">message</span>: (<span class="r3 r">format</span> != <b>null</b>) ? <b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="r3 r">format</span>, <span class="r4 r">args</span>) : <span class="s">&quot;&quot;</span>,
+                    <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Log</span>,
+                    <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                    <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                    <span class="i">context</span>: <b>null</b>));
+            }
+        }
+ 
+        <b>public virtual void</b> <a id="be01e50e93a9f903" href="../../../../../../R/be01e50e93a9f903.html" target="n" data-glyph="72,1" class="i method">Log</a>(<b>object</b> <span id="r5 rd" class="r5 r">message</span>, <span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r6 rd" class="r6 r">context</span> = <b>null</b>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r5 r">message</span> != <b>null</b>) ? <span class="r5 r">message</span>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>() : <span class="s">&quot;&quot;</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Log</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <span class="r6 r">context</span>));
+        }
+ 
+        <b>public virtual void</b> <a id="29616ea1d81dfe72" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LogFormat</a>(<b>string</b> <span id="r7 rd" class="r7 r">format</span>, <b>params object</b>[] <span id="r8 rd" class="r8 r">args</span>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r7 r">format</span> != <b>null</b>) ? <b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="r7 r">format</span>, <span class="r8 r">args</span>) : <span class="s">&quot;&quot;</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Log</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <b>null</b>));
+        }
+ 
+        <b>public virtual void</b> <a id="0ef1273e35640c3b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Warning</a>(<b>object</b> <span id="r9 rd" class="r9 r">message</span>, <span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r10 rd" class="r10 r">context</span> = <b>null</b>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r9 r">message</span> != <b>null</b>) ? <span class="r9 r">message</span>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>() : <span class="s">&quot;&quot;</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Warning</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <span class="r10 r">context</span>));
+        }
+ 
+        <b>public virtual void</b> <a id="508c3259c790c324" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WarningFormat</a>(<b>string</b> <span id="r11 rd" class="r11 r">format</span>, <b>params object</b>[] <span id="r12 rd" class="r12 r">args</span>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r11 r">format</span> != <b>null</b>) ? <b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="r11 r">format</span>, <span class="r12 r">args</span>) : <span class="s">&quot;&quot;</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Warning</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <b>null</b>));
+        }
+ 
+        <b>public virtual void</b> <a id="216d2f9aa2f0013d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Error</a>(<b>object</b> <span id="r13 rd" class="r13 r">message</span>, <span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r14 rd" class="r14 r">context</span> = <b>null</b>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r13 r">message</span> != <b>null</b>) ? <span class="r13 r">message</span>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>() : <span class="s">&quot;&quot;</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Error</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <span class="r14 r">context</span>));
+        }
+ 
+        <b>public virtual void</b> <a id="31601d47744c7c2f" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ErrorFormat</a>(<b>string</b> <span id="r15 rd" class="r15 r">format</span>, <b>params object</b>[] <span id="r16 rd" class="r16 r">args</span>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r15 r">format</span> != <b>null</b>) ? <b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="r15 r">format</span>, <span class="r16 r">args</span>) : <span class="s">&quot;&quot;</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Error</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <b>null</b>));
+        }
+ 
+        <b>public virtual void</b> <a id="f47bf89f550fc150" href="../../../../../../R/f47bf89f550fc150.html" target="n" data-glyph="72,1" class="i method">Exception</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r17 rd" class="r17 r">exception</span>, <span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r18 rd" class="r18 r">context</span> = <b>null</b>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<b>new</b> <span class="t">LogEntry</span>(
+                <span class="i">message</span>: (<span class="r17 r">exception</span> != <b>null</b>) ? <span class="r17 r">exception</span>.<a href="@0@mscorlib/A.html#e2e19f4ed8da81aa" class="i method">ToString</a>() : <span class="s">&quot;&quot;</span>,
+                <span class="i">exception</span>: <span class="r17 r">exception</span>,
+                <span class="i">logType</span>: <span class="i">LogType</span>.<span class="i">Exception</span>,
+                <span class="i">timestamp</span>: <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>,
+                <span class="i">loggerName</span>: <a href="#20a611710baf8603" class="i property">Name</a>,
+                <span class="i">context</span>: <span class="r18 r">context</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Publish raw LogEntry.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="8c850d9d01306b0f" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Raw</a>(<a href="LogEntry.cs.html#31ba9896acb11547" class="t t">LogEntry</a> <span id="r19 rd" class="r19 r">logEntry</span>)
+        {
+            <a href="#d6a3ea81bc041c83" class="i field">logPublisher</a>(<span class="r19 r">logEntry</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

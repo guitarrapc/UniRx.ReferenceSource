@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html><head><title>RangeTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(22);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/RangeTest.cs" target="_top">RangeTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>.<span class="i n">Operators</span>
+{
+    [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="36f8fb13a9bb53ab" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="a125b1438f0f44c0">RangeTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="f455eeed0443bf0a" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Range</a>()
+        {
+            <a href="Tools/ChainingAssertion.Unity.cs.html#3aeb75bd766c7c2b" class="t t">AssertEx</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#d78e2baeb229601c" class="i method">Throws</a>&lt;<a href="@0@mscorlib/A.html#2975f0aa875d4a32" class="t t">ArgumentOutOfRangeException</a>&gt;(() =&gt; <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, -1).<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>());
+ 
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 0).<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10).<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+ 
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#d1261c08daba850d" class="i method">Range</a>(1, 0, <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#313dd3b562665646" class="i field">Immediate</a>).<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#d1261c08daba850d" class="i method">Range</a>(1, 10, <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#313dd3b562665646" class="i field">Immediate</a>).<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

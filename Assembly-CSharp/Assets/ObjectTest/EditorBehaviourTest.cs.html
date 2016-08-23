@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html><head><title>EditorBehaviourTest.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(111);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/EditorBehaviourTest.cs" target="_top">Assets\ObjectTest\EditorBehaviourTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    [<span class="i">ExecuteInEditMode</span>]
+    <b>public class</b> <a id="8696ea5718c8b126" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="13c981202679ec83">EditorBehaviourTest</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>void</b> <a id="b69b54c316a69f9f" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Editor Awake&quot;</span>);
+        }
+ 
+        <b>void</b> <a id="cec52f6ef9609b89" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Editor Start&quot;</span>);
+ 
+            <span class="c">//ObservableWWW.Get(&quot;http://google.co.jp/&quot;)</span>
+            <span class="c">//    .Delay(TimeSpan.FromSeconds(3))</span>
+            <span class="c">//    .Subscribe(x =&gt; Debug.Log(x));</span>
+ 
+            <span class="c">//Observable.Interval(TimeSpan.FromSeconds(1))</span>
+            <span class="c">//    .Take(10)</span>
+            <span class="c">//    .Subscribe(x =&gt; Debug.Log(x));</span>
+ 
+            <span class="c">// MainThreadDispatcher.StartCoroutine(Hoge());</span>
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="3c12f3da888a33e7" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Hoge</a>()
+        {
+            <b>var</b> <span id="r0 rd" class="r0 r">www</span> = <b>new</b> <span class="i">WWW</span>(<span class="s">&quot;http://google.co.jp/&quot;</span>);
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;W&quot;</span>);
+            <b>yield return</b> <span class="r0 r">www</span>;
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r0 r">www</span>.<span class="i">text</span>);
+        }
+ 
+        <b>void</b> <a id="b0b7bc926c600572" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Update</a>()
+        {
+        }
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+ 
+    <b>public static class</b> <a id="f6d04173bb456b44" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">MyEditor</a>
+    {
+        [<span class="i">UnityEditor</span>.<span class="i">MenuItem</span>(<span class="s">&quot;UniRxTest/Fire&quot;</span>, <b>false</b>)]
+        <b>public static void</b> <a id="3dcb23ea1d4d4dc0" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Fire</a>()
+        {
+            <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#9ec383d3102b14f7" class="i method">StartCoroutine</a>(<a href="#e9f78a794056052e" class="i method">Hoge</a>());
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="f093a09f4ea01286" href="../../R/f093a09f4ea01286.html" target="n" data-glyph="46,1" class="i field">runEnumerator</a>;
+ 
+        [<span class="i">UnityEditor</span>.<span class="i">MenuItem</span>(<span class="s">&quot;UniRxTest/RunEnumerator&quot;</span>, <b>false</b>)]
+        <b>public static void</b> <a id="3e234bbb2e0442c0" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">RunEnumerator</a>()
+        {
+            <a href="#f093a09f4ea01286" class="i field">runEnumerator</a> = <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#4bb26026605c3a49" class="i method">FromCoroutine</a>(<a href="#cf0798e0190c65a6" class="i method">Inf</a>).<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+        }
+ 
+        [<span class="i">UnityEditor</span>.<span class="i">MenuItem</span>(<span class="s">&quot;UniRxTest/StopEnumerator&quot;</span>, <b>false</b>)]
+        <b>public static void</b> <a id="2c607348f107f852" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">StopEnumerator</a>()
+        {
+            <b>if</b> (<a href="#f093a09f4ea01286" class="i field">runEnumerator</a> != <b>null</b>)
+            {
+                <a href="#f093a09f4ea01286" class="i field">runEnumerator</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <a href="#f093a09f4ea01286" class="i field">runEnumerator</a> = <b>null</b>;
+            }
+        }
+ 
+        [<span class="i">UnityEditor</span>.<span class="i">MenuItem</span>(<span class="s">&quot;UniRxTest/Thread&quot;</span>, <b>false</b>)]
+        <b>public static void</b> <a id="3a1e711befc7a528" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Thread</a>()
+        {
+            <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#08e19f452b85bc58" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(500), <a href="/Assembly-CSharp-firstpass/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/Assembly-CSharp-firstpass/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>)
+                .<a href="/Assembly-CSharp-firstpass/A.html#b2a8bd8002c609a9" class="i method">ObserveOnMainThread</a>()
+                .<span class="i">Subscribe</span>(<span id="r1 rd" class="r1 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r1 r">x</span>));
+        }
+ 
+        [<span class="i">UnityEditor</span>.<span class="i">MenuItem</span>(<span class="s">&quot;UniRxTest/ScenePlaybackDectector.IsPlaying&quot;</span>, <b>false</b>)]
+        <b>public static void</b> <a id="70e6d795899bf96c" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">IsPlaying</a>()
+        {
+            <span class="c">// huga huga hug 2</span>
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="i n">UniRx</span>.<a href="/Assembly-CSharp-firstpass/A.html#a812c09b704c31b0" class="t t">ScenePlaybackDetector</a>.<a href="/Assembly-CSharp-firstpass/A.html#5b83026a1fd44639" class="i property">IsPlaying</a>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="e9f78a794056052e" href="../../R/e9f78a794056052e.html" target="n" data-glyph="76,1" class="i method">Hoge</a>()
+        {
+            <b>var</b> <span id="r2 rd" class="r2 r">www</span> = <b>new</b> <span class="i">WWW</span>(<span class="s">&quot;http://google.co.jp/&quot;</span>);
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;W&quot;</span>);
+            <b>yield return</b> <span class="r2 r">www</span>;
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r2 r">www</span>.<span class="i">text</span>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="cf0798e0190c65a6" href="../../R/cf0798e0190c65a6.html" target="n" data-glyph="76,1" class="i method">Inf</a>()
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r3 rd" class="r3 r">i</span> = 0;
+            <b>while</b> (<b>true</b>)
+            {
+                <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Editor:&quot;</span> + <span class="r3 r">i</span>++);
+                <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>(1);
+            }
+        }
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+}
+</pre></td></tr></table></div></body></html>

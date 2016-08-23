@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.TimeTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(262);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/Observable.TimeTest.cs" target="_top">Observable.TimeTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="7d02bbdb0c85bb75" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="36b61a0006cf5da5">ObservableTimeTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="cbfed32b728b3826" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">TimerTest</a>()
+        {
+            <span class="c">// periodic(Observable.Interval)</span>
+            {
+                <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r0 rd" class="r0 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+                <b>var</b> <span id="r1 rd" class="r1 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#0d920bee156e6019" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1), <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                    .<a href="/UniRx/A.html#93d2aee26c1bff5b" class="i method">Take</a>(3)
+                    .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                    .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                    .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+                <span class="r1 r">xs</span>[0].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0L);
+                (<span class="r0 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(800) &lt;= <span class="r1 r">xs</span>[0].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &amp;&amp; <span class="r1 r">xs</span>[0].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &lt;= <span class="r0 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(1200)).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+                <span class="r1 r">xs</span>[1].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1L);
+                (<span class="r0 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(1800) &lt;= <span class="r1 r">xs</span>[1].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &amp;&amp; <span class="r1 r">xs</span>[1].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &lt;= <span class="r0 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(2200)).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+                <span class="r1 r">xs</span>[2].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2L);
+                (<span class="r0 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(2800) &lt;= <span class="r1 r">xs</span>[2].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &amp;&amp; <span class="r1 r">xs</span>[2].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &lt;= <span class="r0 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(3200)).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            }
+ 
+            <span class="c">// dueTime + periodic</span>
+            {
+                <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r2 rd" class="r2 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+                <b>var</b> <span id="r3 rd" class="r3 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#0d920bee156e6019" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2), <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                    .<a href="/UniRx/A.html#93d2aee26c1bff5b" class="i method">Take</a>(3)
+                    .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                    .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r4 rd" class="r4 r">x</span> =&gt; <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#fccc5332aa0c1a68" class="i method">Round</a>((<span class="r4 r">x</span>.<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> - <span class="r2 r">now</span>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>, 0))
+                    .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                    .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+                <span class="r3 r">xs</span>[0].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+                <span class="r3 r">xs</span>[1].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+                <span class="r3 r">xs</span>[2].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4);
+            }
+ 
+            <span class="c">// dueTime(DateTimeOffset)</span>
+            {
+                <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r5 rd" class="r5 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+                <b>var</b> <span id="r6 rd" class="r6 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#55937492b8ef853c" class="i method">Timer</a>(<span class="r5 r">now</span>.<a href="@0@mscorlib/A.html#b1f3371f1ec3f990" class="i method">AddSeconds</a>(2), <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                    .<a href="/UniRx/A.html#93d2aee26c1bff5b" class="i method">Take</a>(3)
+                    .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                    .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r7 rd" class="r7 r">x</span> =&gt; <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#fccc5332aa0c1a68" class="i method">Round</a>((<span class="r7 r">x</span>.<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> - <span class="r5 r">now</span>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>, 0))
+                    .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                    .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+                <span class="r6 r">xs</span>[0].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+                <span class="r6 r">xs</span>[1].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+                <span class="r6 r">xs</span>[2].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4);
+            }
+ 
+            <span class="c">// onetime</span>
+            {
+                <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r8 rd" class="r8 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+                <b>var</b> <span id="r9 rd" class="r9 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2))
+                    .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                    .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r10 rd" class="r10 r">x</span> =&gt; <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#fccc5332aa0c1a68" class="i method">Round</a>((<span class="r10 r">x</span>.<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> - <span class="r8 r">now</span>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>, 0))
+                    .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                    .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+                <span class="r9 r">xs</span>[0].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+            }
+ 
+            <span class="c">// non periodic scheduler</span>
+            {
+                <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r11 rd" class="r11 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#1a7109e09365a544" class="i field">CurrentThread</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+                <b>var</b> <span id="r12 rd" class="r12 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5ac66b03ea88dc59" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2), <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1), <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#1a7109e09365a544" class="i field">CurrentThread</a>)
+                    .<a href="/UniRx/A.html#93d2aee26c1bff5b" class="i method">Take</a>(3)
+                    .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                    .<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r13 rd" class="r13 r">x</span> =&gt; <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#fccc5332aa0c1a68" class="i method">Round</a>((<span class="r13 r">x</span>.<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> - <span class="r11 r">now</span>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>, 0))
+                    .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                    .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+                <span class="r12 r">xs</span>[0].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+                <span class="r12 r">xs</span>[1].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+                <span class="r12 r">xs</span>[2].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4);
+            }
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="73c0a1b99b408520" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DelayTest</a>()
+        {
+            <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r14 rd" class="r14 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+ 
+            <b>var</b> <span id="r15 rd" class="r15 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 3)
+                .<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r15 r">xs</span>[0].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1);
+            (<span class="r14 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(800) &lt;= <span class="r15 r">xs</span>[0].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &amp;&amp; <span class="r15 r">xs</span>[0].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &lt;= <span class="r14 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(1200)).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="r15 r">xs</span>[1].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+            (<span class="r14 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(800) &lt;= <span class="r15 r">xs</span>[1].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &amp;&amp; <span class="r15 r">xs</span>[1].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &lt;= <span class="r14 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(1200)).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="r15 r">xs</span>[2].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+            (<span class="r14 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(800) &lt;= <span class="r15 r">xs</span>[2].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &amp;&amp; <span class="r15 r">xs</span>[2].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a> &lt;= <span class="r14 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(1200)).<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="f2643b6c19927ce0" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">SampleTest</a>()
+        {
+            <span class="c">// 2400, 4800, 7200, 9600</span>
+            <b>var</b> <span id="r16 rd" class="r16 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#0d920bee156e6019" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                .<a href="/UniRx/A.html#93d2aee26c1bff5b" class="i method">Take</a>(10)
+                .<a href="/UniRx/A.html#1a18810c0b83f41d" class="i method">Sample</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(2400), <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#1a7109e09365a544" class="i field">CurrentThread</a>)
+                .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r16 r">xs</span>[0].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+            <span class="r16 r">xs</span>[1].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4);
+            <span class="r16 r">xs</span>[2].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(7);
+            <span class="r16 r">xs</span>[3].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(9);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="22f242bbc13f1756" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">TimeoutTest</a>()
+        {
+            <b>var</b> <span id="r17 rd" class="r17 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(1).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(5).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(9).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(3))
+                )
+                .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                .<a href="/UniRx/A.html#a048e8930c90f84f" class="i method">Timeout</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(1500))
+                .<a href="/UniRx/A.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r17 r">xs</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+            <span class="r17 r">xs</span>[0].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1);
+            <span class="r17 r">xs</span>[1].<a href="/UniRx/A.html#7c4c05ec52e35b79" class="i property">Exception</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#035f91a156c7e7c9" class="i method">IsInstanceOf</a>&lt;<a href="@0@mscorlib/A.html#43e40a96805cc4df" class="t t">TimeoutException</a>&gt;();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="f300d3df839308be" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">TimeoutTestOffset</a>()
+        {
+            <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="k">var</a> <span id="r18 rd" class="r18 r">now</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>.<a href="/UniRx/A.html#26e5447b3b301f2d" class="i property">Now</a>;
+            <b>var</b> <span id="r19 rd" class="r19 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(1).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(5).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(9).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(3))
+                )
+                .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                .<a href="/UniRx/A.html#a466aead9e29fe79" class="i method">Timeout</a>(<span class="r18 r">now</span>.<a href="@0@mscorlib/A.html#49bd272a3a275fb2" class="i method">AddMilliseconds</a>(3500))
+                .<a href="/UniRx/A.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r19 r">xs</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+            <span class="r19 r">xs</span>[0].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1);
+            <span class="r19 r">xs</span>[1].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5);
+            <span class="r19 r">xs</span>[2].<a href="/UniRx/A.html#7c4c05ec52e35b79" class="i property">Exception</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#035f91a156c7e7c9" class="i method">IsInstanceOf</a>&lt;<a href="@0@mscorlib/A.html#43e40a96805cc4df" class="t t">TimeoutException</a>&gt;();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="7656507ce7aab68c" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ThrottleTest</a>()
+        {
+            <b>var</b> <span id="r20 rd" class="r20 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(1).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(2).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(3).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(4).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(5).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(2)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(6).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(3)), <span class="c">// over 2500</span>
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(7).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(8).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)) <span class="c">// with onCompleted</span>
+                )
+                .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                .<a href="/UniRx/A.html#b11b67c121f34201" class="i method">Throttle</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(2500))
+                .<a href="/UniRx/A.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r20 r">xs</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+            <span class="r20 r">xs</span>[0].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5);
+            <span class="r20 r">xs</span>[1].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(8);
+            <span class="r20 r">xs</span>[2].<a href="/UniRx/A.html#30da0e55bb60c517" class="i property">Kind</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="/UniRx/A.html#af824cc690aabef9" class="i field">OnCompleted</a>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="e3bd3320e7667eae" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ThrottleFirstTest</a>()
+        {
+            <b>var</b> <span id="r21 rd" class="r21 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(1),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(2).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(3).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(4).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(0.4)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(5).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(0.2)), <span class="c">// over 2500</span>
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(6).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(7).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(8).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)), <span class="c">// over 2500</span>
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(9) <span class="c">// withCompleted</span>
+                )
+                .<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+                .<a href="/UniRx/A.html#1fb7c80eee525412" class="i method">ThrottleFirst</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(2500))
+                .<a href="/UniRx/A.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r21 r">xs</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4);
+            <span class="r21 r">xs</span>[0].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1);
+            <span class="r21 r">xs</span>[1].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5);
+            <span class="r21 r">xs</span>[2].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(8);
+            <span class="r21 r">xs</span>[3].<a href="/UniRx/A.html#30da0e55bb60c517" class="i property">Kind</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="/UniRx/A.html#af824cc690aabef9" class="i field">OnCompleted</a>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="dad8171df8018ae9" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Timestamp</a>()
+        {
+            <b>var</b> <span id="r22 rd" class="r22 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(1),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(2).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(3).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(4).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(0.4)),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(5).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(0.2)) <span class="c">// over 2500</span>
+            ).<a href="/UniRx/A.html#023623f2b8633453" class="i method">Timestamp</a>()
+            .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+            .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="k">var</a> <span id="r23 rd" class="r23 r">now</span> = <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a>.<a href="@0@mscorlib/A.html#1cd5dd408a32124f" class="i property">Now</a>;
+ 
+            <span class="r22 r">xs</span>[0].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1); (<span class="r23 r">now</span> - <span class="r22 r">xs</span>[0].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r24 rd" class="r24 r">x</span> =&gt; 2.5 &lt;= <span class="r24 r">x</span> &amp;&amp; <span class="r24 r">x</span> &lt;= 3.0);
+            <span class="r22 r">xs</span>[1].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2); (<span class="r23 r">now</span> - <span class="r22 r">xs</span>[1].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r25 rd" class="r25 r">x</span> =&gt; 1.4 &lt;= <span class="r25 r">x</span> &amp;&amp; <span class="r25 r">x</span> &lt;= 1.8);
+            <span class="r22 r">xs</span>[2].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3); (<span class="r23 r">now</span> - <span class="r22 r">xs</span>[2].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r26 rd" class="r26 r">x</span> =&gt; 0.5 &lt;= <span class="r26 r">x</span> &amp;&amp; <span class="r26 r">x</span> &lt;= 0.8);
+            <span class="r22 r">xs</span>[3].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4); (<span class="r23 r">now</span> - <span class="r22 r">xs</span>[3].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r27 rd" class="r27 r">x</span> =&gt; 0.18 &lt;= <span class="r27 r">x</span> &amp;&amp; <span class="r27 r">x</span> &lt;= 0.3);
+            <span class="r22 r">xs</span>[4].<a href="/UniRx/A.html#bbc37b553635679f" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5); (<span class="r23 r">now</span> - <span class="r22 r">xs</span>[4].<a href="/UniRx/A.html#d246dea3f3226e70" class="i property">Timestamp</a>).<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r28 rd" class="r28 r">x</span> =&gt; 0 &lt;= <span class="r28 r">x</span> &amp;&amp; <span class="r28 r">x</span> &lt;= 0.1);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="9e02809ce7964350" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">TimeInterval</a>()
+        {
+            <b>var</b> <span id="r29 rd" class="r29 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(1),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(2).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(3).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(4).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(0.4)),
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(5).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(0.2)) <span class="c">// over 2500</span>
+            ).<a href="/UniRx/A.html#6ed6a121e5de823f" class="i method">TimeInterval</a>()
+            .<a href="/UniRx/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>()
+            .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r29 r">xs</span>[0].<a href="/UniRx/A.html#59ff0e57e2578a36" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1); <span class="r29 r">xs</span>[0].<a href="/UniRx/A.html#755ec92b7912b4b0" class="i property">Interval</a>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r30 rd" class="r30 r">x</span> =&gt; 0.0 &lt;= <span class="r30 r">x</span> &amp;&amp; <span class="r30 r">x</span> &lt;= 0.1);
+            <span class="r29 r">xs</span>[1].<a href="/UniRx/A.html#59ff0e57e2578a36" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2); <span class="r29 r">xs</span>[1].<a href="/UniRx/A.html#755ec92b7912b4b0" class="i property">Interval</a>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r31 rd" class="r31 r">x</span> =&gt; 0.9 &lt;= <span class="r31 r">x</span> &amp;&amp; <span class="r31 r">x</span> &lt;= 1.1);
+            <span class="r29 r">xs</span>[2].<a href="/UniRx/A.html#59ff0e57e2578a36" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3); <span class="r29 r">xs</span>[2].<a href="/UniRx/A.html#755ec92b7912b4b0" class="i property">Interval</a>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r32 rd" class="r32 r">x</span> =&gt; 0.9 &lt;= <span class="r32 r">x</span> &amp;&amp; <span class="r32 r">x</span> &lt;= 1.1);
+            <span class="r29 r">xs</span>[3].<a href="/UniRx/A.html#59ff0e57e2578a36" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4); <span class="r29 r">xs</span>[3].<a href="/UniRx/A.html#755ec92b7912b4b0" class="i property">Interval</a>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r33 rd" class="r33 r">x</span> =&gt; 0.3 &lt;= <span class="r33 r">x</span> &amp;&amp; <span class="r33 r">x</span> &lt;= 0.5);
+            <span class="r29 r">xs</span>[4].<a href="/UniRx/A.html#59ff0e57e2578a36" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5); <span class="r29 r">xs</span>[4].<a href="/UniRx/A.html#755ec92b7912b4b0" class="i property">Interval</a>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#7d5534b9648a9a1b" class="i method">Is</a>(<span id="r34 rd" class="r34 r">x</span> =&gt; 0.15 &lt;= <span class="r34 r">x</span> &amp;&amp; <span class="r34 r">x</span> &lt;= 0.25);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

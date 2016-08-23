@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html><head><title>AsSingleUnitObservable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(46);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/AsSingleUnitObservable.cs" target="_top">Operators\AsSingleUnitObservable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="7f9b53df7b20b09a" href="../R/7f9b53df7b20b09a.html" target="n" data-glyph="2,0" class="t t">AsSingleUnitObservableObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="bdf7d82a00af5431" href="../R/bdf7d82a00af5431.html" target="n" data-glyph="46,1" class="i field">source</a>;
+ 
+        <b>public</b> <a id="004445e4549e73e1" href="../R/004445e4549e73e1.html" target="n" data-glyph="72,1" class="i constructor">AsSingleUnitObservableObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#7f9b53df7b20b09a" class="k">this</a>.<a href="#bdf7d82a00af5431" class="i field">source</a> = <span class="r1 r">source</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="8134abd26c42ef65" href="../R/8134abd26c42ef65.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r2 rd" class="r2 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r3 rd" class="r3 r">cancel</span>)
+        {
+            <b>return</b> <a href="#bdf7d82a00af5431" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#3f3164d64108d5d2" class="t constructor">AsSingleUnitObservable</a>(<span class="r2 r">observer</span>, <span class="r3 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="2b299beb24d24218" href="../R/2b299beb24d24218.html" target="n" data-glyph="4,1" class="t t">AsSingleUnitObservable</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+        {
+            <b>public</b> <a id="3f3164d64108d5d2" href="../R/3f3164d64108d5d2.html" target="n" data-glyph="72,2" class="i constructor">AsSingleUnitObservable</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r4 r">observer</span>, <span class="r5 r">cancel</span>)
+            {
+            }
+ 
+            <b>public override void</b> <a id="2f1c62caf3b8cb8d" href="../R/2f1c62caf3b8cb8d.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r6 rd" class="r6 r">value</span>)
+            {
+            }
+ 
+            <b>public override void</b> <a id="c24c607e59f13182" href="../R/c24c607e59f13182.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r7 rd" class="r7 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r7 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="764eaff28606ec74" href="../R/764eaff28606ec74.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+ 
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html><head><title>ToArrayWait</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">36 references to ToArrayWait</div><div class="rA">UniRx.Tests (36)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">AggregateTest.cs (4)</div>
+<a href="../AggregateTest.cs.html#14"><b>14</b>range.Scan((x, y) =&gt; x + y).<i>ToArrayWait</i>().IsCollection(1, 3, 6, 10, 15);</a>
+<a href="../AggregateTest.cs.html#15"><b>15</b>range.Scan(100, (x, y) =&gt; x + y).<i>ToArrayWait</i>().IsCollection(101, 103, 106, 110, 115);</a>
+<a href="../AggregateTest.cs.html#17"><b>17</b>Observable.Empty&lt;int&gt;().Scan((x, y) =&gt; x + y).<i>ToArrayWait</i>().IsCollection();</a>
+<a href="../AggregateTest.cs.html#18"><b>18</b>Observable.Empty&lt;int&gt;().Scan(100, (x, y) =&gt; x + y).<i>ToArrayWait</i>().IsCollection();</a>
+</div>
+<div class="rF"><div class="rN">ConversionTest.cs (6)</div>
+<a href="../ConversionTest.cs.html#14"><b>14</b>Observable.Range(1, 10).AsObservable().<i>ToArrayWait</i>().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../ConversionTest.cs.html#20"><b>20</b>Observable.Range(1, 3).AsUnitObservable().<i>ToArrayWait</i>().IsCollection(Unit.Default, Unit.Default, Unit.Default);</a>
+<a href="../ConversionTest.cs.html#26"><b>26</b>Enumerable.Range(1, 3).ToObservable(Scheduler.CurrentThread).<i>ToArrayWait</i>().IsCollection(1, 2, 3);</a>
+<a href="../ConversionTest.cs.html#27"><b>27</b>Enumerable.Range(1, 3).ToObservable(Scheduler.ThreadPool).<i>ToArrayWait</i>().IsCollection(1, 2, 3);</a>
+<a href="../ConversionTest.cs.html#28"><b>28</b>Enumerable.Range(1, 3).ToObservable(Scheduler.Immediate).<i>ToArrayWait</i>().IsCollection(1, 2, 3);</a>
+<a href="../ConversionTest.cs.html#34"><b>34</b>Observable.Range(1, 3).Cast&lt;int, object&gt;().<i>ToArrayWait</i>().IsCollection(1, 2, 3);</a>
+</div>
+<div class="rF"><div class="rN">Observable.ConcurrencyTest.cs (1)</div>
+<a href="../Observable.ConcurrencyTest.cs.html#17"><b>17</b>.<i>ToArrayWait</i>();</a>
+</div>
+<div class="rF"><div class="rN">Observable.ErrorHandlingTest.cs (3)</div>
+<a href="../Observable.ErrorHandlingTest.cs.html#40"><b>40</b>.<i>ToArrayWait</i>();</a>
+<a href="../Observable.ErrorHandlingTest.cs.html#57"><b>57</b>.<i>ToArrayWait</i>();</a>
+<a href="../Observable.ErrorHandlingTest.cs.html#73"><b>73</b>.<i>ToArrayWait</i>();</a>
+</div>
+<div class="rF"><div class="rN">Observable.GeneratorTest.cs (1)</div>
+<a href="../Observable.GeneratorTest.cs.html#52"><b>52</b>Observable.Repeat(&quot;a&quot;, 5, Scheduler.Immediate).<i>ToArrayWait</i>().IsCollection(&quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;);</a>
+</div>
+<div class="rF"><div class="rN">Observable.PagingTest.cs (5)</div>
+<a href="../Observable.PagingTest.cs.html#843"><b>843</b>range.Skip(3).<i>ToArrayWait</i>().IsCollection(4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../Observable.PagingTest.cs.html#844"><b>844</b>range.Skip(3).Skip(2).<i>ToArrayWait</i>().IsCollection(6, 7, 8, 9, 10);</a>
+<a href="../Observable.PagingTest.cs.html#946"><b>946</b>var xs = Observable.Range(1, 5).Pairwise((x, y) =&gt; x + &quot;:&quot; + y).<i>ToArrayWait</i>();</a>
+<a href="../Observable.PagingTest.cs.html#953"><b>953</b>var xs = Observable.Range(1, 5).Pairwise().<i>ToArrayWait</i>();</a>
+<a href="../Observable.PagingTest.cs.html#992"><b>992</b>.<i>ToArrayWait</i>();</a>
+</div>
+<div class="rF"><div class="rN">ObservableTest.cs (8)</div>
+<a href="../ObservableTest.cs.html#278"><b>278</b>var m = Observable.Empty&lt;int&gt;().Materialize().<i>ToArrayWait</i>();</a>
+<a href="../ObservableTest.cs.html#281"><b>281</b>m = Observable.Range(1, 3).Materialize().<i>ToArrayWait</i>();</a>
+<a href="../ObservableTest.cs.html#287"><b>287</b>m = Observable.Range(1, 3).Concat(Observable.Throw&lt;int&gt;(new Exception())).Materialize().<i>ToArrayWait</i>();</a>
+<a href="../ObservableTest.cs.html#297"><b>297</b>var m = Observable.Empty&lt;int&gt;().Materialize().Dematerialize().<i>ToArrayWait</i>();</a>
+<a href="../ObservableTest.cs.html#300"><b>300</b>m = Observable.Range(1, 3).Materialize().Dematerialize().<i>ToArrayWait</i>();</a>
+<a href="../ObservableTest.cs.html#313"><b>313</b>Observable.Range(1, 3).DefaultIfEmpty(-1).<i>ToArrayWait</i>().IsCollection(1, 2, 3);</a>
+<a href="../ObservableTest.cs.html#314"><b>314</b>Observable.Empty&lt;int&gt;().DefaultIfEmpty(-1).<i>ToArrayWait</i>().IsCollection(-1);</a>
+<a href="../ObservableTest.cs.html#320"><b>320</b>var xs = Observable.Range(1, 10).IgnoreElements().Materialize().<i>ToArrayWait</i>();</a>
+</div>
+<div class="rF"><div class="rN">SelectWhereOptimizeTest.cs (6)</div>
+<a href="../SelectWhereOptimizeTest.cs.html#29"><b>29</b>wherewhere.<i>ToArrayWait</i>().IsCollection(6, 8, 10);</a>
+<a href="../SelectWhereOptimizeTest.cs.html#35"><b>35</b>wherewhere2.<i>ToArrayWait</i>().IsCollection(6, 8, 10);</a>
+<a href="../SelectWhereOptimizeTest.cs.html#46"><b>46</b>selectWhere.<i>ToArrayWait</i>().IsCollection(4, 16, 36, 64, 100);</a>
+<a href="../SelectWhereOptimizeTest.cs.html#53"><b>53</b>selectWhere2.<i>ToArrayWait</i>().IsCollection(4, 16, 36, 64, 100);</a>
+<a href="../SelectWhereOptimizeTest.cs.html#64"><b>64</b>whereSelect.<i>ToArrayWait</i>().IsCollection(4, 16, 36, 64, 100);</a>
+<a href="../SelectWhereOptimizeTest.cs.html#71"><b>71</b>whereSelect2.<i>ToArrayWait</i>().IsCollection(4, 16, 36, 64, 100);</a>
+</div>
+<div class="rF"><div class="rN">TakeTest.cs (2)</div>
+<a href="../TakeTest.cs.html#18"><b>18</b>range.Take(3).<i>ToArrayWait</i>().IsCollection(1, 2, 3);</a>
+<a href="../TakeTest.cs.html#19"><b>19</b>range.Take(15).<i>ToArrayWait</i>().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+</div>
+</div>
+</body></html>

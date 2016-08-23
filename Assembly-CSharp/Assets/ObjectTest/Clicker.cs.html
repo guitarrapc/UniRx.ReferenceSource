@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html><head><title>Clicker.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(55);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/Clicker.cs" target="_top">Assets\ObjectTest\Clicker.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public class</b> <a id="4a958315299c0e99" href="../../R/4a958315299c0e99.html" target="n" data-glyph="0,0" class="t t"><span id="b20f652cad099136">Clicker</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public event</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="9223733f4c368205" href="../../R/9223733f4c368205.html" target="n" data-glyph="30,1" class="i">OnClicked</a> = <b>delegate</b> { };
+ 
+        <b>public event</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="fb1530067c8565e1" href="../../R/fb1530067c8565e1.html" target="n" data-glyph="30,1" class="i">OnEntered</a> = <b>delegate</b> { };
+ 
+        <b>public event</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="37a6bcbae09456de" href="../../R/37a6bcbae09456de.html" target="n" data-glyph="30,1" class="i">OnExited</a> = <b>delegate</b> { };
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+        <span class="c">// Disable OnMouse_ event handlers to make it easy to confirm warning.</span>
+ 
+        <b>void</b> <a id="9dbe89a743a35c1d" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseDown</a>()
+        {
+            <a href="#9223733f4c368205" class="i">OnClicked</a>();
+        }
+ 
+        <b>void</b> <a id="04df7ca96d99cdb4" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseEnter</a>()
+        {
+            <a href="#fb1530067c8565e1" class="i">OnEntered</a>();
+        }
+ 
+        <b>void</b> <a id="b50ea76f91c02750" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseExit</a>()
+        {
+            <a href="#37a6bcbae09456de" class="i">OnExited</a>();
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="/Assembly-CSharp-firstpass/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="2756e72c9deb313d" href="../../R/2756e72c9deb313d.html" target="n" data-glyph="46,1" class="i field">update</a>;
+        <b>public int</b> <a id="7a4a29a4499aee5a" href="../../R/7a4a29a4499aee5a.html" target="n" data-glyph="42,1" class="i field">VVV</a>;
+ 
+        <b>public void</b> <a id="57915d75947c9dcb" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Update</a>()
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r0 rd" class="r0 r">t</span> = (<b>int</b>)<span class="i">Time</span>.<span class="i">time</span>;
+            <b>if</b> (<span class="r0 r">t</span> % 5 == 0)
+            {
+                <a href="#7a4a29a4499aee5a" class="i field">VVV</a> = <span class="r0 r">t</span>;
+            }
+ 
+            <b>if</b> (<a href="#2756e72c9deb313d" class="i field">update</a> != <b>null</b>) <a href="#2756e72c9deb313d" class="i field">update</a>.<a href="/Assembly-CSharp-firstpass/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="/Assembly-CSharp-firstpass/A.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="/Assembly-CSharp-firstpass/A.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="/Assembly-CSharp-firstpass/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="9b7d706e095f8d7d" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">UpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#2756e72c9deb313d" class="i field">update</a> ?? (<a href="#2756e72c9deb313d" class="i field">update</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="/Assembly-CSharp-firstpass/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

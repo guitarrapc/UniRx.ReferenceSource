@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html><head><title>WorkerThreadTest.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/WorkerThreadTest.cs" target="_top">Assets\ObjectTest\WorkerThreadTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public class</b> <a id="2c190da1c7f85ed4" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="77664cb2d5e2e5ca">WorkerThreadTest</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>void</b> <a id="fcad07f7d411cc44" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_METRO</span>
+<span class="e">            // Windows Store doesn&#39;t support System.Threading.Thread.
+            // Other platforms can use both ThreadPool and System.Threading.Thread.
+            // ThreadPool.QueueUserWorkItem(RegisterApplicationQuitEvent);
+            // ThreadPool.QueueUserWorkItem(SpawnCapsules);
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+            <a href="@0@mscorlib/A.html#3980e012bae82e96" class="t t">Thread</a> <span id="r0 rd" class="r0 r">thread</span> = <b>new</b> <a href="@0@mscorlib/A.html#f754fe1aa7bcaeb2" class="t constructor">Thread</a>(<a href="#c56ac5665b5c985c" class="i method">SpawnCapsules</a>);
+            <span class="r0 r">thread</span>.<a href="@0@mscorlib/A.html#cd2144b8dd6f4373" class="i method">Start</a>();
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        }
+ 
+        <b>private void</b> <a id="55cbfba0cdff9ef9" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">RegisterApplicationQuitEvent</a>(<b>object</b> <span id="r1 rd" class="r1 r">a</span>)
+        {
+            <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#9a6813ff918a4d25" class="i method">OnApplicationQuitAsObservable</a>().<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">_</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;OnApplicationQuitAsObservable&quot;</span>));
+        }
+ 
+        <b>private void</b> <a id="c56ac5665b5c985c" href="../../R/c56ac5665b5c985c.html" target="n" data-glyph="76,1" class="i method">SpawnCapsules</a>(<b>object</b> <span id="r3 rd" class="r3 r">a</span>)
+        {
+            <span class="c">// Create capsules one by one.</span>
+            <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#5a83b602fef2c922" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(300))
+                .<a href="/Assembly-CSharp-firstpass/A.html#93d2aee26c1bff5b" class="i method">Take</a>(5)
+                .<span class="i">Subscribe</span>((<span id="r4 rd" class="r4 r">s</span>) =&gt;
+                {
+                    <b>var</b> <span id="r5 rd" class="r5 r">g</span> = <span class="i">GameObject</span>.<span class="i">CreatePrimitive</span>(<span class="i">PrimitiveType</span>.<span class="i">Capsule</span>);
+                    <span class="r5 r">g</span>.<span class="i">name</span> = <span class="s">&quot;Capsule &quot;</span> + <span class="r4 r">s</span>;
+                    <span class="r5 r">g</span>.<span class="i">transform</span>.<span class="i">position</span> += <b>new</b> <span class="i">Vector3</span>(<span class="r4 r">s</span>, 0, 0);
+                });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

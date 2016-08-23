@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableMouseTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(143);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableMouseTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableMouseTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="0246d779d4a89f18" href="../../../../../../R/0246d779d4a89f18.html" target="n" data-glyph="0,0" class="t t"><span id="f01866c1167cc131">ObservableMouseTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>
+    {
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b5716b8a29015dbc" href="../../../../../../R/b5716b8a29015dbc.html" target="n" data-glyph="46,1" class="i field">onMouseDown</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDown is called when the user has pressed the mouse button while over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="76ae495323b80769" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseDown</a>()
+        {
+            <b>if</b> (<a href="#b5716b8a29015dbc" class="i field">onMouseDown</a> != <b>null</b>) <a href="#b5716b8a29015dbc" class="i field">onMouseDown</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDown is called when the user has pressed the mouse button while over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="7b35e1813e4333c0" href="../../../../../../R/7b35e1813e4333c0.html" target="n" data-glyph="72,1" class="i method">OnMouseDownAsObservable</a>()
+        {
+            <b>return</b> <a href="#b5716b8a29015dbc" class="i field">onMouseDown</a> ?? (<a href="#b5716b8a29015dbc" class="i field">onMouseDown</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="af78a9b7cce56ec2" href="../../../../../../R/af78a9b7cce56ec2.html" target="n" data-glyph="46,1" class="i field">onMouseDrag</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDrag is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="53d8e5e77f62b7ed" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseDrag</a>()
+        {
+            <b>if</b> (<a href="#af78a9b7cce56ec2" class="i field">onMouseDrag</a> != <b>null</b>) <a href="#af78a9b7cce56ec2" class="i field">onMouseDrag</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDrag is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="1e7138bc4d09faa2" href="../../../../../../R/1e7138bc4d09faa2.html" target="n" data-glyph="72,1" class="i method">OnMouseDragAsObservable</a>()
+        {
+            <b>return</b> <a href="#af78a9b7cce56ec2" class="i field">onMouseDrag</a> ?? (<a href="#af78a9b7cce56ec2" class="i field">onMouseDrag</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="dd9fe2b06d5bc732" href="../../../../../../R/dd9fe2b06d5bc732.html" target="n" data-glyph="46,1" class="i field">onMouseEnter</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseEnter is called when the mouse entered the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="38e97793a7c1aacb" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseEnter</a>()
+        {
+            <b>if</b> (<a href="#dd9fe2b06d5bc732" class="i field">onMouseEnter</a> != <b>null</b>) <a href="#dd9fe2b06d5bc732" class="i field">onMouseEnter</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseEnter is called when the mouse entered the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="25ebcd3d52a1c41f" href="../../../../../../R/25ebcd3d52a1c41f.html" target="n" data-glyph="72,1" class="i method">OnMouseEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#dd9fe2b06d5bc732" class="i field">onMouseEnter</a> ?? (<a href="#dd9fe2b06d5bc732" class="i field">onMouseEnter</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="6883d7b228c09e06" href="../../../../../../R/6883d7b228c09e06.html" target="n" data-glyph="46,1" class="i field">onMouseExit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseExit is called when the mouse is not any longer over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="b26af6d77cc53b59" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseExit</a>()
+        {
+            <b>if</b> (<a href="#6883d7b228c09e06" class="i field">onMouseExit</a> != <b>null</b>) <a href="#6883d7b228c09e06" class="i field">onMouseExit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseExit is called when the mouse is not any longer over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0ee4699ea9fc4f30" href="../../../../../../R/0ee4699ea9fc4f30.html" target="n" data-glyph="72,1" class="i method">OnMouseExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#6883d7b228c09e06" class="i field">onMouseExit</a> ?? (<a href="#6883d7b228c09e06" class="i field">onMouseExit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="84910bdd0d64a23c" href="../../../../../../R/84910bdd0d64a23c.html" target="n" data-glyph="46,1" class="i field">onMouseOver</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseOver is called every frame while the mouse is over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="42aba48243a3809c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseOver</a>()
+        {
+            <b>if</b> (<a href="#84910bdd0d64a23c" class="i field">onMouseOver</a> != <b>null</b>) <a href="#84910bdd0d64a23c" class="i field">onMouseOver</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseOver is called every frame while the mouse is over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="e33763df164165cf" href="../../../../../../R/e33763df164165cf.html" target="n" data-glyph="72,1" class="i method">OnMouseOverAsObservable</a>()
+        {
+            <b>return</b> <a href="#84910bdd0d64a23c" class="i field">onMouseOver</a> ?? (<a href="#84910bdd0d64a23c" class="i field">onMouseOver</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="43b468b8cb772774" href="../../../../../../R/43b468b8cb772774.html" target="n" data-glyph="46,1" class="i field">onMouseUp</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUp is called when the user has released the mouse button.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="f3131f3fdeeffd06" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseUp</a>()
+        {
+            <b>if</b> (<a href="#43b468b8cb772774" class="i field">onMouseUp</a> != <b>null</b>) <a href="#43b468b8cb772774" class="i field">onMouseUp</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUp is called when the user has released the mouse button.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="bd484079858582a5" href="../../../../../../R/bd484079858582a5.html" target="n" data-glyph="72,1" class="i method">OnMouseUpAsObservable</a>()
+        {
+            <b>return</b> <a href="#43b468b8cb772774" class="i field">onMouseUp</a> ?? (<a href="#43b468b8cb772774" class="i field">onMouseUp</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="eac48e35b522c71b" href="../../../../../../R/eac48e35b522c71b.html" target="n" data-glyph="46,1" class="i field">onMouseUpAsButton</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUpAsButton is only called when the mouse is released over the same GUIElement or Collider as it was pressed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="e4f126ab9d517154" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMouseUpAsButton</a>()
+        {
+            <b>if</b> (<a href="#eac48e35b522c71b" class="i field">onMouseUpAsButton</a> != <b>null</b>) <a href="#eac48e35b522c71b" class="i field">onMouseUpAsButton</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUpAsButton is only called when the mouse is released over the same GUIElement or Collider as it was pressed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="107e37c116526852" href="../../../../../../R/107e37c116526852.html" target="n" data-glyph="72,1" class="i method">OnMouseUpAsButtonAsObservable</a>()
+        {
+            <b>return</b> <a href="#eac48e35b522c71b" class="i field">onMouseUpAsButton</a> ?? (<a href="#eac48e35b522c71b" class="i field">onMouseUpAsButton</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <b>protected override void</b> <a id="edc6eb4c92d2a6d2" href="../../../../../../R/edc6eb4c92d2a6d2.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#b5716b8a29015dbc" class="i field">onMouseDown</a> != <b>null</b>)
+            {
+                <a href="#b5716b8a29015dbc" class="i field">onMouseDown</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#af78a9b7cce56ec2" class="i field">onMouseDrag</a> != <b>null</b>)
+            {
+                <a href="#af78a9b7cce56ec2" class="i field">onMouseDrag</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#dd9fe2b06d5bc732" class="i field">onMouseEnter</a> != <b>null</b>)
+            {
+                <a href="#dd9fe2b06d5bc732" class="i field">onMouseEnter</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#6883d7b228c09e06" class="i field">onMouseExit</a> != <b>null</b>)
+            {
+                <a href="#6883d7b228c09e06" class="i field">onMouseExit</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#84910bdd0d64a23c" class="i field">onMouseOver</a> != <b>null</b>)
+            {
+                <a href="#84910bdd0d64a23c" class="i field">onMouseOver</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#43b468b8cb772774" class="i field">onMouseUp</a> != <b>null</b>)
+            {
+                <a href="#43b468b8cb772774" class="i field">onMouseUp</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#eac48e35b522c71b" class="i field">onMouseUpAsButton</a> != <b>null</b>)
+            {
+                <a href="#eac48e35b522c71b" class="i field">onMouseUpAsButton</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

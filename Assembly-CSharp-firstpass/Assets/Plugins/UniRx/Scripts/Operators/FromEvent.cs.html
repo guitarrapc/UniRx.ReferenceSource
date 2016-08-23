@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html><head><title>FromEvent.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(323);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/FromEvent.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\FromEvent.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <span class="c">// FromEvent, FromEventPattern</span>
+ 
+    <b>internal class</b> <a id="faee5d7ac7138eda" href="../../../../../R/faee5d7ac7138eda.html" target="n" data-glyph="2,0" class="t t">FromEventPatternObservable</a>&lt;<span id="r0 rd t" class="r0 r t">TDelegate</span>, <span id="r1 rd t" class="r1 r t">TEventArgs</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<a href="../EventPattern.cs.html#01ea9a8bae91f6ef" class="t t">EventPattern</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;&gt;
+        <b>where</b> <span class="r1 r t">TEventArgs</span> : <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>
+    {
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;, <span class="r0 r t">TDelegate</span>&gt; <a id="6445c3d4f15bd91f" href="../../../../../R/6445c3d4f15bd91f.html" target="n" data-glyph="46,1" class="i field">conversion</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r0 r t">TDelegate</span>&gt; <a id="15da71f699e98704" href="../../../../../R/15da71f699e98704.html" target="n" data-glyph="46,1" class="i field">addHandler</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r0 r t">TDelegate</span>&gt; <a id="5793596d396572fc" href="../../../../../R/5793596d396572fc.html" target="n" data-glyph="46,1" class="i field">removeHandler</a>;
+ 
+        <b>public</b> <a id="79ddc8844865fabc" href="../../../../../R/79ddc8844865fabc.html" target="n" data-glyph="72,1" class="i constructor">FromEventPatternObservable</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;, <span class="r0 r t">TDelegate</span>&gt; <span id="r2 rd" class="r2 r">conversion</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r0 r t">TDelegate</span>&gt; <span id="r3 rd" class="r3 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r0 r t">TDelegate</span>&gt; <span id="r4 rd" class="r4 r">removeHandler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#faee5d7ac7138eda" class="k">this</a>.<a href="#6445c3d4f15bd91f" class="i field">conversion</a> = <span class="r2 r">conversion</span>;
+            <a href="#faee5d7ac7138eda" class="k">this</a>.<a href="#15da71f699e98704" class="i field">addHandler</a> = <span class="r3 r">addHandler</span>;
+            <a href="#faee5d7ac7138eda" class="k">this</a>.<a href="#5793596d396572fc" class="i field">removeHandler</a> = <span class="r4 r">removeHandler</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="56c8de2e0f6cfeb4" href="../../../../../R/56c8de2e0f6cfeb4.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../EventPattern.cs.html#01ea9a8bae91f6ef" class="t t">EventPattern</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;&gt; <span id="r5 rd" class="r5 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r6 rd" class="r6 r">cancel</span>)
+        {
+            <a href="#78ec933a032d9fca" class="k">var</a> <span id="r7 rd" class="r7 r">fe</span> = <b>new</b> <a href="#1ded8be507e41cb6" class="t constructor">FromEventPattern</a>(<a href="#faee5d7ac7138eda" class="k">this</a>, <span class="r5 r">observer</span>);
+            <b>return</b> <span class="r7 r">fe</span>.<a href="#8d85dda78c9fa465" class="i method">Register</a>() ?  <span class="r7 r">fe</span> : <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>class</b> <a id="78ec933a032d9fca" href="../../../../../R/78ec933a032d9fca.html" target="n" data-glyph="4,1" class="t t">FromEventPattern</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#faee5d7ac7138eda" class="t t">FromEventPatternObservable</a>&lt;<span class="r0 r t">TDelegate</span>, <span class="r1 r t">TEventArgs</span>&gt; <a id="39f6ac670e5b5ed1" href="../../../../../R/39f6ac670e5b5ed1.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../EventPattern.cs.html#01ea9a8bae91f6ef" class="t t">EventPattern</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;&gt; <a id="fd7c3dd92ab041bd" href="../../../../../R/fd7c3dd92ab041bd.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <span class="r0 r t">TDelegate</span> <a id="6368328d1b552830" href="../../../../../R/6368328d1b552830.html" target="n" data-glyph="46,2" class="i field">handler</a>;
+ 
+            <b>public</b> <a id="1ded8be507e41cb6" href="../../../../../R/1ded8be507e41cb6.html" target="n" data-glyph="72,2" class="i constructor">FromEventPattern</a>(<a href="#faee5d7ac7138eda" class="t t">FromEventPatternObservable</a>&lt;<span class="r0 r t">TDelegate</span>, <span class="r1 r t">TEventArgs</span>&gt; <span id="r8 rd" class="r8 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../EventPattern.cs.html#01ea9a8bae91f6ef" class="t t">EventPattern</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;&gt; <span id="r9 rd" class="r9 r">observer</span>)
+            {
+                <a href="#78ec933a032d9fca" class="k">this</a>.<a href="#39f6ac670e5b5ed1" class="i field">parent</a> = <span class="r8 r">parent</span>;
+                <a href="#78ec933a032d9fca" class="k">this</a>.<a href="#fd7c3dd92ab041bd" class="i field">observer</a> = <span class="r9 r">observer</span>;
+            }
+ 
+            <b>public bool</b> <a id="8d85dda78c9fa465" href="../../../../../R/8d85dda78c9fa465.html" target="n" data-glyph="72,2" class="i method">Register</a>()
+            {
+                <a href="#6368328d1b552830" class="i field">handler</a> = <a href="#39f6ac670e5b5ed1" class="i field">parent</a>.<a href="#6445c3d4f15bd91f" class="i field">conversion</a>(<a href="#244e31fba984cae9" class="i method">OnNext</a>);
+                <b>try</b>
+                {
+                    <a href="#39f6ac670e5b5ed1" class="i field">parent</a>.<a href="#15da71f699e98704" class="i field">addHandler</a>(<a href="#6368328d1b552830" class="i field">handler</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r10 rd" class="r10 r">ex</span>)
+                {
+                    <a href="#fd7c3dd92ab041bd" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r10 r">ex</span>);
+                    <b>return false</b>;
+                }
+                <b>return true</b>;
+            }
+ 
+            <b>void</b> <a id="244e31fba984cae9" href="../../../../../R/244e31fba984cae9.html" target="n" data-glyph="76,2" class="i method">OnNext</a>(<b>object</b> <span id="r11 rd" class="r11 r">sender</span>, <span class="r1 r t">TEventArgs</span> <span id="r12 rd" class="r12 r">eventArgs</span>)
+            {
+                <a href="#fd7c3dd92ab041bd" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<b>new</b> <a href="../EventPattern.cs.html#9fe442f5c6692d63" class="t constructor">EventPattern</a>&lt;<span class="r1 r t">TEventArgs</span>&gt;(<span class="r11 r">sender</span>, <span class="r12 r">eventArgs</span>));
+            }
+ 
+            <b>public void</b> <a id="21ec73779248ddad" href="../../../../../R/21ec73779248ddad.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="#6368328d1b552830" class="i field">handler</a> != <b>null</b>)
+                {
+                    <a href="#39f6ac670e5b5ed1" class="i field">parent</a>.<a href="#5793596d396572fc" class="i field">removeHandler</a>(<a href="#6368328d1b552830" class="i field">handler</a>);
+                    <a href="#6368328d1b552830" class="i field">handler</a> = <b>default</b>(<span class="r0 r t">TDelegate</span>);
+                }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="b513dd70b3875946" href="../../../../../R/b513dd70b3875946.html" target="n" data-glyph="2,0" class="t t">FromEventObservable</a>&lt;<span id="r13 rd t" class="r13 r t">TDelegate</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>, <span class="r13 r t">TDelegate</span>&gt; <a id="350f7cc71f30610d" href="../../../../../R/350f7cc71f30610d.html" target="n" data-glyph="46,1" class="i field">conversion</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r13 r t">TDelegate</span>&gt; <a id="2819a53f20f1bbfa" href="../../../../../R/2819a53f20f1bbfa.html" target="n" data-glyph="46,1" class="i field">addHandler</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r13 r t">TDelegate</span>&gt; <a id="1f95f581779143d6" href="../../../../../R/1f95f581779143d6.html" target="n" data-glyph="46,1" class="i field">removeHandler</a>;
+ 
+        <b>public</b> <a id="e376cfe33f450093" href="../../../../../R/e376cfe33f450093.html" target="n" data-glyph="72,1" class="i constructor">FromEventObservable</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>, <span class="r13 r t">TDelegate</span>&gt; <span id="r14 rd" class="r14 r">conversion</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r13 r t">TDelegate</span>&gt; <span id="r15 rd" class="r15 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r13 r t">TDelegate</span>&gt; <span id="r16 rd" class="r16 r">removeHandler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#b513dd70b3875946" class="k">this</a>.<a href="#350f7cc71f30610d" class="i field">conversion</a> = <span class="r14 r">conversion</span>;
+            <a href="#b513dd70b3875946" class="k">this</a>.<a href="#2819a53f20f1bbfa" class="i field">addHandler</a> = <span class="r15 r">addHandler</span>;
+            <a href="#b513dd70b3875946" class="k">this</a>.<a href="#1f95f581779143d6" class="i field">removeHandler</a> = <span class="r16 r">removeHandler</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b21fe8d4acd48b9d" href="../../../../../R/b21fe8d4acd48b9d.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r17 rd" class="r17 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r18 rd" class="r18 r">cancel</span>)
+        {
+            <a href="#248e85813a39a1af" class="k">var</a> <span id="r19 rd" class="r19 r">fe</span> = <b>new</b> <a href="#5333b25e3fead786" class="t constructor">FromEvent</a>(<a href="#b513dd70b3875946" class="k">this</a>, <span class="r17 r">observer</span>);
+            <b>return</b> <span class="r19 r">fe</span>.<a href="#b01980c5ae0c2f9c" class="i method">Register</a>() ?  <span class="r19 r">fe</span> : <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>class</b> <a id="248e85813a39a1af" href="../../../../../R/248e85813a39a1af.html" target="n" data-glyph="4,1" class="t t">FromEvent</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#b513dd70b3875946" class="t t">FromEventObservable</a>&lt;<span class="r13 r t">TDelegate</span>&gt; <a id="c9561b87c14f3f5a" href="../../../../../R/c9561b87c14f3f5a.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="862d54da9907ec9f" href="../../../../../R/862d54da9907ec9f.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <span class="r13 r t">TDelegate</span> <a id="c6e6c07a50c9ea76" href="../../../../../R/c6e6c07a50c9ea76.html" target="n" data-glyph="46,2" class="i field">handler</a>;
+ 
+            <b>public</b> <a id="5333b25e3fead786" href="../../../../../R/5333b25e3fead786.html" target="n" data-glyph="72,2" class="i constructor">FromEvent</a>(<a href="#b513dd70b3875946" class="t t">FromEventObservable</a>&lt;<span class="r13 r t">TDelegate</span>&gt; <span id="r20 rd" class="r20 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r21 rd" class="r21 r">observer</span>)
+            {
+                <a href="#248e85813a39a1af" class="k">this</a>.<a href="#c9561b87c14f3f5a" class="i field">parent</a> = <span class="r20 r">parent</span>;
+                <a href="#248e85813a39a1af" class="k">this</a>.<a href="#862d54da9907ec9f" class="i field">observer</a> = <span class="r21 r">observer</span>;
+            }
+ 
+            <b>public bool</b> <a id="b01980c5ae0c2f9c" href="../../../../../R/b01980c5ae0c2f9c.html" target="n" data-glyph="72,2" class="i method">Register</a>()
+            {
+                <a href="#c6e6c07a50c9ea76" class="i field">handler</a> = <a href="#c9561b87c14f3f5a" class="i field">parent</a>.<a href="#350f7cc71f30610d" class="i field">conversion</a>(<a href="#817b62201f462514" class="i method">OnNext</a>);
+ 
+                <b>try</b>
+                {
+                    <a href="#c9561b87c14f3f5a" class="i field">parent</a>.<a href="#2819a53f20f1bbfa" class="i field">addHandler</a>(<a href="#c6e6c07a50c9ea76" class="i field">handler</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r22 rd" class="r22 r">ex</span>)
+                {
+                    <a href="#862d54da9907ec9f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r22 r">ex</span>);
+                    <b>return false</b>;
+                }
+                <b>return true</b>;
+            }
+ 
+            <b>void</b> <a id="817b62201f462514" href="../../../../../R/817b62201f462514.html" target="n" data-glyph="76,2" class="i method">OnNext</a>()
+            {
+                <a href="#862d54da9907ec9f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            }
+ 
+            <b>public void</b> <a id="8bbe35434c51bc34" href="../../../../../R/8bbe35434c51bc34.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="#c6e6c07a50c9ea76" class="i field">handler</a> != <b>null</b>)
+                {
+                    <a href="#c9561b87c14f3f5a" class="i field">parent</a>.<a href="#1f95f581779143d6" class="i field">removeHandler</a>(<a href="#c6e6c07a50c9ea76" class="i field">handler</a>);
+                    <a href="#c6e6c07a50c9ea76" class="i field">handler</a> = <b>default</b>(<span class="r13 r t">TDelegate</span>);
+                }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="71209b3ea12715d4" href="../../../../../R/71209b3ea12715d4.html" target="n" data-glyph="2,0" class="t t">FromEventObservable</a>&lt;<span id="r23 rd t" class="r23 r t">TDelegate</span>, <span id="r24 rd t" class="r24 r t">TEventArgs</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r24 r t">TEventArgs</span>&gt;
+    {
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r24 r t">TEventArgs</span>&gt;, <span class="r23 r t">TDelegate</span>&gt; <a id="135c0449d5c49d58" href="../../../../../R/135c0449d5c49d58.html" target="n" data-glyph="46,1" class="i field">conversion</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r23 r t">TDelegate</span>&gt; <a id="38653133563f6507" href="../../../../../R/38653133563f6507.html" target="n" data-glyph="46,1" class="i field">addHandler</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r23 r t">TDelegate</span>&gt; <a id="2e8536ede457aedd" href="../../../../../R/2e8536ede457aedd.html" target="n" data-glyph="46,1" class="i field">removeHandler</a>;
+ 
+        <b>public</b> <a id="75ebb3106668477f" href="../../../../../R/75ebb3106668477f.html" target="n" data-glyph="72,1" class="i constructor">FromEventObservable</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r24 r t">TEventArgs</span>&gt;, <span class="r23 r t">TDelegate</span>&gt; <span id="r25 rd" class="r25 r">conversion</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r23 r t">TDelegate</span>&gt; <span id="r26 rd" class="r26 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r23 r t">TDelegate</span>&gt; <span id="r27 rd" class="r27 r">removeHandler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#71209b3ea12715d4" class="k">this</a>.<a href="#135c0449d5c49d58" class="i field">conversion</a> = <span class="r25 r">conversion</span>;
+            <a href="#71209b3ea12715d4" class="k">this</a>.<a href="#38653133563f6507" class="i field">addHandler</a> = <span class="r26 r">addHandler</span>;
+            <a href="#71209b3ea12715d4" class="k">this</a>.<a href="#2e8536ede457aedd" class="i field">removeHandler</a> = <span class="r27 r">removeHandler</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="10cb0f881293d3a6" href="../../../../../R/10cb0f881293d3a6.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r24 r t">TEventArgs</span>&gt; <span id="r28 rd" class="r28 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r29 rd" class="r29 r">cancel</span>)
+        {
+            <a href="#c3c524cbb30fa09e" class="k">var</a> <span id="r30 rd" class="r30 r">fe</span> = <b>new</b> <a href="#8a9245b2fda3dd11" class="t constructor">FromEvent</a>(<a href="#71209b3ea12715d4" class="k">this</a>, <span class="r28 r">observer</span>);
+            <b>return</b> <span class="r30 r">fe</span>.<a href="#25ae1a3a18e8d3b8" class="i method">Register</a>() ?  <span class="r30 r">fe</span> : <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>class</b> <a id="c3c524cbb30fa09e" href="../../../../../R/c3c524cbb30fa09e.html" target="n" data-glyph="4,1" class="t t">FromEvent</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#71209b3ea12715d4" class="t t">FromEventObservable</a>&lt;<span class="r23 r t">TDelegate</span>, <span class="r24 r t">TEventArgs</span>&gt; <a id="a0cdd04007f67bbc" href="../../../../../R/a0cdd04007f67bbc.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r24 r t">TEventArgs</span>&gt; <a id="ba2e2d2aeabb6311" href="../../../../../R/ba2e2d2aeabb6311.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <span class="r23 r t">TDelegate</span> <a id="4ed32e8556a37e79" href="../../../../../R/4ed32e8556a37e79.html" target="n" data-glyph="46,2" class="i field">handler</a>;
+ 
+            <b>public</b> <a id="8a9245b2fda3dd11" href="../../../../../R/8a9245b2fda3dd11.html" target="n" data-glyph="72,2" class="i constructor">FromEvent</a>(<a href="#71209b3ea12715d4" class="t t">FromEventObservable</a>&lt;<span class="r23 r t">TDelegate</span>, <span class="r24 r t">TEventArgs</span>&gt; <span id="r31 rd" class="r31 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r24 r t">TEventArgs</span>&gt; <span id="r32 rd" class="r32 r">observer</span>)
+            {
+                <a href="#c3c524cbb30fa09e" class="k">this</a>.<a href="#a0cdd04007f67bbc" class="i field">parent</a> = <span class="r31 r">parent</span>;
+                <a href="#c3c524cbb30fa09e" class="k">this</a>.<a href="#ba2e2d2aeabb6311" class="i field">observer</a> = <span class="r32 r">observer</span>;
+            }
+ 
+            <b>public bool</b> <a id="25ae1a3a18e8d3b8" href="../../../../../R/25ae1a3a18e8d3b8.html" target="n" data-glyph="72,2" class="i method">Register</a>()
+            {
+                <a href="#4ed32e8556a37e79" class="i field">handler</a> = <a href="#a0cdd04007f67bbc" class="i field">parent</a>.<a href="#135c0449d5c49d58" class="i field">conversion</a>(<a href="#9ab0467a9643bfb6" class="i method">OnNext</a>);
+ 
+                <b>try</b>
+                {
+                    <a href="#a0cdd04007f67bbc" class="i field">parent</a>.<a href="#38653133563f6507" class="i field">addHandler</a>(<a href="#4ed32e8556a37e79" class="i field">handler</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r33 rd" class="r33 r">ex</span>)
+                {
+                    <a href="#ba2e2d2aeabb6311" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r33 r">ex</span>);
+                    <b>return false</b>;
+                }
+                <b>return true</b>;
+            }
+ 
+            <b>void</b> <a id="9ab0467a9643bfb6" href="../../../../../R/9ab0467a9643bfb6.html" target="n" data-glyph="76,2" class="i method">OnNext</a>(<span class="r24 r t">TEventArgs</span> <span id="r34 rd" class="r34 r">args</span>)
+            {
+                <a href="#ba2e2d2aeabb6311" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r34 r">args</span>);
+            }
+ 
+            <b>public void</b> <a id="0d20dd5037fceb54" href="../../../../../R/0d20dd5037fceb54.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="#4ed32e8556a37e79" class="i field">handler</a> != <b>null</b>)
+                {
+                    <a href="#a0cdd04007f67bbc" class="i field">parent</a>.<a href="#2e8536ede457aedd" class="i field">removeHandler</a>(<a href="#4ed32e8556a37e79" class="i field">handler</a>);
+                    <a href="#4ed32e8556a37e79" class="i field">handler</a> = <b>default</b>(<span class="r23 r t">TDelegate</span>);
+                }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="e2db7e55750abe5e" href="../../../../../R/e2db7e55750abe5e.html" target="n" data-glyph="2,0" class="t t">FromEventObservable</a> : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <a id="4038063c5a466b48" href="../../../../../R/4038063c5a466b48.html" target="n" data-glyph="46,1" class="i field">addHandler</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <a id="a7ae3173c81f1e4c" href="../../../../../R/a7ae3173c81f1e4c.html" target="n" data-glyph="46,1" class="i field">removeHandler</a>;
+ 
+        <b>public</b> <a id="e11d11c4282bae9c" href="../../../../../R/e11d11c4282bae9c.html" target="n" data-glyph="72,1" class="i constructor">FromEventObservable</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <span id="r35 rd" class="r35 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <span id="r36 rd" class="r36 r">removeHandler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#e2db7e55750abe5e" class="k">this</a>.<a href="#4038063c5a466b48" class="i field">addHandler</a> = <span class="r35 r">addHandler</span>;
+            <a href="#e2db7e55750abe5e" class="k">this</a>.<a href="#a7ae3173c81f1e4c" class="i field">removeHandler</a> = <span class="r36 r">removeHandler</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="e8f923f38e7d0789" href="../../../../../R/e8f923f38e7d0789.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r37 rd" class="r37 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r38 rd" class="r38 r">cancel</span>)
+        {
+            <a href="#72fd7261d3254ec1" class="k">var</a> <span id="r39 rd" class="r39 r">fe</span> = <b>new</b> <a href="#2f8433315f6d7854" class="t constructor">FromEvent</a>(<a href="#e2db7e55750abe5e" class="k">this</a>, <span class="r37 r">observer</span>);
+            <b>return</b> <span class="r39 r">fe</span>.<a href="#15f47946187834fb" class="i method">Register</a>() ?  <span class="r39 r">fe</span> : <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>class</b> <a id="72fd7261d3254ec1" href="../../../../../R/72fd7261d3254ec1.html" target="n" data-glyph="4,1" class="t t">FromEvent</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#e2db7e55750abe5e" class="t t">FromEventObservable</a> <a id="bf7e45d9749dd79b" href="../../../../../R/bf7e45d9749dd79b.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0eea6f2d32af171c" href="../../../../../R/0eea6f2d32af171c.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="fb014b9a7dcc4356" href="../../../../../R/fb014b9a7dcc4356.html" target="n" data-glyph="46,2" class="i field">handler</a>;
+ 
+            <b>public</b> <a id="2f8433315f6d7854" href="../../../../../R/2f8433315f6d7854.html" target="n" data-glyph="72,2" class="i constructor">FromEvent</a>(<a href="#e2db7e55750abe5e" class="t t">FromEventObservable</a> <span id="r40 rd" class="r40 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r41 rd" class="r41 r">observer</span>)
+            {
+                <a href="#72fd7261d3254ec1" class="k">this</a>.<a href="#bf7e45d9749dd79b" class="i field">parent</a> = <span class="r40 r">parent</span>;
+                <a href="#72fd7261d3254ec1" class="k">this</a>.<a href="#0eea6f2d32af171c" class="i field">observer</a> = <span class="r41 r">observer</span>;
+                <a href="#72fd7261d3254ec1" class="k">this</a>.<a href="#fb014b9a7dcc4356" class="i field">handler</a> = <a href="#467861aba9fc6b47" class="i method">OnNext</a>;
+            }
+ 
+            <b>public bool</b> <a id="15f47946187834fb" href="../../../../../R/15f47946187834fb.html" target="n" data-glyph="72,2" class="i method">Register</a>()
+            {
+                <b>try</b>
+                {
+                    <a href="#bf7e45d9749dd79b" class="i field">parent</a>.<a href="#4038063c5a466b48" class="i field">addHandler</a>(<a href="#fb014b9a7dcc4356" class="i field">handler</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r42 rd" class="r42 r">ex</span>)
+                {
+                    <a href="#0eea6f2d32af171c" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r42 r">ex</span>);
+                    <b>return false</b>;
+                }
+                <b>return true</b>;
+            }
+ 
+            <b>void</b> <a id="467861aba9fc6b47" href="../../../../../R/467861aba9fc6b47.html" target="n" data-glyph="76,2" class="i method">OnNext</a>()
+            {
+                <a href="#0eea6f2d32af171c" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            }
+ 
+            <b>public void</b> <a id="1d72dbfe1ededdae" href="../../../../../R/1d72dbfe1ededdae.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="#fb014b9a7dcc4356" class="i field">handler</a> != <b>null</b>)
+                {
+                    <a href="#bf7e45d9749dd79b" class="i field">parent</a>.<a href="#a7ae3173c81f1e4c" class="i field">removeHandler</a>(<a href="#fb014b9a7dcc4356" class="i field">handler</a>);
+                    <a href="#fb014b9a7dcc4356" class="i field">handler</a> = <b>null</b>;
+                }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="32b66e5190c2b917" href="../../../../../R/32b66e5190c2b917.html" target="n" data-glyph="2,0" class="t t">FromEventObservable_</a>&lt;<span id="r43 rd t" class="r43 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r43 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r43 r t">T</span>&gt;&gt; <a id="62cfd009f6641c19" href="../../../../../R/62cfd009f6641c19.html" target="n" data-glyph="46,1" class="i field">addHandler</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r43 r t">T</span>&gt;&gt; <a id="0dc203761ff28d8f" href="../../../../../R/0dc203761ff28d8f.html" target="n" data-glyph="46,1" class="i field">removeHandler</a>;
+ 
+        <b>public</b> <a id="b233e49e6a9b3df8" href="../../../../../R/b233e49e6a9b3df8.html" target="n" data-glyph="72,1" class="i constructor">FromEventObservable_</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r43 r t">T</span>&gt;&gt; <span id="r44 rd" class="r44 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r43 r t">T</span>&gt;&gt; <span id="r45 rd" class="r45 r">removeHandler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#32b66e5190c2b917" class="k">this</a>.<a href="#62cfd009f6641c19" class="i field">addHandler</a> = <span class="r44 r">addHandler</span>;
+            <a href="#32b66e5190c2b917" class="k">this</a>.<a href="#0dc203761ff28d8f" class="i field">removeHandler</a> = <span class="r45 r">removeHandler</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="414c32d44bd8f6c7" href="../../../../../R/414c32d44bd8f6c7.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r43 r t">T</span>&gt; <span id="r46 rd" class="r46 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r47 rd" class="r47 r">cancel</span>)
+        {
+            <a href="#f0cadf9c30a33890" class="k">var</a> <span id="r48 rd" class="r48 r">fe</span> = <b>new</b> <a href="#fe4308b013645f4c" class="t constructor">FromEvent</a>(<a href="#32b66e5190c2b917" class="k">this</a>, <span class="r46 r">observer</span>);
+            <b>return</b> <span class="r48 r">fe</span>.<a href="#6fbb2e1ee4327c7f" class="i method">Register</a>() ?  <span class="r48 r">fe</span> : <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>class</b> <a id="f0cadf9c30a33890" href="../../../../../R/f0cadf9c30a33890.html" target="n" data-glyph="4,1" class="t t">FromEvent</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#32b66e5190c2b917" class="t t">FromEventObservable_</a>&lt;<span class="r43 r t">T</span>&gt; <a id="250eb92a67c1ce82" href="../../../../../R/250eb92a67c1ce82.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r43 r t">T</span>&gt; <a id="827e1ca5df2f3aad" href="../../../../../R/827e1ca5df2f3aad.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r43 r t">T</span>&gt; <a id="e0e41e1810c7709d" href="../../../../../R/e0e41e1810c7709d.html" target="n" data-glyph="46,2" class="i field">handler</a>;
+ 
+            <b>public</b> <a id="fe4308b013645f4c" href="../../../../../R/fe4308b013645f4c.html" target="n" data-glyph="72,2" class="i constructor">FromEvent</a>(<a href="#32b66e5190c2b917" class="t t">FromEventObservable_</a>&lt;<span class="r43 r t">T</span>&gt; <span id="r49 rd" class="r49 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r43 r t">T</span>&gt; <span id="r50 rd" class="r50 r">observer</span>)
+            {
+                <a href="#f0cadf9c30a33890" class="k">this</a>.<a href="#250eb92a67c1ce82" class="i field">parent</a> = <span class="r49 r">parent</span>;
+                <a href="#f0cadf9c30a33890" class="k">this</a>.<a href="#827e1ca5df2f3aad" class="i field">observer</a> = <span class="r50 r">observer</span>;
+                <a href="#f0cadf9c30a33890" class="k">this</a>.<a href="#e0e41e1810c7709d" class="i field">handler</a> = <a href="#b0cdfe5088bfbe3c" class="i method">OnNext</a>;
+            }
+ 
+            <b>public bool</b> <a id="6fbb2e1ee4327c7f" href="../../../../../R/6fbb2e1ee4327c7f.html" target="n" data-glyph="72,2" class="i method">Register</a>()
+            {
+                <b>try</b>
+                {
+                    <a href="#250eb92a67c1ce82" class="i field">parent</a>.<a href="#62cfd009f6641c19" class="i field">addHandler</a>(<a href="#e0e41e1810c7709d" class="i field">handler</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r51 rd" class="r51 r">ex</span>)
+                {
+                    <a href="#827e1ca5df2f3aad" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r51 r">ex</span>);
+                    <b>return false</b>;
+                }
+                <b>return true</b>;
+            }
+ 
+            <b>void</b> <a id="b0cdfe5088bfbe3c" href="../../../../../R/b0cdfe5088bfbe3c.html" target="n" data-glyph="76,2" class="i method">OnNext</a>(<span class="r43 r t">T</span> <span id="r52 rd" class="r52 r">value</span>)
+            {
+                <a href="#827e1ca5df2f3aad" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r52 r">value</span>);
+            }
+ 
+            <b>public void</b> <a id="3881f1e09e655331" href="../../../../../R/3881f1e09e655331.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="#e0e41e1810c7709d" class="i field">handler</a> != <b>null</b>)
+                {
+                    <a href="#250eb92a67c1ce82" class="i field">parent</a>.<a href="#0dc203761ff28d8f" class="i field">removeHandler</a>(<a href="#e0e41e1810c7709d" class="i field">handler</a>);
+                    <a href="#e0e41e1810c7709d" class="i field">handler</a> = <b>null</b>;
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

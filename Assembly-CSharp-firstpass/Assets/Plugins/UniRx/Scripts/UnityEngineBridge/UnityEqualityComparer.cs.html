@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnityEqualityComparer.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(136);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEqualityComparer.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityEqualityComparer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static class</b> <a id="b297979dd74fdcb1" href="../../../../../R/b297979dd74fdcb1.html" target="n" data-glyph="0,0" class="t t">UnityEqualityComparer</a>
+    {
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Vector2</span>&gt; <a id="7b788b5858039c84" href="../../../../../R/7b788b5858039c84.html" target="n" data-glyph="42,1" class="i field">Vector2</a> = <b>new</b> <a href="#7b126cd63c6574ab" class="t constructor">Vector2EqualityComparer</a>();
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Vector3</span>&gt; <a id="df84718e16c437dd" href="../../../../../R/df84718e16c437dd.html" target="n" data-glyph="42,1" class="i field">Vector3</a> = <b>new</b> <a href="#23b091ab6591732e" class="t constructor">Vector3EqualityComparer</a>();
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Vector4</span>&gt; <a id="4998bdabd1b075ee" href="../../../../../R/4998bdabd1b075ee.html" target="n" data-glyph="42,1" class="i field">Vector4</a> = <b>new</b> <a href="#3c3741a8a22ea5b3" class="t constructor">Vector4EqualityComparer</a>();
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Color</span>&gt; <a id="43828de041d8bbc0" href="../../../../../R/43828de041d8bbc0.html" target="n" data-glyph="42,1" class="i field">Color</a> = <b>new</b> <a href="#e370d601f367d1fd" class="t constructor">ColorEqualityComparer</a>();
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Rect</span>&gt; <a id="d138fda209c1f08c" href="../../../../../R/d138fda209c1f08c.html" target="n" data-glyph="42,1" class="i field">Rect</a> = <b>new</b> <a href="#a8d790cf8562340a" class="t constructor">RectEqualityComparer</a>();
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Bounds</span>&gt; <a id="8647b7765fabe9a8" href="../../../../../R/8647b7765fabe9a8.html" target="n" data-glyph="42,1" class="i field">Bounds</a> = <b>new</b> <a href="#96325b3b735bf8eb" class="t constructor">BoundsEqualityComparer</a>();
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Quaternion</span>&gt; <a id="1bc995010ec112be" href="../../../../../R/1bc995010ec112be.html" target="n" data-glyph="42,1" class="i field">Quaternion</a> = <b>new</b> <a href="#9df7ba9b14a4f8bf" class="t constructor">QuaternionEqualityComparer</a>();
+ 
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="ee868b27e2d3344b" href="../../../../../R/ee868b27e2d3344b.html" target="n" data-glyph="46,1" class="i field">vector2Type</a> = <b>typeof</b>(<span class="i">Vector2</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="b215eae40432491f" href="../../../../../R/b215eae40432491f.html" target="n" data-glyph="46,1" class="i field">vector3Type</a> = <b>typeof</b>(<span class="i">Vector3</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="14c711be2a09141f" href="../../../../../R/14c711be2a09141f.html" target="n" data-glyph="46,1" class="i field">vector4Type</a> = <b>typeof</b>(<span class="i">Vector4</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="210b48d068dd98d9" href="../../../../../R/210b48d068dd98d9.html" target="n" data-glyph="46,1" class="i field">colorType</a> = <b>typeof</b>(<span class="i">Color</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="323881268faa4c9b" href="../../../../../R/323881268faa4c9b.html" target="n" data-glyph="46,1" class="i field">rectType</a> = <b>typeof</b>(<span class="i">Rect</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="a8d2b3ac0582b382" href="../../../../../R/a8d2b3ac0582b382.html" target="n" data-glyph="46,1" class="i field">boundsType</a> = <b>typeof</b>(<span class="i">Bounds</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="5b5f3687e07c7206" href="../../../../../R/5b5f3687e07c7206.html" target="n" data-glyph="46,1" class="i field">quaternionType</a> = <b>typeof</b>(<span class="i">Quaternion</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+ 
+        <b>static class</b> <a id="37eeda7417dddf1b" href="../../../../../R/37eeda7417dddf1b.html" target="n" data-glyph="4,1" class="t t">RuntimeTypeHandlerCache</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;
+        {
+            <b>public static readonly</b> <a href="@0@mscorlib/A.html#0701d28060985e94" class="t t">RuntimeTypeHandle</a> <a id="fdd784496de37872" href="../../../../../R/fdd784496de37872.html" target="n" data-glyph="42,2" class="i field">TypeHandle</a> = <b>typeof</b>(<span class="r0 r t">T</span>).<a href="@0@mscorlib/A.html#3b996698ffcafb07" class="i property">TypeHandle</a>;
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt; <a id="e7cc1a7d3ff064c1" href="../../../../../R/e7cc1a7d3ff064c1.html" target="n" data-glyph="72,1" class="i method">GetDefault</a>&lt;<span id="r1 rd t" class="r1 r t">T</span>&gt;()
+        {
+            <a href="@0@mscorlib/A.html#0701d28060985e94" class="k">var</a> <span id="r2 rd" class="r2 r">t</span> = <a href="#37eeda7417dddf1b" class="t t">RuntimeTypeHandlerCache</a>&lt;<span class="r1 r t">T</span>&gt;.<a href="#fdd784496de37872" class="i field">TypeHandle</a>;
+ 
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#ee868b27e2d3344b" class="i field">vector2Type</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#7b788b5858039c84" class="i field">Vector2</a>;
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#b215eae40432491f" class="i field">vector3Type</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#df84718e16c437dd" class="i field">Vector3</a>;
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#14c711be2a09141f" class="i field">vector4Type</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#4998bdabd1b075ee" class="i field">Vector4</a>;
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#210b48d068dd98d9" class="i field">colorType</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#43828de041d8bbc0" class="i field">Color</a>;
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#323881268faa4c9b" class="i field">rectType</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#d138fda209c1f08c" class="i field">Rect</a>;
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#a8d2b3ac0582b382" class="i field">boundsType</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#8647b7765fabe9a8" class="i field">Bounds</a>;
+            <b>if</b> (<span class="r2 r">t</span>.<a href="@0@mscorlib/A.html#6695a7be871711d7" class="i method">Equals</a>(<a href="#5b5f3687e07c7206" class="i field">quaternionType</a>)) <b>return</b> (<a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;)<a href="#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="#1bc995010ec112be" class="i field">Quaternion</a>;
+ 
+            <b>return</b> <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r1 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+        }
+ 
+        <b>class</b> <a id="7b126cd63c6574ab" href="../../../../../R/7b126cd63c6574ab.html" target="n" data-glyph="4,1" class="t t"><span id="57cf6303fe391e63">Vector2EqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Vector2</span>&gt;
+        {
+            <b>public bool</b> <a id="44e8f34861307384" href="../../../../../R/44e8f34861307384.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Vector2</span> <span id="r3 rd" class="r3 r">self</span>, <span class="i">Vector2</span> <span id="r4 rd" class="r4 r">vector</span>)
+            {
+                <b>return</b> <span class="r3 r">self</span>.<span class="i">x</span>.<span class="i">Equals</span>(<span class="r4 r">vector</span>.<span class="i">x</span>) &amp;&amp; <span class="r3 r">self</span>.<span class="i">y</span>.<span class="i">Equals</span>(<span class="r4 r">vector</span>.<span class="i">y</span>);
+            }
+ 
+            <b>public int</b> <a id="33cd4c1d1aa70631" href="../../../../../R/33cd4c1d1aa70631.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Vector2</span> <span id="r5 rd" class="r5 r">obj</span>)
+            {
+                <b>return</b> <span class="r5 r">obj</span>.<span class="i">x</span>.<span class="i">GetHashCode</span>() ^ <span class="r5 r">obj</span>.<span class="i">y</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2;
+            }
+        }
+ 
+        <b>class</b> <a id="23b091ab6591732e" href="../../../../../R/23b091ab6591732e.html" target="n" data-glyph="4,1" class="t t"><span id="4970729540a53b2e">Vector3EqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Vector3</span>&gt;
+        {
+            <b>public bool</b> <a id="cbe82b2d20dd527c" href="../../../../../R/cbe82b2d20dd527c.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Vector3</span> <span id="r6 rd" class="r6 r">self</span>, <span class="i">Vector3</span> <span id="r7 rd" class="r7 r">vector</span>)
+            {
+                <b>return</b> <span class="r6 r">self</span>.<span class="i">x</span>.<span class="i">Equals</span>(<span class="r7 r">vector</span>.<span class="i">x</span>) &amp;&amp; <span class="r6 r">self</span>.<span class="i">y</span>.<span class="i">Equals</span>(<span class="r7 r">vector</span>.<span class="i">y</span>) &amp;&amp; <span class="r6 r">self</span>.<span class="i">z</span>.<span class="i">Equals</span>(<span class="r7 r">vector</span>.<span class="i">z</span>);
+            }
+ 
+            <b>public int</b> <a id="f5f7df18811be017" href="../../../../../R/f5f7df18811be017.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Vector3</span> <span id="r8 rd" class="r8 r">obj</span>)
+            {
+                <b>return</b> <span class="r8 r">obj</span>.<span class="i">x</span>.<span class="i">GetHashCode</span>() ^ <span class="r8 r">obj</span>.<span class="i">y</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2 ^ <span class="r8 r">obj</span>.<span class="i">z</span>.<span class="i">GetHashCode</span>() &gt;&gt; 2;
+            }
+        }
+ 
+        <b>class</b> <a id="3c3741a8a22ea5b3" href="../../../../../R/3c3741a8a22ea5b3.html" target="n" data-glyph="4,1" class="t t"><span id="da0ff38a8315c5ad">Vector4EqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Vector4</span>&gt;
+        {
+            <b>public bool</b> <a id="db7acea3af09b608" href="../../../../../R/db7acea3af09b608.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Vector4</span> <span id="r9 rd" class="r9 r">self</span>, <span class="i">Vector4</span> <span id="r10 rd" class="r10 r">vector</span>)
+            {
+                <b>return</b> <span class="r9 r">self</span>.<span class="i">x</span>.<span class="i">Equals</span>(<span class="r10 r">vector</span>.<span class="i">x</span>) &amp;&amp; <span class="r9 r">self</span>.<span class="i">y</span>.<span class="i">Equals</span>(<span class="r10 r">vector</span>.<span class="i">y</span>) &amp;&amp; <span class="r9 r">self</span>.<span class="i">z</span>.<span class="i">Equals</span>(<span class="r10 r">vector</span>.<span class="i">z</span>) &amp;&amp; <span class="r9 r">self</span>.<span class="i">w</span>.<span class="i">Equals</span>(<span class="r10 r">vector</span>.<span class="i">w</span>);
+            }
+ 
+            <b>public int</b> <a id="a71981ce3412c2fc" href="../../../../../R/a71981ce3412c2fc.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Vector4</span> <span id="r11 rd" class="r11 r">obj</span>)
+            {
+                <b>return</b> <span class="r11 r">obj</span>.<span class="i">x</span>.<span class="i">GetHashCode</span>() ^ <span class="r11 r">obj</span>.<span class="i">y</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2 ^ <span class="r11 r">obj</span>.<span class="i">z</span>.<span class="i">GetHashCode</span>() &gt;&gt; 2 ^ <span class="r11 r">obj</span>.<span class="i">w</span>.<span class="i">GetHashCode</span>() &gt;&gt; 1;
+            }
+        }
+ 
+        <b>class</b> <a id="e370d601f367d1fd" href="../../../../../R/e370d601f367d1fd.html" target="n" data-glyph="4,1" class="t t"><span id="27406ed9eb33e353">ColorEqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Color</span>&gt;
+        {
+            <b>public bool</b> <a id="4e35c0ba90068558" href="../../../../../R/4e35c0ba90068558.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Color</span> <span id="r12 rd" class="r12 r">self</span>, <span class="i">Color</span> <span id="r13 rd" class="r13 r">other</span>)
+            {
+                <b>return</b> <span class="r12 r">self</span>.<span class="i">r</span>.<span class="i">Equals</span>(<span class="r13 r">other</span>.<span class="i">r</span>) &amp;&amp; <span class="r12 r">self</span>.<span class="i">g</span>.<span class="i">Equals</span>(<span class="r13 r">other</span>.<span class="i">g</span>) &amp;&amp; <span class="r12 r">self</span>.<span class="i">b</span>.<span class="i">Equals</span>(<span class="r13 r">other</span>.<span class="i">b</span>) &amp;&amp; <span class="r12 r">self</span>.<span class="i">a</span>.<span class="i">Equals</span>(<span class="r13 r">other</span>.<span class="i">a</span>);
+            }
+ 
+            <b>public int</b> <a id="4f03de9a02a8f615" href="../../../../../R/4f03de9a02a8f615.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Color</span> <span id="r14 rd" class="r14 r">obj</span>)
+            {
+                <b>return</b> <span class="r14 r">obj</span>.<span class="i">r</span>.<span class="i">GetHashCode</span>() ^ <span class="r14 r">obj</span>.<span class="i">g</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2 ^ <span class="r14 r">obj</span>.<span class="i">b</span>.<span class="i">GetHashCode</span>() &gt;&gt; 2 ^ <span class="r14 r">obj</span>.<span class="i">a</span>.<span class="i">GetHashCode</span>() &gt;&gt; 1;
+            }
+        }
+ 
+        <b>class</b> <a id="a8d790cf8562340a" href="../../../../../R/a8d790cf8562340a.html" target="n" data-glyph="4,1" class="t t"><span id="d5f5ff15fdcf4af6">RectEqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Rect</span>&gt;
+        {
+            <b>public bool</b> <a id="032e86ab86d47a37" href="../../../../../R/032e86ab86d47a37.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Rect</span> <span id="r15 rd" class="r15 r">self</span>, <span class="i">Rect</span> <span id="r16 rd" class="r16 r">other</span>)
+            {
+                <b>return</b> <span class="r15 r">self</span>.<span class="i">x</span>.<span class="i">Equals</span>(<span class="r16 r">other</span>.<span class="i">x</span>) &amp;&amp; <span class="r15 r">self</span>.<span class="i">width</span>.<span class="i">Equals</span>(<span class="r16 r">other</span>.<span class="i">width</span>) &amp;&amp; <span class="r15 r">self</span>.<span class="i">y</span>.<span class="i">Equals</span>(<span class="r16 r">other</span>.<span class="i">y</span>) &amp;&amp; <span class="r15 r">self</span>.<span class="i">height</span>.<span class="i">Equals</span>(<span class="r16 r">other</span>.<span class="i">height</span>);
+            }
+ 
+            <b>public int</b> <a id="8272198a59ac8411" href="../../../../../R/8272198a59ac8411.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Rect</span> <span id="r17 rd" class="r17 r">obj</span>)
+            {
+                <b>return</b> <span class="r17 r">obj</span>.<span class="i">x</span>.<span class="i">GetHashCode</span>() ^ <span class="r17 r">obj</span>.<span class="i">width</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2 ^ <span class="r17 r">obj</span>.<span class="i">y</span>.<span class="i">GetHashCode</span>() &gt;&gt; 2 ^ <span class="r17 r">obj</span>.<span class="i">height</span>.<span class="i">GetHashCode</span>() &gt;&gt; 1;
+            }
+        }
+ 
+        <b>class</b> <a id="96325b3b735bf8eb" href="../../../../../R/96325b3b735bf8eb.html" target="n" data-glyph="4,1" class="t t"><span id="7a23b3ec8e76f403">BoundsEqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Bounds</span>&gt;
+        {
+            <b>public bool</b> <a id="e824eaa0c8910fae" href="../../../../../R/e824eaa0c8910fae.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Bounds</span> <span id="r18 rd" class="r18 r">self</span>, <span class="i">Bounds</span> <span id="r19 rd" class="r19 r">vector</span>)
+            {
+                <b>return</b> <span class="r18 r">self</span>.<span class="i">center</span>.<span class="i">Equals</span>(<span class="r19 r">vector</span>.<span class="i">center</span>) &amp;&amp; <span class="r18 r">self</span>.<span class="i">extents</span>.<span class="i">Equals</span>(<span class="r19 r">vector</span>.<span class="i">extents</span>);
+            }
+ 
+            <b>public int</b> <a id="fd403d502413035f" href="../../../../../R/fd403d502413035f.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Bounds</span> <span id="r20 rd" class="r20 r">obj</span>)
+            {
+                <b>return</b> <span class="r20 r">obj</span>.<span class="i">center</span>.<span class="i">GetHashCode</span>() ^ <span class="r20 r">obj</span>.<span class="i">extents</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2;
+            }
+        }
+ 
+        <b>class</b> <a id="9df7ba9b14a4f8bf" href="../../../../../R/9df7ba9b14a4f8bf.html" target="n" data-glyph="4,1" class="t t"><span id="c130be3f8ca234e8">QuaternionEqualityComparer</span></a> : <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="i">Quaternion</span>&gt;
+        {
+            <b>public bool</b> <a id="31a15566d5a82d07" href="../../../../../R/31a15566d5a82d07.html" target="n" data-glyph="72,2" class="i method">Equals</a>(<span class="i">Quaternion</span> <span id="r21 rd" class="r21 r">self</span>, <span class="i">Quaternion</span> <span id="r22 rd" class="r22 r">vector</span>)
+            {
+                <b>return</b> <span class="r21 r">self</span>.<span class="i">x</span>.<span class="i">Equals</span>(<span class="r22 r">vector</span>.<span class="i">x</span>) &amp;&amp; <span class="r21 r">self</span>.<span class="i">y</span>.<span class="i">Equals</span>(<span class="r22 r">vector</span>.<span class="i">y</span>) &amp;&amp; <span class="r21 r">self</span>.<span class="i">z</span>.<span class="i">Equals</span>(<span class="r22 r">vector</span>.<span class="i">z</span>) &amp;&amp; <span class="r21 r">self</span>.<span class="i">w</span>.<span class="i">Equals</span>(<span class="r22 r">vector</span>.<span class="i">w</span>);
+            }
+ 
+            <b>public int</b> <a id="27177066ee338ebb" href="../../../../../R/27177066ee338ebb.html" target="n" data-glyph="72,2" class="i method">GetHashCode</a>(<span class="i">Quaternion</span> <span id="r23 rd" class="r23 r">obj</span>)
+            {
+                <b>return</b> <span class="r23 r">obj</span>.<span class="i">x</span>.<span class="i">GetHashCode</span>() ^ <span class="r23 r">obj</span>.<span class="i">y</span>.<span class="i">GetHashCode</span>() &lt;&lt; 2 ^ <span class="r23 r">obj</span>.<span class="i">z</span>.<span class="i">GetHashCode</span>() &gt;&gt; 2 ^ <span class="r23 r">obj</span>.<span class="i">w</span>.<span class="i">GetHashCode</span>() &gt;&gt; 1;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

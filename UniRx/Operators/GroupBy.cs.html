@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html><head><title>GroupBy.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(196);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/GroupBy.cs" target="_top">Operators\GroupBy.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="a08642ceeb6f4a9c" href="../R/a08642ceeb6f4a9c.html" target="n" data-glyph="2,0" class="t t">GroupedObservable</a>&lt;<span id="r0 rd t" class="r0 r t">TKey</span>, <span id="r1 rd t" class="r1 r t">TElement</span>&gt; : <a href="../System/IObservable.cs.html#be1e4b1a75b0c556" class="t t">IGroupedObservable</a>&lt;<span class="r0 r t">TKey</span>, <span class="r1 r t">TElement</span>&gt;
+    {
+        <b>readonly</b> <span class="r0 r t">TKey</span> <a id="0813935a446bd20e" href="../R/0813935a446bd20e.html" target="n" data-glyph="46,1" class="i field">key</a>;
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">TElement</span>&gt; <a id="a6c056b6a42f2ab9" href="../R/a6c056b6a42f2ab9.html" target="n" data-glyph="46,1" class="i field">subject</a>;
+        <b>readonly</b> <a href="../Disposables/RefCountDisposable.cs.html#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <a id="7094c281ba5b40e1" href="../R/7094c281ba5b40e1.html" target="n" data-glyph="46,1" class="i field">refCount</a>;
+ 
+        <b>public</b> <span class="r0 r t">TKey</span> <a id="d486e600595b0cb5" href="../R/d486e600595b0cb5.html" target="n" data-glyph="102,1" class="i property">Key</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#0813935a446bd20e" class="i field">key</a>; }
+        }
+ 
+        <b>public</b> <a id="6d503cf38c1489e1" href="../R/6d503cf38c1489e1.html" target="n" data-glyph="72,1" class="i constructor">GroupedObservable</a>(<span class="r0 r t">TKey</span> <span id="r2 rd" class="r2 r">key</span>, <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r1 r t">TElement</span>&gt; <span id="r3 rd" class="r3 r">subject</span>, <a href="../Disposables/RefCountDisposable.cs.html#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <span id="r4 rd" class="r4 r">refCount</span>)
+        {
+            <a href="#a08642ceeb6f4a9c" class="k">this</a>.<a href="#0813935a446bd20e" class="i field">key</a> = <span class="r2 r">key</span>;
+            <a href="#a08642ceeb6f4a9c" class="k">this</a>.<a href="#a6c056b6a42f2ab9" class="i field">subject</a> = <span class="r3 r">subject</span>;
+            <a href="#a08642ceeb6f4a9c" class="k">this</a>.<a href="#7094c281ba5b40e1" class="i field">refCount</a> = <span class="r4 r">refCount</span>;
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="bbf2f6c1f46f6227" href="../R/bbf2f6c1f46f6227.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r1 r t">TElement</span>&gt; <span id="r5 rd" class="r5 r">observer</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r6 rd" class="r6 r">release</span> = <a href="#7094c281ba5b40e1" class="i field">refCount</a>.<a href="../Disposables/RefCountDisposable.cs.html#567eb8b84bd0eed6" class="i method">GetDisposable</a>();
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r7 rd" class="r7 r">subscription</span> = <a href="#a6c056b6a42f2ab9" class="i field">subject</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r5 r">observer</span>);
+            <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<span class="r6 r">release</span>, <span class="r7 r">subscription</span>);
+        }
+    }
+ 
+    <b>internal class</b> <a id="04f89810f46bec69" href="../R/04f89810f46bec69.html" target="n" data-glyph="2,0" class="t t">GroupByObservable</a>&lt;<span id="r8 rd t" class="r8 r t">TSource</span>, <span id="r9 rd t" class="r9 r t">TKey</span>, <span id="r10 rd t" class="r10 r t">TElement</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<a href="../System/IObservable.cs.html#be1e4b1a75b0c556" class="t t">IGroupedObservable</a>&lt;<span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt;&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">TSource</span>&gt; <a id="f13735b037d8204e" href="../R/f13735b037d8204e.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r8 r t">TSource</span>, <span class="r9 r t">TKey</span>&gt; <a id="2b2f025d1c240cf3" href="../R/2b2f025d1c240cf3.html" target="n" data-glyph="46,1" class="i field">keySelector</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r8 r t">TSource</span>, <span class="r10 r t">TElement</span>&gt; <a id="4df22d8b3b7d9f37" href="../R/4df22d8b3b7d9f37.html" target="n" data-glyph="46,1" class="i field">elementSelector</a>;
+        <b>readonly int</b>? <a id="b71cd716659fc9ff" href="../R/b71cd716659fc9ff.html" target="n" data-glyph="46,1" class="i field">capacity</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r9 r t">TKey</span>&gt; <a id="77c01d06b019c085" href="../R/77c01d06b019c085.html" target="n" data-glyph="46,1" class="i field">comparer</a>;
+ 
+        <b>public</b> <a id="b7681d25a619a24d" href="../R/b7681d25a619a24d.html" target="n" data-glyph="72,1" class="i constructor">GroupByObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">TSource</span>&gt; <span id="r11 rd" class="r11 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r8 r t">TSource</span>, <span class="r9 r t">TKey</span>&gt; <span id="r12 rd" class="r12 r">keySelector</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r8 r t">TSource</span>, <span class="r10 r t">TElement</span>&gt; <span id="r13 rd" class="r13 r">elementSelector</span>, <b>int</b>? <span id="r14 rd" class="r14 r">capacity</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r9 r t">TKey</span>&gt; <span id="r15 rd" class="r15 r">comparer</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r11 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#04f89810f46bec69" class="k">this</a>.<a href="#f13735b037d8204e" class="i field">source</a> = <span class="r11 r">source</span>;
+            <a href="#04f89810f46bec69" class="k">this</a>.<a href="#2b2f025d1c240cf3" class="i field">keySelector</a> = <span class="r12 r">keySelector</span>;
+            <a href="#04f89810f46bec69" class="k">this</a>.<a href="#4df22d8b3b7d9f37" class="i field">elementSelector</a> = <span class="r13 r">elementSelector</span>;
+            <a href="#04f89810f46bec69" class="k">this</a>.<a href="#b71cd716659fc9ff" class="i field">capacity</a> = <span class="r14 r">capacity</span>;
+            <a href="#04f89810f46bec69" class="k">this</a>.<a href="#77c01d06b019c085" class="i field">comparer</a> = <span class="r15 r">comparer</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="37b501a5f9585056" href="../R/37b501a5f9585056.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/IObservable.cs.html#be1e4b1a75b0c556" class="t t">IGroupedObservable</a>&lt;<span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt;&gt; <span id="r16 rd" class="r16 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r17 rd" class="r17 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#c2f4c5f65e314d7d" class="t constructor">GroupBy</a>(<a href="#04f89810f46bec69" class="k">this</a>, <span class="r16 r">observer</span>, <span class="r17 r">cancel</span>).<a href="#144013a38cbd540d" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="f0360d6cfe0fe566" href="../R/f0360d6cfe0fe566.html" target="n" data-glyph="4,1" class="t t">GroupBy</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r8 r t">TSource</span>, <a href="../System/IObservable.cs.html#be1e4b1a75b0c556" class="t t">IGroupedObservable</a>&lt;<span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt;&gt;
+        {
+            <b>readonly</b> <a href="#04f89810f46bec69" class="t t">GroupByObservable</a>&lt;<span class="r8 r t">TSource</span>, <span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt; <a id="9d626ead28f0cd2a" href="../R/9d626ead28f0cd2a.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<span class="r9 r t">TKey</span>, <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r10 r t">TElement</span>&gt;&gt; <a id="29bbed1e4a92a75e" href="../R/29bbed1e4a92a75e.html" target="n" data-glyph="46,2" class="i field">map</a>;
+            <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r10 r t">TElement</span>&gt; <a id="fa39cb51cedcd5d3" href="../R/fa39cb51cedcd5d3.html" target="n" data-glyph="46,2" class="i field">nullKeySubject</a>;
+ 
+            <a href="../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="t t">CompositeDisposable</a> <a id="a18d935653bcf24d" href="../R/a18d935653bcf24d.html" target="n" data-glyph="46,2" class="i field">groupDisposable</a>;
+            <a href="../Disposables/RefCountDisposable.cs.html#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <a id="7a2d7225e86642f1" href="../R/7a2d7225e86642f1.html" target="n" data-glyph="46,2" class="i field">refCountDisposable</a>;
+ 
+            <b>public</b> <a id="c2f4c5f65e314d7d" href="../R/c2f4c5f65e314d7d.html" target="n" data-glyph="72,2" class="i constructor">GroupBy</a>(<a href="#04f89810f46bec69" class="t t">GroupByObservable</a>&lt;<span class="r8 r t">TSource</span>, <span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt; <span id="r18 rd" class="r18 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/IObservable.cs.html#be1e4b1a75b0c556" class="t t">IGroupedObservable</a>&lt;<span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt;&gt; <span id="r19 rd" class="r19 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r20 rd" class="r20 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r19 r">observer</span>, <span class="r20 r">cancel</span>)
+            {
+                <a href="#f0360d6cfe0fe566" class="k">this</a>.<a href="#9d626ead28f0cd2a" class="i field">parent</a> = <span class="r18 r">parent</span>;
+                <b>if</b> (<span class="r18 r">parent</span>.<a href="#b71cd716659fc9ff" class="i field">capacity</a>.<a href="@0@mscorlib/A.html#7bbe60e33e857298" class="i property">HasValue</a>)
+                {
+                    <a href="#29bbed1e4a92a75e" class="i field">map</a> = <b>new</b> <a href="@0@mscorlib/A.html#523713dd12290314" class="t constructor">Dictionary</a>&lt;<span class="r9 r t">TKey</span>, <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r10 r t">TElement</span>&gt;&gt;(<span class="r18 r">parent</span>.<a href="#b71cd716659fc9ff" class="i field">capacity</a>.<a href="@0@mscorlib/A.html#7b38d1fa76071c95" class="i property">Value</a>, <span class="r18 r">parent</span>.<a href="#77c01d06b019c085" class="i field">comparer</a>);
+                }
+                <b>else</b>
+                {
+                    <a href="#29bbed1e4a92a75e" class="i field">map</a> = <b>new</b> <a href="@0@mscorlib/A.html#05d4a216235a779c" class="t constructor">Dictionary</a>&lt;<span class="r9 r t">TKey</span>, <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r10 r t">TElement</span>&gt;&gt;(<span class="r18 r">parent</span>.<a href="#77c01d06b019c085" class="i field">comparer</a>);
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="144013a38cbd540d" href="../R/144013a38cbd540d.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#a18d935653bcf24d" class="i field">groupDisposable</a> = <b>new</b> <a href="../Disposables/CompositeDisposable.cs.html#b8fe93d2b696d1ee" class="t constructor">CompositeDisposable</a>();
+                <a href="#7a2d7225e86642f1" class="i field">refCountDisposable</a> = <b>new</b> <a href="../Disposables/RefCountDisposable.cs.html#a13ec056932ad596" class="t constructor">RefCountDisposable</a>(<a href="#a18d935653bcf24d" class="i field">groupDisposable</a>);
+ 
+                <a href="#a18d935653bcf24d" class="i field">groupDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<a href="#9d626ead28f0cd2a" class="i field">parent</a>.<a href="#f13735b037d8204e" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#f0360d6cfe0fe566" class="k">this</a>));
+ 
+                <b>return</b> <a href="#7a2d7225e86642f1" class="i field">refCountDisposable</a>;
+            }
+ 
+            <b>public override void</b> <a id="69dce3bf2ed4674c" href="../R/69dce3bf2ed4674c.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r8 r t">TSource</span> <span id="r21 rd" class="r21 r">value</span>)
+            {
+                <span class="r9 r t">var</span> <span id="r22 rd" class="r22 r">key</span> = <b>default</b>(<span class="r9 r t">TKey</span>);
+                <b>try</b>
+                {
+                    <span class="r22 r">key</span> = <a href="#9d626ead28f0cd2a" class="i field">parent</a>.<a href="#2b2f025d1c240cf3" class="i field">keySelector</a>(<span class="r21 r">value</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r23 rd" class="r23 r">exception</span>)
+                {
+                    <a href="#563b3696d9006226" class="i method">Error</a>(<span class="r23 r">exception</span>);
+                    <b>return</b>;
+                }
+ 
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r24 rd" class="r24 r">fireNewMapEntry</span> = <b>false</b>;
+                <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="k">var</a> <span id="r25 rd" class="r25 r">writer</span> = <b>default</b>(<a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r10 r t">TElement</span>&gt;);
+                <b>try</b>
+                {
+                    <b>if</b> (<span class="r22 r">key</span> == <b>null</b>)
+                    {
+                        <b>if</b> (<a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a> == <b>null</b>)
+                        {
+                            <a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r10 r t">TElement</span>&gt;();
+                            <span class="r24 r">fireNewMapEntry</span> = <b>true</b>;
+                        }
+ 
+                        <span class="r25 r">writer</span> = <a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a>;
+                    }
+                    <b>else</b>
+                    {
+                        <b>if</b> (!<a href="#29bbed1e4a92a75e" class="i field">map</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<span class="r22 r">key</span>, <b>out</b> <span class="r25 r">writer</span>))
+                        {
+                            <span class="r25 r">writer</span> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r10 r t">TElement</span>&gt;();
+                            <a href="#29bbed1e4a92a75e" class="i field">map</a>.<a href="@0@mscorlib/A.html#a7861da7aaa500fe" class="i method">Add</a>(<span class="r22 r">key</span>, <span class="r25 r">writer</span>);
+                            <span class="r24 r">fireNewMapEntry</span> = <b>true</b>;
+                        }
+                    }
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r26 rd" class="r26 r">exception</span>)
+                {
+                    <a href="#563b3696d9006226" class="i method">Error</a>(<span class="r26 r">exception</span>);
+                    <b>return</b>;
+                }
+ 
+                <b>if</b> (<span class="r24 r">fireNewMapEntry</span>)
+                {
+                    <a href="#a08642ceeb6f4a9c" class="k">var</a> <span id="r27 rd" class="r27 r">group</span> = <b>new</b> <a href="#6d503cf38c1489e1" class="t constructor">GroupedObservable</a>&lt;<span class="r9 r t">TKey</span>, <span class="r10 r t">TElement</span>&gt;(<span class="r22 r">key</span>, <span class="r25 r">writer</span>, <a href="#7a2d7225e86642f1" class="i field">refCountDisposable</a>);
+                    <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r27 r">group</span>);
+                }
+ 
+                <span class="r10 r t">var</span> <span id="r28 rd" class="r28 r">element</span> = <b>default</b>(<span class="r10 r t">TElement</span>);
+                <b>try</b>
+                {
+                    <span class="r28 r">element</span> = <a href="#9d626ead28f0cd2a" class="i field">parent</a>.<a href="#4df22d8b3b7d9f37" class="i field">elementSelector</a>(<span class="r21 r">value</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r29 rd" class="r29 r">exception</span>)
+                {
+                    <a href="#563b3696d9006226" class="i method">Error</a>(<span class="r29 r">exception</span>);
+                    <b>return</b>;
+                }
+ 
+                <span class="r25 r">writer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r28 r">element</span>);
+            }
+ 
+            <b>public override void</b> <a id="26cd9f5e91f52b5c" href="../R/26cd9f5e91f52b5c.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r30 rd" class="r30 r">error</span>)
+            {
+                <a href="#563b3696d9006226" class="i method">Error</a>(<span class="r30 r">error</span>);
+            }
+ 
+            <b>public override void</b> <a id="2cba4994665b9142" href="../R/2cba4994665b9142.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b>
+                {
+                    <b>if</b> (<a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a> != <b>null</b>) <a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+ 
+                    <b>foreach</b> (<a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="k">var</a> <span id="r31 rd" class="r31 r">s</span> <b>in</b> <a href="#29bbed1e4a92a75e" class="i field">map</a>.<a href="@0@mscorlib/A.html#4367dd1e300ae797" class="i property">Values</a>)
+                    {
+                        <span class="r31 r">s</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                    }
+ 
+                    <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+                <b>finally</b>
+                {
+                    <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>();
+                }
+            }
+ 
+            <b>void</b> <a id="563b3696d9006226" href="../R/563b3696d9006226.html" target="n" data-glyph="76,2" class="i method">Error</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r32 rd" class="r32 r">exception</span>)
+            {
+                <b>try</b>
+                {
+                    <b>if</b> (<a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a> != <b>null</b>) <a href="#fa39cb51cedcd5d3" class="i field">nullKeySubject</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r32 r">exception</span>);
+ 
+                    <b>foreach</b> (<a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="k">var</a> <span id="r33 rd" class="r33 r">s</span> <b>in</b> <a href="#29bbed1e4a92a75e" class="i field">map</a>.<a href="@0@mscorlib/A.html#4367dd1e300ae797" class="i property">Values</a>)
+                    {
+                        <span class="r33 r">s</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r32 r">exception</span>);
+                    }
+ 
+                    <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r32 r">exception</span>);
+                }
+                <b>finally</b>
+                {
+                    <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>();
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

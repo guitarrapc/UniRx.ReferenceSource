@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html><head><title>Aggregate.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(207);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/Aggregate.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\Aggregate.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="4a89e95468743aed" href="../../../../../R/4a89e95468743aed.html" target="n" data-glyph="2,0" class="t t">AggregateObservable</a>&lt;<span id="r0 rd t" class="r0 r t">TSource</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">TSource</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TSource</span>&gt; <a id="e1d673db0080303f" href="../../../../../R/e1d673db0080303f.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>&gt; <a id="33d9776b8ae89d70" href="../../../../../R/33d9776b8ae89d70.html" target="n" data-glyph="46,1" class="i field">accumulator</a>;
+ 
+        <b>public</b> <a id="1e58fc44ed266b01" href="../../../../../R/1e58fc44ed266b01.html" target="n" data-glyph="72,1" class="i constructor">AggregateObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TSource</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>&gt; <span id="r2 rd" class="r2 r">accumulator</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#4a89e95468743aed" class="k">this</a>.<a href="#e1d673db0080303f" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#4a89e95468743aed" class="k">this</a>.<a href="#33d9776b8ae89d70" class="i field">accumulator</a> = <span class="r2 r">accumulator</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1e9b3492b8e22590" href="../../../../../R/1e9b3492b8e22590.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">TSource</span>&gt; <span id="r3 rd" class="r3 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r4 rd" class="r4 r">cancel</span>)
+        {
+            <b>return</b> <a href="#e1d673db0080303f" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#61a080ebf0e732b6" class="t constructor">Aggregate</a>(<a href="#4a89e95468743aed" class="k">this</a>, <span class="r3 r">observer</span>, <span class="r4 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="85304a8c731e9003" href="../../../../../R/85304a8c731e9003.html" target="n" data-glyph="4,1" class="t t">Aggregate</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>&gt;
+        {
+            <b>readonly</b> <a href="#4a89e95468743aed" class="t t">AggregateObservable</a>&lt;<span class="r0 r t">TSource</span>&gt; <a id="8e192ec15111d8cb" href="../../../../../R/8e192ec15111d8cb.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <span class="r0 r t">TSource</span> <a id="08843c43592d57d0" href="../../../../../R/08843c43592d57d0.html" target="n" data-glyph="46,2" class="i field">accumulation</a>;
+            <b>bool</b> <a id="f7f7b75e063580e1" href="../../../../../R/f7f7b75e063580e1.html" target="n" data-glyph="46,2" class="i field">seenValue</a>;
+ 
+            <b>public</b> <a id="61a080ebf0e732b6" href="../../../../../R/61a080ebf0e732b6.html" target="n" data-glyph="72,2" class="i constructor">Aggregate</a>(<a href="#4a89e95468743aed" class="t t">AggregateObservable</a>&lt;<span class="r0 r t">TSource</span>&gt; <span id="r5 rd" class="r5 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">TSource</span>&gt; <span id="r6 rd" class="r6 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r6 r">observer</span>, <span class="r7 r">cancel</span>)
+            {
+                <a href="#85304a8c731e9003" class="k">this</a>.<a href="#8e192ec15111d8cb" class="i field">parent</a> = <span class="r5 r">parent</span>;
+                <a href="#85304a8c731e9003" class="k">this</a>.<a href="#f7f7b75e063580e1" class="i field">seenValue</a> = <b>false</b>;
+            }
+ 
+            <b>public override void</b> <a id="f9ddbebf4b9a9a3d" href="../../../../../R/f9ddbebf4b9a9a3d.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">TSource</span> <span id="r8 rd" class="r8 r">value</span>)
+            {
+                <b>if</b> (!<a href="#f7f7b75e063580e1" class="i field">seenValue</a>)
+                {
+                    <a href="#f7f7b75e063580e1" class="i field">seenValue</a> = <b>true</b>;
+                    <a href="#08843c43592d57d0" class="i field">accumulation</a> = <span class="r8 r">value</span>;
+                }
+                <b>else</b>
+                {
+                    <b>try</b>
+                    {
+                        <a href="#08843c43592d57d0" class="i field">accumulation</a> = <a href="#8e192ec15111d8cb" class="i field">parent</a>.<a href="#33d9776b8ae89d70" class="i field">accumulator</a>(<a href="#08843c43592d57d0" class="i field">accumulation</a>, <span class="r8 r">value</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r9 rd" class="r9 r">ex</span>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r9 r">ex</span>); }
+                        <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        <b>return</b>;
+                    }
+                }
+            }
+ 
+            <b>public override void</b> <a id="9dd15937d0dbdd67" href="../../../../../R/9dd15937d0dbdd67.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r10 rd" class="r10 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r10 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="912ff77aca296729" href="../../../../../R/912ff77aca296729.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>if</b> (!<a href="#f7f7b75e063580e1" class="i field">seenValue</a>)
+                {
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;Sequence contains no elements.&quot;</span>);
+                }
+ 
+                <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="#08843c43592d57d0" class="i field">accumulation</a>);
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="aa9b928a9fb81c40" href="../../../../../R/aa9b928a9fb81c40.html" target="n" data-glyph="2,0" class="t t">AggregateObservable</a>&lt;<span id="r11 rd t" class="r11 r t">TSource</span>, <span id="r12 rd t" class="r12 r t">TAccumulate</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r12 r t">TAccumulate</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r11 r t">TSource</span>&gt; <a id="d6de456e006e4bad" href="../../../../../R/d6de456e006e4bad.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <span class="r12 r t">TAccumulate</span> <a id="1252ff7b8afc739e" href="../../../../../R/1252ff7b8afc739e.html" target="n" data-glyph="46,1" class="i field">seed</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r12 r t">TAccumulate</span>, <span class="r11 r t">TSource</span>, <span class="r12 r t">TAccumulate</span>&gt; <a id="4ca49908757fa9bc" href="../../../../../R/4ca49908757fa9bc.html" target="n" data-glyph="46,1" class="i field">accumulator</a>;
+ 
+        <b>public</b> <a id="2c16239daf8cdb83" href="../../../../../R/2c16239daf8cdb83.html" target="n" data-glyph="72,1" class="i constructor">AggregateObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r11 r t">TSource</span>&gt; <span id="r13 rd" class="r13 r">source</span>, <span class="r12 r t">TAccumulate</span> <span id="r14 rd" class="r14 r">seed</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r12 r t">TAccumulate</span>, <span class="r11 r t">TSource</span>, <span class="r12 r t">TAccumulate</span>&gt; <span id="r15 rd" class="r15 r">accumulator</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r13 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#aa9b928a9fb81c40" class="k">this</a>.<a href="#d6de456e006e4bad" class="i field">source</a> = <span class="r13 r">source</span>;
+            <a href="#aa9b928a9fb81c40" class="k">this</a>.<a href="#1252ff7b8afc739e" class="i field">seed</a> = <span class="r14 r">seed</span>;
+            <a href="#aa9b928a9fb81c40" class="k">this</a>.<a href="#4ca49908757fa9bc" class="i field">accumulator</a> = <span class="r15 r">accumulator</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="2da2af4ea0978c8b" href="../../../../../R/2da2af4ea0978c8b.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r12 r t">TAccumulate</span>&gt; <span id="r16 rd" class="r16 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r17 rd" class="r17 r">cancel</span>)
+        {
+            <b>return</b> <a href="#d6de456e006e4bad" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#760f39e73aefce05" class="t constructor">Aggregate</a>(<a href="#aa9b928a9fb81c40" class="k">this</a>, <span class="r16 r">observer</span>, <span class="r17 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="4bda38824eaaff6c" href="../../../../../R/4bda38824eaaff6c.html" target="n" data-glyph="4,1" class="t t">Aggregate</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r11 r t">TSource</span>, <span class="r12 r t">TAccumulate</span>&gt;
+        {
+            <b>readonly</b> <a href="#aa9b928a9fb81c40" class="t t">AggregateObservable</a>&lt;<span class="r11 r t">TSource</span>, <span class="r12 r t">TAccumulate</span>&gt; <a id="2eed2ce4bb207a43" href="../../../../../R/2eed2ce4bb207a43.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <span class="r12 r t">TAccumulate</span> <a id="44caab094660945d" href="../../../../../R/44caab094660945d.html" target="n" data-glyph="46,2" class="i field">accumulation</a>;
+ 
+            <b>public</b> <a id="760f39e73aefce05" href="../../../../../R/760f39e73aefce05.html" target="n" data-glyph="72,2" class="i constructor">Aggregate</a>(<a href="#aa9b928a9fb81c40" class="t t">AggregateObservable</a>&lt;<span class="r11 r t">TSource</span>, <span class="r12 r t">TAccumulate</span>&gt; <span id="r18 rd" class="r18 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r12 r t">TAccumulate</span>&gt; <span id="r19 rd" class="r19 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r20 rd" class="r20 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r19 r">observer</span>, <span class="r20 r">cancel</span>)
+            {
+                <a href="#4bda38824eaaff6c" class="k">this</a>.<a href="#2eed2ce4bb207a43" class="i field">parent</a> = <span class="r18 r">parent</span>;
+                <a href="#4bda38824eaaff6c" class="k">this</a>.<a href="#44caab094660945d" class="i field">accumulation</a> = <span class="r18 r">parent</span>.<a href="#1252ff7b8afc739e" class="i field">seed</a>;
+            }
+ 
+            <b>public override void</b> <a id="c01eaf63f2b95331" href="../../../../../R/c01eaf63f2b95331.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r11 r t">TSource</span> <span id="r21 rd" class="r21 r">value</span>)
+            {
+                <b>try</b>
+                {
+                    <a href="#44caab094660945d" class="i field">accumulation</a> = <a href="#2eed2ce4bb207a43" class="i field">parent</a>.<a href="#4ca49908757fa9bc" class="i field">accumulator</a>(<a href="#44caab094660945d" class="i field">accumulation</a>, <span class="r21 r">value</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r22 rd" class="r22 r">ex</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r22 r">ex</span>); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+            }
+ 
+            <b>public override void</b> <a id="2bc0bd974c2e2c40" href="../../../../../R/2bc0bd974c2e2c40.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r23 rd" class="r23 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r23 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="bc262925214926e0" href="../../../../../R/bc262925214926e0.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="#44caab094660945d" class="i field">accumulation</a>);
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="0bdcf7e9f3c76caf" href="../../../../../R/0bdcf7e9f3c76caf.html" target="n" data-glyph="2,0" class="t t">AggregateObservable</a>&lt;<span id="r24 rd t" class="r24 r t">TSource</span>, <span id="r25 rd t" class="r25 r t">TAccumulate</span>, <span id="r26 rd t" class="r26 r t">TResult</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r26 r t">TResult</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r24 r t">TSource</span>&gt; <a id="a400b4595d9f2fae" href="../../../../../R/a400b4595d9f2fae.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <span class="r25 r t">TAccumulate</span> <a id="0c4d071f62756922" href="../../../../../R/0c4d071f62756922.html" target="n" data-glyph="46,1" class="i field">seed</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r25 r t">TAccumulate</span>, <span class="r24 r t">TSource</span>, <span class="r25 r t">TAccumulate</span>&gt; <a id="ef65e0309509a244" href="../../../../../R/ef65e0309509a244.html" target="n" data-glyph="46,1" class="i field">accumulator</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r25 r t">TAccumulate</span>, <span class="r26 r t">TResult</span>&gt; <a id="4d4e6db6dc6816a3" href="../../../../../R/4d4e6db6dc6816a3.html" target="n" data-glyph="46,1" class="i field">resultSelector</a>;
+ 
+        <b>public</b> <a id="7d41ac02e4c1c9fd" href="../../../../../R/7d41ac02e4c1c9fd.html" target="n" data-glyph="72,1" class="i constructor">AggregateObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r24 r t">TSource</span>&gt; <span id="r27 rd" class="r27 r">source</span>, <span class="r25 r t">TAccumulate</span> <span id="r28 rd" class="r28 r">seed</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r25 r t">TAccumulate</span>, <span class="r24 r t">TSource</span>, <span class="r25 r t">TAccumulate</span>&gt; <span id="r29 rd" class="r29 r">accumulator</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r25 r t">TAccumulate</span>, <span class="r26 r t">TResult</span>&gt; <span id="r30 rd" class="r30 r">resultSelector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r27 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#0bdcf7e9f3c76caf" class="k">this</a>.<a href="#a400b4595d9f2fae" class="i field">source</a> = <span class="r27 r">source</span>;
+            <a href="#0bdcf7e9f3c76caf" class="k">this</a>.<a href="#0c4d071f62756922" class="i field">seed</a> = <span class="r28 r">seed</span>;
+            <a href="#0bdcf7e9f3c76caf" class="k">this</a>.<a href="#ef65e0309509a244" class="i field">accumulator</a> = <span class="r29 r">accumulator</span>;
+            <a href="#0bdcf7e9f3c76caf" class="k">this</a>.<a href="#4d4e6db6dc6816a3" class="i field">resultSelector</a> = <span class="r30 r">resultSelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="15b6c121bafdfee2" href="../../../../../R/15b6c121bafdfee2.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r26 r t">TResult</span>&gt; <span id="r31 rd" class="r31 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r32 rd" class="r32 r">cancel</span>)
+        {
+            <b>return</b> <a href="#a400b4595d9f2fae" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#dcb1d9df371fe01f" class="t constructor">Aggregate</a>(<a href="#0bdcf7e9f3c76caf" class="k">this</a>, <span class="r31 r">observer</span>, <span class="r32 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="120f1a9299e6c17d" href="../../../../../R/120f1a9299e6c17d.html" target="n" data-glyph="4,1" class="t t">Aggregate</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r24 r t">TSource</span>, <span class="r26 r t">TResult</span>&gt;
+        {
+            <b>readonly</b> <a href="#0bdcf7e9f3c76caf" class="t t">AggregateObservable</a>&lt;<span class="r24 r t">TSource</span>, <span class="r25 r t">TAccumulate</span>, <span class="r26 r t">TResult</span>&gt; <a id="02ec077e577f8bfe" href="../../../../../R/02ec077e577f8bfe.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <span class="r25 r t">TAccumulate</span> <a id="b8d56f1dbce0e139" href="../../../../../R/b8d56f1dbce0e139.html" target="n" data-glyph="46,2" class="i field">accumulation</a>;
+ 
+            <b>public</b> <a id="dcb1d9df371fe01f" href="../../../../../R/dcb1d9df371fe01f.html" target="n" data-glyph="72,2" class="i constructor">Aggregate</a>(<a href="#0bdcf7e9f3c76caf" class="t t">AggregateObservable</a>&lt;<span class="r24 r t">TSource</span>, <span class="r25 r t">TAccumulate</span>, <span class="r26 r t">TResult</span>&gt; <span id="r33 rd" class="r33 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r26 r t">TResult</span>&gt; <span id="r34 rd" class="r34 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r35 rd" class="r35 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r34 r">observer</span>, <span class="r35 r">cancel</span>)
+            {
+                <a href="#120f1a9299e6c17d" class="k">this</a>.<a href="#02ec077e577f8bfe" class="i field">parent</a> = <span class="r33 r">parent</span>;
+                <a href="#120f1a9299e6c17d" class="k">this</a>.<a href="#b8d56f1dbce0e139" class="i field">accumulation</a> = <span class="r33 r">parent</span>.<a href="#0c4d071f62756922" class="i field">seed</a>;
+            }
+ 
+            <b>public override void</b> <a id="3f6d3b8d85fe5f31" href="../../../../../R/3f6d3b8d85fe5f31.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r24 r t">TSource</span> <span id="r36 rd" class="r36 r">value</span>)
+            {
+                <b>try</b>
+                {
+                    <a href="#b8d56f1dbce0e139" class="i field">accumulation</a> = <a href="#02ec077e577f8bfe" class="i field">parent</a>.<a href="#ef65e0309509a244" class="i field">accumulator</a>(<a href="#b8d56f1dbce0e139" class="i field">accumulation</a>, <span class="r36 r">value</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r37 rd" class="r37 r">ex</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r37 r">ex</span>); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+            }
+ 
+            <b>public override void</b> <a id="5b2aa4bdfa48b0ad" href="../../../../../R/5b2aa4bdfa48b0ad.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r38 rd" class="r38 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r38 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="7bf64c4c34d0f6a5" href="../../../../../R/7bf64c4c34d0f6a5.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <span class="r26 r t">TResult</span> <span id="r39 rd" class="r39 r">result</span>;
+                <b>try</b>
+                {
+                    <span class="r39 r">result</span> = <a href="#02ec077e577f8bfe" class="i field">parent</a>.<a href="#4d4e6db6dc6816a3" class="i field">resultSelector</a>(<a href="#b8d56f1dbce0e139" class="i field">accumulation</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r40 rd" class="r40 r">ex</span>)
+                {
+                    <a href="#5b2aa4bdfa48b0ad" class="i method">OnError</a>(<span class="r40 r">ex</span>);
+                    <b>return</b>;
+                }
+ 
+                <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r39 r">result</span>);
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

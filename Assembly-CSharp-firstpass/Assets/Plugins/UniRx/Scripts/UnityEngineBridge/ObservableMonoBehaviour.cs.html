@@ -1,0 +1,892 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableMonoBehaviour.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(883);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableMonoBehaviour.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ObservableMonoBehaviour.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Note: TypedMonoBehaviour and ObservableMonoBehaviour cause some performance issues.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">This is legacy interface.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">I recommend use ObservableTriggers(UniRx.Triggers) instead.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">More information, see github page.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    [<a href="@0@mscorlib/A.html#66ed4e142f4e14e7" class="t constructor">Obsolete</a>(<span class="s">&quot;ObservableMonoBehaviour is legacy component. use triggers instead&quot;</span>)]
+    <b>public class</b> <a id="25d786b70a0f3046" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="91f3fdbe0a28e10d">ObservableMonoBehaviour</span></a> : <a href="TypedMonoBehaviour.cs.html#15e089a0cc1bdea9" class="t t">TypedMonoBehaviour</a>
+    {
+        <b>bool</b> <a id="841d748c5f97cfe8" href="../../../../../R/841d748c5f97cfe8.html" target="n" data-glyph="46,1" class="i field">calledAwake</a> = <b>false</b>;
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="1f64b75495e1607a" href="../../../../../R/1f64b75495e1607a.html" target="n" data-glyph="46,1" class="i field">awake</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Awake is called when the script instance is being loaded.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="4fd5df565e44783a" href="../../../../../R/4fd5df565e44783a.html" target="n" data-glyph="72,1" class="i method">Awake</a>()
+        {
+            <a href="#841d748c5f97cfe8" class="i field">calledAwake</a> = <b>true</b>;
+            <b>if</b> (<a href="#1f64b75495e1607a" class="i field">awake</a> != <b>null</b>) { <a href="#1f64b75495e1607a" class="i field">awake</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#1f64b75495e1607a" class="i field">awake</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Awake is called when the script instance is being loaded.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="272690a99043567e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">AwakeAsObservable</a>()
+        {
+            <b>if</b> (<a href="#841d748c5f97cfe8" class="i field">calledAwake</a>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#1f64b75495e1607a" class="i field">awake</a> ?? (<a href="#1f64b75495e1607a" class="i field">awake</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a1055e4c6531e849" href="../../../../../R/a1055e4c6531e849.html" target="n" data-glyph="46,1" class="i field">fixedUpdate</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called every fixed framerate frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="8712d497f6b64305" href="../../../../../R/8712d497f6b64305.html" target="n" data-glyph="72,1" class="i method">FixedUpdate</a>()
+        {
+            <b>if</b> (<a href="#a1055e4c6531e849" class="i field">fixedUpdate</a> != <b>null</b>) <a href="#a1055e4c6531e849" class="i field">fixedUpdate</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called every fixed framerate frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="f12b657fc5746f7b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FixedUpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#a1055e4c6531e849" class="i field">fixedUpdate</a> ?? (<a href="#a1055e4c6531e849" class="i field">fixedUpdate</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="74b02f8e13fee72b" href="../../../../../R/74b02f8e13fee72b.html" target="n" data-glyph="46,1" class="i field">lateUpdate</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">LateUpdate is called every frame, if the Behaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="ae0f7598b09a0055" href="../../../../../R/ae0f7598b09a0055.html" target="n" data-glyph="72,1" class="i method">LateUpdate</a>()
+        {
+            <b>if</b> (<a href="#74b02f8e13fee72b" class="i field">lateUpdate</a> != <b>null</b>) <a href="#74b02f8e13fee72b" class="i field">lateUpdate</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">LateUpdate is called every frame, if the Behaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ead81cf5e8db6056" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LateUpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#74b02f8e13fee72b" class="i field">lateUpdate</a> ?? (<a href="#74b02f8e13fee72b" class="i field">lateUpdate</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>int</b>&gt; <a id="9e0db30441d5b6ab" href="../../../../../R/9e0db30441d5b6ab.html" target="n" data-glyph="46,1" class="i field">onAnimatorIK</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for setting up animation IK (inverse kinematics).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="b848bae1e47fcfa1" href="../../../../../R/b848bae1e47fcfa1.html" target="n" data-glyph="72,1" class="i method">OnAnimatorIK</a>(<b>int</b> <span id="r0 rd" class="r0 r">layerIndex</span>)
+        {
+            <b>if</b> (<a href="#9e0db30441d5b6ab" class="i field">onAnimatorIK</a> != <b>null</b>) <a href="#9e0db30441d5b6ab" class="i field">onAnimatorIK</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r0 r">layerIndex</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for setting up animation IK (inverse kinematics).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="984d430d492073da" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnAnimatorIKAsObservable</a>()
+        {
+            <b>return</b> <a href="#9e0db30441d5b6ab" class="i field">onAnimatorIK</a> ?? (<a href="#9e0db30441d5b6ab" class="i field">onAnimatorIK</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="47fa3ecd2c84464b" href="../../../../../R/47fa3ecd2c84464b.html" target="n" data-glyph="46,1" class="i field">onAnimatorMove</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for processing animation movements for modifying root motion.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="929d314e3fadcd08" href="../../../../../R/929d314e3fadcd08.html" target="n" data-glyph="72,1" class="i method">OnAnimatorMove</a>()
+        {
+            <b>if</b> (<a href="#47fa3ecd2c84464b" class="i field">onAnimatorMove</a> != <b>null</b>) <a href="#47fa3ecd2c84464b" class="i field">onAnimatorMove</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for processing animation movements for modifying root motion.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="47a3ebb5e4e0ae55" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnAnimatorMoveAsObservable</a>()
+        {
+            <b>return</b> <a href="#47fa3ecd2c84464b" class="i field">onAnimatorMove</a> ?? (<a href="#47fa3ecd2c84464b" class="i field">onAnimatorMove</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>bool</b>&gt; <a id="8521ea07bd6b690b" href="../../../../../R/8521ea07bd6b690b.html" target="n" data-glyph="46,1" class="i field">onApplicationFocus</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects when the player gets or loses focus.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="c2ac48663c8c9434" href="../../../../../R/c2ac48663c8c9434.html" target="n" data-glyph="72,1" class="i method">OnApplicationFocus</a>(<b>bool</b> <span id="r1 rd" class="r1 r">focus</span>)
+        {
+            <b>if</b> (<a href="#8521ea07bd6b690b" class="i field">onApplicationFocus</a> != <b>null</b>) <a href="#8521ea07bd6b690b" class="i field">onApplicationFocus</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r1 r">focus</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects when the player gets or loses focus.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="f319e47f9bffa9ed" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnApplicationFocusAsObservable</a>()
+        {
+            <b>return</b> <a href="#8521ea07bd6b690b" class="i field">onApplicationFocus</a> ?? (<a href="#8521ea07bd6b690b" class="i field">onApplicationFocus</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>bool</b>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>bool</b>&gt; <a id="34c5dbfe5f2c583f" href="../../../../../R/34c5dbfe5f2c583f.html" target="n" data-glyph="46,1" class="i field">onApplicationPause</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects when the player pauses.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="35d018a3a7abe0e5" href="../../../../../R/35d018a3a7abe0e5.html" target="n" data-glyph="72,1" class="i method">OnApplicationPause</a>(<b>bool</b> <span id="r2 rd" class="r2 r">pause</span>)
+        {
+            <b>if</b> (<a href="#34c5dbfe5f2c583f" class="i field">onApplicationPause</a> != <b>null</b>) <a href="#34c5dbfe5f2c583f" class="i field">onApplicationPause</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">pause</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects when the player pauses.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="8da271987498ce13" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnApplicationPauseAsObservable</a>()
+        {
+            <b>return</b> <a href="#34c5dbfe5f2c583f" class="i field">onApplicationPause</a> ?? (<a href="#34c5dbfe5f2c583f" class="i field">onApplicationPause</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>bool</b>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ba834d86a5558ad5" href="../../../../../R/ba834d86a5558ad5.html" target="n" data-glyph="46,1" class="i field">onApplicationQuit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects before the application is quit.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="ccafffeb9702b991" href="../../../../../R/ccafffeb9702b991.html" target="n" data-glyph="72,1" class="i method">OnApplicationQuit</a>()
+        {
+            <b>if</b> (<a href="#ba834d86a5558ad5" class="i field">onApplicationQuit</a> != <b>null</b>) <a href="#ba834d86a5558ad5" class="i field">onApplicationQuit</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects before the application is quit.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="487d1fe0788d6393" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnApplicationQuitAsObservable</a>()
+        {
+            <b>return</b> <a href="#ba834d86a5558ad5" class="i field">onApplicationQuit</a> ?? (<a href="#ba834d86a5558ad5" class="i field">onApplicationQuit</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<b>float</b>[], <b>int</b>&gt;&gt; <a id="bc983ebda42fa892" href="../../../../../R/bc983ebda42fa892.html" target="n" data-glyph="46,1" class="i field">onAudioFilterRead</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">If OnAudioFilterRead is implemented, Unity will insert a custom filter into the audio DSP chain.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="dfcc7455d5d2ad9f" href="../../../../../R/dfcc7455d5d2ad9f.html" target="n" data-glyph="72,1" class="i method">OnAudioFilterRead</a>(<b>float</b>[] <span id="r3 rd" class="r3 r">data</span>, <b>int</b> <span id="r4 rd" class="r4 r">channels</span>)
+        {
+            <b>if</b> (<a href="#bc983ebda42fa892" class="i field">onAudioFilterRead</a> != <b>null</b>) <a href="#bc983ebda42fa892" class="i field">onAudioFilterRead</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="../System/Tuple.cs.html#f9644928b1f50449" class="i method">Create</a>(<span class="r3 r">data</span>, <span class="r4 r">channels</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">If OnAudioFilterRead is implemented, Unity will insert a custom filter into the audio DSP chain.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<b>float</b>[], <b>int</b>&gt;&gt; <a id="2b6241f720f1e5da" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnAudioFilterReadAsObservable</a>()
+        {
+            <b>return</b> <a href="#bc983ebda42fa892" class="i field">onAudioFilterRead</a> ?? (<a href="#bc983ebda42fa892" class="i field">onAudioFilterRead</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<b>float</b>[], <b>int</b>&gt;&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4e11ed36e5c2fc36" href="../../../../../R/4e11ed36e5c2fc36.html" target="n" data-glyph="46,1" class="i field">onBecameInvisible</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameInvisible is called when the renderer is no longer visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="a2c9dd460ec76ae1" href="../../../../../R/a2c9dd460ec76ae1.html" target="n" data-glyph="72,1" class="i method">OnBecameInvisible</a>()
+        {
+            <b>if</b> (<a href="#4e11ed36e5c2fc36" class="i field">onBecameInvisible</a> != <b>null</b>) <a href="#4e11ed36e5c2fc36" class="i field">onBecameInvisible</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameInvisible is called when the renderer is no longer visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="dfe514f798706c4c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnBecameInvisibleAsObservable</a>()
+        {
+            <b>return</b> <a href="#4e11ed36e5c2fc36" class="i field">onBecameInvisible</a> ?? (<a href="#4e11ed36e5c2fc36" class="i field">onBecameInvisible</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="004f714c679c13c8" href="../../../../../R/004f714c679c13c8.html" target="n" data-glyph="46,1" class="i field">onBecameVisible</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameVisible is called when the renderer became visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="41a34e06424a3eda" href="../../../../../R/41a34e06424a3eda.html" target="n" data-glyph="72,1" class="i method">OnBecameVisible</a>()
+        {
+            <b>if</b> (<a href="#004f714c679c13c8" class="i field">onBecameVisible</a> != <b>null</b>) <a href="#004f714c679c13c8" class="i field">onBecameVisible</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameVisible is called when the renderer became visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4266a745489620b5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnBecameVisibleAsObservable</a>()
+        {
+            <b>return</b> <a href="#004f714c679c13c8" class="i field">onBecameVisible</a> ?? (<a href="#004f714c679c13c8" class="i field">onBecameVisible</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision</span>&gt; <a id="17c2046ec9c66e94" href="../../../../../R/17c2046ec9c66e94.html" target="n" data-glyph="46,1" class="i field">onCollisionEnter</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="2e81b6b170e5619e" href="../../../../../R/2e81b6b170e5619e.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnter</a>(<span class="i">Collision</span> <span id="r5 rd" class="r5 r">collision</span>)
+        {
+            <b>if</b> (<a href="#17c2046ec9c66e94" class="i field">onCollisionEnter</a> != <b>null</b>) <a href="#17c2046ec9c66e94" class="i field">onCollisionEnter</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r5 r">collision</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="54139c91aa580cec" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#17c2046ec9c66e94" class="i field">onCollisionEnter</a> ?? (<a href="#17c2046ec9c66e94" class="i field">onCollisionEnter</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision2D</span>&gt; <a id="e4573e7825368a63" href="../../../../../R/e4573e7825368a63.html" target="n" data-glyph="46,1" class="i field">onCollisionEnter2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when an incoming collider makes contact with this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="518692c270ee2c4b" href="../../../../../R/518692c270ee2c4b.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnter2D</a>(<span class="i">Collision2D</span> <span id="r6 rd" class="r6 r">coll</span>)
+        {
+            <b>if</b> (<a href="#e4573e7825368a63" class="i field">onCollisionEnter2D</a> != <b>null</b>) <a href="#e4573e7825368a63" class="i field">onCollisionEnter2D</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r6 r">coll</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when an incoming collider makes contact with this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="519e3bed420a40f2" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnter2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#e4573e7825368a63" class="i field">onCollisionEnter2D</a> ?? (<a href="#e4573e7825368a63" class="i field">onCollisionEnter2D</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision2D</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision</span>&gt; <a id="38ecc6352d21c71a" href="../../../../../R/38ecc6352d21c71a.html" target="n" data-glyph="46,1" class="i field">onCollisionExit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionExit is called when this collider/rigidbody has stopped touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="189b8d3aa23a9b97" href="../../../../../R/189b8d3aa23a9b97.html" target="n" data-glyph="72,1" class="i method">OnCollisionExit</a>(<span class="i">Collision</span> <span id="r7 rd" class="r7 r">collisionInfo</span>)
+        {
+            <b>if</b> (<a href="#38ecc6352d21c71a" class="i field">onCollisionExit</a> != <b>null</b>) <a href="#38ecc6352d21c71a" class="i field">onCollisionExit</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r7 r">collisionInfo</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionExit is called when this collider/rigidbody has stopped touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="8e312d948835dc0f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCollisionExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#38ecc6352d21c71a" class="i field">onCollisionExit</a> ?? (<a href="#38ecc6352d21c71a" class="i field">onCollisionExit</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision2D</span>&gt; <a id="311dee7c48721fec" href="../../../../../R/311dee7c48721fec.html" target="n" data-glyph="46,1" class="i field">onCollisionExit2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when a collider on another object stops touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="acbd3737f2e8fae8" href="../../../../../R/acbd3737f2e8fae8.html" target="n" data-glyph="72,1" class="i method">OnCollisionExit2D</a>(<span class="i">Collision2D</span> <span id="r8 rd" class="r8 r">coll</span>)
+        {
+            <b>if</b> (<a href="#311dee7c48721fec" class="i field">onCollisionExit2D</a> != <b>null</b>) <a href="#311dee7c48721fec" class="i field">onCollisionExit2D</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r8 r">coll</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when a collider on another object stops touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="3a8b83a891cbe565" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCollisionExit2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#311dee7c48721fec" class="i field">onCollisionExit2D</a> ?? (<a href="#311dee7c48721fec" class="i field">onCollisionExit2D</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision2D</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision</span>&gt; <a id="8d1ea7b02db88060" href="../../../../../R/8d1ea7b02db88060.html" target="n" data-glyph="46,1" class="i field">onCollisionStay</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionStay is called once per frame for every collider/rigidbody that is touching rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="d52fef43b0eb8954" href="../../../../../R/d52fef43b0eb8954.html" target="n" data-glyph="72,1" class="i method">OnCollisionStay</a>(<span class="i">Collision</span> <span id="r9 rd" class="r9 r">collisionInfo</span>)
+        {
+            <b>if</b> (<a href="#8d1ea7b02db88060" class="i field">onCollisionStay</a> != <b>null</b>) <a href="#8d1ea7b02db88060" class="i field">onCollisionStay</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r9 r">collisionInfo</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionStay is called once per frame for every collider/rigidbody that is touching rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="fa1128d57a9831b5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCollisionStayAsObservable</a>()
+        {
+            <b>return</b> <a href="#8d1ea7b02db88060" class="i field">onCollisionStay</a> ?? (<a href="#8d1ea7b02db88060" class="i field">onCollisionStay</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision2D</span>&gt; <a id="3e509a41cfaf122a" href="../../../../../R/3e509a41cfaf122a.html" target="n" data-glyph="46,1" class="i field">onCollisionStay2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where a collider on another object is touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="6fc95532d29ac83c" href="../../../../../R/6fc95532d29ac83c.html" target="n" data-glyph="72,1" class="i method">OnCollisionStay2D</a>(<span class="i">Collision2D</span> <span id="r10 rd" class="r10 r">coll</span>)
+        {
+            <b>if</b> (<a href="#3e509a41cfaf122a" class="i field">onCollisionStay2D</a> != <b>null</b>) <a href="#3e509a41cfaf122a" class="i field">onCollisionStay2D</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r10 r">coll</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where a collider on another object is touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="9357fc17b2086e40" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCollisionStay2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#3e509a41cfaf122a" class="i field">onCollisionStay2D</a> ?? (<a href="#3e509a41cfaf122a" class="i field">onCollisionStay2D</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision2D</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="8dc94b6d78c8ee96" href="../../../../../R/8dc94b6d78c8ee96.html" target="n" data-glyph="46,1" class="i field">onConnectedToServer</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when you have successfully connected to a server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="ba3c4c2d14789d2c" href="../../../../../R/ba3c4c2d14789d2c.html" target="n" data-glyph="72,1" class="i method">OnConnectedToServer</a>()
+        {
+            <b>if</b> (<a href="#8dc94b6d78c8ee96" class="i field">onConnectedToServer</a> != <b>null</b>) <a href="#8dc94b6d78c8ee96" class="i field">onConnectedToServer</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when you have successfully connected to a server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="d5a8d2bc9dff543d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnConnectedToServerAsObservable</a>()
+        {
+            <b>return</b> <a href="#8dc94b6d78c8ee96" class="i field">onConnectedToServer</a> ?? (<a href="#8dc94b6d78c8ee96" class="i field">onConnectedToServer</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">ControllerColliderHit</span>&gt; <a id="51a6d70ebc873ceb" href="../../../../../R/51a6d70ebc873ceb.html" target="n" data-glyph="46,1" class="i field">onControllerColliderHit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnControllerColliderHit is called when the controller hits a collider while performing a Move.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="4b504ef565f90bf2" href="../../../../../R/4b504ef565f90bf2.html" target="n" data-glyph="72,1" class="i method">OnControllerColliderHit</a>(<span class="i">ControllerColliderHit</span> <span id="r11 rd" class="r11 r">hit</span>)
+        {
+            <b>if</b> (<a href="#51a6d70ebc873ceb" class="i field">onControllerColliderHit</a> != <b>null</b>) <a href="#51a6d70ebc873ceb" class="i field">onControllerColliderHit</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r11 r">hit</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnControllerColliderHit is called when the controller hits a collider while performing a Move.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">ControllerColliderHit</span>&gt; <a id="1c2166664b62c23f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnControllerColliderHitAsObservable</a>()
+        {
+            <b>return</b> <a href="#51a6d70ebc873ceb" class="i field">onControllerColliderHit</a> ?? (<a href="#51a6d70ebc873ceb" class="i field">onControllerColliderHit</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">ControllerColliderHit</span>&gt;());
+        }
+ 
+        <b>bool</b> <a id="81fbbe5a1ac950cf" href="../../../../../R/81fbbe5a1ac950cf.html" target="n" data-glyph="46,1" class="i field">calledDestroy</a> = <b>false</b>;
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a7db0fd166f411f2" href="../../../../../R/a7db0fd166f411f2.html" target="n" data-glyph="46,1" class="i field">onDestroy</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="1e0e2a521e786ed4" href="../../../../../R/1e0e2a521e786ed4.html" target="n" data-glyph="72,1" class="i method">OnDestroy</a>()
+        {
+            <a href="#81fbbe5a1ac950cf" class="i field">calledDestroy</a> = <b>true</b>;
+            <b>if</b> (<a href="#a7db0fd166f411f2" class="i field">onDestroy</a> != <b>null</b>) { <a href="#a7db0fd166f411f2" class="i field">onDestroy</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#a7db0fd166f411f2" class="i field">onDestroy</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="36ffa54589504908" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDestroyAsObservable</a>()
+        {
+            <b>if</b> (<a href="#25d786b70a0f3046" class="k">this</a> == <b>null</b>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>if</b> (<a href="#81fbbe5a1ac950cf" class="i field">calledDestroy</a>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#a7db0fd166f411f2" class="i field">onDestroy</a> ?? (<a href="#a7db0fd166f411f2" class="i field">onDestroy</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ac1a81ca403d6f1c" href="../../../../../R/ac1a81ca403d6f1c.html" target="n" data-glyph="46,1" class="i field">onDisable</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the behaviour becomes disabled () or inactive.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="e6f44dfaf3e56b65" href="../../../../../R/e6f44dfaf3e56b65.html" target="n" data-glyph="72,1" class="i method">OnDisable</a>()
+        {
+            <b>if</b> (<a href="#ac1a81ca403d6f1c" class="i field">onDisable</a> != <b>null</b>) <a href="#ac1a81ca403d6f1c" class="i field">onDisable</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the behaviour becomes disabled () or inactive.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="6e6d2255fa46ae63" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDisableAsObservable</a>()
+        {
+            <b>return</b> <a href="#ac1a81ca403d6f1c" class="i field">onDisable</a> ?? (<a href="#ac1a81ca403d6f1c" class="i field">onDisable</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="73da993db0dd9826" href="../../../../../R/73da993db0dd9826.html" target="n" data-glyph="46,1" class="i field">onDrawGizmos</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="41759fae945c0caf" href="../../../../../R/41759fae945c0caf.html" target="n" data-glyph="72,1" class="i method">OnDrawGizmos</a>()
+        {
+            <b>if</b> (<a href="#73da993db0dd9826" class="i field">onDrawGizmos</a> != <b>null</b>) <a href="#73da993db0dd9826" class="i field">onDrawGizmos</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="d5e0e3dfc4d2cc44" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDrawGizmosAsObservable</a>()
+        {
+            <b>return</b> <a href="#73da993db0dd9826" class="i field">onDrawGizmos</a> ?? (<a href="#73da993db0dd9826" class="i field">onDrawGizmos</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="e3cd143d1ece1e20" href="../../../../../R/e3cd143d1ece1e20.html" target="n" data-glyph="46,1" class="i field">onDrawGizmosSelected</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="e91cd9acf8b71563" href="../../../../../R/e91cd9acf8b71563.html" target="n" data-glyph="72,1" class="i method">OnDrawGizmosSelected</a>()
+        {
+            <b>if</b> (<a href="#e3cd143d1ece1e20" class="i field">onDrawGizmosSelected</a> != <b>null</b>) <a href="#e3cd143d1ece1e20" class="i field">onDrawGizmosSelected</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="cebeb422cd4b3d47" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDrawGizmosSelectedAsObservable</a>()
+        {
+            <b>return</b> <a href="#e3cd143d1ece1e20" class="i field">onDrawGizmosSelected</a> ?? (<a href="#e3cd143d1ece1e20" class="i field">onDrawGizmosSelected</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="826e76c645dc20a6" href="../../../../../R/826e76c645dc20a6.html" target="n" data-glyph="46,1" class="i field">onEnable</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the object becomes enabled and active.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="0967142322c52e50" href="../../../../../R/0967142322c52e50.html" target="n" data-glyph="72,1" class="i method">OnEnable</a>()
+        {
+            <b>if</b> (<a href="#826e76c645dc20a6" class="i field">onEnable</a> != <b>null</b>) <a href="#826e76c645dc20a6" class="i field">onEnable</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the object becomes enabled and active.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="978314d43487483e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnEnableAsObservable</a>()
+        {
+            <b>return</b> <a href="#826e76c645dc20a6" class="i field">onEnable</a> ?? (<a href="#826e76c645dc20a6" class="i field">onEnable</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">FALSE</span> <span class="c">// OnGUI called multiple time per frame update and it cause performance issue, If you want to need OnGUI, copy &amp; paste this code on your MonoBehaviour</span>
+<span class="e">
+        Subject&lt;Unit&gt; onGUI;
+ 
+        /// &lt;summary&gt;OnGUI is called for rendering and handling GUI events.&lt;/summary&gt;
+        public override void OnGUI()
+        {
+            if (onGUI != null) onGUI.OnNext(Unit.Default);
+        }
+ 
+        /// &lt;summary&gt;OnGUI is called for rendering and handling GUI events.&lt;/summary&gt;
+        public IObservable&lt;Unit&gt; OnGUIAsObservable()
+        {
+            return onGUI ?? (onGUI = new Subject&lt;Unit&gt;());
+        }
+ 
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>float</b>&gt; <a id="e7f591d04555f337" href="../../../../../R/e7f591d04555f337.html" target="n" data-glyph="46,1" class="i field">onJointBreak</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called when a joint attached to the same game object broke.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="7dc70b9bb9b1e7c1" href="../../../../../R/7dc70b9bb9b1e7c1.html" target="n" data-glyph="72,1" class="i method">OnJointBreak</a>(<b>float</b> <span id="r12 rd" class="r12 r">breakForce</span>)
+        {
+            <b>if</b> (<a href="#e7f591d04555f337" class="i field">onJointBreak</a> != <b>null</b>) <a href="#e7f591d04555f337" class="i field">onJointBreak</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r12 r">breakForce</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called when a joint attached to the same game object broke.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>float</b>&gt; <a id="300e94811cbf55e1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnJointBreakAsObservable</a>()
+        {
+            <b>return</b> <a href="#e7f591d04555f337" class="i field">onJointBreak</a> ?? (<a href="#e7f591d04555f337" class="i field">onJointBreak</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>float</b>&gt;());
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="99bc8213ac998b40" href="../../../../../R/99bc8213ac998b40.html" target="n" data-glyph="46,1" class="i field">onMouseDown</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDown is called when the user has pressed the mouse button while over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="cfad0941c973fe44" href="../../../../../R/cfad0941c973fe44.html" target="n" data-glyph="72,1" class="i method">OnMouseDown</a>()
+        {
+            <b>if</b> (<a href="#99bc8213ac998b40" class="i field">onMouseDown</a> != <b>null</b>) <a href="#99bc8213ac998b40" class="i field">onMouseDown</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDown is called when the user has pressed the mouse button while over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b99c9ccf84c1d8b3" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseDownAsObservable</a>()
+        {
+            <b>return</b> <a href="#99bc8213ac998b40" class="i field">onMouseDown</a> ?? (<a href="#99bc8213ac998b40" class="i field">onMouseDown</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ceafaeaf9112923d" href="../../../../../R/ceafaeaf9112923d.html" target="n" data-glyph="46,1" class="i field">onMouseDrag</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDrag is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="8da6be999dc1114e" href="../../../../../R/8da6be999dc1114e.html" target="n" data-glyph="72,1" class="i method">OnMouseDrag</a>()
+        {
+            <b>if</b> (<a href="#ceafaeaf9112923d" class="i field">onMouseDrag</a> != <b>null</b>) <a href="#ceafaeaf9112923d" class="i field">onMouseDrag</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDrag is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0f86de502ef54668" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseDragAsObservable</a>()
+        {
+            <b>return</b> <a href="#ceafaeaf9112923d" class="i field">onMouseDrag</a> ?? (<a href="#ceafaeaf9112923d" class="i field">onMouseDrag</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ca689a4235cdc8e1" href="../../../../../R/ca689a4235cdc8e1.html" target="n" data-glyph="46,1" class="i field">onMouseEnter</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseEnter is called when the mouse entered the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="161ddc22698edb26" href="../../../../../R/161ddc22698edb26.html" target="n" data-glyph="72,1" class="i method">OnMouseEnter</a>()
+        {
+            <b>if</b> (<a href="#ca689a4235cdc8e1" class="i field">onMouseEnter</a> != <b>null</b>) <a href="#ca689a4235cdc8e1" class="i field">onMouseEnter</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseEnter is called when the mouse entered the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="177ddbafb2131b07" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#ca689a4235cdc8e1" class="i field">onMouseEnter</a> ?? (<a href="#ca689a4235cdc8e1" class="i field">onMouseEnter</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="d9e236f7a9e96c48" href="../../../../../R/d9e236f7a9e96c48.html" target="n" data-glyph="46,1" class="i field">onMouseExit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseExit is called when the mouse is not any longer over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="35babc8deaac8f50" href="../../../../../R/35babc8deaac8f50.html" target="n" data-glyph="72,1" class="i method">OnMouseExit</a>()
+        {
+            <b>if</b> (<a href="#d9e236f7a9e96c48" class="i field">onMouseExit</a> != <b>null</b>) <a href="#d9e236f7a9e96c48" class="i field">onMouseExit</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseExit is called when the mouse is not any longer over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0aa3ab4399d8c451" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#d9e236f7a9e96c48" class="i field">onMouseExit</a> ?? (<a href="#d9e236f7a9e96c48" class="i field">onMouseExit</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="95fdd2532afee127" href="../../../../../R/95fdd2532afee127.html" target="n" data-glyph="46,1" class="i field">onMouseOver</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseOver is called every frame while the mouse is over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="318e6f710baa2ae9" href="../../../../../R/318e6f710baa2ae9.html" target="n" data-glyph="72,1" class="i method">OnMouseOver</a>()
+        {
+            <b>if</b> (<a href="#95fdd2532afee127" class="i field">onMouseOver</a> != <b>null</b>) <a href="#95fdd2532afee127" class="i field">onMouseOver</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseOver is called every frame while the mouse is over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="49768e4b8b806217" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseOverAsObservable</a>()
+        {
+            <b>return</b> <a href="#95fdd2532afee127" class="i field">onMouseOver</a> ?? (<a href="#95fdd2532afee127" class="i field">onMouseOver</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4cfafd885a3ebb05" href="../../../../../R/4cfafd885a3ebb05.html" target="n" data-glyph="46,1" class="i field">onMouseUp</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUp is called when the user has released the mouse button.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="c261286648403467" href="../../../../../R/c261286648403467.html" target="n" data-glyph="72,1" class="i method">OnMouseUp</a>()
+        {
+            <b>if</b> (<a href="#4cfafd885a3ebb05" class="i field">onMouseUp</a> != <b>null</b>) <a href="#4cfafd885a3ebb05" class="i field">onMouseUp</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUp is called when the user has released the mouse button.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="881ac141e34b86f7" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseUpAsObservable</a>()
+        {
+            <b>return</b> <a href="#4cfafd885a3ebb05" class="i field">onMouseUp</a> ?? (<a href="#4cfafd885a3ebb05" class="i field">onMouseUp</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="c3c17fe7ed5b0d71" href="../../../../../R/c3c17fe7ed5b0d71.html" target="n" data-glyph="46,1" class="i field">onMouseUpAsButton</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUpAsButton is only called when the mouse is released over the same GUIElement or Collider as it was pressed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="ac95a5e60c7bd410" href="../../../../../R/ac95a5e60c7bd410.html" target="n" data-glyph="72,1" class="i method">OnMouseUpAsButton</a>()
+        {
+            <b>if</b> (<a href="#c3c17fe7ed5b0d71" class="i field">onMouseUpAsButton</a> != <b>null</b>) <a href="#c3c17fe7ed5b0d71" class="i field">onMouseUpAsButton</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUpAsButton is only called when the mouse is released over the same GUIElement or Collider as it was pressed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0ccba6d1cfb00bae" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseUpAsButtonAsObservable</a>()
+        {
+            <b>return</b> <a href="#c3c17fe7ed5b0d71" class="i field">onMouseUpAsButton</a> ?? (<a href="#c3c17fe7ed5b0d71" class="i field">onMouseUpAsButton</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">GameObject</span>&gt; <a id="d7f03cc11ea7c327" href="../../../../../R/d7f03cc11ea7c327.html" target="n" data-glyph="46,1" class="i field">onParticleCollision</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnParticleCollision is called when a particle hits a collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="413db8342777a330" href="../../../../../R/413db8342777a330.html" target="n" data-glyph="72,1" class="i method">OnParticleCollision</a>(<span class="i">GameObject</span> <span id="r13 rd" class="r13 r">other</span>)
+        {
+            <b>if</b> (<a href="#d7f03cc11ea7c327" class="i field">onParticleCollision</a> != <b>null</b>) <a href="#d7f03cc11ea7c327" class="i field">onParticleCollision</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r13 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnParticleCollision is called when a particle hits a collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">GameObject</span>&gt; <a id="5c6f81b046123c93" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnParticleCollisionAsObservable</a>()
+        {
+            <b>return</b> <a href="#d7f03cc11ea7c327" class="i field">onParticleCollision</a> ?? (<a href="#d7f03cc11ea7c327" class="i field">onParticleCollision</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">GameObject</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b7eb0e76c84f49a4" href="../../../../../R/b7eb0e76c84f49a4.html" target="n" data-glyph="46,1" class="i field">onPostRender</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPostRender is called after a camera finished rendering the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="be0eec04858ee87a" href="../../../../../R/be0eec04858ee87a.html" target="n" data-glyph="72,1" class="i method">OnPostRender</a>()
+        {
+            <b>if</b> (<a href="#b7eb0e76c84f49a4" class="i field">onPostRender</a> != <b>null</b>) <a href="#b7eb0e76c84f49a4" class="i field">onPostRender</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPostRender is called after a camera finished rendering the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="37658670f454fadb" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPostRenderAsObservable</a>()
+        {
+            <b>return</b> <a href="#b7eb0e76c84f49a4" class="i field">onPostRender</a> ?? (<a href="#b7eb0e76c84f49a4" class="i field">onPostRender</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="9896745f417e15b1" href="../../../../../R/9896745f417e15b1.html" target="n" data-glyph="46,1" class="i field">onPreCull</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPreCull is called before a camera culls the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="4e63aea15855da40" href="../../../../../R/4e63aea15855da40.html" target="n" data-glyph="72,1" class="i method">OnPreCull</a>()
+        {
+            <b>if</b> (<a href="#9896745f417e15b1" class="i field">onPreCull</a> != <b>null</b>) <a href="#9896745f417e15b1" class="i field">onPreCull</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPreCull is called before a camera culls the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="8f85181ac87e6192" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPreCullAsObservable</a>()
+        {
+            <b>return</b> <a href="#9896745f417e15b1" class="i field">onPreCull</a> ?? (<a href="#9896745f417e15b1" class="i field">onPreCull</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="fca27c262e584d60" href="../../../../../R/fca27c262e584d60.html" target="n" data-glyph="46,1" class="i field">onPreRender</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPreRender is called before a camera starts rendering the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="49b4898c6aac7c55" href="../../../../../R/49b4898c6aac7c55.html" target="n" data-glyph="72,1" class="i method">OnPreRender</a>()
+        {
+            <b>if</b> (<a href="#fca27c262e584d60" class="i field">onPreRender</a> != <b>null</b>) <a href="#fca27c262e584d60" class="i field">onPreRender</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPreRender is called before a camera starts rendering the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="8c79b112be00582e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPreRenderAsObservable</a>()
+        {
+            <b>return</b> <a href="#fca27c262e584d60" class="i field">onPreRender</a> ?? (<a href="#fca27c262e584d60" class="i field">onPreRender</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="i">RenderTexture</span>, <span class="i">RenderTexture</span>&gt;&gt; <a id="9155c3ee18f8fe43" href="../../../../../R/9155c3ee18f8fe43.html" target="n" data-glyph="46,1" class="i field">onRenderImage</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnRenderImage is called after all rendering is complete to render image.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="33f35417e1f16882" href="../../../../../R/33f35417e1f16882.html" target="n" data-glyph="72,1" class="i method">OnRenderImage</a>(<span class="i">RenderTexture</span> <span id="r14 rd" class="r14 r">src</span>, <span class="i">RenderTexture</span> <span id="r15 rd" class="r15 r">dest</span>)
+        {
+            <b>if</b> (<a href="#9155c3ee18f8fe43" class="i field">onRenderImage</a> != <b>null</b>) <a href="#9155c3ee18f8fe43" class="i field">onRenderImage</a>.<span class="i">OnNext</span>(<a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<span class="i">Create</span>(<span class="r14 r">src</span>, <span class="r15 r">dest</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnRenderImage is called after all rendering is complete to render image.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="i">RenderTexture</span>, <span class="i">RenderTexture</span>&gt;&gt; <a id="9c39475b2de16d47" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnRenderImageAsObservable</a>()
+        {
+            <b>return</b> <a href="#9155c3ee18f8fe43" class="i field">onRenderImage</a> ?? (<a href="#9155c3ee18f8fe43" class="i field">onRenderImage</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="i">RenderTexture</span>, <span class="i">RenderTexture</span>&gt;&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b49052ce62b8a63f" href="../../../../../R/b49052ce62b8a63f.html" target="n" data-glyph="46,1" class="i field">onRenderObject</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnRenderObject is called after camera has rendered the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="43cc2090003f5ad0" href="../../../../../R/43cc2090003f5ad0.html" target="n" data-glyph="72,1" class="i method">OnRenderObject</a>()
+        {
+            <b>if</b> (<a href="#b49052ce62b8a63f" class="i field">onRenderObject</a> != <b>null</b>) <a href="#b49052ce62b8a63f" class="i field">onRenderObject</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnRenderObject is called after camera has rendered the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="5dbb40da6989ddb1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnRenderObjectAsObservable</a>()
+        {
+            <b>return</b> <a href="#b49052ce62b8a63f" class="i field">onRenderObject</a> ?? (<a href="#b49052ce62b8a63f" class="i field">onRenderObject</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="435e54cc1847cad2" href="../../../../../R/435e54cc1847cad2.html" target="n" data-glyph="46,1" class="i field">onServerInitialized</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a Network.InitializeServer was invoked and has completed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="92c92008fa7e344d" href="../../../../../R/92c92008fa7e344d.html" target="n" data-glyph="72,1" class="i method">OnServerInitialized</a>()
+        {
+            <b>if</b> (<a href="#435e54cc1847cad2" class="i field">onServerInitialized</a> != <b>null</b>) <a href="#435e54cc1847cad2" class="i field">onServerInitialized</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a Network.InitializeServer was invoked and has completed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="59b429802608156c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnServerInitializedAsObservable</a>()
+        {
+            <b>return</b> <a href="#435e54cc1847cad2" class="i field">onServerInitialized</a> ?? (<a href="#435e54cc1847cad2" class="i field">onServerInitialized</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider</span>&gt; <a id="4b9b5787717e46f8" href="../../../../../R/4b9b5787717e46f8.html" target="n" data-glyph="46,1" class="i field">onTriggerEnter</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerEnter is called when the Collider other enters the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="b74f631baeeed668" href="../../../../../R/b74f631baeeed668.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnter</a>(<span class="i">Collider</span> <span id="r16 rd" class="r16 r">other</span>)
+        {
+            <b>if</b> (<a href="#4b9b5787717e46f8" class="i field">onTriggerEnter</a> != <b>null</b>) <a href="#4b9b5787717e46f8" class="i field">onTriggerEnter</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r16 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerEnter is called when the Collider other enters the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="a1de9624165233ab" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#4b9b5787717e46f8" class="i field">onTriggerEnter</a> ?? (<a href="#4b9b5787717e46f8" class="i field">onTriggerEnter</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider2D</span>&gt; <a id="e67b6719a1fbdb90" href="../../../../../R/e67b6719a1fbdb90.html" target="n" data-glyph="46,1" class="i field">onTriggerEnter2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object enters a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="9fd15d1f8842894d" href="../../../../../R/9fd15d1f8842894d.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnter2D</a>(<span class="i">Collider2D</span> <span id="r17 rd" class="r17 r">other</span>)
+        {
+            <b>if</b> (<a href="#e67b6719a1fbdb90" class="i field">onTriggerEnter2D</a> != <b>null</b>) <a href="#e67b6719a1fbdb90" class="i field">onTriggerEnter2D</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r17 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object enters a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="5fe307a292ef3500" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnter2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#e67b6719a1fbdb90" class="i field">onTriggerEnter2D</a> ?? (<a href="#e67b6719a1fbdb90" class="i field">onTriggerEnter2D</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider2D</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider</span>&gt; <a id="2332b18eef2184b5" href="../../../../../R/2332b18eef2184b5.html" target="n" data-glyph="46,1" class="i field">onTriggerExit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerExit is called when the Collider other has stopped touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="016a02bd146727fd" href="../../../../../R/016a02bd146727fd.html" target="n" data-glyph="72,1" class="i method">OnTriggerExit</a>(<span class="i">Collider</span> <span id="r18 rd" class="r18 r">other</span>)
+        {
+            <b>if</b> (<a href="#2332b18eef2184b5" class="i field">onTriggerExit</a> != <b>null</b>) <a href="#2332b18eef2184b5" class="i field">onTriggerExit</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r18 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerExit is called when the Collider other has stopped touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="6ae238cef8232b6d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnTriggerExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#2332b18eef2184b5" class="i field">onTriggerExit</a> ?? (<a href="#2332b18eef2184b5" class="i field">onTriggerExit</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider2D</span>&gt; <a id="a606c65f64f9927e" href="../../../../../R/a606c65f64f9927e.html" target="n" data-glyph="46,1" class="i field">onTriggerExit2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object leaves a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="5d02498d46ad38b5" href="../../../../../R/5d02498d46ad38b5.html" target="n" data-glyph="72,1" class="i method">OnTriggerExit2D</a>(<span class="i">Collider2D</span> <span id="r19 rd" class="r19 r">other</span>)
+        {
+            <b>if</b> (<a href="#a606c65f64f9927e" class="i field">onTriggerExit2D</a> != <b>null</b>) <a href="#a606c65f64f9927e" class="i field">onTriggerExit2D</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r19 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object leaves a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="21b5baf70d0653a2" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnTriggerExit2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#a606c65f64f9927e" class="i field">onTriggerExit2D</a> ?? (<a href="#a606c65f64f9927e" class="i field">onTriggerExit2D</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider2D</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider</span>&gt; <a id="b06a7e196df51db4" href="../../../../../R/b06a7e196df51db4.html" target="n" data-glyph="46,1" class="i field">onTriggerStay</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerStay is called once per frame for every Collider other that is touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="fa64c5104d6bca64" href="../../../../../R/fa64c5104d6bca64.html" target="n" data-glyph="72,1" class="i method">OnTriggerStay</a>(<span class="i">Collider</span> <span id="r20 rd" class="r20 r">other</span>)
+        {
+            <b>if</b> (<a href="#b06a7e196df51db4" class="i field">onTriggerStay</a> != <b>null</b>) <a href="#b06a7e196df51db4" class="i field">onTriggerStay</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r20 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerStay is called once per frame for every Collider other that is touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider</span>&gt; <a id="9d7c57fbac042612" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnTriggerStayAsObservable</a>()
+        {
+            <b>return</b> <a href="#b06a7e196df51db4" class="i field">onTriggerStay</a> ?? (<a href="#b06a7e196df51db4" class="i field">onTriggerStay</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider2D</span>&gt; <a id="d5b81b8babc5adbb" href="../../../../../R/d5b81b8babc5adbb.html" target="n" data-glyph="46,1" class="i field">onTriggerStay2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where another object is within a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="c458dd4a28717d69" href="../../../../../R/c458dd4a28717d69.html" target="n" data-glyph="72,1" class="i method">OnTriggerStay2D</a>(<span class="i">Collider2D</span> <span id="r21 rd" class="r21 r">other</span>)
+        {
+            <b>if</b> (<a href="#d5b81b8babc5adbb" class="i field">onTriggerStay2D</a> != <b>null</b>) <a href="#d5b81b8babc5adbb" class="i field">onTriggerStay2D</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r21 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where another object is within a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="4ca0a2eb3a9dcb4c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnTriggerStay2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#d5b81b8babc5adbb" class="i field">onTriggerStay2D</a> ?? (<a href="#d5b81b8babc5adbb" class="i field">onTriggerStay2D</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider2D</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0a3fc388787a6b7e" href="../../../../../R/0a3fc388787a6b7e.html" target="n" data-glyph="46,1" class="i field">onValidate</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="c442ec8bef6594e3" href="../../../../../R/c442ec8bef6594e3.html" target="n" data-glyph="72,1" class="i method">OnValidate</a>()
+        {
+            <b>if</b> (<a href="#0a3fc388787a6b7e" class="i field">onValidate</a> != <b>null</b>) <a href="#0a3fc388787a6b7e" class="i field">onValidate</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="cb9ad083fbefad1f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnValidateAsObservable</a>()
+        {
+            <b>return</b> <a href="#0a3fc388787a6b7e" class="i field">onValidate</a> ?? (<a href="#0a3fc388787a6b7e" class="i field">onValidate</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="13955b68a4a7304a" href="../../../../../R/13955b68a4a7304a.html" target="n" data-glyph="46,1" class="i field">onWillRenderObject</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnWillRenderObject is called once for each camera if the object is visible.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="90aece5b189e67b2" href="../../../../../R/90aece5b189e67b2.html" target="n" data-glyph="72,1" class="i method">OnWillRenderObject</a>()
+        {
+            <b>if</b> (<a href="#13955b68a4a7304a" class="i field">onWillRenderObject</a> != <b>null</b>) <a href="#13955b68a4a7304a" class="i field">onWillRenderObject</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnWillRenderObject is called once for each camera if the object is visible.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="312c94563d39d22f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnWillRenderObjectAsObservable</a>()
+        {
+            <b>return</b> <a href="#13955b68a4a7304a" class="i field">onWillRenderObject</a> ?? (<a href="#13955b68a4a7304a" class="i field">onWillRenderObject</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0eddd8cc2e544e26" href="../../../../../R/0eddd8cc2e544e26.html" target="n" data-glyph="46,1" class="i field">reset</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Reset to default values.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="162d7b757d5f884a" href="../../../../../R/162d7b757d5f884a.html" target="n" data-glyph="72,1" class="i method">Reset</a>()
+        {
+            <b>if</b> (<a href="#0eddd8cc2e544e26" class="i field">reset</a> != <b>null</b>) <a href="#0eddd8cc2e544e26" class="i field">reset</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Reset to default values.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="e2744674c3ac7b76" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ResetAsObservable</a>()
+        {
+            <b>return</b> <a href="#0eddd8cc2e544e26" class="i field">reset</a> ?? (<a href="#0eddd8cc2e544e26" class="i field">reset</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <b>bool</b> <a id="07b214644316fde0" href="../../../../../R/07b214644316fde0.html" target="n" data-glyph="46,1" class="i field">calledStart</a> = <b>false</b>;
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="31e11e0ee1941165" href="../../../../../R/31e11e0ee1941165.html" target="n" data-glyph="46,1" class="i field">start</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="07a44355ef5f3f2c" href="../../../../../R/07a44355ef5f3f2c.html" target="n" data-glyph="72,1" class="i method">Start</a>()
+        {
+            <a href="#07b214644316fde0" class="i field">calledStart</a> = <b>true</b>;
+            <b>if</b> (<a href="#31e11e0ee1941165" class="i field">start</a> != <b>null</b>) { <a href="#31e11e0ee1941165" class="i field">start</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#31e11e0ee1941165" class="i field">start</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="929caf4d570c6b5f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">StartAsObservable</a>()
+        {
+            <b>if</b> (<a href="#07b214644316fde0" class="i field">calledStart</a>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#31e11e0ee1941165" class="i field">start</a> ?? (<a href="#31e11e0ee1941165" class="i field">start</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="51ab5fba4f2d715b" href="../../../../../R/51ab5fba4f2d715b.html" target="n" data-glyph="46,1" class="i field">update</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Update is called every frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="c1d73543cc86da1b" href="../../../../../R/c1d73543cc86da1b.html" target="n" data-glyph="72,1" class="i method">Update</a>()
+        {
+            <b>if</b> (<a href="#51ab5fba4f2d715b" class="i field">update</a> != <b>null</b>) <a href="#51ab5fba4f2d715b" class="i field">update</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Update is called every frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="6ee22bb77019ba18" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">UpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#51ab5fba4f2d715b" class="i field">update</a> ?? (<a href="#51ab5fba4f2d715b" class="i field">update</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_METRO</span> || <span class="i">UNITY_WP8</span> || <span class="i">UNITY_NACL_CHROME</span> || <span class="i">UNITY_WEBGL</span>)
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">NetworkDisconnection</span>&gt; <a id="aa0a68c464d8d848" href="../../../../../R/aa0a68c464d8d848.html" target="n" data-glyph="46,1" class="i field">onDisconnectedFromServer</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when the connection was lost or you disconnected from the server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="8dd2936e5ae764c4" href="../../../../../R/8dd2936e5ae764c4.html" target="n" data-glyph="72,1" class="i method">OnDisconnectedFromServer</a>(<span class="i">NetworkDisconnection</span> <span id="r22 rd" class="r22 r">info</span>)
+        {
+            <b>if</b> (<a href="#aa0a68c464d8d848" class="i field">onDisconnectedFromServer</a> != <b>null</b>) <a href="#aa0a68c464d8d848" class="i field">onDisconnectedFromServer</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r22 r">info</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when the connection was lost or you disconnected from the server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">NetworkDisconnection</span>&gt; <a id="5fc9cf4af2b24173" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDisconnectedFromServerAsObservable</a>()
+        {
+            <b>return</b> <a href="#aa0a68c464d8d848" class="i field">onDisconnectedFromServer</a> ?? (<a href="#aa0a68c464d8d848" class="i field">onDisconnectedFromServer</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">NetworkDisconnection</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">NetworkConnectionError</span>&gt; <a id="6df1a9fc9514ebe0" href="../../../../../R/6df1a9fc9514ebe0.html" target="n" data-glyph="46,1" class="i field">onFailedToConnect</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when a connection attempt fails for some reason.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="d833381c0fb08867" href="../../../../../R/d833381c0fb08867.html" target="n" data-glyph="72,1" class="i method">OnFailedToConnect</a>(<span class="i">NetworkConnectionError</span> <span id="r23 rd" class="r23 r">error</span>)
+        {
+            <b>if</b> (<a href="#6df1a9fc9514ebe0" class="i field">onFailedToConnect</a> != <b>null</b>) <a href="#6df1a9fc9514ebe0" class="i field">onFailedToConnect</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r23 r">error</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when a connection attempt fails for some reason.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">NetworkConnectionError</span>&gt; <a id="360c2212036c8200" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnFailedToConnectAsObservable</a>()
+        {
+            <b>return</b> <a href="#6df1a9fc9514ebe0" class="i field">onFailedToConnect</a> ?? (<a href="#6df1a9fc9514ebe0" class="i field">onFailedToConnect</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">NetworkConnectionError</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">NetworkConnectionError</span>&gt; <a id="40c5a4a2016f4d66" href="../../../../../R/40c5a4a2016f4d66.html" target="n" data-glyph="46,1" class="i field">onFailedToConnectToMasterServer</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on clients or servers when there is a problem connecting to the MasterServer.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="16e9b6ef0a1e75ab" href="../../../../../R/16e9b6ef0a1e75ab.html" target="n" data-glyph="72,1" class="i method">OnFailedToConnectToMasterServer</a>(<span class="i">NetworkConnectionError</span> <span id="r24 rd" class="r24 r">info</span>)
+        {
+            <b>if</b> (<a href="#40c5a4a2016f4d66" class="i field">onFailedToConnectToMasterServer</a> != <b>null</b>) <a href="#40c5a4a2016f4d66" class="i field">onFailedToConnectToMasterServer</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r24 r">info</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on clients or servers when there is a problem connecting to the MasterServer.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">NetworkConnectionError</span>&gt; <a id="e2be8de89b9d2759" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnFailedToConnectToMasterServerAsObservable</a>()
+        {
+            <b>return</b> <a href="#40c5a4a2016f4d66" class="i field">onFailedToConnectToMasterServer</a> ?? (<a href="#40c5a4a2016f4d66" class="i field">onFailedToConnectToMasterServer</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">NetworkConnectionError</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">MasterServerEvent</span>&gt; <a id="c98205d40956f42b" href="../../../../../R/c98205d40956f42b.html" target="n" data-glyph="46,1" class="i field">onMasterServerEvent</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on clients or servers when reporting events from the MasterServer.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="b034ac2d75c63b13" href="../../../../../R/b034ac2d75c63b13.html" target="n" data-glyph="72,1" class="i method">OnMasterServerEvent</a>(<span class="i">MasterServerEvent</span> <span id="r25 rd" class="r25 r">msEvent</span>)
+        {
+            <b>if</b> (<a href="#c98205d40956f42b" class="i field">onMasterServerEvent</a> != <b>null</b>) <a href="#c98205d40956f42b" class="i field">onMasterServerEvent</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r25 r">msEvent</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on clients or servers when reporting events from the MasterServer.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">MasterServerEvent</span>&gt; <a id="ad167100053edd98" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMasterServerEventAsObservable</a>()
+        {
+            <b>return</b> <a href="#c98205d40956f42b" class="i field">onMasterServerEvent</a> ?? (<a href="#c98205d40956f42b" class="i field">onMasterServerEvent</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">MasterServerEvent</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">NetworkMessageInfo</span>&gt; <a id="09710edd5c25f333" href="../../../../../R/09710edd5c25f333.html" target="n" data-glyph="46,1" class="i field">onNetworkInstantiate</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on objects which have been network instantiated with Network.Instantiate.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="00b45518ccf1a1e0" href="../../../../../R/00b45518ccf1a1e0.html" target="n" data-glyph="72,1" class="i method">OnNetworkInstantiate</a>(<span class="i">NetworkMessageInfo</span> <span id="r26 rd" class="r26 r">info</span>)
+        {
+            <b>if</b> (<a href="#09710edd5c25f333" class="i field">onNetworkInstantiate</a> != <b>null</b>) <a href="#09710edd5c25f333" class="i field">onNetworkInstantiate</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r26 r">info</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on objects which have been network instantiated with Network.Instantiate.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">NetworkMessageInfo</span>&gt; <a id="c057d7adac72bca8" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnNetworkInstantiateAsObservable</a>()
+        {
+            <b>return</b> <a href="#09710edd5c25f333" class="i field">onNetworkInstantiate</a> ?? (<a href="#09710edd5c25f333" class="i field">onNetworkInstantiate</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">NetworkMessageInfo</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">NetworkPlayer</span>&gt; <a id="1c8541082395b416" href="../../../../../R/1c8541082395b416.html" target="n" data-glyph="46,1" class="i field">onPlayerConnected</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a new player has successfully connected.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="468d5e6415a02500" href="../../../../../R/468d5e6415a02500.html" target="n" data-glyph="72,1" class="i method">OnPlayerConnected</a>(<span class="i">NetworkPlayer</span> <span id="r27 rd" class="r27 r">player</span>)
+        {
+            <b>if</b> (<a href="#1c8541082395b416" class="i field">onPlayerConnected</a> != <b>null</b>) <a href="#1c8541082395b416" class="i field">onPlayerConnected</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r27 r">player</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a new player has successfully connected.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">NetworkPlayer</span>&gt; <a id="7fb175d6e946371f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPlayerConnectedAsObservable</a>()
+        {
+            <b>return</b> <a href="#1c8541082395b416" class="i field">onPlayerConnected</a> ?? (<a href="#1c8541082395b416" class="i field">onPlayerConnected</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">NetworkPlayer</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">NetworkPlayer</span>&gt; <a id="af66764b6653439f" href="../../../../../R/af66764b6653439f.html" target="n" data-glyph="46,1" class="i field">onPlayerDisconnected</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a player disconnected from the server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="5d461405b0784e79" href="../../../../../R/5d461405b0784e79.html" target="n" data-glyph="72,1" class="i method">OnPlayerDisconnected</a>(<span class="i">NetworkPlayer</span> <span id="r28 rd" class="r28 r">player</span>)
+        {
+            <b>if</b> (<a href="#af66764b6653439f" class="i field">onPlayerDisconnected</a> != <b>null</b>) <a href="#af66764b6653439f" class="i field">onPlayerDisconnected</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r28 r">player</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a player disconnected from the server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">NetworkPlayer</span>&gt; <a id="3d83c60205b3f796" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPlayerDisconnectedAsObservable</a>()
+        {
+            <b>return</b> <a href="#af66764b6653439f" class="i field">onPlayerDisconnected</a> ?? (<a href="#af66764b6653439f" class="i field">onPlayerDisconnected</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">NetworkPlayer</span>&gt;());
+        }
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="i">BitStream</span>, <span class="i">NetworkMessageInfo</span>&gt;&gt; <a id="e8b0e9fc92030c38" href="../../../../../R/e8b0e9fc92030c38.html" target="n" data-glyph="46,1" class="i field">onSerializeNetworkView</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Used to customize synchronization of variables in a script watched by a network view.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public override void</b> <a id="736e1d8685560f2a" href="../../../../../R/736e1d8685560f2a.html" target="n" data-glyph="72,1" class="i method">OnSerializeNetworkView</a>(<span class="i">BitStream</span> <span id="r29 rd" class="r29 r">stream</span>, <span class="i">NetworkMessageInfo</span> <span id="r30 rd" class="r30 r">info</span>)
+        {
+            <b>if</b> (<a href="#e8b0e9fc92030c38" class="i field">onSerializeNetworkView</a> != <b>null</b>) <a href="#e8b0e9fc92030c38" class="i field">onSerializeNetworkView</a>.<span class="i">OnNext</span>(<a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<span class="i">Create</span>(<span class="r29 r">stream</span>, <span class="r30 r">info</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Used to customize synchronization of variables in a script watched by a network view.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="i">BitStream</span>, <span class="i">NetworkMessageInfo</span>&gt;&gt; <a id="2fe294d3a12872fc" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnSerializeNetworkViewAsObservable</a>()
+        {
+            <b>return</b> <a href="#e8b0e9fc92030c38" class="i field">onSerializeNetworkView</a> ?? (<a href="#e8b0e9fc92030c38" class="i field">onSerializeNetworkView</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="i">BitStream</span>, <span class="i">NetworkMessageInfo</span>&gt;&gt;());
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+}
+ 
+ 
+<span class="c">// above code is generated from template</span>
+ 
+<span class="c">/*
+var template = @&quot;Subject&lt;Unit&gt; {0};
+ 
+/// &lt;summary&gt;{1}&lt;/summary&gt;
+public override void {2}()
+{{
+    if ({0} != null) {0}.OnNext(Unit.Default);
+}}
+ 
+/// &lt;summary&gt;{1}&lt;/summary&gt;
+public IObservable&lt;Unit&gt; {2}AsObservable()
+{{
+    return {0} ?? ({0} = new Subject&lt;Unit&gt;());
+}}&quot;;
+*/</span>
+</pre></td></tr></table></div></body></html>

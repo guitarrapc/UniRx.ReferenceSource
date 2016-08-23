@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html><head><title>DispatcherCullingTest.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(49);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/DispatcherCullingTest.cs" target="_top">Assets\ObjectTest\DispatcherCullingTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public class</b> <a id="47a1ab2799a880e3" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="b10d91a2be2e2d3e">DispatcherCullingTest</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public</b> <span class="i">GUIText</span> <a id="8125bd960816550c" href="../../R/8125bd960816550c.html" target="n" data-glyph="42,1" class="i field">cullLabel</a>;
+        <b>private string</b> <a id="321b83d1951b24ab" href="../../R/321b83d1951b24ab.html" target="n" data-glyph="46,1" class="i field">cullingModeDescription</a> = <b>string</b>.<a href="@0@mscorlib/A.html#c9f70a27facb27cf" class="i field">Empty</a>;
+ 
+        <b>void</b> <a id="05f10465ae9bcbfc" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <b>var</b> <span id="r0 rd" class="r0 r">cullClicker</span> = <a href="#8125bd960816550c" class="i field">cullLabel</a>.<span class="i">gameObject</span>.<span class="i">AddComponent</span>&lt;<a href="Clicker.cs.html#4a958315299c0e99" class="t t">Clicker</a>&gt;();
+            <b>var</b> <span id="r1 rd" class="r1 r">cullClickerColor</span> = <span class="r0 r">cullClicker</span>.<span class="i">GetComponent</span>&lt;<span class="i">GUIText</span>&gt;().<span class="i">color</span>;
+            <span class="r0 r">cullClicker</span>.<span class="i">OnEntered</span> += () =&gt; <a href="#8125bd960816550c" class="i field">cullLabel</a>.<span class="i">GetComponent</span>&lt;<span class="i">GUIText</span>&gt;().<span class="i">color</span> = <span class="i">Color</span>.<span class="i">blue</span>;
+            <span class="r0 r">cullClicker</span>.<span class="i">OnExited</span> += () =&gt; <a href="#8125bd960816550c" class="i field">cullLabel</a>.<span class="i">GetComponent</span>&lt;<span class="i">GUIText</span>&gt;().<span class="i">color</span> = <span class="r1 r">cullClickerColor</span>;
+            <span class="r0 r">cullClicker</span>.<span class="i">OnClicked</span> += () =&gt;
+            {
+                <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="k">var</a> <span id="r2 rd" class="r2 r">values</span> = <a href="@0@mscorlib/A.html#36729210e317a805" class="t t">Enum</a>.<a href="@0@mscorlib/A.html#20fa909ef3233d20" class="i method">GetValues</a>(<b>typeof</b>(<a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#e1a1b59b867573cf" class="t t">CullingMode</a>));
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r3 rd" class="r3 r">currentValue</span> = (<b>int</b>)<a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#613e106d82018537" class="i field">cullingMode</a>;
+                <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#613e106d82018537" class="i field">cullingMode</a> = (<a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#e1a1b59b867573cf" class="t t">CullingMode</a>)((<span class="r3 r">currentValue</span> + 1 == <span class="r2 r">values</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>) ? 0 : <span class="r3 r">currentValue</span> + 1);
+            };
+        }
+ 
+        <b>void</b> <a id="e2e89516ccc673fb" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Update</a>()
+        {
+            <b>switch</b> (<a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#613e106d82018537" class="i field">cullingMode</a>)
+            {
+                <b>case</b> <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#e1a1b59b867573cf" class="t t">CullingMode</a>.<a href="/Assembly-CSharp-firstpass/A.html#88fcc8c28b45ccaa" class="i field">Disabled</a>:
+                    <a href="#321b83d1951b24ab" class="i field">cullingModeDescription</a> = <span class="s">&quot;Won&#39;t remove any MainThreadDispatchers.&quot;</span>;
+                    <b>break</b>;
+ 
+                <b>case</b> <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#e1a1b59b867573cf" class="t t">CullingMode</a>.<a href="/Assembly-CSharp-firstpass/A.html#f5e2fae6bedc4d3c" class="i field">Self</a>:
+                    <a href="#321b83d1951b24ab" class="i field">cullingModeDescription</a> = <span class="s">&quot;A new MainThreadDispatcher will remove itself when there&#39;s an existing dispatcher.&quot;</span>;
+                    <b>break</b>;
+ 
+                <b>case</b> <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#e1a1b59b867573cf" class="t t">CullingMode</a>.<a href="/Assembly-CSharp-firstpass/A.html#cd6e3e48ea6d8da6" class="i field">All</a>:
+                    <a href="#321b83d1951b24ab" class="i field">cullingModeDescription</a> = <span class="s">&quot;When a new MainThreadDispatcher is added, search and destroy any excess dispatchers.&quot;</span>;
+                    <b>break</b>;
+            }
+            <a href="#8125bd960816550c" class="i field">cullLabel</a>.<span class="i">text</span> = <b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;Click to toggle Dispatcher Culling Mode: &lt;b&gt;{0}&lt;/b&gt;\n{1}&quot;</span>
+                , <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#613e106d82018537" class="i field">cullingMode</a>.<a href="@0@mscorlib/A.html#1365cfeffd45409d" class="i method">ToString</a>(), <a href="#321b83d1951b24ab" class="i field">cullingModeDescription</a>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

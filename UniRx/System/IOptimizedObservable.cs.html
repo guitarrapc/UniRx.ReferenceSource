@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html><head><title>IOptimizedObservable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(27);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/System/IOptimizedObservable.cs" target="_top">System\IOptimizedObservable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="7849a264b3164ac0" href="../R/7849a264b3164ac0.html" target="n" data-glyph="48,0" class="t t">IOptimizedObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>bool</b> <a id="390df0585d95e607" href="../R/390df0585d95e607.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>();
+    }
+ 
+    <b>public static class</b> <a id="71e93ef6ced9d4cc" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">OptimizedObservableExtensions</a>
+    {
+        <b>public static bool</b> <a id="b9fe99af9671789e" href="../R/b9fe99af9671789e.html" target="n" data-glyph="220,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>&lt;<span id="r1 rd t" class="r1 r t">T</span>&gt;(<b>this</b> <a href="IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r2 rd" class="r2 r">source</span>)
+        {
+            <a href="#7849a264b3164ac0" class="k">var</a> <span id="r3 rd" class="r3 r">obs</span> = <span class="r2 r">source</span> <b>as</b> <a href="#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r1 r t">T</span>&gt;;
+            <b>if</b> (<span class="r3 r">obs</span> == <b>null</b>) <b>return true</b>;
+ 
+            <b>return</b> <span class="r3 r">obs</span>.<a href="#390df0585d95e607" class="i method">IsRequiredSubscribeOnCurrentThread</a>();
+        }
+ 
+        <b>public static bool</b> <a id="b2487d81b07d1f85" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<b>this</b> <a href="IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r5 rd" class="r5 r">source</span>, <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r6 rd" class="r6 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r6 r">scheduler</span> == <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>) <b>return true</b>;
+ 
+            <b>return</b> <a href="#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>(<span class="r5 r">source</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

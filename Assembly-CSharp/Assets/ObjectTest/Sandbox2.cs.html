@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sandbox2.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(73);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/Sandbox2.cs" target="_top">Assets\ObjectTest\Sandbox2.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UNITY_4_5</span>
+ 
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+<span class="c">// using UnityEngine.SceneManagement;</span>
+ 
+<b>public class</b> <a id="d0e16fbf3e0ad70b" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="5f405db54d1f2034">MyEventClass</span></a>
+{
+    <b>public event</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt; <a id="9a56739579039d55" href="../../R/9a56739579039d55.html" target="n" data-glyph="30,1" class="i">Hoge</a>;
+    <b>public void</b> <a id="3df5e29a41dc46ce" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Push</a>(<b>int</b> <span id="r0 rd" class="r0 r">x</span>)
+    {
+        <a href="#9a56739579039d55" class="i">Hoge</a>(<span class="r0 r">x</span>);
+    }
+}
+ 
+<b>public class</b> <a id="0fa95fd083fbdeff" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="10f1afcd38f170af">MoGe</span></a>
+{
+    <b>public void</b> <a id="64684ed94e2f90e6" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Huga</a>()
+    {
+    }
+}
+ 
+<span class="c">// for Scenes/NextSandBox</span>
+<b>public class</b> <a id="212697136fe14d74" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="37186961fad11b4b">Sandbox2</span></a> : <span class="i">MonoBehaviour</span>
+{
+    <b>public</b> <span class="i">Button</span> <a id="b0923c6a44829d9c" href="../../R/b0923c6a44829d9c.html" target="n" data-glyph="42,1" class="i field">button</a>;
+ 
+    <b>void</b> <a id="8b0050b084505937" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+    {
+        <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+    }
+ 
+    <b>void</b> <a id="0fe6f3a97d6d9497" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Aaa</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r1 rd" class="r1 r">action</span>)
+    {
+    }
+ 
+    <span class="c">//int clickCount = 0;</span>
+    <span class="c">//AsyncOperation ao = null;</span>
+ 
+    <b>void</b> <a id="3f6fc9722296bc10" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+    {
+ 
+        <a href="#b0923c6a44829d9c" class="i field">button</a>.<span class="i">OnClickAsObservable</span>().<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">_</span> =&gt;
+        {
+ 
+            <b>var</b> <span id="r3 rd" class="r3 r">cube</span> = <span class="i">GameObject</span>.<span class="i">CreatePrimitive</span>(<span class="i">PrimitiveType</span>.<span class="i">Cube</span>);
+ 
+            <span class="r3 r">cube</span>.<span class="i">UpdateAsObservable</span>()
+                .<a href="/Assembly-CSharp-firstpass/A.html#0157fe26ce241ae9" class="i method">SampleFrame</a>(30)
+                .<span class="i">TakeUntilDestroy</span>(<span class="r3 r">cube</span>) <span class="c">// add line.</span>
+                .<span class="i">Subscribe</span>(
+                    <span id="r4 rd" class="r4 r">__</span> =&gt;
+                    {
+                        <b>var</b> <span id="r5 rd" class="r5 r">p</span> = <span class="r3 r">cube</span>.<span class="i">transform</span>.<span class="i">position</span>;
+                        <span class="r3 r">cube</span>.<span class="i">transform</span>.<span class="i">position</span> = <b>new</b> <span class="i">Vector3</span>(<span class="r5 r">p</span>.<span class="i">x</span> + 0.4f, <span class="r5 r">p</span>.<span class="i">y</span>, <span class="r5 r">p</span>.<span class="i">z</span>);
+                    },
+                    <span id="r6 rd" class="r6 r">e</span> =&gt; <span class="i">Debug</span>.<span class="i">LogError</span>(<span class="s">&quot;Error! &quot;</span> + <span class="r6 r">e</span>),
+                    () =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Completed!&quot;</span>));
+ 
+            <span class="i">GameObject</span>.<span class="i">Destroy</span>(<span class="r3 r">cube</span>, 3f);
+ 
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r3 r">cube</span>);
+        });
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

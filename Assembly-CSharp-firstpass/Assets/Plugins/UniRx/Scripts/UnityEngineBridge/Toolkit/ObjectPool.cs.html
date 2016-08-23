@@ -1,0 +1,482 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObjectPool.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(473);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Toolkit\ObjectPool.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_5_3_OR_NEWER</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Toolkit</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Bass class of ObjectPool.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract class</b> <a id="3b8872c6c5aed852" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="b3a49b7e497c1d9b">ObjectPool</span></a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        <b>where</b> <span class="r0 r t">T</span> : <span class="i">UnityEngine</span>.<span class="i">Component</span>
+    {
+        <b>bool</b> <a id="c464d8a9f37bcf3e" href="../../../../../../R/c464d8a9f37bcf3e.html" target="n" data-glyph="46,1" class="i field">disposedValue</a> = <b>false</b>;
+        <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt; <a id="6ba1e370e80baf42" href="../../../../../../R/6ba1e370e80baf42.html" target="n" data-glyph="46,1" class="i field">q</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Limit of instace count.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected int</b> <a id="67914839d227c5d6" href="../../../../../../R/67914839d227c5d6.html" target="n" data-glyph="105,1" class="i property">MaxPoolCount</a>
+        {
+            <b>get</b>
+            {
+                <b>return int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create instance when needed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract</b> <span class="r0 r t">T</span> <a id="e1c3574a5ee0ed3b" href="../../../../../../R/e1c3574a5ee0ed3b.html" target="n" data-glyph="75,1" class="i method">CreateInstance</a>();
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called before return to pool, useful for set active object(it is default behavior).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="3a7c4a764477e9ab" href="../../../../../../R/3a7c4a764477e9ab.html" target="n" data-glyph="75,1" class="i method">OnBeforeRent</a>(<span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">instance</span>)
+        {
+            <span class="r1 r">instance</span>.<span class="i">gameObject</span>.<span class="i">SetActive</span>(<b>true</b>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called before return to pool, useful for set inactive object(it is default behavior).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="8f4d500755c52fa9" href="../../../../../../R/8f4d500755c52fa9.html" target="n" data-glyph="75,1" class="i method">OnBeforeReturn</a>(<span class="r0 r t">T</span> <span id="r2 rd" class="r2 r">instance</span>)
+        {
+            <span class="r2 r">instance</span>.<span class="i">gameObject</span>.<span class="i">SetActive</span>(<b>false</b>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called when clear or disposed, useful for destroy instance or other finalize method.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="04ec7e5ff6c59034" href="../../../../../../R/04ec7e5ff6c59034.html" target="n" data-glyph="75,1" class="i method">OnClear</a>(<span class="r0 r t">T</span> <span id="r3 rd" class="r3 r">instance</span>)
+        {
+            <b>if</b> (<span class="r3 r">instance</span> == <b>null</b>) <b>return</b>;
+ 
+            <b>var</b> <span id="r4 rd" class="r4 r">go</span> = <span class="r3 r">instance</span>.<span class="i">gameObject</span>;
+            <b>if</b> (<span class="r4 r">go</span> == <b>null</b>) <b>return</b>;
+            <span class="i">UnityEngine</span>.<span class="i">Object</span>.<span class="i">Destroy</span>(<span class="r4 r">go</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Current pooled object count.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public int</b> <a id="56bd3cedf1ee185c" href="../../../../../../R/56bd3cedf1ee185c.html" target="n" data-glyph="102,1" class="i property">Count</a>
+        {
+            <b>get</b>
+            {
+                <b>if</b> (<a href="#6ba1e370e80baf42" class="i field">q</a> == <b>null</b>) <b>return</b> 0;
+                <b>return</b> <a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Get instance from pool.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <span class="r0 r t">T</span> <a id="1090fcd85aad6fd6" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Rent</a>()
+        {
+            <b>if</b> (<a href="#c464d8a9f37bcf3e" class="i field">disposedValue</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;ObjectPool was already disposed.&quot;</span>);
+            <b>if</b> (<a href="#6ba1e370e80baf42" class="i field">q</a> == <b>null</b>) <a href="#6ba1e370e80baf42" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<span class="r0 r t">T</span>&gt;();
+ 
+            <span class="r0 r t">var</span> <span id="r5 rd" class="r5 r">instance</span> = (<a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; 0)
+                ? <a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>()
+                : <a href="#e1c3574a5ee0ed3b" class="i method">CreateInstance</a>();
+ 
+            <a href="#3a7c4a764477e9ab" class="i method">OnBeforeRent</a>(<span class="r5 r">instance</span>);
+            <b>return</b> <span class="r5 r">instance</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Return instance to pool.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="26f4930935eed3a0" href="../../../../../../R/26f4930935eed3a0.html" target="n" data-glyph="72,1" class="i method">Return</a>(<span class="r0 r t">T</span> <span id="r6 rd" class="r6 r">instance</span>)
+        {
+            <b>if</b> (<a href="#c464d8a9f37bcf3e" class="i field">disposedValue</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;ObjectPool was already disposed.&quot;</span>);
+            <b>if</b> (<span class="r6 r">instance</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;instance&quot;</span>);
+ 
+            <b>if</b> (<a href="#6ba1e370e80baf42" class="i field">q</a> == <b>null</b>) <a href="#6ba1e370e80baf42" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<span class="r0 r t">T</span>&gt;();
+ 
+            <b>if</b> ((<a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> + 1) == <a href="#67914839d227c5d6" class="i property">MaxPoolCount</a>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;Reached Max PoolSize&quot;</span>);
+            }
+ 
+            <a href="#8f4d500755c52fa9" class="i method">OnBeforeReturn</a>(<span class="r6 r">instance</span>);
+            <a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r6 r">instance</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Clear pool.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="0c6bda8112160434" href="../../../../../../R/0c6bda8112160434.html" target="n" data-glyph="72,1" class="i method">Clear</a>(<b>bool</b> <span id="r7 rd" class="r7 r">callOnBeforeRent</span> = <b>false</b>)
+        {
+            <b>if</b> (<a href="#6ba1e370e80baf42" class="i field">q</a> == <b>null</b>) <b>return</b>;
+            <b>while</b> (<a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> != 0)
+            {
+                <span class="r0 r t">var</span> <span id="r8 rd" class="r8 r">instance</span> = <a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                <b>if</b> (<span class="r7 r">callOnBeforeRent</span>)
+                {
+                    <a href="#3a7c4a764477e9ab" class="i method">OnBeforeRent</a>(<span class="r8 r">instance</span>);
+                }
+                <a href="#04ec7e5ff6c59034" class="i method">OnClear</a>(<span class="r8 r">instance</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Trim pool instances. </span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r9 r">instanceCountRatio</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">0.0f = clear all ~ 1.0f = live all.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r10 r">minSize</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Min pool count.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r11 r">callOnBeforeRent</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">If true, call OnBeforeRent before OnClear.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="e5bdbb71a2bbd688" href="../../../../../../R/e5bdbb71a2bbd688.html" target="n" data-glyph="72,1" class="i method">Shrink</a>(<b>float</b> <span id="r9 rd" class="r9 r">instanceCountRatio</span>, <b>int</b> <span id="r10 rd" class="r10 r">minSize</span>, <b>bool</b> <span id="r11 rd" class="r11 r">callOnBeforeRent</span> = <b>false</b>)
+        {
+            <b>if</b> (<a href="#6ba1e370e80baf42" class="i field">q</a> == <b>null</b>) <b>return</b>;
+ 
+            <b>if</b> (<span class="r9 r">instanceCountRatio</span> &lt;= 0) <span class="r9 r">instanceCountRatio</span> = 0;
+            <b>if</b> (<span class="r9 r">instanceCountRatio</span> &gt;= 1.0f) <span class="r9 r">instanceCountRatio</span> = 1.0f;
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r12 rd" class="r12 r">size</span> = (<b>int</b>)(<a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> * <span class="r9 r">instanceCountRatio</span>);
+            <span class="r12 r">size</span> = <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#80ff956e9ca8e414" class="i method">Max</a>(<span class="r10 r">minSize</span>, <span class="r12 r">size</span>);
+ 
+            <b>while</b> (<a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; <span class="r12 r">size</span>)
+            {
+                <span class="r0 r t">var</span> <span id="r13 rd" class="r13 r">instance</span> = <a href="#6ba1e370e80baf42" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                <b>if</b> (<span class="r11 r">callOnBeforeRent</span>)
+                {
+                    <a href="#3a7c4a764477e9ab" class="i method">OnBeforeRent</a>(<span class="r13 r">instance</span>);
+                }
+                <a href="#04ec7e5ff6c59034" class="i method">OnClear</a>(<span class="r13 r">instance</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> If needs shrink pool frequently, start check timer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r14 r">checkInterval</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Interval of call Shrink.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r15 r">instanceCountRatio</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">0.0f = clearAll ~ 1.0f = live all.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r16 r">minSize</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Min pool count.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r17 r">callOnBeforeRent</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">If true, call OnBeforeRent before OnClear.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="20bf88a0f74ae513" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">StartShrinkTimer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r14 rd" class="r14 r">checkInterval</span>, <b>float</b> <span id="r15 rd" class="r15 r">instanceCountRatio</span>, <b>int</b> <span id="r16 rd" class="r16 r">minSize</span>, <b>bool</b> <span id="r17 rd" class="r17 r">callOnBeforeRent</span> = <b>false</b>)
+        {
+            <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Time.cs.html#5a83b602fef2c922" class="i method">Interval</a>(<span class="r14 r">checkInterval</span>)
+                .<a href="../../Observable.Paging.cs.html#8d5a70058e5dbdd6" class="i method">TakeWhile</a>(<span id="r18 rd" class="r18 r">_</span> =&gt; <a href="#c464d8a9f37bcf3e" class="i field">disposedValue</a>)
+                .<a href="../../Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r19 rd" class="r19 r">_</span> =&gt;
+                {
+                    <a href="#e5bdbb71a2bbd688" class="i method">Shrink</a>(<span class="r15 r">instanceCountRatio</span>, <span class="r16 r">minSize</span>, <span class="r17 r">callOnBeforeRent</span>);
+                });
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Fill pool before rent operation.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r20 r">preloadCount</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Pool instance count.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r21 r">threshold</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Create count per frame.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="5fe8b640410f69f0" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PreloadAsync</a>(<b>int</b> <span id="r20 rd" class="r20 r">preloadCount</span>, <b>int</b> <span id="r21 rd" class="r21 r">threshold</span>)
+        {
+            <b>if</b> (<a href="#6ba1e370e80baf42" class="i field">q</a> == <b>null</b>) <a href="#6ba1e370e80baf42" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#58bbd750f3390054" class="t constructor">Queue</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r20 r">preloadCount</span>);
+ 
+            <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Unity.cs.html#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r22 rd" class="r22 r">observer</span>, <span id="r23 rd" class="r23 r">cancel</span>) =&gt; <a href="#5cfd237101be7339" class="i method">PreloadCore</a>(<span class="r20 r">preloadCount</span>, <span class="r21 r">threshold</span>, <span class="r22 r">observer</span>, <span class="r23 r">cancel</span>));
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="5cfd237101be7339" href="../../../../../../R/5cfd237101be7339.html" target="n" data-glyph="76,1" class="i method">PreloadCore</a>(<b>int</b> <span id="r24 rd" class="r24 r">preloadCount</span>, <b>int</b> <span id="r25 rd" class="r25 r">threshold</span>, <a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r26 rd" class="r26 r">observer</span>, <a href="../CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r27 rd" class="r27 r">cancellationToken</span>)
+        {
+            <b>while</b> (<a href="#56bd3cedf1ee185c" class="i property">Count</a> &lt; <span class="r24 r">preloadCount</span> &amp;&amp; !<span class="r27 r">cancellationToken</span>.<a href="../CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r28 rd" class="r28 r">requireCount</span> = <span class="r24 r">preloadCount</span> - <a href="#56bd3cedf1ee185c" class="i property">Count</a>;
+                <b>if</b> (<span class="r28 r">requireCount</span> &lt;= 0) <b>break</b>;
+ 
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r29 rd" class="r29 r">createCount</span> = <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#f441d55c88d635ad" class="i method">Min</a>(<span class="r28 r">requireCount</span>, <span class="r25 r">threshold</span>);
+ 
+                <b>for</b> (<b>int</b> <span id="r30 rd" class="r30 r">i</span> = 0; <span class="r30 r">i</span> &lt; <span class="r29 r">createCount</span>; <span class="r30 r">i</span>++)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r0 r t">var</span> <span id="r31 rd" class="r31 r">instance</span> = <a href="#e1c3574a5ee0ed3b" class="i method">CreateInstance</a>();
+                        <a href="#26f4930935eed3a0" class="i method">Return</a>(<span class="r31 r">instance</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r32 rd" class="r32 r">ex</span>)
+                    {
+                        <span class="r26 r">observer</span>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r32 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                }
+                <b>yield return null</b>; <span class="c">// next frame.</span>
+            }
+ 
+            <span class="r26 r">observer</span>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <span class="r26 r">observer</span>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IDisposable Support
+ 
+        <b>protected virtual void</b> <a id="66e53fe0eaea3893" href="../../../../../../R/66e53fe0eaea3893.html" target="n" data-glyph="75,1" class="i method">Dispose</a>(<b>bool</b> <span id="r33 rd" class="r33 r">disposing</span>)
+        {
+            <b>if</b> (!<a href="#c464d8a9f37bcf3e" class="i field">disposedValue</a>)
+            {
+                <b>if</b> (<span class="r33 r">disposing</span>)
+                {
+                    <a href="#0c6bda8112160434" class="i method">Clear</a>(<b>false</b>);
+                }
+ 
+                <a href="#c464d8a9f37bcf3e" class="i field">disposedValue</a> = <b>true</b>;
+            }
+        }
+ 
+        <b>public void</b> <a id="a9152ff9f6f7b666" href="../../../../../../R/a9152ff9f6f7b666.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#66e53fe0eaea3893" class="i method">Dispose</a>(<b>true</b>);
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Bass class of ObjectPool. If needs asynchronous initialization, use this instead of standard ObjectPool.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract class</b> <a id="8561c66dfd3ebdae" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="78ff2f9f92575da8">AsyncObjectPool</span></a>&lt;<span id="r34 rd t" class="r34 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        <b>where</b> <span class="r34 r t">T</span> : <span class="i">UnityEngine</span>.<span class="i">Component</span>
+    {
+        <b>bool</b> <a id="d1f81247a543295d" href="../../../../../../R/d1f81247a543295d.html" target="n" data-glyph="46,1" class="i field">disposedValue</a> = <b>false</b>;
+        <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r34 r t">T</span>&gt; <a id="a4eebb79b8243018" href="../../../../../../R/a4eebb79b8243018.html" target="n" data-glyph="46,1" class="i field">q</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Limit of instace count.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected int</b> <a id="00cfb8793a2f6052" href="../../../../../../R/00cfb8793a2f6052.html" target="n" data-glyph="105,1" class="i property">MaxPoolCount</a>
+        {
+            <b>get</b>
+            {
+                <b>return int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create instance when needed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r34 r t">T</span>&gt; <a id="80c4011fdb67e571" href="../../../../../../R/80c4011fdb67e571.html" target="n" data-glyph="75,1" class="i method">CreateInstanceAsync</a>();
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called before return to pool, useful for set active object(it is default behavior).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="628cdd16c37a26c8" href="../../../../../../R/628cdd16c37a26c8.html" target="n" data-glyph="75,1" class="i method">OnBeforeRent</a>(<span class="r34 r t">T</span> <span id="r35 rd" class="r35 r">instance</span>)
+        {
+            <span class="r35 r">instance</span>.<span class="i">gameObject</span>.<span class="i">SetActive</span>(<b>true</b>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called before return to pool, useful for set inactive object(it is default behavior).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="cea35eec02a20699" href="../../../../../../R/cea35eec02a20699.html" target="n" data-glyph="75,1" class="i method">OnBeforeReturn</a>(<span class="r34 r t">T</span> <span id="r36 rd" class="r36 r">instance</span>)
+        {
+            <span class="r36 r">instance</span>.<span class="i">gameObject</span>.<span class="i">SetActive</span>(<b>false</b>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called when clear or disposed, useful for destroy instance or other finalize method.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="2f52e6433fb93c88" href="../../../../../../R/2f52e6433fb93c88.html" target="n" data-glyph="75,1" class="i method">OnClear</a>(<span class="r34 r t">T</span> <span id="r37 rd" class="r37 r">instance</span>)
+        {
+            <b>if</b> (<span class="r37 r">instance</span> == <b>null</b>) <b>return</b>;
+ 
+            <b>var</b> <span id="r38 rd" class="r38 r">go</span> = <span class="r37 r">instance</span>.<span class="i">gameObject</span>;
+            <b>if</b> (<span class="r38 r">go</span> == <b>null</b>) <b>return</b>;
+            <span class="i">UnityEngine</span>.<span class="i">Object</span>.<span class="i">Destroy</span>(<span class="r38 r">go</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Current pooled object count.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public int</b> <a id="61bdc15273c7d55d" href="../../../../../../R/61bdc15273c7d55d.html" target="n" data-glyph="102,1" class="i property">Count</a>
+        {
+            <b>get</b>
+            {
+                <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a> == <b>null</b>) <b>return</b> 0;
+                <b>return</b> <a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Get instance from pool.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r34 r t">T</span>&gt; <a id="82528837a5b323a9" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">RentAsync</a>()
+        {
+            <b>if</b> (<a href="#d1f81247a543295d" class="i field">disposedValue</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;ObjectPool was already disposed.&quot;</span>);
+            <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a> == <b>null</b>) <a href="#a4eebb79b8243018" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<span class="r34 r t">T</span>&gt;();
+ 
+            <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; 0)
+            {
+                <span class="r34 r t">var</span> <span id="r39 rd" class="r39 r">instance</span> = <a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                <a href="#628cdd16c37a26c8" class="i method">OnBeforeRent</a>(<span class="r39 r">instance</span>);
+                <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#2843d6a6f424ac6b" class="i method">Return</a>(<span class="r39 r">instance</span>);
+            }
+            <b>else</b>
+            {
+                <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r40 rd" class="r40 r">instance</span> = <a href="#80c4011fdb67e571" class="i method">CreateInstanceAsync</a>();
+                <b>return</b> <span class="r40 r">instance</span>.<a href="../../Observable.cs.html#5cfa3f7295a92210" class="i method">Do</a>(<span id="r41 rd" class="r41 r">x</span> =&gt; <a href="#628cdd16c37a26c8" class="i method">OnBeforeRent</a>(<span class="r41 r">x</span>));
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Return instance to pool.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="4eb848be1665fb12" href="../../../../../../R/4eb848be1665fb12.html" target="n" data-glyph="72,1" class="i method">Return</a>(<span class="r34 r t">T</span> <span id="r42 rd" class="r42 r">instance</span>)
+        {
+            <b>if</b> (<a href="#d1f81247a543295d" class="i field">disposedValue</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;ObjectPool was already disposed.&quot;</span>);
+            <b>if</b> (<span class="r42 r">instance</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;instance&quot;</span>);
+ 
+            <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a> == <b>null</b>) <a href="#a4eebb79b8243018" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<span class="r34 r t">T</span>&gt;();
+ 
+            <b>if</b> ((<a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> + 1) == <a href="#00cfb8793a2f6052" class="i property">MaxPoolCount</a>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;Reached Max PoolSize&quot;</span>);
+            }
+ 
+            <a href="#cea35eec02a20699" class="i method">OnBeforeReturn</a>(<span class="r42 r">instance</span>);
+            <a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r42 r">instance</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Trim pool instances. </span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r43 r">instanceCountRatio</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">0.0f = clear all ~ 1.0f = live all.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r44 r">minSize</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Min pool count.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r45 r">callOnBeforeRent</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">If true, call OnBeforeRent before OnClear.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="519b558dd11898d9" href="../../../../../../R/519b558dd11898d9.html" target="n" data-glyph="72,1" class="i method">Shrink</a>(<b>float</b> <span id="r43 rd" class="r43 r">instanceCountRatio</span>, <b>int</b> <span id="r44 rd" class="r44 r">minSize</span>, <b>bool</b> <span id="r45 rd" class="r45 r">callOnBeforeRent</span> = <b>false</b>)
+        {
+            <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a> == <b>null</b>) <b>return</b>;
+ 
+            <b>if</b> (<span class="r43 r">instanceCountRatio</span> &lt;= 0) <span class="r43 r">instanceCountRatio</span> = 0;
+            <b>if</b> (<span class="r43 r">instanceCountRatio</span> &gt;= 1.0f) <span class="r43 r">instanceCountRatio</span> = 1.0f;
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r46 rd" class="r46 r">size</span> = (<b>int</b>)(<a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> * <span class="r43 r">instanceCountRatio</span>);
+            <span class="r46 r">size</span> = <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#80ff956e9ca8e414" class="i method">Max</a>(<span class="r44 r">minSize</span>, <span class="r46 r">size</span>);
+ 
+            <b>while</b> (<a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; <span class="r46 r">size</span>)
+            {
+                <span class="r34 r t">var</span> <span id="r47 rd" class="r47 r">instance</span> = <a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                <b>if</b> (<span class="r45 r">callOnBeforeRent</span>)
+                {
+                    <a href="#628cdd16c37a26c8" class="i method">OnBeforeRent</a>(<span class="r47 r">instance</span>);
+                }
+                <a href="#2f52e6433fb93c88" class="i method">OnClear</a>(<span class="r47 r">instance</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> If needs shrink pool frequently, start check timer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r48 r">checkInterval</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Interval of call Shrink.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r49 r">instanceCountRatio</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">0.0f = clearAll ~ 1.0f = live all.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r50 r">minSize</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Min pool count.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r51 r">callOnBeforeRent</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">If true, call OnBeforeRent before OnClear.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="879e4d1c13439ff0" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">StartShrinkTimer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r48 rd" class="r48 r">checkInterval</span>, <b>float</b> <span id="r49 rd" class="r49 r">instanceCountRatio</span>, <b>int</b> <span id="r50 rd" class="r50 r">minSize</span>, <b>bool</b> <span id="r51 rd" class="r51 r">callOnBeforeRent</span> = <b>false</b>)
+        {
+            <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Time.cs.html#5a83b602fef2c922" class="i method">Interval</a>(<span class="r48 r">checkInterval</span>)
+                .<a href="../../Observable.Paging.cs.html#8d5a70058e5dbdd6" class="i method">TakeWhile</a>(<span id="r52 rd" class="r52 r">_</span> =&gt; <a href="#d1f81247a543295d" class="i field">disposedValue</a>)
+                .<a href="../../Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r53 rd" class="r53 r">_</span> =&gt;
+                {
+                    <a href="#519b558dd11898d9" class="i method">Shrink</a>(<span class="r49 r">instanceCountRatio</span>, <span class="r50 r">minSize</span>, <span class="r51 r">callOnBeforeRent</span>);
+                });
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Clear pool.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="9a7ad257d0f9e15d" href="../../../../../../R/9a7ad257d0f9e15d.html" target="n" data-glyph="72,1" class="i method">Clear</a>(<b>bool</b> <span id="r54 rd" class="r54 r">callOnBeforeRent</span> = <b>false</b>)
+        {
+            <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a> == <b>null</b>) <b>return</b>;
+            <b>while</b> (<a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> != 0)
+            {
+                <span class="r34 r t">var</span> <span id="r55 rd" class="r55 r">instance</span> = <a href="#a4eebb79b8243018" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                <b>if</b> (<span class="r54 r">callOnBeforeRent</span>)
+                {
+                    <a href="#628cdd16c37a26c8" class="i method">OnBeforeRent</a>(<span class="r55 r">instance</span>);
+                }
+                <a href="#2f52e6433fb93c88" class="i method">OnClear</a>(<span class="r55 r">instance</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Fill pool before rent operation.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r56 r">preloadCount</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Pool instance count.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r57 r">threshold</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Create count per frame.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="06391d4750aa1a86" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PreloadAsync</a>(<b>int</b> <span id="r56 rd" class="r56 r">preloadCount</span>, <b>int</b> <span id="r57 rd" class="r57 r">threshold</span>)
+        {
+            <b>if</b> (<a href="#a4eebb79b8243018" class="i field">q</a> == <b>null</b>) <a href="#a4eebb79b8243018" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#58bbd750f3390054" class="t constructor">Queue</a>&lt;<span class="r34 r t">T</span>&gt;(<span class="r56 r">preloadCount</span>);
+ 
+            <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Unity.cs.html#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r58 rd" class="r58 r">observer</span>, <span id="r59 rd" class="r59 r">cancel</span>) =&gt; <a href="#877a9c8c3a35d0af" class="i method">PreloadCore</a>(<span class="r56 r">preloadCount</span>, <span class="r57 r">threshold</span>, <span class="r58 r">observer</span>, <span class="r59 r">cancel</span>));
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="877a9c8c3a35d0af" href="../../../../../../R/877a9c8c3a35d0af.html" target="n" data-glyph="76,1" class="i method">PreloadCore</a>(<b>int</b> <span id="r60 rd" class="r60 r">preloadCount</span>, <b>int</b> <span id="r61 rd" class="r61 r">threshold</span>, <a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r62 rd" class="r62 r">observer</span>, <a href="../CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r63 rd" class="r63 r">cancellationToken</span>)
+        {
+            <b>while</b> (<a href="#61bdc15273c7d55d" class="i property">Count</a> &lt; <span class="r60 r">preloadCount</span> &amp;&amp; !<span class="r63 r">cancellationToken</span>.<a href="../CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r64 rd" class="r64 r">requireCount</span> = <span class="r60 r">preloadCount</span> - <a href="#61bdc15273c7d55d" class="i property">Count</a>;
+                <b>if</b> (<span class="r64 r">requireCount</span> &lt;= 0) <b>break</b>;
+ 
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r65 rd" class="r65 r">createCount</span> = <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#f441d55c88d635ad" class="i method">Min</a>(<span class="r64 r">requireCount</span>, <span class="r61 r">threshold</span>);
+ 
+                <b>var</b> <span id="r66 rd" class="r66 r">loaders</span> = <b>new</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;[<span class="r65 r">createCount</span>];
+                <b>for</b> (<b>int</b> <span id="r67 rd" class="r67 r">i</span> = 0; <span class="r67 r">i</span> &lt; <span class="r65 r">createCount</span>; <span class="r67 r">i</span>++)
+                {
+                    <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r68 rd" class="r68 r">instanceFuture</span> = <a href="#80c4011fdb67e571" class="i method">CreateInstanceAsync</a>();
+                    <span class="r66 r">loaders</span>[<span class="r67 r">i</span>] = <span class="r68 r">instanceFuture</span>.<a href="../../Observable.cs.html#f77f8b6f662008c2" class="i method">ForEachAsync</a>(<span id="r69 rd" class="r69 r">x</span> =&gt; <a href="#4eb848be1665fb12" class="i method">Return</a>(<span class="r69 r">x</span>));
+                }
+ 
+                <a href="../Observable.Unity.cs.html#f022e54f47b94101" class="k">var</a> <span id="r70 rd" class="r70 r">awaiter</span> = <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Concatenate.cs.html#31132660576ae3ec" class="i method">WhenAll</a>(<span class="r66 r">loaders</span>).<a href="../Observable.Unity.cs.html#f26b81979ebd57da" class="i method">ToYieldInstruction</a>(<b>false</b>, <span class="r63 r">cancellationToken</span>);
+                <b>while</b> (!(<span class="r70 r">awaiter</span>.<a href="../Observable.Unity.cs.html#1c0099e9931a7f61" class="i property">HasResult</a> || <span class="r70 r">awaiter</span>.<a href="../Observable.Unity.cs.html#e653d4d7d6cc3aa1" class="i property">IsCanceled</a> || <span class="r70 r">awaiter</span>.<a href="../Observable.Unity.cs.html#b187a8b914995945" class="i property">HasError</a>))
+                {
+                    <b>yield return null</b>;
+                }
+ 
+                <b>if</b> (<span class="r70 r">awaiter</span>.<a href="../Observable.Unity.cs.html#b187a8b914995945" class="i property">HasError</a>)
+                {
+                    <span class="r62 r">observer</span>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r70 r">awaiter</span>.<a href="../Observable.Unity.cs.html#28a94baf7e5d5e9e" class="i property">Error</a>);
+                    <b>yield break</b>;
+                }
+                <b>else if</b> (<span class="r70 r">awaiter</span>.<a href="../Observable.Unity.cs.html#e653d4d7d6cc3aa1" class="i property">IsCanceled</a>)
+                {
+                    <b>yield break</b>; <span class="c">// end.</span>
+                }
+            }
+ 
+            <span class="r62 r">observer</span>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <span class="r62 r">observer</span>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IDisposable Support
+ 
+        <b>protected virtual void</b> <a id="9dd2bac25340bc3d" href="../../../../../../R/9dd2bac25340bc3d.html" target="n" data-glyph="75,1" class="i method">Dispose</a>(<b>bool</b> <span id="r71 rd" class="r71 r">disposing</span>)
+        {
+            <b>if</b> (!<a href="#d1f81247a543295d" class="i field">disposedValue</a>)
+            {
+                <b>if</b> (<span class="r71 r">disposing</span>)
+                {
+                    <a href="#9a7ad257d0f9e15d" class="i method">Clear</a>(<b>false</b>);
+                }
+ 
+                <a href="#d1f81247a543295d" class="i field">disposedValue</a> = <b>true</b>;
+            }
+        }
+ 
+        <b>public void</b> <a id="6b2be362d9347e3b" href="../../../../../../R/6b2be362d9347e3b.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#9dd2bac25340bc3d" class="i method">Dispose</a>(<b>true</b>);
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

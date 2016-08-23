@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.CSharp.CurrentVersion.targets</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(369);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.CurrentVersion.targets" target="_top">C\ProgramFiles(x86)\MSBuild\14.0\bin_\amd64\Microsoft.CSharp.CurrentVersion.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.CSharp.CurrentVersion.targets
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+This file defines the steps in the standard build process specific for C# .NET projects.
+For example, it contains the step that actually calls the C# compiler.  The remainder
+of the build process is defined in Microsoft.Common.targets, which is imported by 
+this file.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+ 
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImportByWildcardBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportByWildcardBeforeMicrosoftCSharpTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportByWildcardBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportByWildcardBeforeMicrosoftCSharpTargets</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ImportByWildcardBeforeMicrosoftCSharpTargets</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImportByWildcardAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportByWildcardAfterMicrosoftCSharpTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportByWildcardAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportByWildcardAfterMicrosoftCSharpTargets</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ImportByWildcardAfterMicrosoftCSharpTargets</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildUserExtensionsPath.html" target="n" class="msbuildlink">MSBuildUserExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportBefore\*</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets</a>)&#39; == &#39;true&#39; and exists(&#39;$(<a href="/MSBuildProperties/R/MSBuildUserExtensionsPath.html" target="n" class="msbuildlink">MSBuildUserExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportBefore&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportBefore\*</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportByWildcardBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportByWildcardBeforeMicrosoftCSharpTargets</a>)&#39; == &#39;true&#39; and exists(&#39;$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportBefore&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CustomBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomBeforeMicrosoftCSharpTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CustomBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomBeforeMicrosoftCSharpTargets</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\v$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Custom.Before.Microsoft.CSharp.targets<span class="xd">&lt;/</span><span class="xn">CustomBeforeMicrosoftCSharpTargets</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CustomAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomAfterMicrosoftCSharpTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CustomAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomAfterMicrosoftCSharpTargets</a>)&#39;==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\v$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Custom.After.Microsoft.CSharp.targets<span class="xd">&lt;/</span><span class="xn">CustomAfterMicrosoftCSharpTargets</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CustomBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomBeforeMicrosoftCSharpTargets</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CustomBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomBeforeMicrosoftCSharpTargets</a>)&#39; != &#39;&#39; and Exists(&#39;$(<a href="/MSBuildProperties/R/CustomBeforeMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomBeforeMicrosoftCSharpTargets</a>)&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a>);$(<a href="/MSBuildProperties/R/MSBuildThisFileFullPath.html" target="n" class="msbuildlink">MSBuildThisFileFullPath</a>)<span class="xd">&lt;/</span><span class="xn">MSBuildAllProjects</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DefaultLanguageSourceExtension.html" target="n" class="msbuildlink">DefaultLanguageSourceExtension</a></span><span class="xd">&gt;</span>.cs<span class="xd">&lt;/</span><span class="xn">DefaultLanguageSourceExtension</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/Language.html" target="n" class="msbuildlink">Language</a></span><span class="xd">&gt;</span>C#<span class="xd">&lt;/</span><span class="xn">Language</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetRuntime.html" target="n" class="msbuildlink">TargetRuntime</a></span><span class="xd">&gt;</span>Managed<span class="xd">&lt;/</span><span class="xn">TargetRuntime</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AlwaysUseNumericalSuffixInItemNames.html" target="n" class="msbuildlink">AlwaysUseNumericalSuffixInItemNames</a></span><span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">AlwaysUseNumericalSuffixInItemNames</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DefineCommonItemSchemas.html" target="n" class="msbuildlink">DefineCommonItemSchemas</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/DefineCommonItemSchemas.html" target="n" class="msbuildlink">DefineCommonItemSchemas</a>)&#39; == &#39;&#39; </span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">DefineCommonItemSchemas</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DefineCommonReferenceSchemas.html" target="n" class="msbuildlink">DefineCommonReferenceSchemas</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/DefineCommonReferenceSchemas.html" target="n" class="msbuildlink">DefineCommonReferenceSchemas</a>)&#39; == &#39;&#39; </span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">DefineCommonReferenceSchemas</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DefineCommonCapabilities.html" target="n" class="msbuildlink">DefineCommonCapabilities</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/DefineCommonCapabilities.html" target="n" class="msbuildlink">DefineCommonCapabilities</a>)&#39; == &#39;&#39; </span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">DefineCommonCapabilities</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/SynthesizeLinkMetadata.html" target="n" class="msbuildlink">SynthesizeLinkMetadata</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/SynthesizeLinkMetadata.html" target="n" class="msbuildlink">SynthesizeLinkMetadata</a>)&#39; == &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/HasSharedItems.html" target="n" class="msbuildlink">HasSharedItems</a>)&#39; == &#39;true&#39; </span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">SynthesizeLinkMetadata</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/PropertyPageSchema.html" target="n" class="msbuildlink">PropertyPageSchema</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CommonXamlResourcesDirectory.html" target="n" class="msbuildlink">CommonXamlResourcesDirectory</a>)CSharp.ProjectItemsSchema.xaml;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/PropertyPageSchema.html" target="n" class="msbuildlink">PropertyPageSchema</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CommonXamlResourcesDirectory.html" target="n" class="msbuildlink">CommonXamlResourcesDirectory</a>)CSharp.xaml;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn">Context</span><span class="xd">&gt;</span>File<span class="xd">&lt;/</span><span class="xn">Context</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyPageSchema</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/PropertyPageSchema.html" target="n" class="msbuildlink">PropertyPageSchema</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CommonXamlResourcesDirectory.html" target="n" class="msbuildlink">CommonXamlResourcesDirectory</a>)CSharp.BrowseObject.xaml;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn">Context</span><span class="xd">&gt;</span>BrowseObject<span class="xd">&lt;/</span><span class="xn">Context</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyPageSchema</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/ProjectCapability.html" target="n" class="msbuildlink">ProjectCapability</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">CSharp;Managed</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/DefineCommonCapabilities.html" target="n" class="msbuildlink">DefineCommonCapabilities</a>)&#39; == &#39;true&#39; </span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/ProjectCapability.html" target="n" class="msbuildlink">ProjectCapability</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">ReferencesFolder;LanguageService</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/ProjectCapability.html" target="n" class="msbuildlink">ProjectCapability</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">ProjectConfigurationsInferredFromUsage</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c">
+    The CreateManifestResourceNames target create the manifest resource names from the .RESX
+    files.
+    
+        [IN]
+        @(EmbeddedResource) - The list of EmbeddedResource items that have been pre-processed to add metadata about resource type
+                              Expected Metadata &quot;Type&quot; can either be &quot;Resx&quot; or &quot;Non-Resx&quot;
+ 
+        [OUT]
+        @(EmbeddedResource) - EmbeddedResource items with metadata         
+        
+    For C# applications the transformation is like:
+ 
+        Resources1.resx =&gt; RootNamespace.Resources1 =&gt; Build into main assembly
+        SubFolder\Resources1.resx =&gt; RootNamespace.SubFolder.Resources1 =&gt; Build into main assembly
+        Resources1.fr.resx =&gt; RootNamespace.Resources1.fr =&gt; Build into satellite assembly
+        Resources1.notaculture.resx =&gt; RootNamespace.Resources1.notaculture =&gt; Build into main assembly
+ 
+    For other project systems, this transformation may be different.
+    </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CreateManifestResourceNamesDependsOn.html" target="n" class="msbuildlink">CreateManifestResourceNamesDependsOn</a></span><span class="xd">&gt;</span><span class="xd">&lt;/</span><span class="xn">CreateManifestResourceNamesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Target</span><span class="xan">
+        Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/CreateManifestResourceNames.html" target="n" class="msbuildlink">CreateManifestResourceNames</a></span>&quot;<span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+        DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CreateManifestResourceNamesDependsOn.html" target="n" class="msbuildlink">CreateManifestResourceNamesDependsOn</a>)</span>&quot;<span class="xd">
+        &gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a> </span><span class="xan">Remove</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        
+        &lt;!--</span><span class="c"> Create manifest names for culture and non-culture Resx files, and for non-culture Non-Resx resources </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CreateCSharpManifestResourceName.html" target="n" class="msbuildlink">CreateCSharpManifestResourceName</a></span><span class="xan">
+              ResourceFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a>)</span>&quot;<span class="xan">
+              RootNamespace</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/RootNamespace.html" target="n" class="msbuildlink">RootNamespace</a>)</span>&quot;              <span class="xan">
+              Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(EmbeddedResource.ManifestResourceName)&#39; == &#39;&#39; and (&#39;%(EmbeddedResource.WithCulture)&#39; == &#39;false&#39; or &#39;%(EmbeddedResource.Type)&#39; == &#39;Resx&#39;)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+            &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ResourceFilesWithManifestResourceNames</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;/</span><span class="xn">CreateCSharpManifestResourceName</span><span class="xd">&gt;</span><span class="xd">
+        
+        &lt;!--</span><span class="c"> Create manifest names for all culture non-resx resources </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CreateCSharpManifestResourceName.html" target="n" class="msbuildlink">CreateCSharpManifestResourceName</a></span><span class="xan">
+              ResourceFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a>)</span>&quot;<span class="xan">
+              RootNamespace</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/RootNamespace.html" target="n" class="msbuildlink">RootNamespace</a>)</span>&quot;<span class="xan">
+              PrependCultureAsDirectory</span><span class="xd">=</span>&quot;<span class="xav">false</span>&quot;<span class="xan">
+              Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(EmbeddedResource.ManifestResourceName)&#39; == &#39;&#39; and &#39;%(EmbeddedResource.WithCulture)&#39; == &#39;true&#39; and &#39;%(EmbeddedResource.Type)&#39; == &#39;Non-Resx&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+            &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ResourceFilesWithManifestResourceNames</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;/</span><span class="xn">CreateCSharpManifestResourceName</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a> </span><span class="xan">Remove</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(EmbeddedResource.ManifestResourceName)&#39; == &#39;&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a> </span><span class="xan">Remove</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_Temporary.html" target="n" class="msbuildlink">_Temporary</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+              
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Target</span><span class="xan">
+        Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/ResolveCodeAnalysisRuleSet.html" target="n" class="msbuildlink">ResolveCodeAnalysisRuleSet</a></span>&quot;<span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CodeAnalysisRuleSet.html" target="n" class="msbuildlink">CodeAnalysisRuleSet</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">
+        &gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/ResolveCodeAnalysisRuleSet.html" target="n" class="msbuildlink">ResolveCodeAnalysisRuleSet</a></span><span class="xan">
+            CodeAnalysisRuleSet</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CodeAnalysisRuleSet.html" target="n" class="msbuildlink">CodeAnalysisRuleSet</a>)</span>&quot;<span class="xan">
+            CodeAnalysisRuleSetDirectories</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CodeAnalysisRuleSetDirectories.html" target="n" class="msbuildlink">CodeAnalysisRuleSetDirectories</a>)</span>&quot;<span class="xan">
+            MSBuildProjectDirectory</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectDirectory.html" target="n" class="msbuildlink">MSBuildProjectDirectory</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+            &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ResolvedCodeAnalysisRuleSet</span>&quot; <span class="xan">PropertyName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildProperties/R/ResolvedCodeAnalysisRuleSet.html" target="n" class="msbuildlink">ResolvedCodeAnalysisRuleSet</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;/</span><span class="xn">ResolveCodeAnalysisRuleSet</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;!--</span><span class="c"> Activate CPS projects to track folder names in namespace. </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/ProjectCapability.html" target="n" class="msbuildlink">ProjectCapability</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">RelativePathDerivedDefaultNamespace</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;!--</span><span class="c"> Provide a facility to override UseHostCompilerIfAvailable</span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/UseHostCompilerIfAvailable.html" target="n" class="msbuildlink">UseHostCompilerIfAvailable</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/UseHostCompilerIfAvailable.html" target="n" class="msbuildlink">UseHostCompilerIfAvailable</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">UseHostCompilerIfAvailable</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/DocFileItem.html" target="n" class="msbuildlink">DocFileItem</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DocumentationFile.html" target="n" class="msbuildlink">DocumentationFile</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/DocumentationFile.html" target="n" class="msbuildlink">DocumentationFile</a>)&#39;!=&#39;&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/_DebugSymbolsProduced.html" target="n" class="msbuildlink">_DebugSymbolsProduced</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/PdbFile.html" target="n" class="msbuildlink">PdbFile</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/_DebugSymbolsIntermediatePathTemporary.html" target="n" class="msbuildlink">_DebugSymbolsIntermediatePathTemporary</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/PdbFile.html" target="n" class="msbuildlink">PdbFile</a>)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+        &lt;!--</span><span class="c"> Add any missing .pdb extension, as the compiler does </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/_DebugSymbolsIntermediatePath.html" target="n" class="msbuildlink">_DebugSymbolsIntermediatePath</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_DebugSymbolsIntermediatePathTemporary.html" target="n" class="msbuildlink">_DebugSymbolsIntermediatePathTemporary</a>-&gt;&#39;%(RootDir)%(Directory)%(Filename).pdb&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CoreCompileDependsOn.html" target="n" class="msbuildlink">CoreCompileDependsOn</a></span><span class="xd">&gt;</span><a href="/MSBuildTargets/R/_ComputeNonExistentFileProperty.html" target="n" class="msbuildlink">_ComputeNonExistentFileProperty</a>;<a href="/MSBuildTargets/R/ResolveCodeAnalysisRuleSet.html" target="n" class="msbuildlink">ResolveCodeAnalysisRuleSet</a><span class="xd">&lt;/</span><span class="xn">CoreCompileDependsOn</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ExportWinMDFile.html" target="n" class="msbuildlink">ExportWinMDFile</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ExportWinMDFile.html" target="n" class="msbuildlink">ExportWinMDFile</a>)&#39; == &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/OutputType.html" target="n" class="msbuildlink">OutputType</a>)&#39; == &#39;WinMDObj&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ExportWinMDFile</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+&lt;!--</span><span class="c">
+      The XamlPreCompile target must remain identical to
+      the CoreCompile target in Microsoft.CSharp.Core.targets.
+      Any updates to one must be made to the other.
+</span><span class="xd">--&gt;</span><span class="xd">
+     &lt;</span><span class="xn">Target</span><span class="xan">
+        Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/XamlPreCompile.html" target="n" class="msbuildlink">XamlPreCompile</a></span>&quot;<span class="xan">
+        Inputs</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildAllProjects.html" target="n" class="msbuildlink">MSBuildAllProjects</a>);
+                @(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>);
+                @(<a href="/MSBuildItems/R/_CoreCompileResourceInputs.html" target="n" class="msbuildlink">_CoreCompileResourceInputs</a>);
+                $(<a href="/MSBuildProperties/R/ApplicationIcon.html" target="n" class="msbuildlink">ApplicationIcon</a>);
+                $(<a href="/MSBuildProperties/R/AssemblyOriginatorKeyFile.html" target="n" class="msbuildlink">AssemblyOriginatorKeyFile</a>);
+                @(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>);
+                @(<a href="/MSBuildItems/R/CompiledLicenseFile.html" target="n" class="msbuildlink">CompiledLicenseFile</a>);
+                @(<a href="/MSBuildItems/R/LinkResource.html" target="n" class="msbuildlink">LinkResource</a>);
+                @(<a href="/MSBuildItems/R/EmbeddedDocumentation.html" target="n" class="msbuildlink">EmbeddedDocumentation</a>); 
+                $(<a href="/MSBuildProperties/R/Win32Resource.html" target="n" class="msbuildlink">Win32Resource</a>);
+                $(<a href="/MSBuildProperties/R/Win32Manifest.html" target="n" class="msbuildlink">Win32Manifest</a>);
+                @(<a href="/MSBuildItems/R/CustomAdditionalCompileInputs.html" target="n" class="msbuildlink">CustomAdditionalCompileInputs</a>);
+                @(<a href="/MSBuildItems/R/Page.html" target="n" class="msbuildlink">Page</a>);
+                @(<a href="/MSBuildItems/R/ApplicationDefinition.html" target="n" class="msbuildlink">ApplicationDefinition</a>);
+                $(<a href="/MSBuildProperties/R/ResolvedCodeAnalysisRuleSet.html" target="n" class="msbuildlink">ResolvedCodeAnalysisRuleSet</a>)</span>&quot;<span class="xan">
+                  
+        Outputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/DocFileItem.html" target="n" class="msbuildlink">DocFileItem</a>);
+                 @(<a href="/MSBuildItems/R/XamlIntermediateAssembly.html" target="n" class="msbuildlink">XamlIntermediateAssembly</a>);
+                 @(<a href="/MSBuildItems/R/_DebugSymbolsIntermediatePath.html" target="n" class="msbuildlink">_DebugSymbolsIntermediatePath</a>);
+                 $(<a href="/MSBuildProperties/R/NonExistentFile.html" target="n" class="msbuildlink">NonExistentFile</a>);
+                 @(<a href="/MSBuildItems/R/CustomAdditionalCompileOutputs.html" target="n" class="msbuildlink">CustomAdditionalCompileOutputs</a>)</span>&quot;<span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/Page.html" target="n" class="msbuildlink">Page</a>)&#39; != &#39;&#39; Or &#39;@(<a href="/MSBuildItems/R/ApplicationDefinition.html" target="n" class="msbuildlink">ApplicationDefinition</a>)&#39; != &#39;&#39;</span>&quot;<span class="xan">
+        Returns</span><span class="xd">=</span>&quot;&quot;<span class="xan">
+        DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CoreCompileDependsOn.html" target="n" class="msbuildlink">CoreCompileDependsOn</a>)</span>&quot;<span class="xd">
+    &gt;</span><span class="xd">
+       &lt;!--</span><span class="c"> These two compiler warnings are raised when a reference is bound to a different version
+             than specified in the assembly reference version number.  MSBuild raises the same warning in this case,
+             so the compiler warning would be redundant. </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn">PropertyGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">(&#39;$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)&#39; != &#39;v1.0&#39;) and (&#39;$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)&#39; != &#39;v1.1&#39;)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/NoWarn.html" target="n" class="msbuildlink">NoWarn</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/NoWarn.html" target="n" class="msbuildlink">NoWarn</a>);1701;1702<span class="xd">&lt;/</span><span class="xn">NoWarn</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;!--</span><span class="c"> To match historical behavior, when inside VS11+ disable the warning from csc.exe indicating that no sources were passed in</span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/NoWarn.html" target="n" class="msbuildlink">NoWarn</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/BuildingInsideVisualStudio.html" target="n" class="msbuildlink">BuildingInsideVisualStudio</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)&#39; != &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)&#39; &gt; &#39;10.0&#39; </span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/NoWarn.html" target="n" class="msbuildlink">NoWarn</a>);2008<span class="xd">&lt;/</span><span class="xn">NoWarn</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetingClr2Framework.html" target="n" class="msbuildlink">TargetingClr2Framework</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a></span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">EmbedInteropTypes</span><span class="xd">/&gt;</span><span class="xd">
+            &lt;/</span><span class="xn">ReferencePath</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        
+        &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;!--</span><span class="c"> If the user has specified AppConfigForCompiler, we&#39;ll use it. If they have not, but they set UseAppConfigForCompiler,
+                 then we&#39;ll use AppConfig </span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AppConfigForCompiler.html" target="n" class="msbuildlink">AppConfigForCompiler</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/AppConfigForCompiler.html" target="n" class="msbuildlink">AppConfigForCompiler</a>)&#39; == &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/UseAppConfigForCompiler.html" target="n" class="msbuildlink">UseAppConfigForCompiler</a>)&#39; == &#39;true&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/AppConfig.html" target="n" class="msbuildlink">AppConfig</a>)<span class="xd">&lt;/</span><span class="xn">AppConfigForCompiler</span><span class="xd">&gt;</span><span class="xd">
+            
+            &lt;!--</span><span class="c"> If we are targeting winmdobj we want to specifically the pdbFile property since we do not want it to collide with the output of winmdexp</span><span class="xd">--&gt;</span><span class="xd"> 
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/PdbFile.html" target="n" class="msbuildlink">PdbFile</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/PdbFile.html" target="n" class="msbuildlink">PdbFile</a>)&#39; == &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/OutputType.html" target="n" class="msbuildlink">OutputType</a>)&#39; == &#39;winmdobj&#39; and &#39;$(<a href="/MSBuildProperties/R/_DebugSymbolsProduced.html" target="n" class="msbuildlink">_DebugSymbolsProduced</a>)&#39; == &#39;true&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)$(<a href="/MSBuildProperties/R/TargetName.html" target="n" class="msbuildlink">TargetName</a>).compile.pdb<span class="xd">&lt;/</span><span class="xn">PdbFile</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;!--</span><span class="c"> Prefer32Bit was introduced in .NET 4.5. Set it to false if we are targeting 4.0 </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn">PropertyGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">(&#39;$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)&#39; == &#39;v4.0&#39;)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/Prefer32Bit.html" target="n" class="msbuildlink">Prefer32Bit</a></span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">Prefer32Bit</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+       
+        &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">(&#39;$(<a href="/MSBuildProperties/R/AdditionalFileItemNames.html" target="n" class="msbuildlink">AdditionalFileItemNames</a>)&#39; != &#39;&#39;)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+          &lt;</span><span class="xn"><a href="/MSBuildItems/R/AdditionalFileItems.html" target="n" class="msbuildlink">AdditionalFileItems</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AdditionalFileItemNames.html" target="n" class="msbuildlink">AdditionalFileItemNames</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+          &lt;</span><span class="xn"><a href="/MSBuildItems/R/AdditionalFiles.html" target="n" class="msbuildlink">AdditionalFiles</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(%(AdditionalFileItems.Identity))</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        
+       &lt;!--</span><span class="c"> Don&#39;t run analyzers for Csc task on XamlPrecompile pass, we only want to run them on core compile. </span><span class="xd">--&gt;</span><span class="xd">
+       &lt;!--</span><span class="c"> Analyzers=&quot;@(Analyzer)&quot; </span><span class="xd">--&gt;</span><span class="xd">
+ 
+       &lt;</span><span class="xn">PropertyGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/UseSharedCompilation.html" target="n" class="msbuildlink">UseSharedCompilation</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+         &lt;</span><span class="xn"><a href="/MSBuildProperties/R/UseSharedCompilation.html" target="n" class="msbuildlink">UseSharedCompilation</a></span><span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">UseSharedCompilation</span><span class="xd">&gt;</span><span class="xd">
+       &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+       &lt;!--</span><span class="c"> Condition is to filter out the _CoreCompileResourceInputs so that it doesn&#39;t pass in culture resources to the compiler </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Csc.html" target="n" class="msbuildlink">Csc</a>  </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;%(_CoreCompileResourceInputs.WithCulture)&#39; != &#39;true&#39; </span>&quot;<span class="xan">
+              AdditionalLibPaths</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AdditionalLibPaths.html" target="n" class="msbuildlink">AdditionalLibPaths</a>)</span>&quot;<span class="xan">
+              AddModules</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/AddModules.html" target="n" class="msbuildlink">AddModules</a>)</span>&quot;<span class="xan">
+              AdditionalFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/AdditionalFiles.html" target="n" class="msbuildlink">AdditionalFiles</a>)</span>&quot;<span class="xan">
+              AllowUnsafeBlocks</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AllowUnsafeBlocks.html" target="n" class="msbuildlink">AllowUnsafeBlocks</a>)</span>&quot;<span class="xan">
+              ApplicationConfiguration</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AppConfigForCompiler.html" target="n" class="msbuildlink">AppConfigForCompiler</a>)</span>&quot;<span class="xan">
+              BaseAddress</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/BaseAddress.html" target="n" class="msbuildlink">BaseAddress</a>)</span>&quot;<span class="xan">
+              CheckForOverflowUnderflow</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CheckForOverflowUnderflow.html" target="n" class="msbuildlink">CheckForOverflowUnderflow</a>)</span>&quot;<span class="xan">
+              CodeAnalysisRuleSet</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ResolvedCodeAnalysisRuleSet.html" target="n" class="msbuildlink">ResolvedCodeAnalysisRuleSet</a>)</span>&quot;<span class="xan">
+              CodePage</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CodePage.html" target="n" class="msbuildlink">CodePage</a>)</span>&quot;<span class="xan">
+              DebugType</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DebugType.html" target="n" class="msbuildlink">DebugType</a>)</span>&quot;<span class="xan">
+              DefineConstants</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DefineConstants.html" target="n" class="msbuildlink">DefineConstants</a>)</span>&quot;<span class="xan">
+              DelaySign</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DelaySign.html" target="n" class="msbuildlink">DelaySign</a>)</span>&quot;<span class="xan">
+              DisabledWarnings</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/NoWarn.html" target="n" class="msbuildlink">NoWarn</a>)</span>&quot;<span class="xan">
+              DocumentationFile</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/DocFileItem.html" target="n" class="msbuildlink">DocFileItem</a>)</span>&quot;<span class="xan">
+              EmitDebugInformation</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DebugSymbols.html" target="n" class="msbuildlink">DebugSymbols</a>)</span>&quot;<span class="xan">
+              EnvironmentVariables</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CscEnvironment.html" target="n" class="msbuildlink">CscEnvironment</a>)</span>&quot;              <span class="xan">
+              ErrorEndLocation</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ErrorEndLocation.html" target="n" class="msbuildlink">ErrorEndLocation</a>)</span>&quot;<span class="xan">
+              ErrorLog</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ErrorLog.html" target="n" class="msbuildlink">ErrorLog</a>)</span>&quot;<span class="xan">
+              ErrorReport</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ErrorReport.html" target="n" class="msbuildlink">ErrorReport</a>)</span>&quot;<span class="xan">
+              FileAlignment</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/FileAlignment.html" target="n" class="msbuildlink">FileAlignment</a>)</span>&quot;<span class="xan">
+              GenerateFullPaths</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/GenerateFullPaths.html" target="n" class="msbuildlink">GenerateFullPaths</a>)</span>&quot;<span class="xan">
+              HighEntropyVA</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/HighEntropyVA.html" target="n" class="msbuildlink">HighEntropyVA</a>)</span>&quot;<span class="xan">
+              KeyContainer</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/KeyContainerName.html" target="n" class="msbuildlink">KeyContainerName</a>)</span>&quot;<span class="xan">
+              KeyFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/KeyOriginatorFile.html" target="n" class="msbuildlink">KeyOriginatorFile</a>)</span>&quot;<span class="xan">
+              LangVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/LangVersion.html" target="n" class="msbuildlink">LangVersion</a>)</span>&quot;<span class="xan">
+              LinkResources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/LinkResource.html" target="n" class="msbuildlink">LinkResource</a>)</span>&quot;<span class="xan">
+              MainEntryPoint</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/StartupObject.html" target="n" class="msbuildlink">StartupObject</a>)</span>&quot;<span class="xan">
+              ModuleAssemblyName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ModuleAssemblyName.html" target="n" class="msbuildlink">ModuleAssemblyName</a>)</span>&quot;<span class="xan">
+              NoConfig</span><span class="xd">=</span>&quot;<span class="xav">true</span>&quot;<span class="xan">
+              NoLogo</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/NoLogo.html" target="n" class="msbuildlink">NoLogo</a>)</span>&quot;<span class="xan">
+              NoStandardLib</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/NoCompilerStandardLib.html" target="n" class="msbuildlink">NoCompilerStandardLib</a>)</span>&quot;<span class="xan">
+              NoWin32Manifest</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/NoWin32Manifest.html" target="n" class="msbuildlink">NoWin32Manifest</a>)</span>&quot;<span class="xan">
+              Optimize</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Optimize.html" target="n" class="msbuildlink">Optimize</a>)</span>&quot;<span class="xan">
+              OutputAssembly</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/XamlIntermediateAssembly.html" target="n" class="msbuildlink">XamlIntermediateAssembly</a>)</span>&quot;<span class="xan">
+              PdbFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/PdbFile.html" target="n" class="msbuildlink">PdbFile</a>)</span>&quot; <span class="xan">
+              Platform</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/PlatformTarget.html" target="n" class="msbuildlink">PlatformTarget</a>)</span>&quot;<span class="xan">
+              Prefer32Bit</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Prefer32Bit.html" target="n" class="msbuildlink">Prefer32Bit</a>)</span>&quot;<span class="xan">
+              PreferredUILang</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/PreferredUILang.html" target="n" class="msbuildlink">PreferredUILang</a>)</span>&quot;<span class="xan">
+              References</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+              ReportAnalyzer</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ReportAnalyzer.html" target="n" class="msbuildlink">ReportAnalyzer</a>)</span>&quot;<span class="xan">
+              Resources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/_CoreCompileResourceInputs.html" target="n" class="msbuildlink">_CoreCompileResourceInputs</a>);@(<a href="/MSBuildItems/R/CompiledLicenseFile.html" target="n" class="msbuildlink">CompiledLicenseFile</a>)</span>&quot;<span class="xan">
+              ResponseFiles</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CompilerResponseFile.html" target="n" class="msbuildlink">CompilerResponseFile</a>)</span>&quot;<span class="xan">
+              Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Compile.html" target="n" class="msbuildlink">Compile</a>)</span>&quot;<span class="xan">
+              SubsystemVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SubsystemVersion.html" target="n" class="msbuildlink">SubsystemVersion</a>)</span>&quot;<span class="xan">
+              TargetType</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/OutputType.html" target="n" class="msbuildlink">OutputType</a>)</span>&quot;<span class="xan">
+              ToolExe</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CscToolExe.html" target="n" class="msbuildlink">CscToolExe</a>)</span>&quot;<span class="xan">
+              ToolPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CscToolPath.html" target="n" class="msbuildlink">CscToolPath</a>)</span>&quot;<span class="xan">
+              TreatWarningsAsErrors</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TreatWarningsAsErrors.html" target="n" class="msbuildlink">TreatWarningsAsErrors</a>)</span>&quot;<span class="xan">
+              UseHostCompilerIfAvailable</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/UseHostCompilerIfAvailable.html" target="n" class="msbuildlink">UseHostCompilerIfAvailable</a>)</span>&quot;<span class="xan">
+              UseSharedCompilation</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/UseSharedCompilation.html" target="n" class="msbuildlink">UseSharedCompilation</a>)</span>&quot;<span class="xan">
+              Utf8Output</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Utf8Output.html" target="n" class="msbuildlink">Utf8Output</a>)</span>&quot;<span class="xan">
+              VsSessionGuid</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/VsSessionGuid.html" target="n" class="msbuildlink">VsSessionGuid</a>)</span>&quot;<span class="xan">
+              WarningLevel</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/WarningLevel.html" target="n" class="msbuildlink">WarningLevel</a>)</span>&quot;<span class="xan">
+              WarningsAsErrors</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/WarningsAsErrors.html" target="n" class="msbuildlink">WarningsAsErrors</a>)</span>&quot;<span class="xan">
+              WarningsNotAsErrors</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/WarningsNotAsErrors.html" target="n" class="msbuildlink">WarningsNotAsErrors</a>)</span>&quot;<span class="xan">
+              Win32Icon</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ApplicationIcon.html" target="n" class="msbuildlink">ApplicationIcon</a>)</span>&quot;<span class="xan">
+              Win32Manifest</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Win32Manifest.html" target="n" class="msbuildlink">Win32Manifest</a>)</span>&quot;<span class="xan">
+              Win32Resource</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Win32Resource.html" target="n" class="msbuildlink">Win32Resource</a>)</span>&quot;<span class="xd">
+              /&gt;</span><span class="xd">
+ 
+&lt;!--</span><span class="c"> Only Applicable to the regular CoreCompile:
+              &lt;ItemGroup&gt;
+                  &lt;_CoreCompileResourceInputs Remove=&quot;@(_CoreCompileResourceInputs)&quot; /&gt;
+              &lt;/ItemGroup&gt;
+ 
+              &lt;CallTarget Targets=&quot;$(TargetsTriggeredByCompilation)&quot; Condition=&quot;&#39;$(TargetsTriggeredByCompilation)&#39; != &#39;&#39;&quot;/&gt;
+</span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/OnError.html" target="n" class="msbuildlink">OnError</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/OnXamlPreCompileErrorTarget.html" target="n" class="msbuildlink">OnXamlPreCompileErrorTarget</a>)&#39; != &#39;&#39;</span>&quot; <span class="xan">ExecuteTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/OnXamlPreCompileErrorTarget.html" target="n" class="msbuildlink">OnXamlPreCompileErrorTarget</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CSharpCoreTargetsPath.html" target="n" class="msbuildlink">CSharpCoreTargetsPath</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CSharpCoreTargetsPath.html" target="n" class="msbuildlink">CSharpCoreTargetsPath</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>Microsoft.CSharp.Core.targets<span class="xd">&lt;/</span><span class="xn">CSharpCoreTargetsPath</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.CSharp.Core.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CSharpCoreTargetsPath.html" target="n" class="msbuildlink">CSharpCoreTargetsPath</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/bin_/amd64/Microsoft.Common.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">Microsoft.Common.targets</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildToolsPath.html" target="n" class="msbuildlink">MSBuildToolsPath</a>)\Microsoft.ServiceModel.targets</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">(&#39;$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)&#39; != &#39;v2.0&#39; and &#39;$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)&#39; != &#39;v3.0&#39; and &#39;$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)&#39; != &#39;v3.5&#39;) and Exists(&#39;$(<a href="/MSBuildProperties/R/MSBuildToolsPath.html" target="n" class="msbuildlink">MSBuildToolsPath</a>)\Microsoft.ServiceModel.targets&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/_SetTargetFrameworkMonikerAttribute.html" target="n" class="msbuildlink">_SetTargetFrameworkMonikerAttribute</a></span>&quot; <span class="xan">BeforeTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GenerateTargetFrameworkMonikerAttribute.html" target="n" class="msbuildlink">GenerateTargetFrameworkMonikerAttribute</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetFrameworkMonikerAssemblyAttributeText.html" target="n" class="msbuildlink">TargetFrameworkMonikerAssemblyAttributeText</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetFrameworkMoniker.html" target="n" class="msbuildlink">TargetFrameworkMoniker</a>)&#39; != &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/TargetingClr2Framework.html" target="n" class="msbuildlink">TargetingClr2Framework</a>)&#39; != &#39;true&#39;</span>&quot;<span class="xd">&gt;</span>
+// <span class="xer">&amp;lt;</span>autogenerated /<span class="xer">&amp;gt;</span>
+using System%3b
+using System.Reflection%3b
+[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(<span class="xer">&amp;quot;</span>$(<a href="/MSBuildProperties/R/TargetFrameworkMoniker.html" target="n" class="msbuildlink">TargetFrameworkMoniker</a>)<span class="xer">&amp;quot;</span>, FrameworkDisplayName = <span class="xer">&amp;quot;</span>$(<a href="/MSBuildProperties/R/TargetFrameworkMonikerDisplayName.html" target="n" class="msbuildlink">TargetFrameworkMonikerDisplayName</a>)<span class="xer">&amp;quot;</span>)]
+        <span class="xd">&lt;/</span><span class="xn">TargetFrameworkMonikerAssemblyAttributeText</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/Utf8Output.html" target="n" class="msbuildlink">Utf8Output</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/Utf8Output.html" target="n" class="msbuildlink">Utf8Output</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">Utf8Output</span><span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;!--</span><span class="c"> NoCompilerStandardLib maps to the compiler&#39;s /nostdlib option. By default we always
+           want that switch to be passed to the compiler so that either we or the user
+           provides the references
+           NoStdLib on the other hand indicates that the user doesn&#39;t want standard references
+           so only if NoStdLib isn&#39;t set to true, will we provide the standard references
+      </span><span class="xd">--&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildProperties/R/NoCompilerStandardLib.html" target="n" class="msbuildlink">NoCompilerStandardLib</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/NoCompilerStandardLib.html" target="n" class="msbuildlink">NoCompilerStandardLib</a>)&#39; == &#39;&#39; </span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">NoCompilerStandardLib</span><span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ErrorEndLocation.html" target="n" class="msbuildlink">ErrorEndLocation</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/BuildingInsideVisualStudio.html" target="n" class="msbuildlink">BuildingInsideVisualStudio</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/ErrorEndLocation.html" target="n" class="msbuildlink">ErrorEndLocation</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ErrorEndLocation</span><span class="xd">&gt;</span><span class="xd">
+ 
+       &lt;!--</span><span class="c"> When building inside VS, by default use the same language for compiler messages as VS itself does. </span><span class="xd">--&gt;</span><span class="xd">
+       &lt;</span><span class="xn"><a href="/MSBuildProperties/R/PreferredUILang.html" target="n" class="msbuildlink">PreferredUILang</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/BuildingInsideVisualStudio.html" target="n" class="msbuildlink">BuildingInsideVisualStudio</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/PreferredUILang.html" target="n" class="msbuildlink">PreferredUILang</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$([System.Globalization.CultureInfo]::CurrentUICulture.Name)<span class="xd">&lt;/</span><span class="xn">PreferredUILang</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    
+    &lt;!--</span><span class="c"> Add any &quot;automatic&quot; compiler references that need to be resolved when NoCompilerStandardLib is set
+         but the user hasn&#39;t told us to not include standard references </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav"> &#39;$(<a href="/MSBuildProperties/R/NoCompilerStandardLib.html" target="n" class="msbuildlink">NoCompilerStandardLib</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/NoStdLib.html" target="n" class="msbuildlink">NoStdLib</a>)&#39; != &#39;true&#39; </span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;!--</span><span class="c"> Note that unlike VB, C# does not automatically locate System.dll as a &quot;standard library&quot;
+           instead the reference is always passed from the project. Also, for mscorlib.dll 
+           we need to provide the explicit location in order to maintain the correct behaviour
+      </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/_ExplicitReference.html" target="n" class="msbuildlink">_ExplicitReference</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/FrameworkPathOverride.html" target="n" class="msbuildlink">FrameworkPathOverride</a>)\mscorlib.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/CustomAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomAfterMicrosoftCSharpTargets</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/CustomAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomAfterMicrosoftCSharpTargets</a>)&#39; != &#39;&#39; and Exists(&#39;$(<a href="/MSBuildProperties/R/CustomAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">CustomAfterMicrosoftCSharpTargets</a>)&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportAfter\*</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportByWildcardAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportByWildcardAfterMicrosoftCSharpTargets</a>)&#39; == &#39;true&#39; and exists(&#39;$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportAfter&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Import </span><span class="xan">Project</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildUserExtensionsPath.html" target="n" class="msbuildlink">MSBuildUserExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportAfter\*</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets.html" target="n" class="msbuildlink">ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets</a>)&#39; == &#39;true&#39; and exists(&#39;$(<a href="/MSBuildProperties/R/MSBuildUserExtensionsPath.html" target="n" class="msbuildlink">MSBuildUserExtensionsPath</a>)\$(<a href="/MSBuildProperties/R/MSBuildToolsVersion.html" target="n" class="msbuildlink">MSBuildToolsVersion</a>)\Microsoft.CSharp.targets\ImportAfter&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span></pre></td></tr></table></div></body></html>

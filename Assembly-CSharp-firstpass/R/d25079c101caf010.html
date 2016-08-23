@@ -1,0 +1,575 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">489 references to Observable</div><div class="rA">Assembly-CSharp (274)</div><div class="rG" id="Assembly-CSharp"><div class="rF"><div class="rN">Assets\ObjectTest\EditorBehaviourTest.cs (2)</div>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/EditorBehaviourTest.cs.html#62"><b>62</b>runEnumerator = <i>Observable</i>.FromCoroutine(Inf).Subscribe();</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/EditorBehaviourTest.cs.html#78"><b>78</b><i>Observable</i>.Timer(TimeSpan.FromMilliseconds(500), Scheduler.ThreadPool)</a>
+</div>
+<div class="rF"><div class="rN">Assets\ObjectTest\IntervalTest.cs (3)</div>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/IntervalTest.cs.html#13"><b>13</b><i>Observable</i></a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/IntervalTest.cs.html#19"><b>19</b><i>Observable</i></a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/IntervalTest.cs.html#45"><b>45</b><i>Observable</i></a>
+</div>
+<div class="rF"><div class="rN">Assets\ObjectTest\RotateGameObject.cs (1)</div>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/RotateGameObject.cs.html#22"><b>22</b>var interval = <i>Observable</i></a>
+</div>
+<div class="rF"><div class="rN">Assets\ObjectTest\UniRxTestSandbox.cs (12)</div>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#79"><b>79</b>return <i>Observable</i>.FromEvent&lt;Application.LogCallback, LogCallback&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#365"><b>365</b>yield return <i>Observable</i>.Timer(TimeSpan.FromSeconds(1)).Select(x =&gt; 999).StartAsCoroutine(x =&gt;</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#424"><b>424</b><i>Observable</i>.FromCoroutine(IncrCounter).Subscribe().AddTo(disposables);</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#436"><b>436</b><i>Observable</i>.FromMicroCoroutine(IncrCounter).Subscribe().AddTo(disposables);</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#460"><b>460</b><i>Observable</i>.EveryGameObjectUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryGameObjectUpdate&quot; + x));</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#461"><b>461</b><i>Observable</i>.EveryUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryUpdate:&quot; + x));</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#462"><b>462</b><i>Observable</i>.EveryLateUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryLateUpdate:&quot; + x));</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#463"><b>463</b><i>Observable</i>.EveryEndOfFrame().Subscribe(x =&gt; Debug.Log(&quot;EveryEndOfFrame:&quot; + x));</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#464"><b>464</b><i>Observable</i>.EveryFixedUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryFixedUpdate:&quot; + x));</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#473"><b>473</b><i>Observable</i>.Return(100).DelayFrame(25, FrameCountType.Update).Subscribe(x =&gt; Debug.Log(&quot;delayed&quot;));</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#672"><b>672</b>var seq = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs.html#684"><b>684</b>cancelCoroutine = <i>Observable</i>.FromCoroutine&lt;int&gt;(observer =&gt; TestCoroutine(observer))</a>
+</div>
+<div class="rF"><div class="rN">Assets\ObjectTest\WorkerThreadTest.cs (1)</div>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/WorkerThreadTest.cs.html#31"><b>31</b><i>Observable</i>.Interval(TimeSpan.FromMilliseconds(300))</a>
+</div>
+<div class="rF"><div class="rN">Assets\ObjectTest\YieldTest.cs (1)</div>
+<a href="../../Assembly-CSharp/Assets/ObjectTest/YieldTest.cs.html#38"><b>38</b>return <i>Observable</i>.ReturnUnit()</a>
+</div>
+<div class="rF"><div class="rN">Assets\UnitTests\UnitTests.cs (254)</div>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#337"><b>337</b>AssertEx.Throws&lt;InvalidOperationException&gt;(() =&gt; <i>Observable</i>.Empty&lt;int&gt;().Aggregate((x, y) =&gt; x + y).Wait());</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#338"><b>338</b><i>Observable</i>.Range(1, 5).Aggregate((x, y) =&gt; x + y).Wait().Is(15);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#340"><b>340</b><i>Observable</i>.Empty&lt;int&gt;().Aggregate(100, (x, y) =&gt; x + y).Wait().Is(100);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#341"><b>341</b><i>Observable</i>.Range(1, 5).Aggregate(100, (x, y) =&gt; x + y).Wait().Is(115);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#343"><b>343</b><i>Observable</i>.Empty&lt;int&gt;().Aggregate(100, (x, y) =&gt; x + y, x =&gt; x + x).Wait().Is(200);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#344"><b>344</b><i>Observable</i>.Range(1, 5).Aggregate(100, (x, y) =&gt; x + y, x =&gt; x + x).Wait().Is(230);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#352"><b>352</b>var range = <i>Observable</i>.Range(1, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#357"><b>357</b><i>Observable</i>.Empty&lt;int&gt;().Scan((x, y) =&gt; x + y).ToArrayWait().IsCollection();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#358"><b>358</b><i>Observable</i>.Empty&lt;int&gt;().Scan(100, (x, y) =&gt; x + y).ToArrayWait().IsCollection();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#432"><b>432</b>var record = subject.ContinueWith(x =&gt; <i>Observable</i>.Return(x)).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#453"><b>453</b>var record = subject.ContinueWith(x =&gt; <i>Observable</i>.Return(x).Delay(TimeSpan.FromMilliseconds(100))).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#640"><b>640</b><i>Observable</i>.Range(1, 10).AsObservable().ToArrayWait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#668"><b>668</b><i>Observable</i>.Range(1, 3).AsUnitObservable().ToArrayWait().IsCollection(Unit.Default, Unit.Default, Unit.Default);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#677"><b>677</b><i>Observable</i>.Range(1, 3).Cast&lt;int, object&gt;().ToArrayWait().IsCollection(1, 2, 3);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1197"><b>1197</b><i>Observable</i>.Empty&lt;int&gt;().Do(x =&gt; list.Add(x), ex =&gt; list.Add(100), () =&gt; list.Add(1000)).DefaultIfEmpty().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1201"><b>1201</b><i>Observable</i>.Range(1, 5).Do(x =&gt; list.Add(x), ex =&gt; list.Add(100), () =&gt; list.Add(1000)).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1205"><b>1205</b><i>Observable</i>.Range(1, 5).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).Do(x =&gt; list.Add(x), ex =&gt; list.Add(100), () =&gt; list.Add(1000)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1216"><b>1216</b><i>Observable</i>.Empty&lt;int&gt;().Do(observer).DefaultIfEmpty().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1220"><b>1220</b><i>Observable</i>.Range(1, 5).Do(observer).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1224"><b>1224</b><i>Observable</i>.Range(1, 5).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).Do(observer).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1235"><b>1235</b><i>Observable</i>.Empty&lt;int&gt;()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1244"><b>1244</b><i>Observable</i>.Throw&lt;int&gt;(new Exception())</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1253"><b>1253</b>var subscription = <i>Observable</i>.Timer(TimeSpan.FromMilliseconds(1000)).Select(x =&gt; (int)x)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1269"><b>1269</b><i>Observable</i>.Empty&lt;int&gt;().DoOnCompleted(() =&gt; list.Add(1000)).DefaultIfEmpty().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1273"><b>1273</b><i>Observable</i>.Range(1, 5).DoOnCompleted(() =&gt; list.Add(1000)).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1277"><b>1277</b><i>Observable</i>.Range(1, 5).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).DoOnCompleted(() =&gt; list.Add(1000)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1288"><b>1288</b><i>Observable</i>.Empty&lt;int&gt;().DoOnError(_ =&gt; list.Add(100)).DefaultIfEmpty().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1292"><b>1292</b><i>Observable</i>.Range(1, 5).DoOnError(_ =&gt; list.Add(100)).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1296"><b>1296</b><i>Observable</i>.Range(1, 5).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).DoOnError(_ =&gt; list.Add(100)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1307"><b>1307</b><i>Observable</i>.Empty&lt;int&gt;()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1313"><b>1313</b><i>Observable</i>.Range(1, 5)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1319"><b>1319</b><i>Observable</i>.Range(1, 5).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception()))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1332"><b>1332</b><i>Observable</i>.Empty&lt;int&gt;().DoOnTerminate(() =&gt; list.Add(1000)).DefaultIfEmpty().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1336"><b>1336</b><i>Observable</i>.Range(1, 5).DoOnTerminate(() =&gt; list.Add(1000)).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1340"><b>1340</b><i>Observable</i>.Range(1, 5).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).DoOnTerminate(() =&gt; list.Add(1000)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1473"><b>1473</b><i>Observable</i>.Return(xx)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1494"><b>1494</b><i>Observable</i>.Return(xx)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1520"><b>1520</b>var d = <i>Observable</i>.FromEventPattern&lt;EventHandler&lt;MyEventArgs&gt;, MyEventArgs&gt;((h) =&gt; h.Invoke, h =&gt; tester.genericEventHandler += h, h =&gt; tester.genericEventHandler -= h)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1524"><b>1524</b><i>Observable</i>.Return(xx.EventArgs.MyProperty)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1550"><b>1550</b>var d = <i>Observable</i>.FromEvent&lt;int&gt;(h =&gt; tester.intAction += h, h =&gt; tester.intAction -= h)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1554"><b>1554</b><i>Observable</i>.Return(xx)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1572"><b>1572</b>var d = <i>Observable</i>.FromEvent(h =&gt; tester.unitAction += h, h =&gt; tester.unitAction -= h)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1576"><b>1576</b><i>Observable</i>.Return(i)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1602"><b>1602</b>var d = <i>Observable</i>.FromEvent&lt;LikeUnityAction&lt;int&gt;, int&gt;(h =&gt; new LikeUnityAction&lt;int&gt;(h), h =&gt; tester.intUnityAction += h, h =&gt; tester.intUnityAction -= h)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1606"><b>1606</b><i>Observable</i>.Return(xx)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1624"><b>1624</b>var d = <i>Observable</i>.FromEvent&lt;LikeUnityAction&gt;(h =&gt; new LikeUnityAction(h), h =&gt; tester.unityAction += h, h =&gt; tester.unityAction -= h)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1628"><b>1628</b><i>Observable</i>.Return(i)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1740"><b>1740</b>var xs = <i>Observable</i>.Return(2, Scheduler.ThreadPool).Concat(<i>Observable</i>.Throw&lt;int&gt;(new InvalidOperationException()))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1743"><b>1743</b>return <i>Observable</i>.Range(1, 3);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1759"><b>1759</b><i>Observable</i>.Return(2).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1760"><b>1760</b><i>Observable</i>.Return(99).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1761"><b>1761</b><i>Observable</i>.Range(10,2)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1776"><b>1776</b><i>Observable</i>.Return(2).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1777"><b>1777</b><i>Observable</i>.Return(99).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception()))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#1797"><b>1797</b><i>Observable</i>.Range(1, 10, Scheduler.Immediate)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#2969"><b>2969</b><i>Observable</i>.CombineLatest(a, b).Select((xs) =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3006"><b>3006</b><i>Observable</i>.CombineLatest(a, b).Select((xs) =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3031"><b>3031</b><i>Observable</i>.CombineLatest(a, b).Select((xs) =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3056"><b>3056</b><i>Observable</i>.CombineLatest(a, b).Select((xs) =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3071"><b>3071</b>var a = <i>Observable</i>.Range(1, 5, Scheduler.ThreadPool);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3072"><b>3072</b>var b = <i>Observable</i>.Range(10, 3, Scheduler.ThreadPool);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3073"><b>3073</b>var c = <i>Observable</i>.Return(300, Scheduler.ThreadPool);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3075"><b>3075</b><i>Observable</i>.Concat(a, b, c).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 10, 11, 12, 300);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3090"><b>3090</b><i>Observable</i>.Merge(s1, s2, s3).Subscribe(list.Add, () =&gt; complete = true);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3123"><b>3123</b><i>Observable</i>.Merge(new[] { s1, s2, s3 }, maxConcurrent: 2).Subscribe(list.Add, () =&gt; complete = true);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3151"><b>3151</b>var seq = <i>Observable</i>.Range(1, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3209"><b>3209</b><i>Observable</i>.WhenAll(a, b).Select(xs =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3438"><b>3438</b><i>Observable</i>.ZipLatest(a, b).Select((xs) =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3467"><b>3467</b><i>Observable</i>.ZipLatest(a, b).Select((xs) =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3540"><b>3540</b><i>Observable</i>.Zip(a, b).Select(xs =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3572"><b>3572</b><i>Observable</i>.Zip(a, b).Select(xs =&gt; new { x = xs[0], y = xs[1] }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3598"><b>3598</b><i>Observable</i>.Zip(a, b, c, (x, y, z) =&gt; new { x, y, z }).Materialize().Subscribe(x =&gt; l.Add(x));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3716"><b>3716</b>var xs = <i>Observable</i>.Return(10).Delay(TimeSpan.FromSeconds(5)).Concat(<i>Observable</i>.Range(1, 3));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3717"><b>3717</b>var ys = <i>Observable</i>.Return(30).Delay(TimeSpan.FromSeconds(1)).Concat(<i>Observable</i>.Range(5, 3));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3718"><b>3718</b>var zs = <i>Observable</i>.Return(50).Delay(TimeSpan.FromSeconds(3)).Concat(<i>Observable</i>.Range(9, 3));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3721"><b>3721</b>var result = <i>Observable</i>.Amb(xs, ys, zs).ToArray().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3729"><b>3729</b>result = <i>Observable</i>.Amb(new[] { ys, xs, zs }.AsEnumerable()).ToArray().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3737"><b>3737</b>result = <i>Observable</i>.Amb(new[] { zs, xs, ys }.AsEnumerable()).ToArray().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3751"><b>3751</b>var xs = <i>Observable</i>.Return(10).Delay(TimeSpan.FromSeconds(1)).Concat(<i>Observable</i>.Range(1, 3));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3753"><b>3753</b>var xss = <i>Observable</i>.Return(10).Concat(<i>Observable</i>.Range(1, 3));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3759"><b>3759</b>var ys = <i>Observable</i>.Return(30).Delay(TimeSpan.FromSeconds(2)).Concat(<i>Observable</i>.Range(5, 3));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3783"><b>3783</b>var xs = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3879"><b>3879</b>var d = <i>Observable</i>.FromEvent&lt;EventHandler, EventArgs&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3893"><b>3893</b>var d = <i>Observable</i>.FromEvent&lt;EventHandler&lt;MyEventArgs&gt;, MyEventArgs&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3907"><b>3907</b>var d = <i>Observable</i>.FromEvent&lt;MyEventHandler, MyEventArgs&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3921"><b>3921</b>var d = <i>Observable</i>.FromEvent&lt;Action, Unit&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3936"><b>3936</b>var d = <i>Observable</i>.FromEvent(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3949"><b>3949</b>var d = <i>Observable</i>.FromEvent&lt;Action&lt;int&gt;, int&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3964"><b>3964</b>var d = <i>Observable</i>.FromEvent&lt;int&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3977"><b>3977</b>var d = <i>Observable</i>.FromEvent&lt;Action&lt;int, string&gt;, Tuple&lt;int, string&gt;&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4001"><b>4001</b>var d = <i>Observable</i>.FromEventPattern&lt;EventHandler, EventArgs&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4015"><b>4015</b>var d = <i>Observable</i>.FromEventPattern&lt;EventHandler&lt;MyEventArgs&gt;, MyEventArgs&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4029"><b>4029</b>var d = <i>Observable</i>.FromEventPattern&lt;MyEventHandler, MyEventArgs&gt;(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4293"><b>4293</b>var material = <i>Observable</i>.Empty&lt;Unit&gt;().Materialize().ToArray().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4304"><b>4304</b><i>Observable</i>.Never&lt;Unit&gt;().Materialize().ToArray().Wait(TimeSpan.FromMilliseconds(10)));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4313"><b>4313</b><i>Observable</i>.Range(1, 5).ToArray().Wait().IsCollection(1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4322"><b>4322</b>var xs = <i>Observable</i>.Range(1, 3, Scheduler.CurrentThread)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4323"><b>4323</b>.Concat(<i>Observable</i>.Return(100))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4329"><b>4329</b><i>Observable</i>.Repeat(100).Take(5).ToArray().Wait().IsCollection(100, 100, 100, 100, 100);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4338"><b>4338</b><i>Observable</i>.Repeat(&quot;a&quot;, 5, Scheduler.Immediate).ToArrayWait().IsCollection(&quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4347"><b>4347</b>var xss = <i>Observable</i>.Repeat(5, 3).ToArray().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4357"><b>4357</b><i>Observable</i>.Return(100).Materialize().ToArray().Wait().IsCollection(Notification.CreateOnNext(100), Notification.CreateOnCompleted&lt;int&gt;());</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4367"><b>4367</b><i>Observable</i>.Throw&lt;string&gt;(ex).Materialize().ToArray().Wait().IsCollection(Notification.CreateOnError&lt;string&gt;(ex));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5208"><b>5208</b>var xs = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5224"><b>5224</b>var xs = <i>Observable</i>.Empty&lt;int&gt;()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5239"><b>5239</b>var xs = <i>Observable</i>.Range(1, 2)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5254"><b>5254</b>var xs = <i>Observable</i>.Empty&lt;int&gt;()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5270"><b>5270</b>var xs = <i>Observable</i>.Range(1, 10).Buffer(3, 1)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5288"><b>5288</b>var xs = <i>Observable</i>.Range(1, 10).Buffer(3, 3)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5300"><b>5300</b>var xs = <i>Observable</i>.Range(1, 20).Buffer(3, 5)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5317"><b>5317</b>var hoge = <i>Observable</i>.Return(1000).Delay(TimeSpan.FromSeconds(4));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5319"><b>5319</b>var xs = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5337"><b>5337</b>var xs = <i>Observable</i>.Return(1000)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5338"><b>5338</b>.Concat(<i>Observable</i>.Return(99).Delay(TimeSpan.FromMilliseconds(1500)))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5339"><b>5339</b>.Concat(<i>Observable</i>.Range(1, 7))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5351"><b>5351</b>var xs = <i>Observable</i>.Return(1000)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5352"><b>5352</b>.Concat(<i>Observable</i>.Return(99).Delay(TimeSpan.FromMilliseconds(1500)))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5353"><b>5353</b>.Concat(<i>Observable</i>.Range(1, 7))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5354"><b>5354</b>.Concat(<i>Observable</i>.Never&lt;int&gt;())</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5368"><b>5368</b>var result = <i>Observable</i>.Return(10).Delay(TimeSpan.FromSeconds(2))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5369"><b>5369</b>.Concat(<i>Observable</i>.Range(1, 2))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5370"><b>5370</b>.Concat(<i>Observable</i>.Return(1000).Delay(TimeSpan.FromSeconds(2)))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5371"><b>5371</b>.Concat(<i>Observable</i>.Never&lt;int&gt;())</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5413"><b>5413</b>var xs = <i>Observable</i>.Return(1).Delay(TimeSpan.FromSeconds(2))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5414"><b>5414</b>.Concat(<i>Observable</i>.Return(1).Delay(TimeSpan.FromSeconds(2)).Skip(1))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5430"><b>5430</b>var xs = <i>Observable</i>.Return(10).Delay(TimeSpan.FromMilliseconds(3500))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5448"><b>5448</b>var xs = <i>Observable</i>.Empty&lt;int&gt;()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5833"><b>5833</b>var xs = <i>Observable</i>.Range(1, 5).Pairwise((x, y) =&gt; x + &quot;:&quot; + y).ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5843"><b>5843</b>var xs = <i>Observable</i>.Range(1, 5).Pairwise().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6088"><b>6088</b><i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6095"><b>6095</b>var range = <i>Observable</i>.Range(1, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6114"><b>6114</b>var timer = <i>Observable</i>.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromMilliseconds(10))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6126"><b>6126</b>var timer = <i>Observable</i>.Timer(TimeSpan.FromSeconds(0), TimeSpan.FromMilliseconds(10))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6193"><b>6193</b><i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6206"><b>6206</b><i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6219"><b>6219</b>var record = <i>Observable</i>.Range(1, 2).TakeLast(3).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6222"><b>6222</b>record = <i>Observable</i>.Range(1, 3).TakeLast(3).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6225"><b>6225</b>record = <i>Observable</i>.Range(1, 4).TakeLast(3).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6228"><b>6228</b>record = <i>Observable</i>.Range(1, 10).TakeLast(3).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6231"><b>6231</b>record = <i>Observable</i>.Empty&lt;int&gt;().TakeLast(3).Record();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6248"><b>6248</b>var data = <i>Observable</i>.Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(200))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6308"><b>6308</b><i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6671"><b>6671</b><i>Observable</i>.Range(1, 3).DefaultIfEmpty(-1).ToArrayWait().IsCollection(1, 2, 3);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6672"><b>6672</b><i>Observable</i>.Empty&lt;int&gt;().DefaultIfEmpty(-1).ToArrayWait().IsCollection(-1);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6681"><b>6681</b>var m = <i>Observable</i>.Empty&lt;int&gt;().Materialize().Dematerialize().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6684"><b>6684</b>m = <i>Observable</i>.Range(1, 3).Materialize().Dematerialize().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6688"><b>6688</b><i>Observable</i>.Range(1, 3).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).Materialize()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6773"><b>6773</b>var xs = <i>Observable</i>.Range(1, 10).ForEachAsync(x =&gt; list.Add(x)).ToArray().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6782"><b>6782</b>var xs = <i>Observable</i>.Range(1, 10).ForEachAsync((x, i) =&gt;</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6800"><b>6800</b>var xs = <i>Observable</i>.Range(1, 10).IgnoreElements().Materialize().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6810"><b>6810</b>var m = <i>Observable</i>.Empty&lt;int&gt;().Materialize().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6813"><b>6813</b>m = <i>Observable</i>.Range(1, 3).Materialize().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6819"><b>6819</b>m = <i>Observable</i>.Range(1, 3).Concat(<i>Observable</i>.Throw&lt;int&gt;(new Exception())).Materialize().ToArrayWait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7296"><b>7296</b>var xs = <i>Observable</i>.Range(1, 3)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7319"><b>7319</b>var xs = <i>Observable</i>.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7338"><b>7338</b>var xs = <i>Observable</i>.Concat(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7339"><b>7339</b><i>Observable</i>.Return(1),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7340"><b>7340</b><i>Observable</i>.Return(2).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7341"><b>7341</b><i>Observable</i>.Return(3).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7342"><b>7342</b><i>Observable</i>.Return(4).Delay(TimeSpan.FromSeconds(0.4)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7343"><b>7343</b><i>Observable</i>.Return(5).Delay(TimeSpan.FromSeconds(0.2)), // over 2500</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7344"><b>7344</b><i>Observable</i>.Return(6).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7345"><b>7345</b><i>Observable</i>.Return(7).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7346"><b>7346</b><i>Observable</i>.Return(8).Delay(TimeSpan.FromSeconds(1)), // over 2500</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7347"><b>7347</b><i>Observable</i>.Return(9) // withCompleted</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7368"><b>7368</b>var xs = <i>Observable</i>.Concat(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7369"><b>7369</b><i>Observable</i>.Return(1).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7370"><b>7370</b><i>Observable</i>.Return(2).Delay(TimeSpan.FromSeconds(2)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7371"><b>7371</b><i>Observable</i>.Return(3).Delay(TimeSpan.FromSeconds(2)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7372"><b>7372</b><i>Observable</i>.Return(4).Delay(TimeSpan.FromSeconds(2)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7373"><b>7373</b><i>Observable</i>.Return(5).Delay(TimeSpan.FromSeconds(2)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7374"><b>7374</b><i>Observable</i>.Return(6).Delay(TimeSpan.FromSeconds(3)), // over 2500</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7375"><b>7375</b><i>Observable</i>.Return(7).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7376"><b>7376</b><i>Observable</i>.Return(8).Delay(TimeSpan.FromSeconds(1)) // with onCompleted</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7396"><b>7396</b>var xs = <i>Observable</i>.Concat(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7397"><b>7397</b><i>Observable</i>.Return(1),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7398"><b>7398</b><i>Observable</i>.Return(2).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7399"><b>7399</b><i>Observable</i>.Return(3).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7400"><b>7400</b><i>Observable</i>.Return(4).Delay(TimeSpan.FromSeconds(0.4)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7401"><b>7401</b><i>Observable</i>.Return(5).Delay(TimeSpan.FromSeconds(0.2)) // over 2500</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7419"><b>7419</b>var xs = <i>Observable</i>.Concat(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7420"><b>7420</b><i>Observable</i>.Return(1).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7421"><b>7421</b><i>Observable</i>.Return(5).Delay(TimeSpan.FromSeconds(2)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7422"><b>7422</b><i>Observable</i>.Return(9).Delay(TimeSpan.FromSeconds(3))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7442"><b>7442</b>var xs = <i>Observable</i>.Concat(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7443"><b>7443</b><i>Observable</i>.Return(1).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7444"><b>7444</b><i>Observable</i>.Return(5).Delay(TimeSpan.FromSeconds(2)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7445"><b>7445</b><i>Observable</i>.Return(9).Delay(TimeSpan.FromSeconds(3))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7467"><b>7467</b>var xs = <i>Observable</i>.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7486"><b>7486</b>var xs = <i>Observable</i>.Timer(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(1))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7501"><b>7501</b>var xs = <i>Observable</i>.Timer(now.AddSeconds(2), TimeSpan.FromSeconds(1))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7516"><b>7516</b>var xs = <i>Observable</i>.Timer(TimeSpan.FromSeconds(2))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7528"><b>7528</b>var xs = <i>Observable</i>.Timer(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(1), Scheduler.CurrentThread)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7547"><b>7547</b>var xs = <i>Observable</i>.Concat(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7548"><b>7548</b><i>Observable</i>.Return(1),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7549"><b>7549</b><i>Observable</i>.Return(2).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7550"><b>7550</b><i>Observable</i>.Return(3).Delay(TimeSpan.FromSeconds(1)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7551"><b>7551</b><i>Observable</i>.Return(4).Delay(TimeSpan.FromSeconds(0.4)),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7552"><b>7552</b><i>Observable</i>.Return(5).Delay(TimeSpan.FromSeconds(0.2)) // over 2500</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7727"><b>7727</b>AssertEx.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt; <i>Observable</i>.Range(1, -1).ToArray().Wait());</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7729"><b>7729</b><i>Observable</i>.Range(1, 0).ToArray().Wait().Length.Is(0);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7730"><b>7730</b><i>Observable</i>.Range(1, 10).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7732"><b>7732</b><i>Observable</i>.Range(1, 0, Scheduler.Immediate).ToArray().Wait().Length.Is(0);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7733"><b>7733</b><i>Observable</i>.Range(1, 10, Scheduler.Immediate).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#8728"><b>8728</b>var selectWhere = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#8735"><b>8735</b>var selectWhere2 = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#8749"><b>8749</b>var whereSelect = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#8756"><b>8756</b>var whereSelect2 = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#8778"><b>8778</b>var wherewhere = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#8784"><b>8784</b>var wherewhere2 = <i>Observable</i>.Range(1, 10)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9459"><b>9459</b>var range = <i>Observable</i>.Range(1, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9539"><b>9539</b><i>Observable</i>.Empty&lt;int&gt;().ToArray().Wait().IsCollection();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9540"><b>9540</b><i>Observable</i>.Return(10).ToArray().Wait().IsCollection(10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9541"><b>9541</b><i>Observable</i>.Range(1, 10).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9550"><b>9550</b><i>Observable</i>.Empty&lt;int&gt;().ToList().Wait().IsCollection();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9551"><b>9551</b><i>Observable</i>.Return(10).ToList().Wait().IsCollection(10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9552"><b>9552</b><i>Observable</i>.Range(1, 10).ToList().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9729"><b>9729</b>var xs = <i>Observable</i>.WhenAll(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9730"><b>9730</b><i>Observable</i>.Return(100),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9731"><b>9731</b><i>Observable</i>.Timer(TimeSpan.FromSeconds(1)).Select(_ =&gt; 5),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9732"><b>9732</b><i>Observable</i>.Range(1, 4))</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9743"><b>9743</b>var xs = <i>Observable</i>.WhenAll(new IObservable&lt;int&gt;[0]).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9746"><b>9746</b>var xs2 = <i>Observable</i>.WhenAll(Enumerable.Empty&lt;IObservable&lt;int&gt;&gt;().Select(x =&gt; x)).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9757"><b>9757</b><i>Observable</i>.Return(100),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9758"><b>9758</b><i>Observable</i>.Timer(TimeSpan.FromSeconds(1)).Select(_ =&gt; 5),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9759"><b>9759</b><i>Observable</i>.Range(1, 4)</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9771"><b>9771</b>var xs = <i>Observable</i>.WhenAll(</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9772"><b>9772</b><i>Observable</i>.Return(100).AsUnitObservable(),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9773"><b>9773</b><i>Observable</i>.Timer(TimeSpan.FromSeconds(1)).AsUnitObservable(),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9774"><b>9774</b><i>Observable</i>.Range(1, 4).AsUnitObservable())</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9786"><b>9786</b>var xs = <i>Observable</i>.WhenAll(new IObservable&lt;Unit&gt;[0]).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9789"><b>9789</b>var xs2 = <i>Observable</i>.WhenAll(Enumerable.Empty&lt;IObservable&lt;Unit&gt;&gt;().Select(x =&gt; x)).Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9800"><b>9800</b><i>Observable</i>.Return(100).AsUnitObservable(),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9801"><b>9801</b><i>Observable</i>.Timer(TimeSpan.FromSeconds(1)).AsUnitObservable(),</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9802"><b>9802</b><i>Observable</i>.Range(1, 4).AsUnitObservable()</a>
+</div>
+</div>
+<div class="rA">Assembly-CSharp-firstpass (215)</div><div class="rG" id="Assembly-CSharp-firstpass"><div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample01_ObservableWWW.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample01_ObservableWWW.cs.html#36"><b>36</b>var parallel = <i>Observable</i>.WhenAll(</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample04_ConvertFromUnityCallback.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample04_ConvertFromUnityCallback.cs.html#47"><b>47</b>return <i>Observable</i>.FromEvent&lt;Application.LogCallback, LogCallback&gt;(</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample05_ConvertFromCoroutine.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample05_ConvertFromCoroutine.cs.html#13"><b>13</b>return <i>Observable</i>.FromCoroutine&lt;string&gt;((observer, cancellationToken) =&gt; GetWWWCore(url, observer, cancellationToken));</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample06_ConvertToCoroutine.cs (5)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample06_ConvertToCoroutine.cs.html#20"><b>20</b>yield return <i>Observable</i>.Range(1, 10).StartAsCoroutine(x =&gt; v = x);</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample06_ConvertToCoroutine.cs.html#25"><b>25</b>yield return <i>Observable</i>.Return(100).StartAsCoroutine(x =&gt; v = x);</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample06_ConvertToCoroutine.cs.html#34"><b>34</b>var task = <i>Observable</i>.Start(() =&gt; 100).ToLazyTask();</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample06_ConvertToCoroutine.cs.html#49"><b>49</b>yield return <i>Observable</i>.Timer(TimeSpan.FromSeconds(1)).ToYieldInstruction();</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample06_ConvertToCoroutine.cs.html#52"><b>52</b>yield return <i>Observable</i>.Timer(TimeSpan.FromSeconds(1), Scheduler.MainThreadIgnoreTimeScale).ToYieldInstruction();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample07_OrchestratIEnumerator.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample07_OrchestratIEnumerator.cs.html#33"><b>33</b>var cancel = <i>Observable</i>.FromCoroutine(AsyncA)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample08_DetectDoubleClick.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample08_DetectDoubleClick.cs.html#24"><b>24</b>var clickStream = <i>Observable</i>.EveryUpdate()</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample09_EventHandling.cs (4)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample09_EventHandling.cs.html#29"><b>29</b><i>Observable</i>.FromEventPattern&lt;EventHandler&lt;MyEventArgs&gt;, MyEventArgs&gt;(</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample09_EventHandling.cs.html#35"><b>35</b><i>Observable</i>.FromEvent&lt;EventHandler&lt;MyEventArgs&gt;, MyEventArgs&gt;(</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample09_EventHandling.cs.html#41"><b>41</b><i>Observable</i>.FromEvent&lt;int&gt;(</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample09_EventHandling.cs.html#48"><b>48</b><i>Observable</i>.FromEventPattern&lt;EventHandler&lt;MyEventArgs&gt;, MyEventArgs&gt;(h =&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample10_MainThreadDispatcher.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample10_MainThreadDispatcher.cs.html#20"><b>20</b><i>Observable</i>.FromCoroutine(TestAsync).Subscribe();</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample10_MainThreadDispatcher.cs.html#27"><b>27</b><i>Observable</i>.Interval(TimeSpan.FromSeconds(1))</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample10_MainThreadDispatcher.cs.html#32"><b>32</b><i>Observable</i>.Start(() =&gt; Unit.Default) // asynchronous work</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample13_ToDoApp.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample13_ToDoApp.cs.html#29"><b>29</b>var submit = <i>Observable</i>.Merge(</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Examples\Sample14_PresenterBase.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Examples/Sample14_PresenterBase.cs.html#80"><b>80</b>return <i>Observable</i>.TimerFrame(AnimationSpeed * Count)</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample14_PresenterBase.cs.html#88"><b>88</b>return <i>Observable</i>.TimerFrame(AnimationSpeed * Count)</a>
+<a href="../Assets/Plugins/UniRx/Examples/Sample14_PresenterBase.cs.html#96"><b>96</b>return <i>Observable</i>.TimerFrame(AnimationSpeed * Count)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Asynchronous\WebRequestExtensions.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Asynchronous/WebRequestExtensions.cs.html#15"><b>15</b>var result = <i>Observable</i>.Create&lt;TResult&gt;(observer =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Asynchronous/WebRequestExtensions.cs.html#18"><b>18</b>var subscription = <i>Observable</i>.FromAsyncPattern&lt;TResult&gt;(begin,</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Disposables\RefCountDisposable.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Disposables/RefCountDisposable.cs.html#145"><b>145</b>return <i>Observable</i>.Create&lt;T&gt;((IObserver&lt;T&gt; observer) =&gt; new CompositeDisposable(new IDisposable[]</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Notification.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Notification.cs.html#624"><b>624</b>return <i>Observable</i>.Create&lt;T&gt;(observer =&gt; scheduler.Schedule(() =&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Notifiers\MessageBroker.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Notifiers/MessageBroker.cs.html#133"><b>133</b>return <i>Observable</i>.ReturnUnit();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Notifiers/MessageBroker.cs.html#143"><b>143</b>return <i>Observable</i>.WhenAll(awaiter);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Observable.Concatenate.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.Concatenate.cs.html#241"><b>241</b>if (sources.Length == 0) return <i>Observable</i>.Return(new T[0]);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.Concatenate.cs.html#251"><b>251</b>if (sources.Length == 0) return <i>Observable</i>.ReturnUnit();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.Concatenate.cs.html#301"><b>301</b>return <i>Observable</i>.Return(value, scheduler).Concat(source);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Observable.Concurrency.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.Concurrency.cs.html#57"><b>57</b>var result = <i>Observable</i>.Never&lt;T&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Observable.ErrorHandling.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.ErrorHandling.cs.html#39"><b>39</b>return <i>Observable</i>.Empty&lt;TSource&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.ErrorHandling.cs.html#112"><b>112</b>var result = <i>Observable</i>.Defer(() =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.ErrorHandling.cs.html#126"><b>126</b>: <i>Observable</i>.Throw&lt;TSource&gt;(ex);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Observable.FromAsync.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.FromAsync.cs.html#32"><b>32</b>return <i>Observable</i>.Throw&lt;TResult&gt;(exception, Scheduler.DefaultSchedulers.AsyncConversions);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.FromAsync.cs.html#63"><b>63</b>return <i>Observable</i>.Throw&lt;TResult&gt;(exception, Scheduler.DefaultSchedulers.AsyncConversions);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.FromAsync.cs.html#94"><b>94</b>return <i>Observable</i>.Throw&lt;TResult&gt;(exception, Scheduler.DefaultSchedulers.AsyncConversions);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Observer.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Observer.cs.html#500"><b>500</b>return <i>Observable</i>.Empty&lt;TSource&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Operators\Buffer.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/Buffer.cs.html#198"><b>198</b>var timerSubscription = <i>Observable</i>.Interval(parent.timeSpan, parent.scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Operators\Catch.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/Catch.cs.html#58"><b>58</b>next = <i>Observable</i>.Empty&lt;T&gt;(); // for avoid iOS AOT</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Operators\Defer.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/Defer.cs.html#26"><b>26</b>source = <i>Observable</i>.Throw&lt;T&gt;(ex);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\AsyncOperationExtensions.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/AsyncOperationExtensions.cs.html#6"><b>6</b>using ObservableUnity = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/AsyncOperationExtensions.cs.html#18"><b>18</b>return <i>ObservableUnity</i>.FromCoroutine&lt;AsyncOperation&gt;((observer, cancellation) =&gt; AsObservableCore(asyncOperation, observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/AsyncOperationExtensions.cs.html#25"><b>25</b>return <i>ObservableUnity</i>.FromCoroutine&lt;T&gt;((observer, cancellation) =&gt; AsObservableCore(asyncOperation, observer, progress, cancellation));</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ObservableMonoBehaviour.cs (4)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableMonoBehaviour.cs.html#28"><b>28</b>if (calledAwake) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableMonoBehaviour.cs.html#297"><b>297</b>if (this == null) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableMonoBehaviour.cs.html#298"><b>298</b>if (calledDestroy) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableMonoBehaviour.cs.html#729"><b>729</b>if (calledStart) return <i>Observable</i>.Return(Unit.Default);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ObservableWWW.cs (20)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#6"><b>6</b>using ObservableUnity = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#27"><b>27</b>return <i>ObservableUnity</i>.FromCoroutine&lt;string&gt;((observer, cancellation) =&gt; FetchText(new WWW(url, null, (headers ?? new Hash())), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#32"><b>32</b>return <i>ObservableUnity</i>.FromCoroutine&lt;byte[]&gt;((observer, cancellation) =&gt; FetchBytes(new WWW(url, null, (headers ?? new Hash())), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#36"><b>36</b>return <i>ObservableUnity</i>.FromCoroutine&lt;WWW&gt;((observer, cancellation) =&gt; Fetch(new WWW(url, null, (headers ?? new Hash())), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#41"><b>41</b>return <i>ObservableUnity</i>.FromCoroutine&lt;string&gt;((observer, cancellation) =&gt; FetchText(new WWW(url, postData), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#46"><b>46</b>return <i>ObservableUnity</i>.FromCoroutine&lt;string&gt;((observer, cancellation) =&gt; FetchText(new WWW(url, postData, headers), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#51"><b>51</b>return <i>ObservableUnity</i>.FromCoroutine&lt;string&gt;((observer, cancellation) =&gt; FetchText(new WWW(url, content), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#57"><b>57</b>return <i>ObservableUnity</i>.FromCoroutine&lt;string&gt;((observer, cancellation) =&gt; FetchText(new WWW(url, content.data, MergeHash(contentHeaders, headers)), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#62"><b>62</b>return <i>ObservableUnity</i>.FromCoroutine&lt;byte[]&gt;((observer, cancellation) =&gt; FetchBytes(new WWW(url, postData), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#67"><b>67</b>return <i>ObservableUnity</i>.FromCoroutine&lt;byte[]&gt;((observer, cancellation) =&gt; FetchBytes(new WWW(url, postData, headers), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#72"><b>72</b>return <i>ObservableUnity</i>.FromCoroutine&lt;byte[]&gt;((observer, cancellation) =&gt; FetchBytes(new WWW(url, content), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#78"><b>78</b>return <i>ObservableUnity</i>.FromCoroutine&lt;byte[]&gt;((observer, cancellation) =&gt; FetchBytes(new WWW(url, content.data, MergeHash(contentHeaders, headers)), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#83"><b>83</b>return <i>ObservableUnity</i>.FromCoroutine&lt;WWW&gt;((observer, cancellation) =&gt; Fetch(new WWW(url, postData), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#88"><b>88</b>return <i>ObservableUnity</i>.FromCoroutine&lt;WWW&gt;((observer, cancellation) =&gt; Fetch(new WWW(url, postData, headers), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#93"><b>93</b>return <i>ObservableUnity</i>.FromCoroutine&lt;WWW&gt;((observer, cancellation) =&gt; Fetch(new WWW(url, content), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#99"><b>99</b>return <i>ObservableUnity</i>.FromCoroutine&lt;WWW&gt;((observer, cancellation) =&gt; Fetch(new WWW(url, content.data, MergeHash(contentHeaders, headers)), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#104"><b>104</b>return <i>ObservableUnity</i>.FromCoroutine&lt;AssetBundle&gt;((observer, cancellation) =&gt; FetchAssetBundle(WWW.LoadFromCacheOrDownload(url, version), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#109"><b>109</b>return <i>ObservableUnity</i>.FromCoroutine&lt;AssetBundle&gt;((observer, cancellation) =&gt; FetchAssetBundle(WWW.LoadFromCacheOrDownload(url, version, crc), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#116"><b>116</b>return <i>ObservableUnity</i>.FromCoroutine&lt;AssetBundle&gt;((observer, cancellation) =&gt; FetchAssetBundle(WWW.LoadFromCacheOrDownload(url, hash128), observer, progress, cancellation));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs.html#121"><b>121</b>return <i>ObservableUnity</i>.FromCoroutine&lt;AssetBundle&gt;((observer, cancellation) =&gt; FetchAssetBundle(WWW.LoadFromCacheOrDownload(url, hash128, crc), observer, progress, cancellation));</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ObserveExtensions.cs (5)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObserveExtensions.cs.html#6"><b>6</b>using ObservableUnity = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObserveExtensions.cs.html#28"><b>28</b>if (source == null) return <i>Observable</i>.Empty&lt;TProperty&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObserveExtensions.cs.html#33"><b>33</b>if (isUnityObject &amp;&amp; unityObject == null) return <i>Observable</i>.Empty&lt;TProperty&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObserveExtensions.cs.html#38"><b>38</b>return <i>ObservableUnity</i>.FromMicroCoroutine&lt;TProperty&gt;((observer, cancellationToken) =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObserveExtensions.cs.html#68"><b>68</b>return <i>ObservableUnity</i>.FromMicroCoroutine&lt;TProperty&gt;((observer, cancellationToken) =&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\DelayFrameSubscription.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/DelayFrameSubscription.cs.html#6"><b>6</b>using UnityObservable = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/DelayFrameSubscription.cs.html#28"><b>28</b>d.Disposable = <i>UnityObservable</i>.TimerFrame(frameCount, frameCountType)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\SampleFrame.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/SampleFrame.cs.html#6"><b>6</b>using UnityObservable = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/SampleFrame.cs.html#48"><b>48</b>var scheduling = <i>UnityObservable</i>.IntervalFrame(parent.frameCount, parent.frameCountType)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\ThrottleFirstFrame.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/ThrottleFirstFrame.cs.html#6"><b>6</b>using UnityObservable = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/ThrottleFirstFrame.cs.html#71"><b>71</b>d.Disposable = <i>UnityObservable</i>.TimerFrame(parent.frameCount, parent.frameCountType)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\ThrottleFrame.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/ThrottleFrame.cs.html#6"><b>6</b>using UnityObservable = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/ThrottleFrame.cs.html#64"><b>64</b>d.Disposable = <i>UnityObservable</i>.TimerFrame(parent.frameCount, parent.frameCountType)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\TimeoutFrame.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/TimeoutFrame.cs.html#6"><b>6</b>using UnityObservable = UniRx.<i>Observable</i>;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/TimeoutFrame.cs.html#55"><b>55</b>return <i>UnityObservable</i>.TimerFrame(parent.frameCount, parent.frameCountType)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\PresenterBase.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/PresenterBase.cs.html#90"><b>90</b>if (isInitialized) return <i>Observable</i>.Return(Unit.Default);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ReactiveCollection.cs (6)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCollection.cs.html#227"><b>227</b>if (isDisposed) return <i>Observable</i>.Empty&lt;int&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCollection.cs.html#244"><b>244</b>if (isDisposed) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCollection.cs.html#252"><b>252</b>if (isDisposed) return <i>Observable</i>.Empty&lt;CollectionAddEvent&lt;T&gt;&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCollection.cs.html#260"><b>260</b>if (isDisposed) return <i>Observable</i>.Empty&lt;CollectionMoveEvent&lt;T&gt;&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCollection.cs.html#268"><b>268</b>if (isDisposed) return <i>Observable</i>.Empty&lt;CollectionRemoveEvent&lt;T&gt;&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCollection.cs.html#276"><b>276</b>if (isDisposed) return <i>Observable</i>.Empty&lt;CollectionReplaceEvent&lt;T&gt;&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ReactiveCommand.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCommand.cs.html#225"><b>225</b>var asyncState = a[0].Invoke(parameter) ?? <i>Observable</i>.ReturnUnit();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCommand.cs.html#241"><b>241</b>xs[i] = a[i].Invoke(parameter) ?? <i>Observable</i>.ReturnUnit();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCommand.cs.html#250"><b>250</b>return <i>Observable</i>.WhenAll(xs).Finally(() =&gt; canExecuteSource.Value = true).Subscribe();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ReactiveDictionary.cs (5)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs.html#295"><b>295</b>if (isDisposed) return <i>Observable</i>.Empty&lt;int&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs.html#303"><b>303</b>if (isDisposed) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs.html#311"><b>311</b>if (isDisposed) return <i>Observable</i>.Empty&lt;DictionaryAddEvent&lt;TKey, TValue&gt;&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs.html#319"><b>319</b>if (isDisposed) return <i>Observable</i>.Empty&lt;DictionaryRemoveEvent&lt;TKey, TValue&gt;&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs.html#327"><b>327</b>if (isDisposed) return <i>Observable</i>.Empty&lt;DictionaryReplaceEvent&lt;TKey, TValue&gt;&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Toolkit\ObjectPool.cs (6)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs.html#162"><b>162</b>return <i>Observable</i>.Interval(checkInterval)</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs.html#179"><b>179</b>return <i>Observable</i>.FromMicroCoroutine&lt;Unit&gt;((observer, cancel) =&gt; PreloadCore(preloadCount, threshold, observer, cancel));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs.html#311"><b>311</b>return <i>Observable</i>.Return(instance);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs.html#375"><b>375</b>return <i>Observable</i>.Interval(checkInterval)</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs.html#409"><b>409</b>return <i>Observable</i>.FromMicroCoroutine&lt;Unit&gt;((observer, cancel) =&gt; PreloadCore(preloadCount, threshold, observer, cancel));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Toolkit/ObjectPool.cs.html#428"><b>428</b>var awaiter = <i>Observable</i>.WhenAll(loaders).ToYieldInstruction(false, cancellationToken);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableDestroyTrigger.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableDestroyTrigger.cs.html#37"><b>37</b>if (this == null) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableDestroyTrigger.cs.html#38"><b>38</b>if (calledDestroy) return <i>Observable</i>.Return(Unit.Default);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTriggerBase.cs (4)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerBase.cs.html#21"><b>21</b>if (calledAwake) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerBase.cs.html#38"><b>38</b>if (calledStart) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerBase.cs.html#58"><b>58</b>if (this == null) return <i>Observable</i>.Return(Unit.Default);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerBase.cs.html#59"><b>59</b>if (calledDestroy) return <i>Observable</i>.Return(Unit.Default);</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTriggerExtensions.Component.cs (54)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#18"><b>18</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;int&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#25"><b>25</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#36"><b>36</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collision2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#44"><b>44</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collision2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#51"><b>51</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collision2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#62"><b>62</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collision&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#70"><b>70</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collision&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#77"><b>77</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collision&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#88"><b>88</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Return(Unit.Default); // send destroy message</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#100"><b>100</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#107"><b>107</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#118"><b>118</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#129"><b>129</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#142"><b>142</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#149"><b>149</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#156"><b>156</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#163"><b>163</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#170"><b>170</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#177"><b>177</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#184"><b>184</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#197"><b>197</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collider2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#205"><b>205</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collider2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#212"><b>212</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collider2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#223"><b>223</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collider&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#231"><b>231</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collider&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#238"><b>238</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Collider&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#249"><b>249</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#260"><b>260</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#267"><b>267</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#280"><b>280</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#287"><b>287</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#294"><b>294</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#305"><b>305</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#316"><b>316</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#323"><b>323</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#335"><b>335</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;BaseEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#341"><b>341</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;AxisEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#347"><b>347</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#353"><b>353</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#359"><b>359</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#365"><b>365</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#371"><b>371</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;BaseEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#377"><b>377</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#383"><b>383</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;BaseEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#389"><b>389</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#395"><b>395</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#401"><b>401</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#407"><b>407</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#413"><b>413</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;BaseEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#419"><b>419</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#425"><b>425</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;BaseEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#431"><b>431</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;PointerEventData&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#444"><b>444</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;GameObject&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.Component.cs.html#453"><b>453</b>if (component == null || component.gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTriggerExtensions.cs (37)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#14"><b>14</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;int&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#21"><b>21</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#32"><b>32</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collision2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#40"><b>40</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collision2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#47"><b>47</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collision2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#58"><b>58</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collision&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#66"><b>66</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collision&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#73"><b>73</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collision&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#84"><b>84</b>if (gameObject == null) return <i>Observable</i>.Return(Unit.Default); // send destroy message</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#96"><b>96</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#103"><b>103</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#114"><b>114</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#125"><b>125</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#138"><b>138</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#145"><b>145</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#152"><b>152</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#159"><b>159</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#166"><b>166</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#173"><b>173</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#180"><b>180</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#193"><b>193</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collider2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#201"><b>201</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collider2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#208"><b>208</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collider2D&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#219"><b>219</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collider&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#227"><b>227</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collider&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#234"><b>234</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Collider&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#245"><b>245</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#256"><b>256</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#263"><b>263</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#276"><b>276</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#283"><b>283</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#290"><b>290</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#301"><b>301</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#312"><b>312</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#319"><b>319</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#331"><b>331</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;GameObject&gt;();</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerExtensions.cs.html#340"><b>340</b>if (gameObject == null) return <i>Observable</i>.Empty&lt;Unit&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityEventExtensions.cs (5)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEventExtensions.cs.html#15"><b>15</b>return <i>Observable</i>.FromEvent&lt;UnityAction&gt;(h =&gt; new UnityAction(h), h =&gt; unityEvent.AddListener(h), h =&gt; unityEvent.RemoveListener(h));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEventExtensions.cs.html#20"><b>20</b>return <i>Observable</i>.FromEvent&lt;UnityAction&lt;T&gt;, T&gt;(h =&gt; new UnityAction&lt;T&gt;(h), h =&gt; unityEvent.AddListener(h), h =&gt; unityEvent.RemoveListener(h));</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEventExtensions.cs.html#25"><b>25</b>return <i>Observable</i>.FromEvent&lt;UnityAction&lt;T0, T1&gt;, Tuple&lt;T0, T1&gt;&gt;(h =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEventExtensions.cs.html#36"><b>36</b>return <i>Observable</i>.FromEvent&lt;UnityAction&lt;T0, T1, T2&gt;, Tuple&lt;T0, T1, T2&gt;&gt;(h =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEventExtensions.cs.html#47"><b>47</b>return <i>Observable</i>.FromEvent&lt;UnityAction&lt;T0, T1, T2, T3&gt;, Tuple&lt;T0, T1, T2, T3&gt;&gt;(h =&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityGraphicExtensions.cs (3)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityGraphicExtensions.cs.html#14"><b>14</b>return <i>Observable</i>.Create&lt;Unit&gt;(observer =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityGraphicExtensions.cs.html#24"><b>24</b>return <i>Observable</i>.Create&lt;Unit&gt;(observer =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityGraphicExtensions.cs.html#34"><b>34</b>return <i>Observable</i>.Create&lt;Unit&gt;(observer =&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityUIComponentExtensions.cs (6)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#42"><b>42</b>return <i>Observable</i>.CreateWithState&lt;bool, Toggle&gt;(toggle, (t, observer) =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#52"><b>52</b>return <i>Observable</i>.CreateWithState&lt;float, Scrollbar&gt;(scrollbar, (s, observer) =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#62"><b>62</b>return <i>Observable</i>.CreateWithState&lt;Vector2, ScrollRect&gt;(scrollRect, (s, observer) =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#72"><b>72</b>return <i>Observable</i>.CreateWithState&lt;float, Slider&gt;(slider, (s, observer) =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#91"><b>91</b>return <i>Observable</i>.CreateWithState&lt;string, InputField&gt;(inputField, (i, observer) =&gt;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#106"><b>106</b>return <i>Observable</i>.CreateWithState&lt;string, InputField&gt;(inputField, (i, observer) =&gt;</a>
+</div>
+</div>
+</body></html>

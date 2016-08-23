@@ -1,0 +1,1203 @@
+﻿<!DOCTYPE html>
+<html><head><title>Tuple.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(1194);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/System/Tuple.cs" target="_top">Assets\Plugins\UniRx\Scripts\System\Tuple.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// defined from .NET Framework 4.0 and NETFX_CORE</span>
+<span class="c">// This code is basaed from mono/mcs, but some performance modified</span>
+<span class="c">// 1. class to struct</span>
+<span class="c">// 2. implements IEquatable&lt;T1, T2,...&gt;</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">NETFX_CORE</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="49ab9ac103a6abe8" href="../../../../../R/49ab9ac103a6abe8.html" target="n" data-glyph="48,0" class="t t">IStructuralEquatable</a>
+    {
+        <b>bool</b> <a id="e7db641a564669bd" href="../../../../../R/e7db641a564669bd.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r0 rd" class="r0 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r1 rd" class="r1 r">comparer</span>);
+ 
+        <b>int</b> <a id="c5701a1451c7222e" href="../../../../../R/c5701a1451c7222e.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r2 rd" class="r2 r">comparer</span>);
+    }
+ 
+    <b>public interface</b> <a id="26fc987235b27d86" href="../../../../../R/26fc987235b27d86.html" target="n" data-glyph="48,0" class="t t">IStructuralComparable</a>
+    {
+        <b>int</b> <a id="4321d66401c559d7" href="../../../../../R/4321d66401c559d7.html" target="n" data-glyph="72,1" class="i method">CompareTo</a>(<b>object</b> <span id="r3 rd" class="r3 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r4 rd" class="r4 r">comparer</span>);
+    }
+ 
+    <b>interface</b> <a id="259745ce53a04687" href="../../../../../R/259745ce53a04687.html" target="n" data-glyph="50,0" class="t t">ITuple</a>
+    {
+        <b>string</b> <a id="73fcbd2721c59087" href="../../../../../R/73fcbd2721c59087.html" target="n" data-glyph="72,1" class="i method">ToString</a>();
+    }
+ 
+    <b>public static class</b> <a id="3e2d90c4fd750003" href="../../../../../R/3e2d90c4fd750003.html" target="n" data-glyph="0,0" class="t t">Tuple</a>
+    {
+        <b>public static</b> <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r5 r t">T1</span>, <span class="r6 r t">T2</span>, <span class="r7 r t">T3</span>, <span class="r8 r t">T4</span>, <span class="r9 r t">T5</span>, <span class="r10 r t">T6</span>, <span class="r11 r t">T7</span>, <a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r12 r t">T8</span>&gt;&gt; <a id="4a271b22fb0c8aff" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r5 rd t" class="r5 r t">T1</span>, <span id="r6 rd t" class="r6 r t">T2</span>, <span id="r7 rd t" class="r7 r t">T3</span>, <span id="r8 rd t" class="r8 r t">T4</span>, <span id="r9 rd t" class="r9 r t">T5</span>, <span id="r10 rd t" class="r10 r t">T6</span>, <span id="r11 rd t" class="r11 r t">T7</span>, <span id="r12 rd t" class="r12 r t">T8</span>&gt;
+            (
+             <span class="r5 r t">T1</span> <span id="r13 rd" class="r13 r">item1</span>,
+             <span class="r6 r t">T2</span> <span id="r14 rd" class="r14 r">item2</span>,
+             <span class="r7 r t">T3</span> <span id="r15 rd" class="r15 r">item3</span>,
+             <span class="r8 r t">T4</span> <span id="r16 rd" class="r16 r">item4</span>,
+             <span class="r9 r t">T5</span> <span id="r17 rd" class="r17 r">item5</span>,
+             <span class="r10 r t">T6</span> <span id="r18 rd" class="r18 r">item6</span>,
+             <span class="r11 r t">T7</span> <span id="r19 rd" class="r19 r">item7</span>,
+             <span class="r12 r t">T8</span> <span id="r20 rd" class="r20 r">item8</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#53b78e5df568b4d2" class="t constructor">Tuple</a>&lt;<span class="r5 r t">T1</span>, <span class="r6 r t">T2</span>, <span class="r7 r t">T3</span>, <span class="r8 r t">T4</span>, <span class="r9 r t">T5</span>, <span class="r10 r t">T6</span>, <span class="r11 r t">T7</span>, <a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r12 r t">T8</span>&gt;&gt;(<span class="r13 r">item1</span>, <span class="r14 r">item2</span>, <span class="r15 r">item3</span>, <span class="r16 r">item4</span>, <span class="r17 r">item5</span>, <span class="r18 r">item6</span>, <span class="r19 r">item7</span>, <b>new</b> <a href="#0e4a1d8ea5f6cda1" class="t constructor">Tuple</a>&lt;<span class="r12 r t">T8</span>&gt;(<span class="r20 r">item8</span>));
+        }
+ 
+        <b>public static</b> <a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r21 r t">T1</span>, <span class="r22 r t">T2</span>, <span class="r23 r t">T3</span>, <span class="r24 r t">T4</span>, <span class="r25 r t">T5</span>, <span class="r26 r t">T6</span>, <span class="r27 r t">T7</span>&gt; <a id="1be0dc299780c77e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r21 rd t" class="r21 r t">T1</span>, <span id="r22 rd t" class="r22 r t">T2</span>, <span id="r23 rd t" class="r23 r t">T3</span>, <span id="r24 rd t" class="r24 r t">T4</span>, <span id="r25 rd t" class="r25 r t">T5</span>, <span id="r26 rd t" class="r26 r t">T6</span>, <span id="r27 rd t" class="r27 r t">T7</span>&gt;
+            (
+             <span class="r21 r t">T1</span> <span id="r28 rd" class="r28 r">item1</span>,
+             <span class="r22 r t">T2</span> <span id="r29 rd" class="r29 r">item2</span>,
+             <span class="r23 r t">T3</span> <span id="r30 rd" class="r30 r">item3</span>,
+             <span class="r24 r t">T4</span> <span id="r31 rd" class="r31 r">item4</span>,
+             <span class="r25 r t">T5</span> <span id="r32 rd" class="r32 r">item5</span>,
+             <span class="r26 r t">T6</span> <span id="r33 rd" class="r33 r">item6</span>,
+             <span class="r27 r t">T7</span> <span id="r34 rd" class="r34 r">item7</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#53f168ead5ad693d" class="t constructor">Tuple</a>&lt;<span class="r21 r t">T1</span>, <span class="r22 r t">T2</span>, <span class="r23 r t">T3</span>, <span class="r24 r t">T4</span>, <span class="r25 r t">T5</span>, <span class="r26 r t">T6</span>, <span class="r27 r t">T7</span>&gt;(<span class="r28 r">item1</span>, <span class="r29 r">item2</span>, <span class="r30 r">item3</span>, <span class="r31 r">item4</span>, <span class="r32 r">item5</span>, <span class="r33 r">item6</span>, <span class="r34 r">item7</span>);
+        }
+ 
+        <b>public static</b> <a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r35 r t">T1</span>, <span class="r36 r t">T2</span>, <span class="r37 r t">T3</span>, <span class="r38 r t">T4</span>, <span class="r39 r t">T5</span>, <span class="r40 r t">T6</span>&gt; <a id="c802698552afbf23" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r35 rd t" class="r35 r t">T1</span>, <span id="r36 rd t" class="r36 r t">T2</span>, <span id="r37 rd t" class="r37 r t">T3</span>, <span id="r38 rd t" class="r38 r t">T4</span>, <span id="r39 rd t" class="r39 r t">T5</span>, <span id="r40 rd t" class="r40 r t">T6</span>&gt;
+            (
+             <span class="r35 r t">T1</span> <span id="r41 rd" class="r41 r">item1</span>,
+             <span class="r36 r t">T2</span> <span id="r42 rd" class="r42 r">item2</span>,
+             <span class="r37 r t">T3</span> <span id="r43 rd" class="r43 r">item3</span>,
+             <span class="r38 r t">T4</span> <span id="r44 rd" class="r44 r">item4</span>,
+             <span class="r39 r t">T5</span> <span id="r45 rd" class="r45 r">item5</span>,
+             <span class="r40 r t">T6</span> <span id="r46 rd" class="r46 r">item6</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#175c2fdcb0f8f1d5" class="t constructor">Tuple</a>&lt;<span class="r35 r t">T1</span>, <span class="r36 r t">T2</span>, <span class="r37 r t">T3</span>, <span class="r38 r t">T4</span>, <span class="r39 r t">T5</span>, <span class="r40 r t">T6</span>&gt;(<span class="r41 r">item1</span>, <span class="r42 r">item2</span>, <span class="r43 r">item3</span>, <span class="r44 r">item4</span>, <span class="r45 r">item5</span>, <span class="r46 r">item6</span>);
+        }
+ 
+        <b>public static</b> <a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r47 r t">T1</span>, <span class="r48 r t">T2</span>, <span class="r49 r t">T3</span>, <span class="r50 r t">T4</span>, <span class="r51 r t">T5</span>&gt; <a id="c1ae9d4b792ca27b" href="../../../../../R/c1ae9d4b792ca27b.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r47 rd t" class="r47 r t">T1</span>, <span id="r48 rd t" class="r48 r t">T2</span>, <span id="r49 rd t" class="r49 r t">T3</span>, <span id="r50 rd t" class="r50 r t">T4</span>, <span id="r51 rd t" class="r51 r t">T5</span>&gt;
+            (
+             <span class="r47 r t">T1</span> <span id="r52 rd" class="r52 r">item1</span>,
+             <span class="r48 r t">T2</span> <span id="r53 rd" class="r53 r">item2</span>,
+             <span class="r49 r t">T3</span> <span id="r54 rd" class="r54 r">item3</span>,
+             <span class="r50 r t">T4</span> <span id="r55 rd" class="r55 r">item4</span>,
+             <span class="r51 r t">T5</span> <span id="r56 rd" class="r56 r">item5</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#cc27f80505da9040" class="t constructor">Tuple</a>&lt;<span class="r47 r t">T1</span>, <span class="r48 r t">T2</span>, <span class="r49 r t">T3</span>, <span class="r50 r t">T4</span>, <span class="r51 r t">T5</span>&gt;(<span class="r52 r">item1</span>, <span class="r53 r">item2</span>, <span class="r54 r">item3</span>, <span class="r55 r">item4</span>, <span class="r56 r">item5</span>);
+        }
+ 
+        <b>public static</b> <a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r57 r t">T1</span>, <span class="r58 r t">T2</span>, <span class="r59 r t">T3</span>, <span class="r60 r t">T4</span>&gt; <a id="432a569d0ec214d5" href="../../../../../R/432a569d0ec214d5.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r57 rd t" class="r57 r t">T1</span>, <span id="r58 rd t" class="r58 r t">T2</span>, <span id="r59 rd t" class="r59 r t">T3</span>, <span id="r60 rd t" class="r60 r t">T4</span>&gt;
+            (
+             <span class="r57 r t">T1</span> <span id="r61 rd" class="r61 r">item1</span>,
+             <span class="r58 r t">T2</span> <span id="r62 rd" class="r62 r">item2</span>,
+             <span class="r59 r t">T3</span> <span id="r63 rd" class="r63 r">item3</span>,
+             <span class="r60 r t">T4</span> <span id="r64 rd" class="r64 r">item4</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#773975e20a72bd3a" class="t constructor">Tuple</a>&lt;<span class="r57 r t">T1</span>, <span class="r58 r t">T2</span>, <span class="r59 r t">T3</span>, <span class="r60 r t">T4</span>&gt;(<span class="r61 r">item1</span>, <span class="r62 r">item2</span>, <span class="r63 r">item3</span>, <span class="r64 r">item4</span>);
+        }
+ 
+        <b>public static</b> <a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r65 r t">T1</span>, <span class="r66 r t">T2</span>, <span class="r67 r t">T3</span>&gt; <a id="cff7efd51d1ce21c" href="../../../../../R/cff7efd51d1ce21c.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r65 rd t" class="r65 r t">T1</span>, <span id="r66 rd t" class="r66 r t">T2</span>, <span id="r67 rd t" class="r67 r t">T3</span>&gt;
+            (
+             <span class="r65 r t">T1</span> <span id="r68 rd" class="r68 r">item1</span>,
+             <span class="r66 r t">T2</span> <span id="r69 rd" class="r69 r">item2</span>,
+             <span class="r67 r t">T3</span> <span id="r70 rd" class="r70 r">item3</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#bc2fd63bb4205e60" class="t constructor">Tuple</a>&lt;<span class="r65 r t">T1</span>, <span class="r66 r t">T2</span>, <span class="r67 r t">T3</span>&gt;(<span class="r68 r">item1</span>, <span class="r69 r">item2</span>, <span class="r70 r">item3</span>);
+        }
+ 
+        <b>public static</b> <a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r71 r t">T1</span>, <span class="r72 r t">T2</span>&gt; <a id="f9644928b1f50449" href="../../../../../R/f9644928b1f50449.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r71 rd t" class="r71 r t">T1</span>, <span id="r72 rd t" class="r72 r t">T2</span>&gt;
+            (
+             <span class="r71 r t">T1</span> <span id="r73 rd" class="r73 r">item1</span>,
+             <span class="r72 r t">T2</span> <span id="r74 rd" class="r74 r">item2</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#0d31306796bcae74" class="t constructor">Tuple</a>&lt;<span class="r71 r t">T1</span>, <span class="r72 r t">T2</span>&gt;(<span class="r73 r">item1</span>, <span class="r74 r">item2</span>);
+        }
+ 
+        <b>public static</b> <a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r75 r t">T1</span>&gt; <a id="84eda26f8c4491bf" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r75 rd t" class="r75 r t">T1</span>&gt;
+            (
+             <span class="r75 r t">T1</span> <span id="r76 rd" class="r76 r">item1</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#0e4a1d8ea5f6cda1" class="t constructor">Tuple</a>&lt;<span class="r75 r t">T1</span>&gt;(<span class="r76 r">item1</span>);
+        }
+    }
+ 
+    <b>public</b> <a href="../../../../../P/e580c8e10eb7cb14.html" target="s" class="k">partial</a> <b>class</b> <a id="e580c8e10eb7cb14" href="../../../../../R/e580c8e10eb7cb14.html" target="n" data-glyph="0,0" class="t t">Tuple</a>&lt;<span id="r77 rd t" class="r77 r t">T1</span>, <span id="r78 rd t" class="r78 r t">T2</span>, <span id="r79 rd t" class="r79 r t">T3</span>, <span id="r80 rd t" class="r80 r t">T4</span>, <span id="r81 rd t" class="r81 r t">T5</span>, <span id="r82 rd t" class="r82 r t">T6</span>, <span id="r83 rd t" class="r83 r t">T7</span>, <span id="r84 rd t" class="r84 r t">TRest</span>&gt;
+    {
+        <b>public</b> <a id="53b78e5df568b4d2" href="../../../../../R/53b78e5df568b4d2.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r77 r t">T1</span> <span id="r85 rd" class="r85 r">item1</span>, <span class="r78 r t">T2</span> <span id="r86 rd" class="r86 r">item2</span>, <span class="r79 r t">T3</span> <span id="r87 rd" class="r87 r">item3</span>, <span class="r80 r t">T4</span> <span id="r88 rd" class="r88 r">item4</span>, <span class="r81 r t">T5</span> <span id="r89 rd" class="r89 r">item5</span>, <span class="r82 r t">T6</span> <span id="r90 rd" class="r90 r">item6</span>, <span class="r83 r t">T7</span> <span id="r91 rd" class="r91 r">item7</span>, <span class="r84 r t">TRest</span> <span id="r92 rd" class="r92 r">rest</span>)
+        {
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#41424e4f3b62b43d" class="i field">item1</a> = <span class="r85 r">item1</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#5e0457623f804632" class="i field">item2</a> = <span class="r86 r">item2</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#58ae40881fe4159f" class="i field">item3</a> = <span class="r87 r">item3</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#06fd01e656c1b6c7" class="i field">item4</a> = <span class="r88 r">item4</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#5ffddcb28d262c17" class="i field">item5</a> = <span class="r89 r">item5</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#4baa62639e98d39e" class="i field">item6</a> = <span class="r90 r">item6</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#059d0b0a96145ae0" class="i field">item7</a> = <span class="r91 r">item7</span>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>.<a href="#3dae2fb74481ea14" class="i field">rest</a> = <span class="r92 r">rest</span>;
+ 
+            <b>if</b> (!(<span class="r92 r">rest</span> <b>is</b> <a href="#259745ce53a04687" class="t t">ITuple</a>))
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#4b20cd3790b6426a" class="t constructor">ArgumentException</a>(<span class="s">&quot;rest&quot;</span>, <span class="s">&quot;The last element of an eight element tuple must be a Tuple.&quot;</span>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="3b685b582c55afdb" href="../../../../../R/3b685b582c55afdb.html" target="n" data-glyph="108,0" class="t t"><span id="32d800e670ebb59f">Tuple</span></a>&lt;<span id="r93 rd t" class="r93 r t">T1</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r93 r t">T1</span>&gt;&gt;
+    {
+        <span class="r93 r t">T1</span> <a id="6003be69575565b1" href="../../../../../R/6003be69575565b1.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+ 
+        <b>public</b> <a id="0e4a1d8ea5f6cda1" href="../../../../../R/0e4a1d8ea5f6cda1.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r93 r t">T1</span> <span id="r94 rd" class="r94 r">item1</span>)
+        {
+            <a href="#3b685b582c55afdb" class="k">this</a>.<a href="#6003be69575565b1" class="i field">item1</a> = <span class="r94 r">item1</span>;
+        }
+ 
+        <b>public</b> <span class="r93 r t">T1</span> <a id="5a41b79f1aeddb29" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#6003be69575565b1" class="i field">item1</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r95 rd" class="r95 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#3b685b582c55afdb" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r95 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r96 rd" class="r96 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r97 rd" class="r97 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r96 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r96 r">other</span> <b>is</b> <a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r93 r t">T1</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#3b685b582c55afdb" class="k">var</a> <span id="r98 rd" class="r98 r">t</span> = (<a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r93 r t">T1</span>&gt;)<span class="r96 r">other</span>;
+            <b>return</b> <span class="r97 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#6003be69575565b1" class="i field">item1</a>, <span class="r98 r">t</span>.<a href="#6003be69575565b1" class="i field">item1</a>);
+        }
+ 
+        <b>public override bool</b> <a id="30e7a7791a10951e" href="../../../../../R/30e7a7791a10951e.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r99 rd" class="r99 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#3b685b582c55afdb" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r99 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r100 rd" class="r100 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r101 rd" class="r101 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r100 r">other</span> <b>is</b> <a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r93 r t">T1</span>&gt;))
+                <b>return false</b>;
+ 
+            <a href="#3b685b582c55afdb" class="k">var</a> <span id="r102 rd" class="r102 r">t</span> = (<a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r93 r t">T1</span>&gt;)<span class="r100 r">other</span>;
+            <b>return</b> <span class="r101 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#6003be69575565b1" class="i field">item1</a>, <span class="r102 r">t</span>.<a href="#6003be69575565b1" class="i field">item1</a>);
+        }
+ 
+        <b>public override int</b> <a id="ae10d7a0c62778a2" href="../../../../../R/ae10d7a0c62778a2.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r93 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#6003be69575565b1" class="i field">item1</a>);
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r103 rd" class="r103 r">comparer</span>)
+        {
+            <b>return</b> <span class="r103 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#6003be69575565b1" class="i field">item1</a>);
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;{0}&quot;</span>, <a href="#6003be69575565b1" class="i field">item1</a>);
+        }
+ 
+        <b>public override string</b> <a id="de4c679bcecedc2b" href="../../../../../R/de4c679bcecedc2b.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#3b685b582c55afdb" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="d7540444c032b832" href="../../../../../R/d7540444c032b832.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#3b685b582c55afdb" class="t t">Tuple</a>&lt;<span class="r93 r t">T1</span>&gt; <span id="r104 rd" class="r104 r">other</span>)
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r93 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#6003be69575565b1" class="i field">item1</a>, <span class="r104 r">other</span>.<a href="#6003be69575565b1" class="i field">item1</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="d6f2a77320b4d449" href="../../../../../R/d6f2a77320b4d449.html" target="n" data-glyph="108,0" class="t t"><span id="32f4123890ff40ab">Tuple</span></a>&lt;<span id="r105 rd t" class="r105 r t">T1</span>, <span id="r106 rd t" class="r106 r t">T2</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r105 r t">T1</span>, <span class="r106 r t">T2</span>&gt;&gt;
+    {
+        <span class="r105 r t">T1</span> <a id="8db4239fb0a39163" href="../../../../../R/8db4239fb0a39163.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r106 r t">T2</span> <a id="3dd54843570540ed" href="../../../../../R/3dd54843570540ed.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+ 
+        <b>public</b> <a id="0d31306796bcae74" href="../../../../../R/0d31306796bcae74.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r105 r t">T1</span> <span id="r107 rd" class="r107 r">item1</span>, <span class="r106 r t">T2</span> <span id="r108 rd" class="r108 r">item2</span>)
+        {
+            <a href="#d6f2a77320b4d449" class="k">this</a>.<a href="#8db4239fb0a39163" class="i field">item1</a> = <span class="r107 r">item1</span>;
+            <a href="#d6f2a77320b4d449" class="k">this</a>.<a href="#3dd54843570540ed" class="i field">item2</a> = <span class="r108 r">item2</span>;
+        }
+ 
+        <b>public</b> <span class="r105 r t">T1</span> <a id="1ce3b84907bc93d0" href="../../../../../R/1ce3b84907bc93d0.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#8db4239fb0a39163" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r106 r t">T2</span> <a id="e8804a44d2c02690" href="../../../../../R/e8804a44d2c02690.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#3dd54843570540ed" class="i field">item2</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r109 rd" class="r109 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#d6f2a77320b4d449" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r109 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r110 rd" class="r110 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r111 rd" class="r111 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r110 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r110 r">other</span> <b>is</b> <a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r105 r t">T1</span>, <span class="r106 r t">T2</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#d6f2a77320b4d449" class="k">var</a> <span id="r112 rd" class="r112 r">t</span> = (<a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r105 r t">T1</span>, <span class="r106 r t">T2</span>&gt;)<span class="r110 r">other</span>;
+ 
+            <b>int</b> <span id="r113 rd" class="r113 r">res</span> = <span class="r111 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#8db4239fb0a39163" class="i field">item1</a>, <span class="r112 r">t</span>.<a href="#8db4239fb0a39163" class="i field">item1</a>);
+            <b>if</b> (<span class="r113 r">res</span> != 0) <b>return</b> <span class="r113 r">res</span>;
+            <b>return</b> <span class="r111 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#3dd54843570540ed" class="i field">item2</a>, <span class="r112 r">t</span>.<a href="#3dd54843570540ed" class="i field">item2</a>);
+        }
+ 
+        <b>public override bool</b> <a id="2080a8baa8702ad8" href="../../../../../R/2080a8baa8702ad8.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r114 rd" class="r114 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#d6f2a77320b4d449" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r114 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r115 rd" class="r115 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r116 rd" class="r116 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r115 r">other</span> <b>is</b> <a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r105 r t">T1</span>, <span class="r106 r t">T2</span>&gt;))
+                <b>return false</b>;
+ 
+            <a href="#d6f2a77320b4d449" class="k">var</a> <span id="r117 rd" class="r117 r">t</span> = (<a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r105 r t">T1</span>, <span class="r106 r t">T2</span>&gt;)<span class="r115 r">other</span>;
+            <b>return</b> <span class="r116 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#8db4239fb0a39163" class="i field">item1</a>, <span class="r117 r">t</span>.<a href="#8db4239fb0a39163" class="i field">item1</a>) &amp;&amp;
+                <span class="r116 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#3dd54843570540ed" class="i field">item2</a>, <span class="r117 r">t</span>.<a href="#3dd54843570540ed" class="i field">item2</a>);
+        }
+ 
+        <b>public override int</b> <a id="710924f8ec092988" href="../../../../../R/710924f8ec092988.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r118 rd" class="r118 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r105 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r119 rd" class="r119 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r106 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r120 rd" class="r120 r">h0</span>;
+            <span class="r120 r">h0</span> = <span class="r118 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#8db4239fb0a39163" class="i field">item1</a>);
+            <span class="r120 r">h0</span> = (<span class="r120 r">h0</span> &lt;&lt; 5) + <span class="r120 r">h0</span> ^ <span class="r119 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#3dd54843570540ed" class="i field">item2</a>);
+            <b>return</b> <span class="r120 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r121 rd" class="r121 r">comparer</span>)
+        {
+            <b>int</b> <span id="r122 rd" class="r122 r">h0</span>;
+            <span class="r122 r">h0</span> = <span class="r121 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#8db4239fb0a39163" class="i field">item1</a>);
+            <span class="r122 r">h0</span> = (<span class="r122 r">h0</span> &lt;&lt; 5) + <span class="r122 r">h0</span> ^ <span class="r121 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#3dd54843570540ed" class="i field">item2</a>);
+            <b>return</b> <span class="r122 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;{0}, {1}&quot;</span>, <a href="#8db4239fb0a39163" class="i field">item1</a>, <a href="#3dd54843570540ed" class="i field">item2</a>);
+        }
+ 
+        <b>public override string</b> <a id="967089d17cbc9321" href="../../../../../R/967089d17cbc9321.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#d6f2a77320b4d449" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="a0b83dbf2b7d5fc4" href="../../../../../R/a0b83dbf2b7d5fc4.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r105 r t">T1</span>, <span class="r106 r t">T2</span>&gt; <span id="r123 rd" class="r123 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r124 rd" class="r124 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r105 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r125 rd" class="r125 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r106 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r124 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#8db4239fb0a39163" class="i field">item1</a>, <span class="r123 r">other</span>.<a href="#8db4239fb0a39163" class="i field">item1</a>) &amp;&amp;
+                <span class="r125 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#3dd54843570540ed" class="i field">item2</a>, <span class="r123 r">other</span>.<a href="#3dd54843570540ed" class="i field">item2</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="97e818b182c67e67" href="../../../../../R/97e818b182c67e67.html" target="n" data-glyph="108,0" class="t t"><span id="09ff9dc2a175d857">Tuple</span></a>&lt;<span id="r126 rd t" class="r126 r t">T1</span>, <span id="r127 rd t" class="r127 r t">T2</span>, <span id="r128 rd t" class="r128 r t">T3</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r126 r t">T1</span>, <span class="r127 r t">T2</span>, <span class="r128 r t">T3</span>&gt;&gt;
+    {
+        <span class="r126 r t">T1</span> <a id="211724162fdebd2c" href="../../../../../R/211724162fdebd2c.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r127 r t">T2</span> <a id="cc87a9e7d9b21348" href="../../../../../R/cc87a9e7d9b21348.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+        <span class="r128 r t">T3</span> <a id="72301ddcba09d99f" href="../../../../../R/72301ddcba09d99f.html" target="n" data-glyph="46,1" class="i field">item3</a>;
+ 
+        <b>public</b> <a id="bc2fd63bb4205e60" href="../../../../../R/bc2fd63bb4205e60.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r126 r t">T1</span> <span id="r129 rd" class="r129 r">item1</span>, <span class="r127 r t">T2</span> <span id="r130 rd" class="r130 r">item2</span>, <span class="r128 r t">T3</span> <span id="r131 rd" class="r131 r">item3</span>)
+        {
+            <a href="#97e818b182c67e67" class="k">this</a>.<a href="#211724162fdebd2c" class="i field">item1</a> = <span class="r129 r">item1</span>;
+            <a href="#97e818b182c67e67" class="k">this</a>.<a href="#cc87a9e7d9b21348" class="i field">item2</a> = <span class="r130 r">item2</span>;
+            <a href="#97e818b182c67e67" class="k">this</a>.<a href="#72301ddcba09d99f" class="i field">item3</a> = <span class="r131 r">item3</span>;
+        }
+ 
+        <b>public</b> <span class="r126 r t">T1</span> <a id="b710cd33fa67d9c3" href="../../../../../R/b710cd33fa67d9c3.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#211724162fdebd2c" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r127 r t">T2</span> <a id="610631776241a57c" href="../../../../../R/610631776241a57c.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#cc87a9e7d9b21348" class="i field">item2</a>; }
+        }
+ 
+        <b>public</b> <span class="r128 r t">T3</span> <a id="d70f2614d027941e" href="../../../../../R/d70f2614d027941e.html" target="n" data-glyph="102,1" class="i property">Item3</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#72301ddcba09d99f" class="i field">item3</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r132 rd" class="r132 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#97e818b182c67e67" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r132 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r133 rd" class="r133 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r134 rd" class="r134 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r133 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r133 r">other</span> <b>is</b> <a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r126 r t">T1</span>, <span class="r127 r t">T2</span>, <span class="r128 r t">T3</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#97e818b182c67e67" class="k">var</a> <span id="r135 rd" class="r135 r">t</span> = (<a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r126 r t">T1</span>, <span class="r127 r t">T2</span>, <span class="r128 r t">T3</span>&gt;)<span class="r133 r">other</span>;
+ 
+            <b>int</b> <span id="r136 rd" class="r136 r">res</span> = <span class="r134 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#211724162fdebd2c" class="i field">item1</a>, <span class="r135 r">t</span>.<a href="#211724162fdebd2c" class="i field">item1</a>);
+            <b>if</b> (<span class="r136 r">res</span> != 0) <b>return</b> <span class="r136 r">res</span>;
+            <span class="r136 r">res</span> = <span class="r134 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#cc87a9e7d9b21348" class="i field">item2</a>, <span class="r135 r">t</span>.<a href="#cc87a9e7d9b21348" class="i field">item2</a>);
+            <b>if</b> (<span class="r136 r">res</span> != 0) <b>return</b> <span class="r136 r">res</span>;
+            <b>return</b> <span class="r134 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#72301ddcba09d99f" class="i field">item3</a>, <span class="r135 r">t</span>.<a href="#72301ddcba09d99f" class="i field">item3</a>);
+        }
+ 
+        <b>public override bool</b> <a id="c952ad8580e66427" href="../../../../../R/c952ad8580e66427.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r137 rd" class="r137 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#97e818b182c67e67" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r137 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r138 rd" class="r138 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r139 rd" class="r139 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r138 r">other</span> <b>is</b> <a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r126 r t">T1</span>, <span class="r127 r t">T2</span>, <span class="r128 r t">T3</span>&gt;))
+                <b>return false</b>;
+ 
+            <a href="#97e818b182c67e67" class="k">var</a> <span id="r140 rd" class="r140 r">t</span> = (<a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r126 r t">T1</span>, <span class="r127 r t">T2</span>, <span class="r128 r t">T3</span>&gt;)<span class="r138 r">other</span>;
+            <b>return</b> <span class="r139 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#211724162fdebd2c" class="i field">item1</a>, <span class="r140 r">t</span>.<a href="#211724162fdebd2c" class="i field">item1</a>) &amp;&amp;
+                <span class="r139 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#cc87a9e7d9b21348" class="i field">item2</a>, <span class="r140 r">t</span>.<a href="#cc87a9e7d9b21348" class="i field">item2</a>) &amp;&amp;
+                <span class="r139 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#72301ddcba09d99f" class="i field">item3</a>, <span class="r140 r">t</span>.<a href="#72301ddcba09d99f" class="i field">item3</a>);
+        }
+ 
+        <b>public override int</b> <a id="7989e4b9fb453c0c" href="../../../../../R/7989e4b9fb453c0c.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r141 rd" class="r141 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r126 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r142 rd" class="r142 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r127 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r143 rd" class="r143 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r128 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r144 rd" class="r144 r">h0</span>;
+            <span class="r144 r">h0</span> = <span class="r141 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#211724162fdebd2c" class="i field">item1</a>);
+            <span class="r144 r">h0</span> = (<span class="r144 r">h0</span> &lt;&lt; 5) + <span class="r144 r">h0</span> ^ <span class="r142 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#cc87a9e7d9b21348" class="i field">item2</a>);
+            <span class="r144 r">h0</span> = (<span class="r144 r">h0</span> &lt;&lt; 5) + <span class="r144 r">h0</span> ^ <span class="r143 r">comparer3</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#72301ddcba09d99f" class="i field">item3</a>);
+            <b>return</b> <span class="r144 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r145 rd" class="r145 r">comparer</span>)
+        {
+            <b>int</b> <span id="r146 rd" class="r146 r">h0</span>;
+            <span class="r146 r">h0</span> = <span class="r145 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#211724162fdebd2c" class="i field">item1</a>);
+            <span class="r146 r">h0</span> = (<span class="r146 r">h0</span> &lt;&lt; 5) + <span class="r146 r">h0</span> ^ <span class="r145 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#cc87a9e7d9b21348" class="i field">item2</a>);
+            <span class="r146 r">h0</span> = (<span class="r146 r">h0</span> &lt;&lt; 5) + <span class="r146 r">h0</span> ^ <span class="r145 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#72301ddcba09d99f" class="i field">item3</a>);
+            <b>return</b> <span class="r146 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;{0}, {1}, {2}&quot;</span>, <a href="#211724162fdebd2c" class="i field">item1</a>, <a href="#cc87a9e7d9b21348" class="i field">item2</a>, <a href="#72301ddcba09d99f" class="i field">item3</a>);
+        }
+ 
+        <b>public override string</b> <a id="9b06fb2331cc8e01" href="../../../../../R/9b06fb2331cc8e01.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#97e818b182c67e67" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="5083cfb919cafc07" href="../../../../../R/5083cfb919cafc07.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r126 r t">T1</span>, <span class="r127 r t">T2</span>, <span class="r128 r t">T3</span>&gt; <span id="r147 rd" class="r147 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r148 rd" class="r148 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r126 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r149 rd" class="r149 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r127 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r150 rd" class="r150 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r128 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r148 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#211724162fdebd2c" class="i field">item1</a>, <span class="r147 r">other</span>.<a href="#211724162fdebd2c" class="i field">item1</a>) &amp;&amp;
+                <span class="r149 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#cc87a9e7d9b21348" class="i field">item2</a>, <span class="r147 r">other</span>.<a href="#cc87a9e7d9b21348" class="i field">item2</a>) &amp;&amp;
+                <span class="r150 r">comparer3</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#72301ddcba09d99f" class="i field">item3</a>, <span class="r147 r">other</span>.<a href="#72301ddcba09d99f" class="i field">item3</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="abccc3c871bb7231" href="../../../../../R/abccc3c871bb7231.html" target="n" data-glyph="108,0" class="t t"><span id="6460ea257546e2cb">Tuple</span></a>&lt;<span id="r151 rd t" class="r151 r t">T1</span>, <span id="r152 rd t" class="r152 r t">T2</span>, <span id="r153 rd t" class="r153 r t">T3</span>, <span id="r154 rd t" class="r154 r t">T4</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r151 r t">T1</span>, <span class="r152 r t">T2</span>, <span class="r153 r t">T3</span>, <span class="r154 r t">T4</span>&gt;&gt;
+    {
+        <span class="r151 r t">T1</span> <a id="56b14657b468a21b" href="../../../../../R/56b14657b468a21b.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r152 r t">T2</span> <a id="2dd1786de31fec78" href="../../../../../R/2dd1786de31fec78.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+        <span class="r153 r t">T3</span> <a id="0c2c462d6afab948" href="../../../../../R/0c2c462d6afab948.html" target="n" data-glyph="46,1" class="i field">item3</a>;
+        <span class="r154 r t">T4</span> <a id="fa7ccd03013d8a9d" href="../../../../../R/fa7ccd03013d8a9d.html" target="n" data-glyph="46,1" class="i field">item4</a>;
+ 
+        <b>public</b> <a id="773975e20a72bd3a" href="../../../../../R/773975e20a72bd3a.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r151 r t">T1</span> <span id="r155 rd" class="r155 r">item1</span>, <span class="r152 r t">T2</span> <span id="r156 rd" class="r156 r">item2</span>, <span class="r153 r t">T3</span> <span id="r157 rd" class="r157 r">item3</span>, <span class="r154 r t">T4</span> <span id="r158 rd" class="r158 r">item4</span>)
+        {
+            <a href="#abccc3c871bb7231" class="k">this</a>.<a href="#56b14657b468a21b" class="i field">item1</a> = <span class="r155 r">item1</span>;
+            <a href="#abccc3c871bb7231" class="k">this</a>.<a href="#2dd1786de31fec78" class="i field">item2</a> = <span class="r156 r">item2</span>;
+            <a href="#abccc3c871bb7231" class="k">this</a>.<a href="#0c2c462d6afab948" class="i field">item3</a> = <span class="r157 r">item3</span>;
+            <a href="#abccc3c871bb7231" class="k">this</a>.<a href="#fa7ccd03013d8a9d" class="i field">item4</a> = <span class="r158 r">item4</span>;
+        }
+ 
+        <b>public</b> <span class="r151 r t">T1</span> <a id="919aa5307ca5ff1b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#56b14657b468a21b" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r152 r t">T2</span> <a id="7a9a167024aff528" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#2dd1786de31fec78" class="i field">item2</a>; }
+        }
+ 
+        <b>public</b> <span class="r153 r t">T3</span> <a id="f534a0bbb32e60c7" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Item3</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#0c2c462d6afab948" class="i field">item3</a>; }
+        }
+ 
+        <b>public</b> <span class="r154 r t">T4</span> <a id="74e6bd5a501be6f8" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Item4</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#fa7ccd03013d8a9d" class="i field">item4</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r159 rd" class="r159 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#abccc3c871bb7231" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r159 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r160 rd" class="r160 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r161 rd" class="r161 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r160 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r160 r">other</span> <b>is</b> <a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r151 r t">T1</span>, <span class="r152 r t">T2</span>, <span class="r153 r t">T3</span>, <span class="r154 r t">T4</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#abccc3c871bb7231" class="k">var</a> <span id="r162 rd" class="r162 r">t</span> = (<a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r151 r t">T1</span>, <span class="r152 r t">T2</span>, <span class="r153 r t">T3</span>, <span class="r154 r t">T4</span>&gt;)<span class="r160 r">other</span>;
+ 
+            <b>int</b> <span id="r163 rd" class="r163 r">res</span> = <span class="r161 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#56b14657b468a21b" class="i field">item1</a>, <span class="r162 r">t</span>.<a href="#56b14657b468a21b" class="i field">item1</a>);
+            <b>if</b> (<span class="r163 r">res</span> != 0) <b>return</b> <span class="r163 r">res</span>;
+            <span class="r163 r">res</span> = <span class="r161 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#2dd1786de31fec78" class="i field">item2</a>, <span class="r162 r">t</span>.<a href="#2dd1786de31fec78" class="i field">item2</a>);
+            <b>if</b> (<span class="r163 r">res</span> != 0) <b>return</b> <span class="r163 r">res</span>;
+            <span class="r163 r">res</span> = <span class="r161 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#0c2c462d6afab948" class="i field">item3</a>, <span class="r162 r">t</span>.<a href="#0c2c462d6afab948" class="i field">item3</a>);
+            <b>if</b> (<span class="r163 r">res</span> != 0) <b>return</b> <span class="r163 r">res</span>;
+            <b>return</b> <span class="r161 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#fa7ccd03013d8a9d" class="i field">item4</a>, <span class="r162 r">t</span>.<a href="#fa7ccd03013d8a9d" class="i field">item4</a>);
+        }
+ 
+        <b>public override bool</b> <a id="7b66e374a02db351" href="../../../../../R/7b66e374a02db351.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r164 rd" class="r164 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#abccc3c871bb7231" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r164 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r165 rd" class="r165 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r166 rd" class="r166 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r165 r">other</span> <b>is</b> <a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r151 r t">T1</span>, <span class="r152 r t">T2</span>, <span class="r153 r t">T3</span>, <span class="r154 r t">T4</span>&gt;))
+                <b>return false</b>;
+            <a href="#abccc3c871bb7231" class="k">var</a> <span id="r167 rd" class="r167 r">t</span> = (<a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r151 r t">T1</span>, <span class="r152 r t">T2</span>, <span class="r153 r t">T3</span>, <span class="r154 r t">T4</span>&gt;)<span class="r165 r">other</span>;
+ 
+            <b>return</b> <span class="r166 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#56b14657b468a21b" class="i field">item1</a>, <span class="r167 r">t</span>.<a href="#56b14657b468a21b" class="i field">item1</a>) &amp;&amp;
+                <span class="r166 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#2dd1786de31fec78" class="i field">item2</a>, <span class="r167 r">t</span>.<a href="#2dd1786de31fec78" class="i field">item2</a>) &amp;&amp;
+                <span class="r166 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#0c2c462d6afab948" class="i field">item3</a>, <span class="r167 r">t</span>.<a href="#0c2c462d6afab948" class="i field">item3</a>) &amp;&amp;
+                <span class="r166 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#fa7ccd03013d8a9d" class="i field">item4</a>, <span class="r167 r">t</span>.<a href="#fa7ccd03013d8a9d" class="i field">item4</a>);
+        }
+ 
+        <b>public override int</b> <a id="091bf14cece31526" href="../../../../../R/091bf14cece31526.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r168 rd" class="r168 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r151 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r169 rd" class="r169 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r152 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r170 rd" class="r170 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r153 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r171 rd" class="r171 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r154 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r172 rd" class="r172 r">h0</span>, <span id="r173 rd" class="r173 r">h1</span>;
+            <span class="r172 r">h0</span> = <span class="r168 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#56b14657b468a21b" class="i field">item1</a>);
+            <span class="r172 r">h0</span> = (<span class="r172 r">h0</span> &lt;&lt; 5) + <span class="r172 r">h0</span> ^ <span class="r169 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#2dd1786de31fec78" class="i field">item2</a>);
+            <span class="r173 r">h1</span> = <span class="r170 r">comparer3</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#0c2c462d6afab948" class="i field">item3</a>);
+            <span class="r173 r">h1</span> = (<span class="r173 r">h1</span> &lt;&lt; 5) + <span class="r173 r">h1</span> ^ <span class="r171 r">comparer4</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#fa7ccd03013d8a9d" class="i field">item4</a>);
+            <span class="r172 r">h0</span> = (<span class="r172 r">h0</span> &lt;&lt; 5) + <span class="r172 r">h0</span> ^ <span class="r173 r">h1</span>;
+            <b>return</b> <span class="r172 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r174 rd" class="r174 r">comparer</span>)
+        {
+            <b>int</b> <span id="r175 rd" class="r175 r">h0</span>, <span id="r176 rd" class="r176 r">h1</span>;
+            <span class="r175 r">h0</span> = <span class="r174 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#56b14657b468a21b" class="i field">item1</a>);
+            <span class="r175 r">h0</span> = (<span class="r175 r">h0</span> &lt;&lt; 5) + <span class="r175 r">h0</span> ^ <span class="r174 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#2dd1786de31fec78" class="i field">item2</a>);
+            <span class="r176 r">h1</span> = <span class="r174 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#0c2c462d6afab948" class="i field">item3</a>);
+            <span class="r176 r">h1</span> = (<span class="r176 r">h1</span> &lt;&lt; 5) + <span class="r176 r">h1</span> ^ <span class="r174 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#fa7ccd03013d8a9d" class="i field">item4</a>);
+            <span class="r175 r">h0</span> = (<span class="r175 r">h0</span> &lt;&lt; 5) + <span class="r175 r">h0</span> ^ <span class="r176 r">h1</span>;
+            <b>return</b> <span class="r175 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;{0}, {1}, {2}, {3}&quot;</span>, <a href="#56b14657b468a21b" class="i field">item1</a>, <a href="#2dd1786de31fec78" class="i field">item2</a>, <a href="#0c2c462d6afab948" class="i field">item3</a>, <a href="#fa7ccd03013d8a9d" class="i field">item4</a>);
+        }
+ 
+        <b>public override string</b> <a id="cb658dc599a8043a" href="../../../../../R/cb658dc599a8043a.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#abccc3c871bb7231" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="537e4a04f56f884c" href="../../../../../R/537e4a04f56f884c.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r151 r t">T1</span>, <span class="r152 r t">T2</span>, <span class="r153 r t">T3</span>, <span class="r154 r t">T4</span>&gt; <span id="r177 rd" class="r177 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r178 rd" class="r178 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r151 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r179 rd" class="r179 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r152 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r180 rd" class="r180 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r153 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r181 rd" class="r181 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r154 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r178 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#56b14657b468a21b" class="i field">item1</a>, <span class="r177 r">other</span>.<a href="#56b14657b468a21b" class="i field">item1</a>) &amp;&amp;
+                <span class="r179 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#2dd1786de31fec78" class="i field">item2</a>, <span class="r177 r">other</span>.<a href="#2dd1786de31fec78" class="i field">item2</a>) &amp;&amp;
+                <span class="r180 r">comparer3</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#0c2c462d6afab948" class="i field">item3</a>, <span class="r177 r">other</span>.<a href="#0c2c462d6afab948" class="i field">item3</a>) &amp;&amp;
+                <span class="r181 r">comparer4</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#fa7ccd03013d8a9d" class="i field">item4</a>, <span class="r177 r">other</span>.<a href="#fa7ccd03013d8a9d" class="i field">item4</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="c25284cc93acdbe6" href="../../../../../R/c25284cc93acdbe6.html" target="n" data-glyph="108,0" class="t t"><span id="1813028068caf4b1">Tuple</span></a>&lt;<span id="r182 rd t" class="r182 r t">T1</span>, <span id="r183 rd t" class="r183 r t">T2</span>, <span id="r184 rd t" class="r184 r t">T3</span>, <span id="r185 rd t" class="r185 r t">T4</span>, <span id="r186 rd t" class="r186 r t">T5</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r182 r t">T1</span>, <span class="r183 r t">T2</span>, <span class="r184 r t">T3</span>, <span class="r185 r t">T4</span>, <span class="r186 r t">T5</span>&gt;&gt;
+    {
+        <span class="r182 r t">T1</span> <a id="f02e179a9f045c85" href="../../../../../R/f02e179a9f045c85.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r183 r t">T2</span> <a id="df9cd17217e8de3d" href="../../../../../R/df9cd17217e8de3d.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+        <span class="r184 r t">T3</span> <a id="2bd07b74cceb233e" href="../../../../../R/2bd07b74cceb233e.html" target="n" data-glyph="46,1" class="i field">item3</a>;
+        <span class="r185 r t">T4</span> <a id="e7d8750fb7a4edc3" href="../../../../../R/e7d8750fb7a4edc3.html" target="n" data-glyph="46,1" class="i field">item4</a>;
+        <span class="r186 r t">T5</span> <a id="742094783ba1a35c" href="../../../../../R/742094783ba1a35c.html" target="n" data-glyph="46,1" class="i field">item5</a>;
+ 
+        <b>public</b> <a id="cc27f80505da9040" href="../../../../../R/cc27f80505da9040.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r182 r t">T1</span> <span id="r187 rd" class="r187 r">item1</span>, <span class="r183 r t">T2</span> <span id="r188 rd" class="r188 r">item2</span>, <span class="r184 r t">T3</span> <span id="r189 rd" class="r189 r">item3</span>, <span class="r185 r t">T4</span> <span id="r190 rd" class="r190 r">item4</span>, <span class="r186 r t">T5</span> <span id="r191 rd" class="r191 r">item5</span>)
+        {
+            <a href="#c25284cc93acdbe6" class="k">this</a>.<a href="#f02e179a9f045c85" class="i field">item1</a> = <span class="r187 r">item1</span>;
+            <a href="#c25284cc93acdbe6" class="k">this</a>.<a href="#df9cd17217e8de3d" class="i field">item2</a> = <span class="r188 r">item2</span>;
+            <a href="#c25284cc93acdbe6" class="k">this</a>.<a href="#2bd07b74cceb233e" class="i field">item3</a> = <span class="r189 r">item3</span>;
+            <a href="#c25284cc93acdbe6" class="k">this</a>.<a href="#e7d8750fb7a4edc3" class="i field">item4</a> = <span class="r190 r">item4</span>;
+            <a href="#c25284cc93acdbe6" class="k">this</a>.<a href="#742094783ba1a35c" class="i field">item5</a> = <span class="r191 r">item5</span>;
+        }
+ 
+        <b>public</b> <span class="r182 r t">T1</span> <a id="8a6e583478f0b4b4" href="../../../../../R/8a6e583478f0b4b4.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#f02e179a9f045c85" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r183 r t">T2</span> <a id="c3348d5890477b95" href="../../../../../R/c3348d5890477b95.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#df9cd17217e8de3d" class="i field">item2</a>; }
+        }
+ 
+        <b>public</b> <span class="r184 r t">T3</span> <a id="0ca7a63245d6cc10" href="../../../../../R/0ca7a63245d6cc10.html" target="n" data-glyph="102,1" class="i property">Item3</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#2bd07b74cceb233e" class="i field">item3</a>; }
+        }
+ 
+        <b>public</b> <span class="r185 r t">T4</span> <a id="1f7222289a2b8baf" href="../../../../../R/1f7222289a2b8baf.html" target="n" data-glyph="102,1" class="i property">Item4</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#e7d8750fb7a4edc3" class="i field">item4</a>; }
+        }
+ 
+        <b>public</b> <span class="r186 r t">T5</span> <a id="ff29f0a83e65d9f0" href="../../../../../R/ff29f0a83e65d9f0.html" target="n" data-glyph="102,1" class="i property">Item5</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#742094783ba1a35c" class="i field">item5</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r192 rd" class="r192 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#c25284cc93acdbe6" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r192 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r193 rd" class="r193 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r194 rd" class="r194 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r193 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r193 r">other</span> <b>is</b> <a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r182 r t">T1</span>, <span class="r183 r t">T2</span>, <span class="r184 r t">T3</span>, <span class="r185 r t">T4</span>, <span class="r186 r t">T5</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#c25284cc93acdbe6" class="k">var</a> <span id="r195 rd" class="r195 r">t</span> = (<a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r182 r t">T1</span>, <span class="r183 r t">T2</span>, <span class="r184 r t">T3</span>, <span class="r185 r t">T4</span>, <span class="r186 r t">T5</span>&gt;)<span class="r193 r">other</span>;
+ 
+            <b>int</b> <span id="r196 rd" class="r196 r">res</span> = <span class="r194 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#f02e179a9f045c85" class="i field">item1</a>, <span class="r195 r">t</span>.<a href="#f02e179a9f045c85" class="i field">item1</a>);
+            <b>if</b> (<span class="r196 r">res</span> != 0) <b>return</b> <span class="r196 r">res</span>;
+            <span class="r196 r">res</span> = <span class="r194 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#df9cd17217e8de3d" class="i field">item2</a>, <span class="r195 r">t</span>.<a href="#df9cd17217e8de3d" class="i field">item2</a>);
+            <b>if</b> (<span class="r196 r">res</span> != 0) <b>return</b> <span class="r196 r">res</span>;
+            <span class="r196 r">res</span> = <span class="r194 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#2bd07b74cceb233e" class="i field">item3</a>, <span class="r195 r">t</span>.<a href="#2bd07b74cceb233e" class="i field">item3</a>);
+            <b>if</b> (<span class="r196 r">res</span> != 0) <b>return</b> <span class="r196 r">res</span>;
+            <span class="r196 r">res</span> = <span class="r194 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#e7d8750fb7a4edc3" class="i field">item4</a>, <span class="r195 r">t</span>.<a href="#e7d8750fb7a4edc3" class="i field">item4</a>);
+            <b>if</b> (<span class="r196 r">res</span> != 0) <b>return</b> <span class="r196 r">res</span>;
+            <b>return</b> <span class="r194 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#742094783ba1a35c" class="i field">item5</a>, <span class="r195 r">t</span>.<a href="#742094783ba1a35c" class="i field">item5</a>);
+        }
+ 
+        <b>public override bool</b> <a id="7c02b2d3593cd977" href="../../../../../R/7c02b2d3593cd977.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r197 rd" class="r197 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#c25284cc93acdbe6" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r197 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r198 rd" class="r198 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r199 rd" class="r199 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r198 r">other</span> <b>is</b> <a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r182 r t">T1</span>, <span class="r183 r t">T2</span>, <span class="r184 r t">T3</span>, <span class="r185 r t">T4</span>, <span class="r186 r t">T5</span>&gt;))
+                <b>return false</b>;
+            <a href="#c25284cc93acdbe6" class="k">var</a> <span id="r200 rd" class="r200 r">t</span> = (<a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r182 r t">T1</span>, <span class="r183 r t">T2</span>, <span class="r184 r t">T3</span>, <span class="r185 r t">T4</span>, <span class="r186 r t">T5</span>&gt;)<span class="r198 r">other</span>;
+ 
+            <b>return</b> <span class="r199 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#f02e179a9f045c85" class="i field">item1</a>, <span class="r200 r">t</span>.<a href="#f02e179a9f045c85" class="i field">item1</a>) &amp;&amp;
+                <span class="r199 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#df9cd17217e8de3d" class="i field">item2</a>, <span class="r200 r">t</span>.<a href="#df9cd17217e8de3d" class="i field">item2</a>) &amp;&amp;
+                <span class="r199 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#2bd07b74cceb233e" class="i field">item3</a>, <span class="r200 r">t</span>.<a href="#2bd07b74cceb233e" class="i field">item3</a>) &amp;&amp;
+                <span class="r199 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#e7d8750fb7a4edc3" class="i field">item4</a>, <span class="r200 r">t</span>.<a href="#e7d8750fb7a4edc3" class="i field">item4</a>) &amp;&amp;
+                <span class="r199 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#742094783ba1a35c" class="i field">item5</a>, <span class="r200 r">t</span>.<a href="#742094783ba1a35c" class="i field">item5</a>);
+        }
+ 
+        <b>public override int</b> <a id="6affe7a6ec94ab47" href="../../../../../R/6affe7a6ec94ab47.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r201 rd" class="r201 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r182 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r202 rd" class="r202 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r183 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r203 rd" class="r203 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r184 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r204 rd" class="r204 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r185 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r205 rd" class="r205 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r186 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r206 rd" class="r206 r">h0</span>, <span id="r207 rd" class="r207 r">h1</span>;
+            <span class="r206 r">h0</span> = <span class="r201 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#f02e179a9f045c85" class="i field">item1</a>);
+            <span class="r206 r">h0</span> = (<span class="r206 r">h0</span> &lt;&lt; 5) + <span class="r206 r">h0</span> ^ <span class="r202 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#df9cd17217e8de3d" class="i field">item2</a>);
+            <span class="r207 r">h1</span> = <span class="r203 r">comparer3</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#2bd07b74cceb233e" class="i field">item3</a>);
+            <span class="r207 r">h1</span> = (<span class="r207 r">h1</span> &lt;&lt; 5) + <span class="r207 r">h1</span> ^ <span class="r204 r">comparer4</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#e7d8750fb7a4edc3" class="i field">item4</a>);
+            <span class="r206 r">h0</span> = (<span class="r206 r">h0</span> &lt;&lt; 5) + <span class="r206 r">h0</span> ^ <span class="r207 r">h1</span>;
+            <span class="r206 r">h0</span> = (<span class="r206 r">h0</span> &lt;&lt; 5) + <span class="r206 r">h0</span> ^ <span class="r205 r">comparer5</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#742094783ba1a35c" class="i field">item5</a>);
+            <b>return</b> <span class="r206 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r208 rd" class="r208 r">comparer</span>)
+        {
+            <b>int</b> <span id="r209 rd" class="r209 r">h0</span>, <span id="r210 rd" class="r210 r">h1</span>;
+            <span class="r209 r">h0</span> = <span class="r208 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#f02e179a9f045c85" class="i field">item1</a>);
+            <span class="r209 r">h0</span> = (<span class="r209 r">h0</span> &lt;&lt; 5) + <span class="r209 r">h0</span> ^ <span class="r208 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#df9cd17217e8de3d" class="i field">item2</a>);
+            <span class="r210 r">h1</span> = <span class="r208 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#2bd07b74cceb233e" class="i field">item3</a>);
+            <span class="r210 r">h1</span> = (<span class="r210 r">h1</span> &lt;&lt; 5) + <span class="r210 r">h1</span> ^ <span class="r208 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#e7d8750fb7a4edc3" class="i field">item4</a>);
+            <span class="r209 r">h0</span> = (<span class="r209 r">h0</span> &lt;&lt; 5) + <span class="r209 r">h0</span> ^ <span class="r210 r">h1</span>;
+            <span class="r209 r">h0</span> = (<span class="r209 r">h0</span> &lt;&lt; 5) + <span class="r209 r">h0</span> ^ <span class="r208 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#742094783ba1a35c" class="i field">item5</a>);
+            <b>return</b> <span class="r209 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;{0}, {1}, {2}, {3}, {4}&quot;</span>, <a href="#f02e179a9f045c85" class="i field">item1</a>, <a href="#df9cd17217e8de3d" class="i field">item2</a>, <a href="#2bd07b74cceb233e" class="i field">item3</a>, <a href="#e7d8750fb7a4edc3" class="i field">item4</a>, <a href="#742094783ba1a35c" class="i field">item5</a>);
+        }
+ 
+        <b>public override string</b> <a id="e83742e5d1846fe2" href="../../../../../R/e83742e5d1846fe2.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#c25284cc93acdbe6" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="182acf678fe46c35" href="../../../../../R/182acf678fe46c35.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#c25284cc93acdbe6" class="t t">Tuple</a>&lt;<span class="r182 r t">T1</span>, <span class="r183 r t">T2</span>, <span class="r184 r t">T3</span>, <span class="r185 r t">T4</span>, <span class="r186 r t">T5</span>&gt; <span id="r211 rd" class="r211 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r212 rd" class="r212 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r182 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r213 rd" class="r213 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r183 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r214 rd" class="r214 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r184 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r215 rd" class="r215 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r185 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r216 rd" class="r216 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r186 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r212 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#f02e179a9f045c85" class="i field">item1</a>, <span class="r211 r">other</span>.<a href="#8a6e583478f0b4b4" class="i property">Item1</a>) &amp;&amp;
+                <span class="r213 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#df9cd17217e8de3d" class="i field">item2</a>, <span class="r211 r">other</span>.<a href="#c3348d5890477b95" class="i property">Item2</a>) &amp;&amp;
+                <span class="r214 r">comparer3</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#2bd07b74cceb233e" class="i field">item3</a>, <span class="r211 r">other</span>.<a href="#0ca7a63245d6cc10" class="i property">Item3</a>) &amp;&amp;
+                <span class="r215 r">comparer4</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#e7d8750fb7a4edc3" class="i field">item4</a>, <span class="r211 r">other</span>.<a href="#1f7222289a2b8baf" class="i property">Item4</a>) &amp;&amp;
+                <span class="r216 r">comparer5</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#742094783ba1a35c" class="i field">item5</a>, <span class="r211 r">other</span>.<a href="#ff29f0a83e65d9f0" class="i property">Item5</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="133397c3b7b416f6" href="../../../../../R/133397c3b7b416f6.html" target="n" data-glyph="108,0" class="t t"><span id="7682ddc790f57c25">Tuple</span></a>&lt;<span id="r217 rd t" class="r217 r t">T1</span>, <span id="r218 rd t" class="r218 r t">T2</span>, <span id="r219 rd t" class="r219 r t">T3</span>, <span id="r220 rd t" class="r220 r t">T4</span>, <span id="r221 rd t" class="r221 r t">T5</span>, <span id="r222 rd t" class="r222 r t">T6</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r217 r t">T1</span>, <span class="r218 r t">T2</span>, <span class="r219 r t">T3</span>, <span class="r220 r t">T4</span>, <span class="r221 r t">T5</span>, <span class="r222 r t">T6</span>&gt;&gt;
+    {
+        <span class="r217 r t">T1</span> <a id="4fced5668fc10dfb" href="../../../../../R/4fced5668fc10dfb.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r218 r t">T2</span> <a id="427c27f5c1968776" href="../../../../../R/427c27f5c1968776.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+        <span class="r219 r t">T3</span> <a id="9a0b12fb17937620" href="../../../../../R/9a0b12fb17937620.html" target="n" data-glyph="46,1" class="i field">item3</a>;
+        <span class="r220 r t">T4</span> <a id="21a0cebe90b7c51f" href="../../../../../R/21a0cebe90b7c51f.html" target="n" data-glyph="46,1" class="i field">item4</a>;
+        <span class="r221 r t">T5</span> <a id="aed2c3f0c0bb03f4" href="../../../../../R/aed2c3f0c0bb03f4.html" target="n" data-glyph="46,1" class="i field">item5</a>;
+        <span class="r222 r t">T6</span> <a id="2cbc62747c40cf4e" href="../../../../../R/2cbc62747c40cf4e.html" target="n" data-glyph="46,1" class="i field">item6</a>;
+ 
+        <b>public</b> <a id="175c2fdcb0f8f1d5" href="../../../../../R/175c2fdcb0f8f1d5.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r217 r t">T1</span> <span id="r223 rd" class="r223 r">item1</span>, <span class="r218 r t">T2</span> <span id="r224 rd" class="r224 r">item2</span>, <span class="r219 r t">T3</span> <span id="r225 rd" class="r225 r">item3</span>, <span class="r220 r t">T4</span> <span id="r226 rd" class="r226 r">item4</span>, <span class="r221 r t">T5</span> <span id="r227 rd" class="r227 r">item5</span>, <span class="r222 r t">T6</span> <span id="r228 rd" class="r228 r">item6</span>)
+        {
+            <a href="#133397c3b7b416f6" class="k">this</a>.<a href="#4fced5668fc10dfb" class="i field">item1</a> = <span class="r223 r">item1</span>;
+            <a href="#133397c3b7b416f6" class="k">this</a>.<a href="#427c27f5c1968776" class="i field">item2</a> = <span class="r224 r">item2</span>;
+            <a href="#133397c3b7b416f6" class="k">this</a>.<a href="#9a0b12fb17937620" class="i field">item3</a> = <span class="r225 r">item3</span>;
+            <a href="#133397c3b7b416f6" class="k">this</a>.<a href="#21a0cebe90b7c51f" class="i field">item4</a> = <span class="r226 r">item4</span>;
+            <a href="#133397c3b7b416f6" class="k">this</a>.<a href="#aed2c3f0c0bb03f4" class="i field">item5</a> = <span class="r227 r">item5</span>;
+            <a href="#133397c3b7b416f6" class="k">this</a>.<a href="#2cbc62747c40cf4e" class="i field">item6</a> = <span class="r228 r">item6</span>;
+        }
+ 
+        <b>public</b> <span class="r217 r t">T1</span> <a id="b63f3f293db43b31" href="../../../../../R/b63f3f293db43b31.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#4fced5668fc10dfb" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r218 r t">T2</span> <a id="2c519ef3b8b2da01" href="../../../../../R/2c519ef3b8b2da01.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#427c27f5c1968776" class="i field">item2</a>; }
+        }
+ 
+        <b>public</b> <span class="r219 r t">T3</span> <a id="d644b0b7ce770e7a" href="../../../../../R/d644b0b7ce770e7a.html" target="n" data-glyph="102,1" class="i property">Item3</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#9a0b12fb17937620" class="i field">item3</a>; }
+        }
+ 
+        <b>public</b> <span class="r220 r t">T4</span> <a id="d14e4e833cdb9c4d" href="../../../../../R/d14e4e833cdb9c4d.html" target="n" data-glyph="102,1" class="i property">Item4</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#21a0cebe90b7c51f" class="i field">item4</a>; }
+        }
+ 
+        <b>public</b> <span class="r221 r t">T5</span> <a id="3d9651d7640afa7f" href="../../../../../R/3d9651d7640afa7f.html" target="n" data-glyph="102,1" class="i property">Item5</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#aed2c3f0c0bb03f4" class="i field">item5</a>; }
+        }
+ 
+        <b>public</b> <span class="r222 r t">T6</span> <a id="1bb43e2e2b851fa3" href="../../../../../R/1bb43e2e2b851fa3.html" target="n" data-glyph="102,1" class="i property">Item6</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#2cbc62747c40cf4e" class="i field">item6</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r229 rd" class="r229 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#133397c3b7b416f6" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r229 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r230 rd" class="r230 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r231 rd" class="r231 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r230 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r230 r">other</span> <b>is</b> <a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r217 r t">T1</span>, <span class="r218 r t">T2</span>, <span class="r219 r t">T3</span>, <span class="r220 r t">T4</span>, <span class="r221 r t">T5</span>, <span class="r222 r t">T6</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#133397c3b7b416f6" class="k">var</a> <span id="r232 rd" class="r232 r">t</span> = (<a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r217 r t">T1</span>, <span class="r218 r t">T2</span>, <span class="r219 r t">T3</span>, <span class="r220 r t">T4</span>, <span class="r221 r t">T5</span>, <span class="r222 r t">T6</span>&gt;)<span class="r230 r">other</span>;
+ 
+            <b>int</b> <span id="r233 rd" class="r233 r">res</span> = <span class="r231 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#4fced5668fc10dfb" class="i field">item1</a>, <span class="r232 r">t</span>.<a href="#4fced5668fc10dfb" class="i field">item1</a>);
+            <b>if</b> (<span class="r233 r">res</span> != 0) <b>return</b> <span class="r233 r">res</span>;
+            <span class="r233 r">res</span> = <span class="r231 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#427c27f5c1968776" class="i field">item2</a>, <span class="r232 r">t</span>.<a href="#427c27f5c1968776" class="i field">item2</a>);
+            <b>if</b> (<span class="r233 r">res</span> != 0) <b>return</b> <span class="r233 r">res</span>;
+            <span class="r233 r">res</span> = <span class="r231 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#9a0b12fb17937620" class="i field">item3</a>, <span class="r232 r">t</span>.<a href="#9a0b12fb17937620" class="i field">item3</a>);
+            <b>if</b> (<span class="r233 r">res</span> != 0) <b>return</b> <span class="r233 r">res</span>;
+            <span class="r233 r">res</span> = <span class="r231 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#21a0cebe90b7c51f" class="i field">item4</a>, <span class="r232 r">t</span>.<a href="#21a0cebe90b7c51f" class="i field">item4</a>);
+            <b>if</b> (<span class="r233 r">res</span> != 0) <b>return</b> <span class="r233 r">res</span>;
+            <span class="r233 r">res</span> = <span class="r231 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>, <span class="r232 r">t</span>.<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>);
+            <b>if</b> (<span class="r233 r">res</span> != 0) <b>return</b> <span class="r233 r">res</span>;
+            <b>return</b> <span class="r231 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#2cbc62747c40cf4e" class="i field">item6</a>, <span class="r232 r">t</span>.<a href="#2cbc62747c40cf4e" class="i field">item6</a>);
+        }
+ 
+        <b>public override bool</b> <a id="d3bb78afd98993a2" href="../../../../../R/d3bb78afd98993a2.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r234 rd" class="r234 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#133397c3b7b416f6" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r234 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r235 rd" class="r235 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r236 rd" class="r236 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r235 r">other</span> <b>is</b> <a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r217 r t">T1</span>, <span class="r218 r t">T2</span>, <span class="r219 r t">T3</span>, <span class="r220 r t">T4</span>, <span class="r221 r t">T5</span>, <span class="r222 r t">T6</span>&gt;))
+                <b>return false</b>;
+            <a href="#133397c3b7b416f6" class="k">var</a> <span id="r237 rd" class="r237 r">t</span> = (<a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r217 r t">T1</span>, <span class="r218 r t">T2</span>, <span class="r219 r t">T3</span>, <span class="r220 r t">T4</span>, <span class="r221 r t">T5</span>, <span class="r222 r t">T6</span>&gt;)<span class="r235 r">other</span>;
+ 
+            <b>return</b> <span class="r236 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#4fced5668fc10dfb" class="i field">item1</a>, <span class="r237 r">t</span>.<a href="#4fced5668fc10dfb" class="i field">item1</a>) &amp;&amp;
+                <span class="r236 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#427c27f5c1968776" class="i field">item2</a>, <span class="r237 r">t</span>.<a href="#427c27f5c1968776" class="i field">item2</a>) &amp;&amp;
+                <span class="r236 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#9a0b12fb17937620" class="i field">item3</a>, <span class="r237 r">t</span>.<a href="#9a0b12fb17937620" class="i field">item3</a>) &amp;&amp;
+                <span class="r236 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#21a0cebe90b7c51f" class="i field">item4</a>, <span class="r237 r">t</span>.<a href="#21a0cebe90b7c51f" class="i field">item4</a>) &amp;&amp;
+                <span class="r236 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>, <span class="r237 r">t</span>.<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>) &amp;&amp;
+                <span class="r236 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#2cbc62747c40cf4e" class="i field">item6</a>, <span class="r237 r">t</span>.<a href="#2cbc62747c40cf4e" class="i field">item6</a>);
+        }
+ 
+        <b>public override int</b> <a id="e70a6fa412aaf85a" href="../../../../../R/e70a6fa412aaf85a.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r238 rd" class="r238 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r217 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r239 rd" class="r239 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r218 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r240 rd" class="r240 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r219 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r241 rd" class="r241 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r220 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r242 rd" class="r242 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r221 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r243 rd" class="r243 r">comparer6</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r222 r t">T6</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r244 rd" class="r244 r">h0</span>, <span id="r245 rd" class="r245 r">h1</span>;
+            <span class="r244 r">h0</span> = <span class="r238 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#4fced5668fc10dfb" class="i field">item1</a>);
+            <span class="r244 r">h0</span> = (<span class="r244 r">h0</span> &lt;&lt; 5) + <span class="r244 r">h0</span> ^ <span class="r239 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#427c27f5c1968776" class="i field">item2</a>);
+            <span class="r245 r">h1</span> = <span class="r240 r">comparer3</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#9a0b12fb17937620" class="i field">item3</a>);
+            <span class="r245 r">h1</span> = (<span class="r245 r">h1</span> &lt;&lt; 5) + <span class="r245 r">h1</span> ^ <span class="r241 r">comparer4</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#21a0cebe90b7c51f" class="i field">item4</a>);
+            <span class="r244 r">h0</span> = (<span class="r244 r">h0</span> &lt;&lt; 5) + <span class="r244 r">h0</span> ^ <span class="r245 r">h1</span>;
+            <span class="r245 r">h1</span> = <span class="r242 r">comparer5</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>);
+            <span class="r245 r">h1</span> = (<span class="r245 r">h1</span> &lt;&lt; 5) + <span class="r245 r">h1</span> ^ <span class="r243 r">comparer6</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#2cbc62747c40cf4e" class="i field">item6</a>);
+            <span class="r244 r">h0</span> = (<span class="r244 r">h0</span> &lt;&lt; 5) + <span class="r244 r">h0</span> ^ <span class="r245 r">h1</span>;
+            <b>return</b> <span class="r244 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r246 rd" class="r246 r">comparer</span>)
+        {
+            <b>int</b> <span id="r247 rd" class="r247 r">h0</span>, <span id="r248 rd" class="r248 r">h1</span>;
+            <span class="r247 r">h0</span> = <span class="r246 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#4fced5668fc10dfb" class="i field">item1</a>);
+            <span class="r247 r">h0</span> = (<span class="r247 r">h0</span> &lt;&lt; 5) + <span class="r247 r">h0</span> ^ <span class="r246 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#427c27f5c1968776" class="i field">item2</a>);
+            <span class="r248 r">h1</span> = <span class="r246 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#9a0b12fb17937620" class="i field">item3</a>);
+            <span class="r248 r">h1</span> = (<span class="r248 r">h1</span> &lt;&lt; 5) + <span class="r248 r">h1</span> ^ <span class="r246 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#21a0cebe90b7c51f" class="i field">item4</a>);
+            <span class="r247 r">h0</span> = (<span class="r247 r">h0</span> &lt;&lt; 5) + <span class="r247 r">h0</span> ^ <span class="r248 r">h1</span>;
+            <span class="r248 r">h1</span> = <span class="r246 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>);
+            <span class="r248 r">h1</span> = (<span class="r248 r">h1</span> &lt;&lt; 5) + <span class="r248 r">h1</span> ^ <span class="r246 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#2cbc62747c40cf4e" class="i field">item6</a>);
+            <span class="r247 r">h0</span> = (<span class="r247 r">h0</span> &lt;&lt; 5) + <span class="r247 r">h0</span> ^ <span class="r248 r">h1</span>;
+            <b>return</b> <span class="r247 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;{0}, {1}, {2}, {3}, {4}, {5}&quot;</span>, <a href="#4fced5668fc10dfb" class="i field">item1</a>, <a href="#427c27f5c1968776" class="i field">item2</a>, <a href="#9a0b12fb17937620" class="i field">item3</a>, <a href="#21a0cebe90b7c51f" class="i field">item4</a>, <a href="#aed2c3f0c0bb03f4" class="i field">item5</a>, <a href="#2cbc62747c40cf4e" class="i field">item6</a>);
+        }
+ 
+        <b>public override string</b> <a id="1237510ec7d3e9b0" href="../../../../../R/1237510ec7d3e9b0.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#133397c3b7b416f6" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="4c4df09abe600cec" href="../../../../../R/4c4df09abe600cec.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#133397c3b7b416f6" class="t t">Tuple</a>&lt;<span class="r217 r t">T1</span>, <span class="r218 r t">T2</span>, <span class="r219 r t">T3</span>, <span class="r220 r t">T4</span>, <span class="r221 r t">T5</span>, <span class="r222 r t">T6</span>&gt; <span id="r249 rd" class="r249 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r250 rd" class="r250 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r217 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r251 rd" class="r251 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r218 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r252 rd" class="r252 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r219 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r253 rd" class="r253 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r220 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r254 rd" class="r254 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r221 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r255 rd" class="r255 r">comparer6</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r222 r t">T6</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r250 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#4fced5668fc10dfb" class="i field">item1</a>, <span class="r249 r">other</span>.<a href="#b63f3f293db43b31" class="i property">Item1</a>) &amp;&amp;
+                <span class="r251 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#427c27f5c1968776" class="i field">item2</a>, <span class="r249 r">other</span>.<a href="#2c519ef3b8b2da01" class="i property">Item2</a>) &amp;&amp;
+                <span class="r252 r">comparer3</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#9a0b12fb17937620" class="i field">item3</a>, <span class="r249 r">other</span>.<a href="#d644b0b7ce770e7a" class="i property">Item3</a>) &amp;&amp;
+                <span class="r253 r">comparer4</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#21a0cebe90b7c51f" class="i field">item4</a>, <span class="r249 r">other</span>.<a href="#d14e4e833cdb9c4d" class="i property">Item4</a>) &amp;&amp;
+                <span class="r254 r">comparer5</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#aed2c3f0c0bb03f4" class="i field">item5</a>, <span class="r249 r">other</span>.<a href="#3d9651d7640afa7f" class="i property">Item5</a>) &amp;&amp;
+                <span class="r255 r">comparer6</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#2cbc62747c40cf4e" class="i field">item6</a>, <span class="r249 r">other</span>.<a href="#1bb43e2e2b851fa3" class="i property">Item6</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="aa04e486c9698251" href="../../../../../R/aa04e486c9698251.html" target="n" data-glyph="108,0" class="t t"><span id="8affabfff25481f4">Tuple</span></a>&lt;<span id="r256 rd t" class="r256 r t">T1</span>, <span id="r257 rd t" class="r257 r t">T2</span>, <span id="r258 rd t" class="r258 r t">T3</span>, <span id="r259 rd t" class="r259 r t">T4</span>, <span id="r260 rd t" class="r260 r t">T5</span>, <span id="r261 rd t" class="r261 r t">T6</span>, <span id="r262 rd t" class="r262 r t">T7</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r256 r t">T1</span>, <span class="r257 r t">T2</span>, <span class="r258 r t">T3</span>, <span class="r259 r t">T4</span>, <span class="r260 r t">T5</span>, <span class="r261 r t">T6</span>, <span class="r262 r t">T7</span>&gt;&gt;
+    {
+        <span class="r256 r t">T1</span> <a id="c649faaa3c71d01f" href="../../../../../R/c649faaa3c71d01f.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r257 r t">T2</span> <a id="479e3650a9dc8459" href="../../../../../R/479e3650a9dc8459.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+        <span class="r258 r t">T3</span> <a id="3348604dd70bf682" href="../../../../../R/3348604dd70bf682.html" target="n" data-glyph="46,1" class="i field">item3</a>;
+        <span class="r259 r t">T4</span> <a id="1c176032d3db20b4" href="../../../../../R/1c176032d3db20b4.html" target="n" data-glyph="46,1" class="i field">item4</a>;
+        <span class="r260 r t">T5</span> <a id="153d23362cea01d1" href="../../../../../R/153d23362cea01d1.html" target="n" data-glyph="46,1" class="i field">item5</a>;
+        <span class="r261 r t">T6</span> <a id="a73bb67b54ee3525" href="../../../../../R/a73bb67b54ee3525.html" target="n" data-glyph="46,1" class="i field">item6</a>;
+        <span class="r262 r t">T7</span> <a id="3535e7a171293f3b" href="../../../../../R/3535e7a171293f3b.html" target="n" data-glyph="46,1" class="i field">item7</a>;
+ 
+        <b>public</b> <a id="53f168ead5ad693d" href="../../../../../R/53f168ead5ad693d.html" target="n" data-glyph="72,1" class="i constructor">Tuple</a>(<span class="r256 r t">T1</span> <span id="r263 rd" class="r263 r">item1</span>, <span class="r257 r t">T2</span> <span id="r264 rd" class="r264 r">item2</span>, <span class="r258 r t">T3</span> <span id="r265 rd" class="r265 r">item3</span>, <span class="r259 r t">T4</span> <span id="r266 rd" class="r266 r">item4</span>, <span class="r260 r t">T5</span> <span id="r267 rd" class="r267 r">item5</span>, <span class="r261 r t">T6</span> <span id="r268 rd" class="r268 r">item6</span>, <span class="r262 r t">T7</span> <span id="r269 rd" class="r269 r">item7</span>)
+        {
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#c649faaa3c71d01f" class="i field">item1</a> = <span class="r263 r">item1</span>;
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#479e3650a9dc8459" class="i field">item2</a> = <span class="r264 r">item2</span>;
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#3348604dd70bf682" class="i field">item3</a> = <span class="r265 r">item3</span>;
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#1c176032d3db20b4" class="i field">item4</a> = <span class="r266 r">item4</span>;
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#153d23362cea01d1" class="i field">item5</a> = <span class="r267 r">item5</span>;
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#a73bb67b54ee3525" class="i field">item6</a> = <span class="r268 r">item6</span>;
+            <a href="#aa04e486c9698251" class="k">this</a>.<a href="#3535e7a171293f3b" class="i field">item7</a> = <span class="r269 r">item7</span>;
+        }
+ 
+        <b>public</b> <span class="r256 r t">T1</span> <a id="7c9c667324024a4e" href="../../../../../R/7c9c667324024a4e.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#c649faaa3c71d01f" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r257 r t">T2</span> <a id="6289210de2915ba8" href="../../../../../R/6289210de2915ba8.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#479e3650a9dc8459" class="i field">item2</a>; }
+        }
+ 
+        <b>public</b> <span class="r258 r t">T3</span> <a id="aebcca8335db0eba" href="../../../../../R/aebcca8335db0eba.html" target="n" data-glyph="102,1" class="i property">Item3</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#3348604dd70bf682" class="i field">item3</a>; }
+        }
+ 
+        <b>public</b> <span class="r259 r t">T4</span> <a id="921b9b0c0d6a117d" href="../../../../../R/921b9b0c0d6a117d.html" target="n" data-glyph="102,1" class="i property">Item4</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#1c176032d3db20b4" class="i field">item4</a>; }
+        }
+ 
+        <b>public</b> <span class="r260 r t">T5</span> <a id="15ed837fcac5041a" href="../../../../../R/15ed837fcac5041a.html" target="n" data-glyph="102,1" class="i property">Item5</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#153d23362cea01d1" class="i field">item5</a>; }
+        }
+ 
+        <b>public</b> <span class="r261 r t">T6</span> <a id="7882ece8d6be9f7a" href="../../../../../R/7882ece8d6be9f7a.html" target="n" data-glyph="102,1" class="i property">Item6</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#a73bb67b54ee3525" class="i field">item6</a>; }
+        }
+ 
+        <b>public</b> <span class="r262 r t">T7</span> <a id="4e12d21246a4f530" href="../../../../../R/4e12d21246a4f530.html" target="n" data-glyph="102,1" class="i property">Item7</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#3535e7a171293f3b" class="i field">item7</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r270 rd" class="r270 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="#aa04e486c9698251" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r270 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r271 rd" class="r271 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r272 rd" class="r272 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r271 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r271 r">other</span> <b>is</b> <a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r256 r t">T1</span>, <span class="r257 r t">T2</span>, <span class="r258 r t">T3</span>, <span class="r259 r t">T4</span>, <span class="r260 r t">T5</span>, <span class="r261 r t">T6</span>, <span class="r262 r t">T7</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="#aa04e486c9698251" class="k">var</a> <span id="r273 rd" class="r273 r">t</span> = (<a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r256 r t">T1</span>, <span class="r257 r t">T2</span>, <span class="r258 r t">T3</span>, <span class="r259 r t">T4</span>, <span class="r260 r t">T5</span>, <span class="r261 r t">T6</span>, <span class="r262 r t">T7</span>&gt;)<span class="r271 r">other</span>;
+ 
+            <b>int</b> <span id="r274 rd" class="r274 r">res</span> = <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#c649faaa3c71d01f" class="i field">item1</a>, <span class="r273 r">t</span>.<a href="#c649faaa3c71d01f" class="i field">item1</a>);
+            <b>if</b> (<span class="r274 r">res</span> != 0) <b>return</b> <span class="r274 r">res</span>;
+            <span class="r274 r">res</span> = <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#479e3650a9dc8459" class="i field">item2</a>, <span class="r273 r">t</span>.<a href="#479e3650a9dc8459" class="i field">item2</a>);
+            <b>if</b> (<span class="r274 r">res</span> != 0) <b>return</b> <span class="r274 r">res</span>;
+            <span class="r274 r">res</span> = <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#3348604dd70bf682" class="i field">item3</a>, <span class="r273 r">t</span>.<a href="#3348604dd70bf682" class="i field">item3</a>);
+            <b>if</b> (<span class="r274 r">res</span> != 0) <b>return</b> <span class="r274 r">res</span>;
+            <span class="r274 r">res</span> = <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#1c176032d3db20b4" class="i field">item4</a>, <span class="r273 r">t</span>.<a href="#1c176032d3db20b4" class="i field">item4</a>);
+            <b>if</b> (<span class="r274 r">res</span> != 0) <b>return</b> <span class="r274 r">res</span>;
+            <span class="r274 r">res</span> = <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#153d23362cea01d1" class="i field">item5</a>, <span class="r273 r">t</span>.<a href="#153d23362cea01d1" class="i field">item5</a>);
+            <b>if</b> (<span class="r274 r">res</span> != 0) <b>return</b> <span class="r274 r">res</span>;
+            <span class="r274 r">res</span> = <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#a73bb67b54ee3525" class="i field">item6</a>, <span class="r273 r">t</span>.<a href="#a73bb67b54ee3525" class="i field">item6</a>);
+            <b>if</b> (<span class="r274 r">res</span> != 0) <b>return</b> <span class="r274 r">res</span>;
+            <b>return</b> <span class="r272 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#3535e7a171293f3b" class="i field">item7</a>, <span class="r273 r">t</span>.<a href="#3535e7a171293f3b" class="i field">item7</a>);
+        }
+ 
+        <b>public override bool</b> <a id="fac44563153571f3" href="../../../../../R/fac44563153571f3.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r275 rd" class="r275 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="#aa04e486c9698251" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r275 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r276 rd" class="r276 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r277 rd" class="r277 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r276 r">other</span> <b>is</b> <a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r256 r t">T1</span>, <span class="r257 r t">T2</span>, <span class="r258 r t">T3</span>, <span class="r259 r t">T4</span>, <span class="r260 r t">T5</span>, <span class="r261 r t">T6</span>, <span class="r262 r t">T7</span>&gt;))
+                <b>return false</b>;
+            <a href="#aa04e486c9698251" class="k">var</a> <span id="r278 rd" class="r278 r">t</span> = (<a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r256 r t">T1</span>, <span class="r257 r t">T2</span>, <span class="r258 r t">T3</span>, <span class="r259 r t">T4</span>, <span class="r260 r t">T5</span>, <span class="r261 r t">T6</span>, <span class="r262 r t">T7</span>&gt;)<span class="r276 r">other</span>;
+ 
+            <b>return</b> <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#c649faaa3c71d01f" class="i field">item1</a>, <span class="r278 r">t</span>.<a href="#c649faaa3c71d01f" class="i field">item1</a>) &amp;&amp;
+                <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#479e3650a9dc8459" class="i field">item2</a>, <span class="r278 r">t</span>.<a href="#479e3650a9dc8459" class="i field">item2</a>) &amp;&amp;
+                <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#3348604dd70bf682" class="i field">item3</a>, <span class="r278 r">t</span>.<a href="#3348604dd70bf682" class="i field">item3</a>) &amp;&amp;
+                <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#1c176032d3db20b4" class="i field">item4</a>, <span class="r278 r">t</span>.<a href="#1c176032d3db20b4" class="i field">item4</a>) &amp;&amp;
+                <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#153d23362cea01d1" class="i field">item5</a>, <span class="r278 r">t</span>.<a href="#153d23362cea01d1" class="i field">item5</a>) &amp;&amp;
+                <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#a73bb67b54ee3525" class="i field">item6</a>, <span class="r278 r">t</span>.<a href="#a73bb67b54ee3525" class="i field">item6</a>) &amp;&amp;
+                <span class="r277 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#3535e7a171293f3b" class="i field">item7</a>, <span class="r278 r">t</span>.<a href="#3535e7a171293f3b" class="i field">item7</a>);
+        }
+ 
+        <b>public override int</b> <a id="b601d9e0cb358e4d" href="../../../../../R/b601d9e0cb358e4d.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r279 rd" class="r279 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r256 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r280 rd" class="r280 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r257 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r281 rd" class="r281 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r258 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r282 rd" class="r282 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r259 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r283 rd" class="r283 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r260 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r284 rd" class="r284 r">comparer6</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r261 r t">T6</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r285 rd" class="r285 r">comparer7</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r262 r t">T7</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r286 rd" class="r286 r">h0</span>, <span id="r287 rd" class="r287 r">h1</span>;
+            <span class="r286 r">h0</span> = <span class="r279 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#c649faaa3c71d01f" class="i field">item1</a>);
+            <span class="r286 r">h0</span> = (<span class="r286 r">h0</span> &lt;&lt; 5) + <span class="r286 r">h0</span> ^ <span class="r280 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#479e3650a9dc8459" class="i field">item2</a>);
+            <span class="r287 r">h1</span> = <span class="r281 r">comparer3</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#3348604dd70bf682" class="i field">item3</a>);
+            <span class="r287 r">h1</span> = (<span class="r287 r">h1</span> &lt;&lt; 5) + <span class="r287 r">h1</span> ^ <span class="r282 r">comparer4</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#1c176032d3db20b4" class="i field">item4</a>);
+            <span class="r286 r">h0</span> = (<span class="r286 r">h0</span> &lt;&lt; 5) + <span class="r286 r">h0</span> ^ <span class="r287 r">h1</span>;
+            <span class="r287 r">h1</span> = <span class="r283 r">comparer5</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#153d23362cea01d1" class="i field">item5</a>);
+            <span class="r287 r">h1</span> = (<span class="r287 r">h1</span> &lt;&lt; 5) + <span class="r287 r">h1</span> ^ <span class="r284 r">comparer6</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#a73bb67b54ee3525" class="i field">item6</a>);
+            <span class="r287 r">h1</span> = (<span class="r287 r">h1</span> &lt;&lt; 5) + <span class="r287 r">h1</span> ^ <span class="r285 r">comparer7</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#3535e7a171293f3b" class="i field">item7</a>);
+            <span class="r286 r">h0</span> = (<span class="r286 r">h0</span> &lt;&lt; 5) + <span class="r286 r">h0</span> ^ <span class="r287 r">h1</span>;
+            <b>return</b> <span class="r286 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r288 rd" class="r288 r">comparer</span>)
+        {
+            <b>int</b> <span id="r289 rd" class="r289 r">h0</span>, <span id="r290 rd" class="r290 r">h1</span>;
+            <span class="r289 r">h0</span> = <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#c649faaa3c71d01f" class="i field">item1</a>);
+            <span class="r289 r">h0</span> = (<span class="r289 r">h0</span> &lt;&lt; 5) + <span class="r289 r">h0</span> ^ <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#479e3650a9dc8459" class="i field">item2</a>);
+            <span class="r290 r">h1</span> = <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#3348604dd70bf682" class="i field">item3</a>);
+            <span class="r290 r">h1</span> = (<span class="r290 r">h1</span> &lt;&lt; 5) + <span class="r290 r">h1</span> ^ <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#1c176032d3db20b4" class="i field">item4</a>);
+            <span class="r289 r">h0</span> = (<span class="r289 r">h0</span> &lt;&lt; 5) + <span class="r289 r">h0</span> ^ <span class="r290 r">h1</span>;
+            <span class="r290 r">h1</span> = <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#153d23362cea01d1" class="i field">item5</a>);
+            <span class="r290 r">h1</span> = (<span class="r290 r">h1</span> &lt;&lt; 5) + <span class="r290 r">h1</span> ^ <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#a73bb67b54ee3525" class="i field">item6</a>);
+            <span class="r290 r">h1</span> = (<span class="r290 r">h1</span> &lt;&lt; 5) + <span class="r290 r">h1</span> ^ <span class="r288 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#3535e7a171293f3b" class="i field">item7</a>);
+            <span class="r289 r">h0</span> = (<span class="r289 r">h0</span> &lt;&lt; 5) + <span class="r289 r">h0</span> ^ <span class="r290 r">h1</span>;
+            <b>return</b> <span class="r289 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;{0}, {1}, {2}, {3}, {4}, {5}, {6}&quot;</span>, <a href="#c649faaa3c71d01f" class="i field">item1</a>, <a href="#479e3650a9dc8459" class="i field">item2</a>, <a href="#3348604dd70bf682" class="i field">item3</a>, <a href="#1c176032d3db20b4" class="i field">item4</a>, <a href="#153d23362cea01d1" class="i field">item5</a>, <a href="#a73bb67b54ee3525" class="i field">item6</a>, <a href="#3535e7a171293f3b" class="i field">item7</a>);
+        }
+ 
+        <b>public override string</b> <a id="64c36ecaeb0cdb57" href="../../../../../R/64c36ecaeb0cdb57.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#aa04e486c9698251" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="22f44326fd8404aa" href="../../../../../R/22f44326fd8404aa.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#aa04e486c9698251" class="t t">Tuple</a>&lt;<span class="r256 r t">T1</span>, <span class="r257 r t">T2</span>, <span class="r258 r t">T3</span>, <span class="r259 r t">T4</span>, <span class="r260 r t">T5</span>, <span class="r261 r t">T6</span>, <span class="r262 r t">T7</span>&gt; <span id="r291 rd" class="r291 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r292 rd" class="r292 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r256 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r293 rd" class="r293 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r257 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r294 rd" class="r294 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r258 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r295 rd" class="r295 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r259 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r296 rd" class="r296 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r260 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r297 rd" class="r297 r">comparer6</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r261 r t">T6</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r298 rd" class="r298 r">comparer7</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r262 r t">T7</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r292 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#c649faaa3c71d01f" class="i field">item1</a>, <span class="r291 r">other</span>.<a href="#7c9c667324024a4e" class="i property">Item1</a>) &amp;&amp;
+                <span class="r293 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#479e3650a9dc8459" class="i field">item2</a>, <span class="r291 r">other</span>.<a href="#6289210de2915ba8" class="i property">Item2</a>) &amp;&amp;
+                <span class="r294 r">comparer3</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#3348604dd70bf682" class="i field">item3</a>, <span class="r291 r">other</span>.<a href="#aebcca8335db0eba" class="i property">Item3</a>) &amp;&amp;
+                <span class="r295 r">comparer4</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#1c176032d3db20b4" class="i field">item4</a>, <span class="r291 r">other</span>.<a href="#921b9b0c0d6a117d" class="i property">Item4</a>) &amp;&amp;
+                <span class="r296 r">comparer5</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#153d23362cea01d1" class="i field">item5</a>, <span class="r291 r">other</span>.<a href="#15ed837fcac5041a" class="i property">Item5</a>) &amp;&amp;
+                <span class="r297 r">comparer6</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#a73bb67b54ee3525" class="i field">item6</a>, <span class="r291 r">other</span>.<a href="#7882ece8d6be9f7a" class="i property">Item6</a>) &amp;&amp;
+                <span class="r298 r">comparer7</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#3535e7a171293f3b" class="i field">item7</a>, <span class="r291 r">other</span>.<a href="#4e12d21246a4f530" class="i property">Item7</a>);
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public</b> <a href="../../../../../P/e580c8e10eb7cb14.html" target="s" class="k">partial</a> <b>class</b> <span class="t t">Tuple</span>&lt;<span class="t">T1</span>, <span class="t">T2</span>, <span class="t">T3</span>, <span class="t">T4</span>, <span class="t">T5</span>, <span class="t">T6</span>, <span class="t">T7</span>, <span class="t">TRest</span>&gt; : <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>, <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>, <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>, <a href="#259745ce53a04687" class="t t">ITuple</a>, <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r77 r t">T1</span>, <span class="r78 r t">T2</span>, <span class="r79 r t">T3</span>, <span class="r80 r t">T4</span>, <span class="r81 r t">T5</span>, <span class="r82 r t">T6</span>, <span class="r83 r t">T7</span>, <span class="r84 r t">TRest</span>&gt;&gt;
+    {
+        <span class="r77 r t">T1</span> <a id="41424e4f3b62b43d" href="../../../../../R/41424e4f3b62b43d.html" target="n" data-glyph="46,1" class="i field">item1</a>;
+        <span class="r78 r t">T2</span> <a id="5e0457623f804632" href="../../../../../R/5e0457623f804632.html" target="n" data-glyph="46,1" class="i field">item2</a>;
+        <span class="r79 r t">T3</span> <a id="58ae40881fe4159f" href="../../../../../R/58ae40881fe4159f.html" target="n" data-glyph="46,1" class="i field">item3</a>;
+        <span class="r80 r t">T4</span> <a id="06fd01e656c1b6c7" href="../../../../../R/06fd01e656c1b6c7.html" target="n" data-glyph="46,1" class="i field">item4</a>;
+        <span class="r81 r t">T5</span> <a id="5ffddcb28d262c17" href="../../../../../R/5ffddcb28d262c17.html" target="n" data-glyph="46,1" class="i field">item5</a>;
+        <span class="r82 r t">T6</span> <a id="4baa62639e98d39e" href="../../../../../R/4baa62639e98d39e.html" target="n" data-glyph="46,1" class="i field">item6</a>;
+        <span class="r83 r t">T7</span> <a id="059d0b0a96145ae0" href="../../../../../R/059d0b0a96145ae0.html" target="n" data-glyph="46,1" class="i field">item7</a>;
+        <span class="r84 r t">TRest</span> <a id="3dae2fb74481ea14" href="../../../../../R/3dae2fb74481ea14.html" target="n" data-glyph="46,1" class="i field">rest</a>;
+ 
+        <b>public</b> <span class="r77 r t">T1</span> <a id="7162ac9052146557" href="../../../../../R/7162ac9052146557.html" target="n" data-glyph="102,1" class="i property">Item1</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#41424e4f3b62b43d" class="i field">item1</a>; }
+        }
+ 
+        <b>public</b> <span class="r78 r t">T2</span> <a id="32272cb61b9f3273" href="../../../../../R/32272cb61b9f3273.html" target="n" data-glyph="102,1" class="i property">Item2</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#5e0457623f804632" class="i field">item2</a>; }
+        }
+ 
+        <b>public</b> <span class="r79 r t">T3</span> <a id="3502a7bed859f507" href="../../../../../R/3502a7bed859f507.html" target="n" data-glyph="102,1" class="i property">Item3</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#58ae40881fe4159f" class="i field">item3</a>; }
+        }
+ 
+        <b>public</b> <span class="r80 r t">T4</span> <a id="a670cb1a65bd865a" href="../../../../../R/a670cb1a65bd865a.html" target="n" data-glyph="102,1" class="i property">Item4</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#06fd01e656c1b6c7" class="i field">item4</a>; }
+        }
+ 
+        <b>public</b> <span class="r81 r t">T5</span> <a id="ee9798d755cb8fbc" href="../../../../../R/ee9798d755cb8fbc.html" target="n" data-glyph="102,1" class="i property">Item5</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#5ffddcb28d262c17" class="i field">item5</a>; }
+        }
+ 
+        <b>public</b> <span class="r82 r t">T6</span> <a id="7e08ce59d8d1918d" href="../../../../../R/7e08ce59d8d1918d.html" target="n" data-glyph="102,1" class="i property">Item6</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#4baa62639e98d39e" class="i field">item6</a>; }
+        }
+ 
+        <b>public</b> <span class="r83 r t">T7</span> <a id="f88ec810eb18d894" href="../../../../../R/f88ec810eb18d894.html" target="n" data-glyph="102,1" class="i property">Item7</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#059d0b0a96145ae0" class="i field">item7</a>; }
+        }
+ 
+        <b>public</b> <span class="r84 r t">TRest</span> <a id="d8f6972b89e7f619" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Rest</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#3dae2fb74481ea14" class="i field">rest</a>; }
+        }
+ 
+        <b>int</b> <a href="@0@mscorlib/A.html#29a39323fbfa896b" class="t t">IComparable</a>.<a href="@0@mscorlib/A.html#cea84c6b9baddcdb" class="i method">CompareTo</a>(<b>object</b> <span id="r299 rd" class="r299 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>)<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>).<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<span class="r299 r">obj</span>, <a href="@0@mscorlib/A.html#23592232e4d01ea4" class="t t">Comparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#78f450d4aef50299" class="i property">Default</a>);
+        }
+ 
+        <b>int</b> <a href="#26fc987235b27d86" class="t t">IStructuralComparable</a>.<a href="#4321d66401c559d7" class="i method">CompareTo</a>(<b>object</b> <span id="r300 rd" class="r300 r">other</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r301 rd" class="r301 r">comparer</span>)
+        {
+            <b>if</b> (<span class="r300 r">other</span> == <b>null</b>) <b>return</b> 1;
+            <b>if</b> (!(<span class="r300 r">other</span> <b>is</b> <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r77 r t">T1</span>, <span class="r78 r t">T2</span>, <span class="r79 r t">T3</span>, <span class="r80 r t">T4</span>, <span class="r81 r t">T5</span>, <span class="r82 r t">T6</span>, <span class="r83 r t">T7</span>, <span class="r84 r t">TRest</span>&gt;))
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;other&quot;</span>);
+            }
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">var</a> <span id="r302 rd" class="r302 r">t</span> = (<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r77 r t">T1</span>, <span class="r78 r t">T2</span>, <span class="r79 r t">T3</span>, <span class="r80 r t">T4</span>, <span class="r81 r t">T5</span>, <span class="r82 r t">T6</span>, <span class="r83 r t">T7</span>, <span class="r84 r t">TRest</span>&gt;)<span class="r300 r">other</span>;
+ 
+            <b>int</b> <span id="r303 rd" class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#41424e4f3b62b43d" class="i field">item1</a>, <span class="r302 r">t</span>.<a href="#41424e4f3b62b43d" class="i field">item1</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <span class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#5e0457623f804632" class="i field">item2</a>, <span class="r302 r">t</span>.<a href="#5e0457623f804632" class="i field">item2</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <span class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#58ae40881fe4159f" class="i field">item3</a>, <span class="r302 r">t</span>.<a href="#58ae40881fe4159f" class="i field">item3</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <span class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#06fd01e656c1b6c7" class="i field">item4</a>, <span class="r302 r">t</span>.<a href="#06fd01e656c1b6c7" class="i field">item4</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <span class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#5ffddcb28d262c17" class="i field">item5</a>, <span class="r302 r">t</span>.<a href="#5ffddcb28d262c17" class="i field">item5</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <span class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#4baa62639e98d39e" class="i field">item6</a>, <span class="r302 r">t</span>.<a href="#4baa62639e98d39e" class="i field">item6</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <span class="r303 r">res</span> = <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#059d0b0a96145ae0" class="i field">item7</a>, <span class="r302 r">t</span>.<a href="#059d0b0a96145ae0" class="i field">item7</a>);
+            <b>if</b> (<span class="r303 r">res</span> != 0) <b>return</b> <span class="r303 r">res</span>;
+            <b>return</b> <span class="r301 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<a href="#3dae2fb74481ea14" class="i field">rest</a>, <span class="r302 r">t</span>.<a href="#3dae2fb74481ea14" class="i field">rest</a>);
+        }
+ 
+        <b>public override bool</b> <a id="42190be64662cd49" href="../../../../../R/42190be64662cd49.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r304 rd" class="r304 r">obj</span>)
+        {
+            <b>return</b> ((<a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>)<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>).<a href="#e7db641a564669bd" class="i method">Equals</a>(<span class="r304 r">obj</span>, <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<b>object</b>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>);
+        }
+ 
+        <b>bool</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#e7db641a564669bd" class="i method">Equals</a>(<b>object</b> <span id="r305 rd" class="r305 r">other</span>, <a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r306 rd" class="r306 r">comparer</span>)
+        {
+            <b>if</b> (!(<span class="r305 r">other</span> <b>is</b> <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r77 r t">T1</span>, <span class="r78 r t">T2</span>, <span class="r79 r t">T3</span>, <span class="r80 r t">T4</span>, <span class="r81 r t">T5</span>, <span class="r82 r t">T6</span>, <span class="r83 r t">T7</span>, <span class="r84 r t">TRest</span>&gt;))
+                <b>return false</b>;
+            <a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">var</a> <span id="r307 rd" class="r307 r">t</span> = (<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r77 r t">T1</span>, <span class="r78 r t">T2</span>, <span class="r79 r t">T3</span>, <span class="r80 r t">T4</span>, <span class="r81 r t">T5</span>, <span class="r82 r t">T6</span>, <span class="r83 r t">T7</span>, <span class="r84 r t">TRest</span>&gt;)<span class="r305 r">other</span>;
+ 
+            <b>return</b> <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#41424e4f3b62b43d" class="i field">item1</a>, <span class="r307 r">t</span>.<a href="#41424e4f3b62b43d" class="i field">item1</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#5e0457623f804632" class="i field">item2</a>, <span class="r307 r">t</span>.<a href="#5e0457623f804632" class="i field">item2</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#58ae40881fe4159f" class="i field">item3</a>, <span class="r307 r">t</span>.<a href="#58ae40881fe4159f" class="i field">item3</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#06fd01e656c1b6c7" class="i field">item4</a>, <span class="r307 r">t</span>.<a href="#06fd01e656c1b6c7" class="i field">item4</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#5ffddcb28d262c17" class="i field">item5</a>, <span class="r307 r">t</span>.<a href="#5ffddcb28d262c17" class="i field">item5</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#4baa62639e98d39e" class="i field">item6</a>, <span class="r307 r">t</span>.<a href="#4baa62639e98d39e" class="i field">item6</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#059d0b0a96145ae0" class="i field">item7</a>, <span class="r307 r">t</span>.<a href="#059d0b0a96145ae0" class="i field">item7</a>) &amp;&amp;
+                <span class="r306 r">comparer</span>.<a href="@0@mscorlib/A.html#14194d1149b92895" class="i method">Equals</a>(<a href="#3dae2fb74481ea14" class="i field">rest</a>, <span class="r307 r">t</span>.<a href="#3dae2fb74481ea14" class="i field">rest</a>);
+        }
+ 
+        <b>public override int</b> <a id="4a699628e65326c5" href="../../../../../R/4a699628e65326c5.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r308 rd" class="r308 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r77 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r309 rd" class="r309 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r78 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r310 rd" class="r310 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r79 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r311 rd" class="r311 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r80 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r312 rd" class="r312 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r81 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r313 rd" class="r313 r">comparer6</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r82 r t">T6</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r314 rd" class="r314 r">comparer7</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r83 r t">T7</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r315 rd" class="r315 r">comparer8</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r84 r t">TRest</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>int</b> <span id="r316 rd" class="r316 r">h0</span>, <span id="r317 rd" class="r317 r">h1</span>, <span id="r318 rd" class="r318 r">h2</span>;
+            <span class="r316 r">h0</span> = <span class="r308 r">comparer1</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#41424e4f3b62b43d" class="i field">item1</a>);
+            <span class="r316 r">h0</span> = (<span class="r316 r">h0</span> &lt;&lt; 5) + <span class="r316 r">h0</span> ^ <span class="r309 r">comparer2</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#5e0457623f804632" class="i field">item2</a>);
+            <span class="r317 r">h1</span> = <span class="r310 r">comparer3</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#58ae40881fe4159f" class="i field">item3</a>);
+            <span class="r317 r">h1</span> = (<span class="r317 r">h1</span> &lt;&lt; 5) + <span class="r317 r">h1</span> ^ <span class="r311 r">comparer4</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#06fd01e656c1b6c7" class="i field">item4</a>);
+            <span class="r316 r">h0</span> = (<span class="r316 r">h0</span> &lt;&lt; 5) + <span class="r316 r">h0</span> ^ <span class="r317 r">h1</span>;
+            <span class="r317 r">h1</span> = <span class="r312 r">comparer5</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#5ffddcb28d262c17" class="i field">item5</a>);
+            <span class="r317 r">h1</span> = (<span class="r317 r">h1</span> &lt;&lt; 5) + <span class="r317 r">h1</span> ^ <span class="r313 r">comparer6</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#4baa62639e98d39e" class="i field">item6</a>);
+            <span class="r318 r">h2</span> = <span class="r314 r">comparer7</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#059d0b0a96145ae0" class="i field">item7</a>);
+            <span class="r318 r">h2</span> = (<span class="r318 r">h2</span> &lt;&lt; 5) + <span class="r318 r">h2</span> ^ <span class="r315 r">comparer8</span>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#3dae2fb74481ea14" class="i field">rest</a>);
+            <span class="r317 r">h1</span> = (<span class="r317 r">h1</span> &lt;&lt; 5) + <span class="r317 r">h1</span> ^ <span class="r318 r">h2</span>;
+            <span class="r316 r">h0</span> = (<span class="r316 r">h0</span> &lt;&lt; 5) + <span class="r316 r">h0</span> ^ <span class="r317 r">h1</span>;
+            <b>return</b> <span class="r316 r">h0</span>;
+        }
+ 
+        <b>int</b> <a href="#49ab9ac103a6abe8" class="t t">IStructuralEquatable</a>.<a href="#c5701a1451c7222e" class="i method">GetHashCode</a>(<a href="@0@mscorlib/A.html#6be91fab5c61f2d0" class="t t">IEqualityComparer</a> <span id="r319 rd" class="r319 r">comparer</span>)
+        {
+            <b>int</b> <span id="r320 rd" class="r320 r">h0</span>, <span id="r321 rd" class="r321 r">h1</span>, <span id="r322 rd" class="r322 r">h2</span>;
+            <span class="r320 r">h0</span> = <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#41424e4f3b62b43d" class="i field">item1</a>);
+            <span class="r320 r">h0</span> = (<span class="r320 r">h0</span> &lt;&lt; 5) + <span class="r320 r">h0</span> ^ <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#5e0457623f804632" class="i field">item2</a>);
+            <span class="r321 r">h1</span> = <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#58ae40881fe4159f" class="i field">item3</a>);
+            <span class="r321 r">h1</span> = (<span class="r321 r">h1</span> &lt;&lt; 5) + <span class="r321 r">h1</span> ^ <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#06fd01e656c1b6c7" class="i field">item4</a>);
+            <span class="r320 r">h0</span> = (<span class="r320 r">h0</span> &lt;&lt; 5) + <span class="r320 r">h0</span> ^ <span class="r321 r">h1</span>;
+            <span class="r321 r">h1</span> = <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#5ffddcb28d262c17" class="i field">item5</a>);
+            <span class="r321 r">h1</span> = (<span class="r321 r">h1</span> &lt;&lt; 5) + <span class="r321 r">h1</span> ^ <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#4baa62639e98d39e" class="i field">item6</a>);
+            <span class="r322 r">h2</span> = <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#059d0b0a96145ae0" class="i field">item7</a>);
+            <span class="r322 r">h2</span> = (<span class="r322 r">h2</span> &lt;&lt; 5) + <span class="r322 r">h2</span> ^ <span class="r319 r">comparer</span>.<a href="@0@mscorlib/A.html#36837936d47f4900" class="i method">GetHashCode</a>(<a href="#3dae2fb74481ea14" class="i field">rest</a>);
+            <span class="r321 r">h1</span> = (<span class="r321 r">h1</span> &lt;&lt; 5) + <span class="r321 r">h1</span> ^ <span class="r322 r">h2</span>;
+            <span class="r320 r">h0</span> = (<span class="r320 r">h0</span> &lt;&lt; 5) + <span class="r320 r">h0</span> ^ <span class="r321 r">h1</span>;
+            <b>return</b> <span class="r320 r">h0</span>;
+        }
+ 
+        <b>string</b> <a href="#259745ce53a04687" class="t t">ITuple</a>.<a href="#73fcbd2721c59087" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="t t">String</a>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}&quot;</span>, <a href="#41424e4f3b62b43d" class="i field">item1</a>, <a href="#5e0457623f804632" class="i field">item2</a>, <a href="#58ae40881fe4159f" class="i field">item3</a>, <a href="#06fd01e656c1b6c7" class="i field">item4</a>, <a href="#5ffddcb28d262c17" class="i field">item5</a>, <a href="#4baa62639e98d39e" class="i field">item6</a>, <a href="#059d0b0a96145ae0" class="i field">item7</a>, ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="#3dae2fb74481ea14" class="i field">rest</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>());
+        }
+ 
+        <b>public override string</b> <a id="e9a919fd57fd9d33" href="../../../../../R/e9a919fd57fd9d33.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;(&quot;</span> + ((<a href="#259745ce53a04687" class="t t">ITuple</a>)<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="k">this</a>).<a href="#73fcbd2721c59087" class="i method">ToString</a>() + <span class="s">&quot;)&quot;</span>;
+        }
+ 
+        <b>public bool</b> <a id="dc5d1ad7324a6c26" href="../../../../../R/dc5d1ad7324a6c26.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="../../../../../P/e580c8e10eb7cb14.html#e580c8e10eb7cb14" class="t t">Tuple</a>&lt;<span class="r77 r t">T1</span>, <span class="r78 r t">T2</span>, <span class="r79 r t">T3</span>, <span class="r80 r t">T4</span>, <span class="r81 r t">T5</span>, <span class="r82 r t">T6</span>, <span class="r83 r t">T7</span>, <span class="r84 r t">TRest</span>&gt; <span id="r323 rd" class="r323 r">other</span>)
+        {
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r324 rd" class="r324 r">comparer1</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r77 r t">T1</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r325 rd" class="r325 r">comparer2</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r78 r t">T2</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r326 rd" class="r326 r">comparer3</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r79 r t">T3</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r327 rd" class="r327 r">comparer4</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r80 r t">T4</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r328 rd" class="r328 r">comparer5</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r81 r t">T5</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r329 rd" class="r329 r">comparer6</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r82 r t">T6</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r330 rd" class="r330 r">comparer7</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r83 r t">T7</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+            <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="k">var</a> <span id="r331 rd" class="r331 r">comparer8</span> = <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r84 r t">TRest</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>;
+ 
+            <b>return</b> <span class="r324 r">comparer1</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#41424e4f3b62b43d" class="i field">item1</a>, <span class="r323 r">other</span>.<a href="#7162ac9052146557" class="i property">Item1</a>) &amp;&amp;
+                <span class="r325 r">comparer2</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#5e0457623f804632" class="i field">item2</a>, <span class="r323 r">other</span>.<a href="#32272cb61b9f3273" class="i property">Item2</a>) &amp;&amp;
+                <span class="r326 r">comparer3</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#58ae40881fe4159f" class="i field">item3</a>, <span class="r323 r">other</span>.<a href="#3502a7bed859f507" class="i property">Item3</a>) &amp;&amp;
+                <span class="r327 r">comparer4</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#06fd01e656c1b6c7" class="i field">item4</a>, <span class="r323 r">other</span>.<a href="#a670cb1a65bd865a" class="i property">Item4</a>) &amp;&amp;
+                <span class="r328 r">comparer5</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#5ffddcb28d262c17" class="i field">item5</a>, <span class="r323 r">other</span>.<a href="#ee9798d755cb8fbc" class="i property">Item5</a>) &amp;&amp;
+                <span class="r329 r">comparer6</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#4baa62639e98d39e" class="i field">item6</a>, <span class="r323 r">other</span>.<a href="#7e08ce59d8d1918d" class="i property">Item6</a>) &amp;&amp;
+                <span class="r330 r">comparer7</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#059d0b0a96145ae0" class="i field">item7</a>, <span class="r323 r">other</span>.<a href="#f88ec810eb18d894" class="i property">Item7</a>) &amp;&amp;
+                <span class="r331 r">comparer8</span>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#3dae2fb74481ea14" class="i field">rest</a>, <span class="r323 r">other</span>.<a href="#3dae2fb74481ea14" class="i field">rest</a>);
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

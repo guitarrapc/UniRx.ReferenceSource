@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnityGraphicExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(44);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityGraphicExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityGraphicExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="98c0badffab2dfb0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">UnityGraphicExtensions</a>
+    {
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="45a35bef7f74f572" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">DirtyLayoutCallbackAsObservable</a>(<b>this</b> <span class="i">Graphic</span> <span id="r0 rd" class="r0 r">graphic</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">Create</span>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span id="r1 rd" class="r1 r">observer</span> =&gt;
+            {
+                <span class="i">UnityAction</span> <span id="r2 rd" class="r2 r">registerHandler</span> = () =&gt; <span class="r1 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                <span class="r0 r">graphic</span>.<span class="i">RegisterDirtyLayoutCallback</span>(<span class="r2 r">registerHandler</span>);
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(() =&gt; <span class="r0 r">graphic</span>.<span class="i">UnregisterDirtyLayoutCallback</span>(<span class="r2 r">registerHandler</span>));
+            });
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="2e73142605281324" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">DirtyMaterialCallbackAsObservable</a>(<b>this</b> <span class="i">Graphic</span> <span id="r3 rd" class="r3 r">graphic</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">Create</span>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span id="r4 rd" class="r4 r">observer</span> =&gt;
+            {
+                <span class="i">UnityAction</span> <span id="r5 rd" class="r5 r">registerHandler</span> = () =&gt; <span class="r4 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                <span class="r3 r">graphic</span>.<span class="i">RegisterDirtyMaterialCallback</span>(<span class="r5 r">registerHandler</span>);
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(() =&gt; <span class="r3 r">graphic</span>.<span class="i">UnregisterDirtyMaterialCallback</span>(<span class="r5 r">registerHandler</span>));
+            });
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="1740eb521023b0db" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">DirtyVerticesCallbackAsObservable</a>(<b>this</b> <span class="i">Graphic</span> <span id="r6 rd" class="r6 r">graphic</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">Create</span>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span id="r7 rd" class="r7 r">observer</span> =&gt;
+            {
+                <span class="i">UnityAction</span> <span id="r8 rd" class="r8 r">registerHandler</span> = () =&gt; <span class="r7 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                <span class="r6 r">graphic</span>.<span class="i">RegisterDirtyVerticesCallback</span>(<span class="r8 r">registerHandler</span>);
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(() =&gt; <span class="r6 r">graphic</span>.<span class="i">UnregisterDirtyVerticesCallback</span>(<span class="r8 r">registerHandler</span>));
+            });
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

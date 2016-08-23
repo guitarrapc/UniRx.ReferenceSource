@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample12_ReactiveProperty.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(77);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample12_ReactiveProperty.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample12_ReactiveProperty.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="799f2c7df58bcfa1" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="a4ee14327af95adb">Sample12_ReactiveProperty</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <span class="c">// Open Sample12Scene. Set from canvas</span>
+        <b>public</b> <span class="i">Button</span> <a id="1e3472e2b90d6443" href="../../../../R/1e3472e2b90d6443.html" target="n" data-glyph="42,1" class="i field">MyButton</a>;
+        <b>public</b> <span class="i">Toggle</span> <a id="8b9edfeb68db46e9" href="../../../../R/8b9edfeb68db46e9.html" target="n" data-glyph="42,1" class="i field">MyToggle</a>;
+        <b>public</b> <span class="i">InputField</span> <a id="d48bef27068ee3d3" href="../../../../R/d48bef27068ee3d3.html" target="n" data-glyph="42,1" class="i field">MyInput</a>;
+        <b>public</b> <span class="i">Text</span> <a id="bf9934a0fffa6fe3" href="../../../../R/bf9934a0fffa6fe3.html" target="n" data-glyph="42,1" class="i field">MyText</a>;
+        <b>public</b> <span class="i">Slider</span> <a id="4b62495dffb00e88" href="../../../../R/4b62495dffb00e88.html" target="n" data-glyph="42,1" class="i field">MySlider</a>;
+ 
+        <span class="c">// You can monitor/modifie in inspector by SpecializedReactiveProperty</span>
+        <b>public</b> <a href="../Scripts/UnityEngineBridge/InspectableReactiveProperty.cs.html#79e4005e5827f533" class="t t">IntReactiveProperty</a> <a id="e77657ffbe835982" href="../../../../R/e77657ffbe835982.html" target="n" data-glyph="42,1" class="i field">IntRxProp</a> = <b>new</b> <a href="../Scripts/UnityEngineBridge/InspectableReactiveProperty.cs.html#baedaecf70d18781" class="t constructor">IntReactiveProperty</a>();
+ 
+        <a href="#8293515319d088fc" class="t t">Enemy</a> <a id="27295b8b7eaeab7e" href="../../../../R/27295b8b7eaeab7e.html" target="n" data-glyph="46,1" class="i field">enemy</a> = <b>new</b> <a href="#eb4f116b4240d7b0" class="t constructor">Enemy</a>(1000);
+ 
+        <b>void</b> <a id="3a28c490896a62ab" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// UnityEvent as Observable</span>
+            <span class="c">// (shortcut, MyButton.OnClickAsObservable())</span>
+            <a href="#1e3472e2b90d6443" class="i field">MyButton</a>.<span class="i">onClick</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span id="r0 rd" class="r0 r">_</span> =&gt; <a href="#27295b8b7eaeab7e" class="i field">enemy</a>.<a href="#44ed01582c13c5e1" class="i property">CurrentHp</a>.<a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> -= 99);
+ 
+            <span class="c">// Toggle, Input etc as Observable(OnValueChangedAsObservable is helper for provide isOn value on subscribe)</span>
+            <span class="c">// SubscribeToInteractable is UniRx.UI Extension Method, same as .interactable = x)</span>
+            <a href="#8b9edfeb68db46e9" class="i field">MyToggle</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#19d2e4b5a1f77c8c" class="i method">OnValueChangedAsObservable</a>().<span class="i">SubscribeToInteractable</span>(<a href="#1e3472e2b90d6443" class="i field">MyButton</a>);
+ 
+            <span class="c">// input shows delay after 1 second</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+            <a href="#d48bef27068ee3d3" class="i field">MyInput</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#61d7ac6d81bcb81f" class="i method">OnValueChangedAsObservable</a>()
+<span class="k preprocess">#</span><span class="k preprocess">else</span>
+<span class="e">            MyInput.OnValueChangeAsObservable()
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                .<a href="../Scripts/Observable.cs.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r1 rd" class="r1 r">x</span> =&gt; <span class="r1 r">x</span> != <b>null</b>)
+                .<a href="../Scripts/Observable.Time.cs.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                .<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#63a6245a5077874b" class="i method">SubscribeToText</a>(<a href="#bf9934a0fffa6fe3" class="i field">MyText</a>); <span class="c">// SubscribeToText is UniRx.UI Extension Method</span>
+ 
+            <span class="c">// converting for human visibility</span>
+            <a href="#4b62495dffb00e88" class="i field">MySlider</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#e5d528f2b81f0c38" class="i method">OnValueChangedAsObservable</a>()
+                .<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#b4d9ea30ac4dc2ca" class="i method">SubscribeToText</a>(<a href="#bf9934a0fffa6fe3" class="i field">MyText</a>, <span id="r2 rd" class="r2 r">x</span> =&gt; <a href="@0@mscorlib/A.html#a4407e67b9a5afad" class="t t">Math</a>.<a href="@0@mscorlib/A.html#fccc5332aa0c1a68" class="i method">Round</a>(<span class="r2 r">x</span>, 2).<a href="@0@mscorlib/A.html#de581d5a1a6b2a1a" class="i method">ToString</a>());
+ 
+            <span class="c">// from RxProp, CurrentHp changing(Button Click) is observable</span>
+            <a href="#27295b8b7eaeab7e" class="i field">enemy</a>.<a href="#44ed01582c13c5e1" class="i property">CurrentHp</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#f6b3f94189afc92e" class="i method">SubscribeToText</a>(<a href="#bf9934a0fffa6fe3" class="i field">MyText</a>);
+            <a href="#27295b8b7eaeab7e" class="i field">enemy</a>.<a href="#9431d7f776d31608" class="i property">IsDead</a>.<a href="../Scripts/Observable.cs.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r3 rd" class="r3 r">isDead</span> =&gt; <span class="r3 r">isDead</span> == <b>true</b>)
+                .<a href="../Scripts/Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r4 rd" class="r4 r">_</span> =&gt;
+                {
+                    <a href="#8b9edfeb68db46e9" class="i field">MyToggle</a>.<span class="i">interactable</span> = <a href="#1e3472e2b90d6443" class="i field">MyButton</a>.<span class="i">interactable</span> = <b>false</b>;
+                });
+ 
+            <span class="c">// initial text:)</span>
+            <a href="#e77657ffbe835982" class="i field">IntRxProp</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#f6b3f94189afc92e" class="i method">SubscribeToText</a>(<a href="#bf9934a0fffa6fe3" class="i field">MyText</a>);
+        }
+    }
+ 
+    <span class="c">// Reactive Notification Model</span>
+    <b>public class</b> <a id="8293515319d088fc" href="../../../../R/8293515319d088fc.html" target="n" data-glyph="0,0" class="t t">Enemy</a>
+    {
+        <b>public</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>long</b>&gt; <a id="44ed01582c13c5e1" href="../../../../R/44ed01582c13c5e1.html" target="n" data-glyph="102,1" class="i property">CurrentHp</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="9431d7f776d31608" href="../../../../R/9431d7f776d31608.html" target="n" data-glyph="102,1" class="i property">IsDead</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="eb4f116b4240d7b0" href="../../../../R/eb4f116b4240d7b0.html" target="n" data-glyph="72,1" class="i constructor">Enemy</a>(<b>int</b> <span id="r5 rd" class="r5 r">initialHp</span>)
+        {
+            <span class="c">// Declarative Property</span>
+            <a href="#44ed01582c13c5e1" class="i property">CurrentHp</a> = <b>new</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>long</b>&gt;(<span class="r5 r">initialHp</span>);
+            <a href="#9431d7f776d31608" class="i property">IsDead</a> = <a href="#44ed01582c13c5e1" class="i property">CurrentHp</a>.<a href="../Scripts/Observable.cs.html#79105120ffc929e6" class="i method">Select</a>(<span id="r6 rd" class="r6 r">x</span> =&gt; <span class="r6 r">x</span> &lt;= 0).<a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#0aaec21b70bdea4b" class="i method">ToReactiveProperty</a>();
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

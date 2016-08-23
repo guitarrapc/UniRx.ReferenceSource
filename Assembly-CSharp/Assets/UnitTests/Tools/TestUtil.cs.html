@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html><head><title>TestUtil.cs</title><link rel="stylesheet" href="../../../../styles.css"><script src="../../../../scripts.js"></script></head>
+<body class="cB" onload="i(150);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/UnitTests/Tools/TestUtil.cs" target="_top">Assets\UnitTests\Tools\TestUtil.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Reflection</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    <b>public static class</b> <a id="460068715159f550" href="../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">TestUtil</a>
+    {
+        <b>public static</b> <span class="r0 r t">T</span>[] <a id="d61d7a8951726998" href="../../../R/d61d7a8951726998.html" target="n" data-glyph="220,1" class="i method">ToArrayWait</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>)
+        {
+            <b>return</b> <span class="r1 r">source</span>.<a href="/Assembly-CSharp-firstpass/A.html#b5ca409b2c8b562b" class="i method">ToArray</a>().<a href="/Assembly-CSharp-firstpass/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+        }
+ 
+        <b>public static</b> <a href="#6c890ab2d95907ce" class="t t">RecordObserver</a>&lt;<span class="r2 r t">T</span>&gt; <a id="ff6c9c81bca9717d" href="../../../R/ff6c9c81bca9717d.html" target="n" data-glyph="220,1" class="i method">Record</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;(<b>this</b> <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r3 rd" class="r3 r">source</span>)
+        {
+            <a href="/Assembly-CSharp-firstpass/A.html#adcb61162c529f98" class="k">var</a> <span id="r4 rd" class="r4 r">d</span> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+            <a href="#6c890ab2d95907ce" class="k">var</a> <span id="r5 rd" class="r5 r">observer</span> = <b>new</b> <a href="#bdb6e6f75615bf74" class="t constructor">RecordObserver</a>&lt;<span class="r2 r t">T</span>&gt;(<span class="r4 r">d</span>);
+            <span class="r4 r">d</span>.<a href="/Assembly-CSharp-firstpass/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r3 r">source</span>.<a href="/Assembly-CSharp-firstpass/A.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r5 r">observer</span>);
+ 
+            <b>return</b> <span class="r5 r">observer</span>;
+        }
+    }
+ 
+    <b>public class</b> <a id="6c890ab2d95907ce" href="../../../R/6c890ab2d95907ce.html" target="n" data-glyph="0,0" class="t t">RecordObserver</a>&lt;<span id="r6 rd t" class="r6 r t">T</span>&gt; : <a href="/Assembly-CSharp-firstpass/A.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r6 r t">T</span>&gt;
+    {
+        <b>readonly object</b> <a id="63eae74792ba87e9" href="../../../R/63eae74792ba87e9.html" target="n" data-glyph="46,1" class="i field">gate</a> = <b>new</b> <b>object</b>();
+        <b>readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="ad4afd3b1621cff2" href="../../../R/ad4afd3b1621cff2.html" target="n" data-glyph="46,1" class="i field">subscription</a>;
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<span class="r6 r t">T</span>&gt; <a id="7085fe0c236f6251" href="../../../R/7085fe0c236f6251.html" target="n" data-glyph="102,1" class="i property">Values</a> { <b>get</b>; <b>set</b>; }
+        <b>public</b> <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<a href="/Assembly-CSharp-firstpass/A.html#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r6 r t">T</span>&gt;&gt; <a id="b5092ec6d6343608" href="../../../R/b5092ec6d6343608.html" target="n" data-glyph="102,1" class="i property">Notifications</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public</b> <a id="bdb6e6f75615bf74" href="../../../R/bdb6e6f75615bf74.html" target="n" data-glyph="72,1" class="i constructor">RecordObserver</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">subscription</span>)
+        {
+            <a href="#6c890ab2d95907ce" class="k">this</a>.<a href="#ad4afd3b1621cff2" class="i field">subscription</a> = <span class="r7 r">subscription</span>;
+            <a href="#6c890ab2d95907ce" class="k">this</a>.<a href="#7085fe0c236f6251" class="i property">Values</a> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<span class="r6 r t">T</span>&gt;();
+            <a href="#6c890ab2d95907ce" class="k">this</a>.<a href="#b5092ec6d6343608" class="i property">Notifications</a> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<a href="/Assembly-CSharp-firstpass/A.html#3775560f59260a8c" class="t t">Notification</a>&lt;<span class="r6 r t">T</span>&gt;&gt;();
+        }
+ 
+        <b>public void</b> <a id="098e5d683f35df3c" href="../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DisposeSubscription</a>()
+        {
+            <a href="#ad4afd3b1621cff2" class="i field">subscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+ 
+        <b>public void</b> <a id="0ba2e38a28aacb36" href="../../../R/0ba2e38a28aacb36.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r6 r t">T</span> <span id="r8 rd" class="r8 r">value</span>)
+        {
+            <b>lock</b> (<a href="#63eae74792ba87e9" class="i field">gate</a>)
+            {
+                <a href="#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r8 r">value</span>);
+                <a href="#b5092ec6d6343608" class="i property">Notifications</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<a href="/Assembly-CSharp-firstpass/A.html#5dee4dc35c2a497b" class="t t">Notification</a>.<a href="/Assembly-CSharp-firstpass/A.html#a9834d248cc676f8" class="i method">CreateOnNext</a>&lt;<span class="r6 r t">T</span>&gt;(<span class="r8 r">value</span>));
+            }
+        }
+ 
+        <b>public void</b> <a id="f4768761a3500453" href="../../../R/f4768761a3500453.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r9 rd" class="r9 r">error</span>)
+        {
+            <b>lock</b> (<a href="#63eae74792ba87e9" class="i field">gate</a>)
+            {
+                <a href="#b5092ec6d6343608" class="i property">Notifications</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<a href="/Assembly-CSharp-firstpass/A.html#5dee4dc35c2a497b" class="t t">Notification</a>.<a href="/Assembly-CSharp-firstpass/A.html#7aa2b74025782e1e" class="i method">CreateOnError</a>&lt;<span class="r6 r t">T</span>&gt;(<span class="r9 r">error</span>));
+            }
+        }
+        <b>public void</b> <a id="42ff6bde3388a654" href="../../../R/42ff6bde3388a654.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <b>lock</b> (<a href="#63eae74792ba87e9" class="i field">gate</a>)
+            {
+                <a href="#b5092ec6d6343608" class="i property">Notifications</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<a href="/Assembly-CSharp-firstpass/A.html#5dee4dc35c2a497b" class="t t">Notification</a>.<a href="/Assembly-CSharp-firstpass/A.html#666b714bee5c2880" class="i method">CreateOnCompleted</a>&lt;<span class="r6 r t">T</span>&gt;());
+            }
+        }
+    }
+ 
+    <b>class</b> <a id="879567f190b0404f" href="../../../R/879567f190b0404f.html" target="n" data-glyph="2,0" class="t t">DecrementEnumerator</a> : <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>
+    {
+        <b>readonly int</b> <a id="3b383e50c31f78d1" href="../../../R/3b383e50c31f78d1.html" target="n" data-glyph="46,1" class="i field">original</a>;
+        <b>int</b> <a id="69413be718a77e6e" href="../../../R/69413be718a77e6e.html" target="n" data-glyph="46,1" class="i field">count</a>;
+ 
+        <b>public</b> <a id="2d9a2a5e17eed4a6" href="../../../R/2d9a2a5e17eed4a6.html" target="n" data-glyph="72,1" class="i constructor">DecrementEnumerator</a>(<b>int</b> <span id="r10 rd" class="r10 r">count</span>)
+        {
+            <a href="#879567f190b0404f" class="k">this</a>.<a href="#3b383e50c31f78d1" class="i field">original</a> = <span class="r10 r">count</span>;
+            <a href="#879567f190b0404f" class="k">this</a>.<a href="#69413be718a77e6e" class="i field">count</a> = <span class="r10 r">count</span>;
+        }
+ 
+        <b>public object</b> <a id="b8dd12fe3bc88756" href="../../../R/b8dd12fe3bc88756.html" target="n" data-glyph="102,1" class="i property">Current</a>
+        {
+            <b>get</b>
+            {
+                <b>return null</b>;
+            }
+        }
+        <b>public int</b> <a id="294d82239a709567" href="../../../R/294d82239a709567.html" target="n" data-glyph="102,1" class="i property">OriginalCount</a> { <b>get</b> { <b>return</b> <a href="#3b383e50c31f78d1" class="i field">original</a>; } }
+ 
+        <b>public int</b> <a id="9f2ac65f54acd268" href="../../../R/9f2ac65f54acd268.html" target="n" data-glyph="102,1" class="i property">Count</a> { <b>get</b> { <b>return</b> <a href="#69413be718a77e6e" class="i field">count</a>; } }
+ 
+        <b>public bool</b> <a id="4aa76726693f7fa9" href="../../../R/4aa76726693f7fa9.html" target="n" data-glyph="72,1" class="i method">MoveNext</a>()
+        {
+            <b>return</b> <a href="#69413be718a77e6e" class="i field">count</a>-- &gt; 0;
+        }
+ 
+        <b>public void</b> <a id="c73f6a7cc0237d8d" href="../../../R/c73f6a7cc0237d8d.html" target="n" data-glyph="72,1" class="i method">Reset</a>()
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#ab0acd5f99886747" class="t constructor">NotSupportedException</a>();
+        }
+ 
+        <b>public override string</b> <a id="5aea76b3f0cd0a79" href="../../../R/5aea76b3f0cd0a79.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="#69413be718a77e6e" class="i field">count</a> + <span class="s">&quot;/&quot;</span> + <a href="#3b383e50c31f78d1" class="i field">original</a>;
+        }
+    }
+ 
+    <b>public</b> <a href="../../../P/0cc70a02d0aff64f.html" target="s" class="k">partial</a> <b>class</b> <a id="0cc70a02d0aff64f" href="../../../R/0cc70a02d0aff64f.html" target="n" data-glyph="0,0" class="t t"><span id="370e5417ccc5603a">MicroCoroutineTest</span></a>
+    {
+        <b>static</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="/Assembly-CSharp-firstpass/A.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <a id="e9f1f8157438b438" href="../../../R/e9f1f8157438b438.html" target="n" data-glyph="76,1" class="i method">Create</a>()
+        {
+            <b>return</b> <b>new</b> <span class="i n">InternalUtil</span>.<a href="/Assembly-CSharp-firstpass/A.html#9ae1cfa971857447" class="t constructor">MicroCoroutine</a>(<span id="r11 rd" class="r11 r">ex</span> =&gt; <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#17999987f8ff4399" class="i method">WriteLine</a>(<span class="r11 r">ex</span>));
+        }
+ 
+        <b>static int</b> <a id="e81960b3d0ffc514" href="../../../R/e81960b3d0ffc514.html" target="n" data-glyph="76,1" class="i method">FindLast</a>(<span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="/Assembly-CSharp-firstpass/A.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <span id="r12 rd" class="r12 r">mc</span>)
+        {
+            <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r13 rd" class="r13 r">coroutines</span> = <span class="r12 r">mc</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="s">&quot;coroutines&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#3cd29d73949adaa3" class="i field">GetField</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a>);
+            <b>var</b> <span id="r14 rd" class="r14 r">enumerators</span> = (<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>[])<span class="r13 r">coroutines</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r12 r">mc</span>);
+ 
+            <b>int</b> <span id="r15 rd" class="r15 r">tail</span> = -1;
+            <b>for</b> (<b>int</b> <span id="r16 rd" class="r16 r">i</span> = 0; <span class="r16 r">i</span> &lt; <span class="r14 r">enumerators</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r16 r">i</span>++)
+            {
+                <b>if</b> (<span class="r14 r">enumerators</span>[<span class="r16 r">i</span>] == <b>null</b>)
+                {
+                    <b>if</b> (<span class="r15 r">tail</span> == -1)
+                    {
+                        <span class="r15 r">tail</span> = <span class="r16 r">i</span>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (<span class="r15 r">tail</span> != -1)
+                    {
+                        <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#df2d82d91ca29e40" class="t constructor">Exception</a>(<span class="s">&quot;what&#39;s happen?&quot;</span>);
+                    }
+                }
+            }
+ 
+            <b>if</b> (<span class="r15 r">tail</span> == -1) <span class="r15 r">tail</span> = <span class="r14 r">enumerators</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+            <b>return</b> <span class="r15 r">tail</span>;
+        }
+ 
+        <b>static int</b> <a id="37ad711dc31de0cc" href="../../../R/37ad711dc31de0cc.html" target="n" data-glyph="76,1" class="i method">GetTailDynamic</a>(<span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="/Assembly-CSharp-firstpass/A.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <span id="r17 rd" class="r17 r">mc</span>)
+        {
+            <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r18 rd" class="r18 r">tail</span> = <span class="r17 r">mc</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="s">&quot;tail&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#3cd29d73949adaa3" class="i field">GetField</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a>);
+            <b>return</b> (<b>int</b>)<span class="r18 r">tail</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r17 r">mc</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

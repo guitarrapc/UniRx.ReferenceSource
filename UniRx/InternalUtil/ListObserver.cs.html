@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html><head><title>ListObserver.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(134);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/InternalUtil/ListObserver.cs" target="_top">InternalUtil\ListObserver.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>
+{
+    <b>public class</b> <a id="53d92869808a5775" href="../R/53d92869808a5775.html" target="n" data-glyph="0,0" class="t t">ListObserver</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>private readonly</b> <a href="ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <a id="f5bba6aa89d89475" href="../R/f5bba6aa89d89475.html" target="n" data-glyph="46,1" class="i field">_observers</a>;
+ 
+        <b>public</b> <a id="51d639679a0129ad" href="../R/51d639679a0129ad.html" target="n" data-glyph="72,1" class="i constructor">ListObserver</a>(<a href="ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <span id="r1 rd" class="r1 r">observers</span>)
+        {
+            <a href="#f5bba6aa89d89475" class="i field">_observers</a> = <span class="r1 r">observers</span>;
+        }
+ 
+        <b>public void</b> <a id="ac7962de94128796" href="../R/ac7962de94128796.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <b>var</b> <span id="r2 rd" class="r2 r">targetObservers</span> = <a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>;
+            <b>for</b> (<b>int</b> <span id="r3 rd" class="r3 r">i</span> = 0; <span class="r3 r">i</span> &lt; <span class="r2 r">targetObservers</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r3 r">i</span>++)
+            {
+                <span class="r2 r">targetObservers</span>[<span class="r3 r">i</span>].<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+        }
+ 
+        <b>public void</b> <a id="c0cae3b8094b3313" href="../R/c0cae3b8094b3313.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r4 rd" class="r4 r">error</span>)
+        {
+            <b>var</b> <span id="r5 rd" class="r5 r">targetObservers</span> = <a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>;
+            <b>for</b> (<b>int</b> <span id="r6 rd" class="r6 r">i</span> = 0; <span class="r6 r">i</span> &lt; <span class="r5 r">targetObservers</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r6 r">i</span>++)
+            {
+                <span class="r5 r">targetObservers</span>[<span class="r6 r">i</span>].<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r4 r">error</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="abaf0d045a1de0fc" href="../R/abaf0d045a1de0fc.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r7 rd" class="r7 r">value</span>)
+        {
+            <b>var</b> <span id="r8 rd" class="r8 r">targetObservers</span> = <a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>;
+            <b>for</b> (<b>int</b> <span id="r9 rd" class="r9 r">i</span> = 0; <span class="r9 r">i</span> &lt; <span class="r8 r">targetObservers</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r9 r">i</span>++)
+            {
+                <span class="r8 r">targetObservers</span>[<span class="r9 r">i</span>].<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r7 r">value</span>);
+            }
+        }
+ 
+        <b>internal</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="68c71fee4b650776" href="../R/68c71fee4b650776.html" target="n" data-glyph="74,1" class="i method">Add</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r10 rd" class="r10 r">observer</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#51d639679a0129ad" class="t constructor">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;(<a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#13acf5d91a8e1dab" class="i method">Add</a>(<span class="r10 r">observer</span>));
+        }
+ 
+        <b>internal</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="32cb63dd18624969" href="../R/32cb63dd18624969.html" target="n" data-glyph="74,1" class="i method">Remove</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r11 rd" class="r11 r">observer</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r12 rd" class="r12 r">i</span> = <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#9dfd2c89c8d18414" class="i method">IndexOf</a>(<a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>, <span class="r11 r">observer</span>);
+            <b>if</b> (<span class="r12 r">i</span> &lt; 0)
+                <b>return</b> <a href="#53d92869808a5775" class="k">this</a>;
+ 
+            <b>if</b> (<a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == 2)
+            {
+                <b>return</b> <a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>[1 - <span class="r12 r">i</span>];
+            }
+            <b>else</b>
+            {
+                <b>return</b> <b>new</b> <a href="#51d639679a0129ad" class="t constructor">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;(<a href="#f5bba6aa89d89475" class="i field">_observers</a>.<a href="ImmutableList.cs.html#9e600300d8a7460b" class="i method">Remove</a>(<span class="r11 r">observer</span>));
+            }
+        }
+    }
+ 
+    <b>public class</b> <a id="1059bf6cf47f025d" href="../R/1059bf6cf47f025d.html" target="n" data-glyph="0,0" class="t t">EmptyObserver</a>&lt;<span id="r13 rd t" class="r13 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r13 r t">T</span>&gt;
+    {
+        <b>public static readonly</b> <a href="#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r13 r t">T</span>&gt; <a id="2050ad21eaa4c4ed" href="../R/2050ad21eaa4c4ed.html" target="n" data-glyph="42,1" class="i field">Instance</a> = <b>new</b> <a href="#146ba373c62b398f" class="t constructor">EmptyObserver</a>&lt;<span class="r13 r t">T</span>&gt;();
+ 
+        <a id="146ba373c62b398f" href="../R/146ba373c62b398f.html" target="n" data-glyph="76,1" class="i constructor">EmptyObserver</a>()
+        {
+ 
+        }
+ 
+        <b>public void</b> <a id="a99596298008b1dc" href="../R/a99596298008b1dc.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+        }
+ 
+        <b>public void</b> <a id="c951ae93e792b9f6" href="../R/c951ae93e792b9f6.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r14 rd" class="r14 r">error</span>)
+        {
+        }
+ 
+        <b>public void</b> <a id="2e3f23442dc10a41" href="../R/2e3f23442dc10a41.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r13 r t">T</span> <span id="r15 rd" class="r15 r">value</span>)
+        {
+        }
+    }
+ 
+    <b>public class</b> <a id="49d72b41fd8b995c" href="../R/49d72b41fd8b995c.html" target="n" data-glyph="0,0" class="t t">ThrowObserver</a>&lt;<span id="r16 rd t" class="r16 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r16 r t">T</span>&gt;
+    {
+        <b>public static readonly</b> <a href="#49d72b41fd8b995c" class="t t">ThrowObserver</a>&lt;<span class="r16 r t">T</span>&gt; <a id="a27a68e127c5e444" href="../R/a27a68e127c5e444.html" target="n" data-glyph="42,1" class="i field">Instance</a> = <b>new</b> <a href="#740134b536b6199a" class="t constructor">ThrowObserver</a>&lt;<span class="r16 r t">T</span>&gt;();
+ 
+        <a id="740134b536b6199a" href="../R/740134b536b6199a.html" target="n" data-glyph="76,1" class="i constructor">ThrowObserver</a>()
+        {
+ 
+        }
+ 
+        <b>public void</b> <a id="d397686c6716d807" href="../R/d397686c6716d807.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+        }
+ 
+        <b>public void</b> <a id="439659aef54065b2" href="../R/439659aef54065b2.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r17 rd" class="r17 r">error</span>)
+        {
+            <b>throw</b> <span class="r17 r">error</span>;
+        }
+ 
+        <b>public void</b> <a id="d14c524298f8ede6" href="../R/d14c524298f8ede6.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r16 r t">T</span> <span id="r18 rd" class="r18 r">value</span>)
+        {
+        }
+    }
+ 
+    <b>public class</b> <a id="3935b7140bd22864" href="../R/3935b7140bd22864.html" target="n" data-glyph="0,0" class="t t">DisposedObserver</a>&lt;<span id="r19 rd t" class="r19 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r19 r t">T</span>&gt;
+    {
+        <b>public static readonly</b> <a href="#3935b7140bd22864" class="t t">DisposedObserver</a>&lt;<span class="r19 r t">T</span>&gt; <a id="115281850ddc85a7" href="../R/115281850ddc85a7.html" target="n" data-glyph="42,1" class="i field">Instance</a> = <b>new</b> <a href="#300cbf9682e03388" class="t constructor">DisposedObserver</a>&lt;<span class="r19 r t">T</span>&gt;();
+ 
+        <a id="300cbf9682e03388" href="../R/300cbf9682e03388.html" target="n" data-glyph="76,1" class="i constructor">DisposedObserver</a>()
+        {
+ 
+        }
+ 
+        <b>public void</b> <a id="8e731a7a4cecbcea" href="../R/8e731a7a4cecbcea.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;&quot;</span>);
+        }
+ 
+        <b>public void</b> <a id="f7f6eb9ba109aa81" href="../R/f7f6eb9ba109aa81.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r20 rd" class="r20 r">error</span>)
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;&quot;</span>);
+        }
+ 
+        <b>public void</b> <a id="1f842159b22f97ba" href="../R/1f842159b22f97ba.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r19 r t">T</span> <span id="r21 rd" class="r21 r">value</span>)
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;&quot;</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

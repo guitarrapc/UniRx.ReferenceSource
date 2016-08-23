@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Blocking.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(18);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Observable.Blocking.cs" target="_top">Assets\Plugins\UniRx\Scripts\Observable.Blocking.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../../../../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <span class="r0 r t">T</span> <a id="5b4996ad0a23a062" href="../../../../R/5b4996ad0a23a062.html" target="n" data-glyph="220,1" class="i method">Wait</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/Wait.cs.html#532f4828406db7eb" class="t constructor">Wait</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r1 r">source</span>, <a href="Observable.cs.html#3fa13ca0ac7f3355" class="i field">InfiniteTimeSpan</a>).<a href="Operators/Wait.cs.html#9522ce57f9124f29" class="i method">Run</a>();
+        }
+ 
+        <b>public static</b> <span class="r2 r t">T</span> <a id="52281a60d540a98a" href="../../../../R/52281a60d540a98a.html" target="n" data-glyph="220,1" class="i method">Wait</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r3 rd" class="r3 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r4 rd" class="r4 r">timeout</span>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/Wait.cs.html#532f4828406db7eb" class="t constructor">Wait</a>&lt;<span class="r2 r t">T</span>&gt;(<span class="r3 r">source</span>, <span class="r4 r">timeout</span>).<a href="Operators/Wait.cs.html#9522ce57f9124f29" class="i method">Run</a>();
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html><head><title>WhenAllTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(79);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/WhenAllTest.cs" target="_top">WhenAllTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>.<span class="i n">Operators</span>
+{
+    [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="28d26c988dcd12a8" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="ed160553481b3036">WhenAllTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="dffc434b044c0525" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAllEmpty</a>()
+        {
+            <b>var</b> <span id="r0 rd" class="r0 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#33021115c6e0ee99" class="i method">WhenAll</a>(<b>new</b> <a href="/UniRx/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt;[0]).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r0 r">xs</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+            <b>var</b> <span id="r1 rd" class="r1 r">xs2</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#1850035445fab0ee" class="i method">WhenAll</a>(<a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#4d026772cf3399f5" class="i method">Empty</a>&lt;<a href="/UniRx/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt;&gt;().<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r2 rd" class="r2 r">x</span> =&gt; <span class="r2 r">x</span>)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r1 r">xs2</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="c9bc64b7c5ff9993" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAll</a>()
+        {
+            <b>var</b> <span id="r3 rd" class="r3 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#33021115c6e0ee99" class="i method">WhenAll</a>(
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(100),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)).<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r4 rd" class="r4 r">_</span> =&gt; 5),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 4))
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r3 r">xs</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(100, 5, 4);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="6e101e35d64dc3a5" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAllEnumerable</a>()
+        {
+            <b>var</b> <span id="r5 rd" class="r5 r">xs</span> = <b>new</b>[] {
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(100),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)).<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r6 rd" class="r6 r">_</span> =&gt; 5),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 4)
+            }.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r7 rd" class="r7 r">x</span> =&gt; <span class="r7 r">x</span>).<a href="/UniRx/A.html#1850035445fab0ee" class="i method">WhenAll</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r5 r">xs</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(100, 5, 4);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="42268805e5fdafd5" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAllUnitEmpty</a>()
+        {
+            <a href="/UniRx/A.html#16821e3ff91ab941" class="k">var</a> <span id="r8 rd" class="r8 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#31132660576ae3ec" class="i method">WhenAll</a>(<b>new</b> <a href="/UniRx/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt;[0]).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r8 r">xs</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="/UniRx/A.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+ 
+            <a href="/UniRx/A.html#16821e3ff91ab941" class="k">var</a> <span id="r9 rd" class="r9 r">xs2</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c12eabf293dd7a30" class="i method">WhenAll</a>(<a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#4d026772cf3399f5" class="i method">Empty</a>&lt;<a href="/UniRx/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;().<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r10 rd" class="r10 r">x</span> =&gt; <span class="r10 r">x</span>)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r9 r">xs2</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="/UniRx/A.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="95d8a106a58b1661" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAllUnit</a>()
+        {
+            <a href="/UniRx/A.html#16821e3ff91ab941" class="k">var</a> <span id="r11 rd" class="r11 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#31132660576ae3ec" class="i method">WhenAll</a>(
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(100).<a href="/UniRx/A.html#cc7086dac1a298ca" class="i method">AsUnitObservable</a>(),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)).<a href="/UniRx/A.html#cc7086dac1a298ca" class="i method">AsUnitObservable</a>(),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 4).<a href="/UniRx/A.html#cc7086dac1a298ca" class="i method">AsUnitObservable</a>())
+                .<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r11 r">xs</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="/UniRx/A.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="8966c428f6167cda" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAllUnitEnumerable</a>()
+        {
+            <a href="/UniRx/A.html#16821e3ff91ab941" class="k">var</a> <span id="r12 rd" class="r12 r">xs</span> = <b>new</b>[] {
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(100).<a href="/UniRx/A.html#cc7086dac1a298ca" class="i method">AsUnitObservable</a>(),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)).<a href="/UniRx/A.html#cc7086dac1a298ca" class="i method">AsUnitObservable</a>(),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 4).<a href="/UniRx/A.html#cc7086dac1a298ca" class="i method">AsUnitObservable</a>()
+            }.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r13 rd" class="r13 r">x</span> =&gt; <span class="r13 r">x</span>).<a href="/UniRx/A.html#c12eabf293dd7a30" class="i method">WhenAll</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+ 
+            <span class="r12 r">xs</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="/UniRx/A.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

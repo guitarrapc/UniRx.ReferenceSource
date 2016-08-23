@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample14_CubeLevel2.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(39);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample14_CubeLevel2.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample14_CubeLevel2.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">Assets</span>.<span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="8dfdb3d7d2321617" href="../../../../R/8dfdb3d7d2321617.html" target="n" data-glyph="0,0" class="t t"><span id="f987086bc08ddba2">Sample14_CubeLevel2</span></a> : <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#e2409cb7857cbe5f" class="t t">PresenterBase</a>&lt;<b>float</b>&gt;
+    {
+        <b>public</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>float</b>&gt; <a id="0dfab9a3aa14186a" href="../../../../R/0dfab9a3aa14186a.html" target="n" data-glyph="102,1" class="i property">Number</a> { <b>get</b>;<b>private set</b>; }
+ 
+        <b>protected override</b> <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="75177d023d454f3b" href="../../../../R/75177d023d454f3b.html" target="n" data-glyph="105,1" class="i property">Children</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#527c962370ffd5e4" class="i field">EmptyChildren</a>;
+            }
+        }
+ 
+        <b>protected override void</b> <a id="4165466ec08dae7f" href="../../../../R/4165466ec08dae7f.html" target="n" data-glyph="75,1" class="i method">OnAwake</a>()
+        {
+            <a href="Sample14_PresenterBase.cs.html#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkAwakePhase</span>(<a href="#8dfdb3d7d2321617" class="k">this</a>);
+        }
+ 
+        <b>protected override void</b> <a id="f54fd97c8f66a130" href="../../../../R/f54fd97c8f66a130.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>(<b>float</b> <span id="r0 rd" class="r0 r">argument</span>)
+        {
+            <a href="Sample14_PresenterBase.cs.html#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkCapturePhase</span>(<a href="#8dfdb3d7d2321617" class="k">this</a>);
+        }
+ 
+        <b>protected override void</b> <a id="ce31ae50c3a859df" href="../../../../R/ce31ae50c3a859df.html" target="n" data-glyph="75,1" class="i method">Initialize</a>(<b>float</b> <span id="r1 rd" class="r1 r">argument</span>)
+        {
+            <a href="Sample14_PresenterBase.cs.html#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkBubblingPhase</span>(<a href="#8dfdb3d7d2321617" class="k">this</a>);
+ 
+            <a href="#0dfab9a3aa14186a" class="i property">Number</a> = <b>new</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>float</b>&gt;(<span class="r1 r">argument</span>);
+            <a href="#0dfab9a3aa14186a" class="i property">Number</a>.<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">x</span> =&gt;
+            {
+                <a href="#8dfdb3d7d2321617" class="k">this</a>.<span class="i">GetComponent</span>&lt;<span class="i">Renderer</span>&gt;().<span class="i">material</span>.<span class="i">color</span> = <b>new</b> <span class="i">Color</span>(<span class="r2 r">x</span>, 0.2f, 0.2f, 0);
+            });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

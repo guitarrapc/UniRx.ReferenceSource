@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html><head><title>CountNotifier.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(97);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Notifiers/CountNotifier.cs" target="_top">Assets\Plugins\UniRx\Scripts\Notifiers\CountNotifier.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+﻿<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Event kind of CountNotifier.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public enum</b> <a id="6ec5ff25ec3dc052" href="../../../../../R/6ec5ff25ec3dc052.html" target="n" data-glyph="18,0" class="t t"><span id="36ca15b42a93faeb">CountChangedStatus</span></a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Count incremented.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="debcd45b55160a1c" href="../../../../../R/debcd45b55160a1c.html" target="n" data-glyph="24,1" class="i field">Increment</a>,
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Count decremented.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="2c2b2b05efa801cd" href="../../../../../R/2c2b2b05efa801cd.html" target="n" data-glyph="24,1" class="i field">Decrement</a>,
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Count is zero.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="85cff14b94d1d920" href="../../../../../R/85cff14b94d1d920.html" target="n" data-glyph="24,1" class="i field">Empty</a>,
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Count arrived max.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="ba16c736d773efe0" href="../../../../../R/ba16c736d773efe0.html" target="n" data-glyph="24,1" class="i field">Max</a>
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Notify event of count flag.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="2ab93346b9cdf51e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">CountNotifier</a> : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>&gt;
+    {
+        <b>readonly object</b> <a id="5a6bdc04d153e35c" href="../../../../../R/5a6bdc04d153e35c.html" target="n" data-glyph="46,1" class="i field">lockObject</a> = <b>new</b> <b>object</b>();
+        <b>readonly</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>&gt; <a id="3c18facc6714495c" href="../../../../../R/3c18facc6714495c.html" target="n" data-glyph="46,1" class="i field">statusChanged</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>&gt;();
+        <b>readonly int</b> <a id="c32697f15b2f88fb" href="../../../../../R/c32697f15b2f88fb.html" target="n" data-glyph="46,1" class="i field">max</a>;
+ 
+        <b>public int</b> <a id="bd691ca94dc0e8a5" href="../../../../../R/bd691ca94dc0e8a5.html" target="n" data-glyph="102,1" class="i property">Max</a> { <b>get</b> { <b>return</b> <a href="#c32697f15b2f88fb" class="i field">max</a>; } }
+        <b>public int</b> <a id="7613164b607934d1" href="../../../../../R/7613164b607934d1.html" target="n" data-glyph="102,1" class="i property">Count</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Setup max count of signal.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="0766b2d4c7474539" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">CountNotifier</a>(<b>int</b> <span id="r0 rd" class="r0 r">max</span> = <b>int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>)
+        {
+            <b>if</b> (<span class="r0 r">max</span> &lt;= 0)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;max&quot;</span>);
+            }
+ 
+            <a href="#2ab93346b9cdf51e" class="k">this</a>.<a href="#c32697f15b2f88fb" class="i field">max</a> = <span class="r0 r">max</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Increment count and notify status.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b05fa232abd8dd72" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Increment</a>(<b>int</b> <span id="r1 rd" class="r1 r">incrementCount</span> = 1)
+        {
+            <b>if</b> (<span class="r1 r">incrementCount</span> &lt; 0)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;incrementCount&quot;</span>);
+            }
+ 
+            <b>lock</b> (<a href="#5a6bdc04d153e35c" class="i field">lockObject</a>)
+            {
+                <b>if</b> (<a href="#7613164b607934d1" class="i property">Count</a> == <a href="#bd691ca94dc0e8a5" class="i property">Max</a>) <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+                <b>else if</b> (<span class="r1 r">incrementCount</span> + <a href="#7613164b607934d1" class="i property">Count</a> &gt; <a href="#bd691ca94dc0e8a5" class="i property">Max</a>) <a href="#7613164b607934d1" class="i property">Count</a> = <a href="#bd691ca94dc0e8a5" class="i property">Max</a>;
+                <b>else</b> <a href="#7613164b607934d1" class="i property">Count</a> += <span class="r1 r">incrementCount</span>;
+ 
+                <a href="#3c18facc6714495c" class="i field">statusChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>.<a href="#debcd45b55160a1c" class="i field">Increment</a>);
+                <b>if</b> (<a href="#7613164b607934d1" class="i property">Count</a> == <a href="#bd691ca94dc0e8a5" class="i property">Max</a>) <a href="#3c18facc6714495c" class="i field">statusChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>.<a href="#ba16c736d773efe0" class="i field">Max</a>);
+ 
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(() =&gt; <a href="#2ab93346b9cdf51e" class="k">this</a>.<a href="#f2b4b04f3cc3eb86" class="i method">Decrement</a>(<span class="r1 r">incrementCount</span>));
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Decrement count and notify status.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="f2b4b04f3cc3eb86" href="../../../../../R/f2b4b04f3cc3eb86.html" target="n" data-glyph="72,1" class="i method">Decrement</a>(<b>int</b> <span id="r2 rd" class="r2 r">decrementCount</span> = 1)
+        {
+            <b>if</b> (<span class="r2 r">decrementCount</span> &lt; 0)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;decrementCount&quot;</span>);
+            }
+ 
+            <b>lock</b> (<a href="#5a6bdc04d153e35c" class="i field">lockObject</a>)
+            {
+                <b>if</b> (<a href="#7613164b607934d1" class="i property">Count</a> == 0) <b>return</b>;
+                <b>else if</b> (<a href="#7613164b607934d1" class="i property">Count</a> - <span class="r2 r">decrementCount</span> &lt; 0) <a href="#7613164b607934d1" class="i property">Count</a> = 0;
+                <b>else</b> <a href="#7613164b607934d1" class="i property">Count</a> -= <span class="r2 r">decrementCount</span>;
+ 
+                <a href="#3c18facc6714495c" class="i field">statusChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>.<a href="#2c2b2b05efa801cd" class="i field">Decrement</a>);
+                <b>if</b> (<a href="#7613164b607934d1" class="i property">Count</a> == 0) <a href="#3c18facc6714495c" class="i field">statusChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>.<a href="#85cff14b94d1d920" class="i field">Empty</a>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Subscribe observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="f171b7374f44830f" href="../../../../../R/f171b7374f44830f.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="#6ec5ff25ec3dc052" class="t t">CountChangedStatus</a>&gt; <span id="r3 rd" class="r3 r">observer</span>)
+        {
+            <b>return</b> <a href="#3c18facc6714495c" class="i field">statusChanged</a>.<a href="../Subjects/Subject.cs.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r3 r">observer</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,967 @@
+﻿<!DOCTYPE html>
+<html><head><title>UniRxTestSandbox.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(958);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/UniRxTestSandbox.cs" target="_top">Assets\ObjectTest\UniRxTestSandbox.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+<span class="k preprocess">#</span><span class="k preprocess">define</span> <span class="i">SupportCustomYieldInstruction</span>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">disable</span> 0414
+ 
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Net</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">IO</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_METRO</span> || <span class="i">UNITY_WP8</span>) &amp;&amp; (<span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_0_1</span> || <span class="i">UNITY_4_0</span> || <span class="i">UNITY_3_5</span> || <span class="i">UNITY_3_4</span> || <span class="i">UNITY_3_3</span> || <span class="i">UNITY_3_2</span> || <span class="i">UNITY_3_1</span> || <span class="i">UNITY_3_0_0</span> || <span class="i">UNITY_3_0</span> || <span class="i">UNITY_2_6_1</span> || <span class="i">UNITY_2_6</span>)
+<span class="e">    // Fallback for Unity versions below 4.5
+    using Hash = System.Collections.Hashtable;
+    using HashEntry = System.Collections.DictionaryEntry;    
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+<b>using</b> <span class="t">Hash</span> = <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>.<a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<b>string</b>, <b>string</b>&gt;;
+<b>using</b> <span class="t">HashEntry</span> = <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>.<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<b>string</b>, <b>string</b>&gt;;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public enum</b> <a id="0501f01d53703e99" href="../../R/0501f01d53703e99.html" target="n" data-glyph="18,0" class="t t"><span id="d1d1c248d1ea3f00">Mikan</span></a>
+    {
+        <a id="1e7fb6c852bed6bd" href="../../R/../../0000000000.html" target="n" data-glyph="24,1" class="i field">Ringo</a> = 30,
+        <a id="fcf1580a33e51d49" href="../../R/../../0000000000.html" target="n" data-glyph="24,1" class="i field">Tako</a> = 40
+    }
+ 
+    <b>public class</b> <a id="aa27b225507a9f80" href="../../R/aa27b225507a9f80.html" target="n" data-glyph="0,0" class="t t"><span id="f45a1055bfb6cae0">LogCallback</span></a>
+    {
+        <b>public string</b> <a id="17b844c405f33972" href="../../R/17b844c405f33972.html" target="n" data-glyph="42,1" class="i field">Condition</a>;
+        <b>public string</b> <a id="27204e80f546b055" href="../../R/27204e80f546b055.html" target="n" data-glyph="42,1" class="i field">StackTrace</a>;
+        <b>public</b> <span class="i">UnityEngine</span>.<span class="i">LogType</span> <a id="8b291aaadc1d09ad" href="../../R/8b291aaadc1d09ad.html" target="n" data-glyph="42,1" class="i field">LogType</a>;
+ 
+        <b>public override string</b> <a id="c4ac1a1fb9ae4d8a" href="../../R/c4ac1a1fb9ae4d8a.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="#17b844c405f33972" class="i field">Condition</a> + <span class="s">&quot; &quot;</span> + <a href="#27204e80f546b055" class="i field">StackTrace</a>;
+        }
+    }
+ 
+    <b>static class</b> <a id="a3667a6e941f2b34" href="../../R/../../0000000000.html" target="n" data-glyph="2,0" class="t t">LogHelper</a>
+    {
+        <span class="c">// If static register callback, use Subject for event branching.</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> (<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span>)
+<span class="e">            static Subject&lt;LogCallback&gt; subject;
+ 
+            public static IObservable&lt;LogCallback&gt; LogCallbackAsObservable()
+            {
+                if (subject == null)
+                {
+                    subject = new Subject&lt;LogCallback&gt;();
+ 
+                    // Publish to Subject in callback
+ 
+ 
+                    UnityEngine.Application.RegisterLogCallback((condition, stackTrace, type) =&gt;
+                    {
+                        subject.OnNext(new LogCallback { Condition = condition, StackTrace = stackTrace, LogType = type });
+                    });
+                }
+ 
+                return subject.AsObservable();
+            }
+ 
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+        <span class="c">// If standard evetns, you can use Observable.FromEvent.</span>
+ 
+        <b>public static</b> <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#aa27b225507a9f80" class="t t">LogCallback</a>&gt; <a id="9060692966db24c9" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LogCallbackAsObservable</a>()
+        {
+            <b>return</b> <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">Application</span>.<span class="i">LogCallback</span>, <a href="#aa27b225507a9f80" class="t t">LogCallback</a>&gt;(
+                <span id="r0 rd" class="r0 r">h</span> =&gt; (<span id="r1 rd" class="r1 r">condition</span>, <span id="r2 rd" class="r2 r">stackTrace</span>, <span id="r3 rd" class="r3 r">type</span>) =&gt; <span class="r0 r">h</span>(<b>new</b> <a href="#aa27b225507a9f80" class="t constructor">LogCallback</a> { <a href="#17b844c405f33972" class="i field">Condition</a> = <span class="r1 r">condition</span>, <a href="#27204e80f546b055" class="i field">StackTrace</a> = <span class="r2 r">stackTrace</span>, <a href="#8b291aaadc1d09ad" class="i field">LogType</a> = <span class="r3 r">type</span> }),
+                <span id="r4 rd" class="r4 r">h</span> =&gt; <span class="i">Application</span>.<span class="i">logMessageReceived</span> += <span class="r4 r">h</span>, <span id="r5 rd" class="r5 r">h</span> =&gt; <span class="i">Application</span>.<span class="i">logMessageReceived</span> -= <span class="r5 r">h</span>);
+        }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="7a9219b65b6842a7" href="../../R/7a9219b65b6842a7.html" target="n" data-glyph="108,0" class="t t"><span id="cb73a0c552e3d87b">MySuperStruct</span></a>
+    {
+        <b>public int</b> <a id="e7cab2e813d92ac8" href="../../R/e7cab2e813d92ac8.html" target="n" data-glyph="42,1" class="i field">A</a>;
+        <b>public int</b> <a id="fcc1286f191c72a7" href="../../R/fcc1286f191c72a7.html" target="n" data-glyph="42,1" class="i field">B</a>;
+        <b>public int</b> <a id="c896cf2a99867c51" href="../../R/c896cf2a99867c51.html" target="n" data-glyph="42,1" class="i field">C</a>;
+        <b>public int</b> <a id="1626bd0aa1ecb5d6" href="../../R/1626bd0aa1ecb5d6.html" target="n" data-glyph="42,1" class="i field">D</a>;
+        <b>public int</b> <a id="5aca7b30745ce868" href="../../R/5aca7b30745ce868.html" target="n" data-glyph="42,1" class="i field">E</a>;
+        <b>public int</b> <a id="553e827ef9f96f21" href="../../R/553e827ef9f96f21.html" target="n" data-glyph="42,1" class="i field">F</a>;
+        <b>public int</b> <a id="edaac909d66edb65" href="../../R/edaac909d66edb65.html" target="n" data-glyph="42,1" class="i field">G</a>;
+        <b>public int</b> <a id="d14a5c4e71370d2c" href="../../R/d14a5c4e71370d2c.html" target="n" data-glyph="42,1" class="i field">X</a>;
+        <b>public int</b> <a id="ac2b300b57168e7f" href="../../R/ac2b300b57168e7f.html" target="n" data-glyph="42,1" class="i field">Y</a>;
+        <b>public int</b> <a id="ef3a8344de379d7b" href="../../R/ef3a8344de379d7b.html" target="n" data-glyph="42,1" class="i field">Z</a>;
+ 
+        <b>public override string</b> <a id="425bc11530da8707" href="../../R/425bc11530da8707.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <a href="#e7cab2e813d92ac8" class="i field">A</a> + <span class="s">&quot;:&quot;</span> + <a href="#fcc1286f191c72a7" class="i field">B</a> + <span class="s">&quot;:&quot;</span> + <a href="#c896cf2a99867c51" class="i field">C</a> + <span class="s">&quot;:&quot;</span> + <a href="#1626bd0aa1ecb5d6" class="i field">D</a> + <span class="s">&quot;:&quot;</span> + <a href="#5aca7b30745ce868" class="i field">E</a> + <span class="s">&quot;:&quot;</span> + <a href="#553e827ef9f96f21" class="i field">F</a> + <span class="s">&quot;:&quot;</span> + <a href="#edaac909d66edb65" class="i field">G</a> + <span class="s">&quot;:&quot;</span> + <a href="#d14a5c4e71370d2c" class="i field">X</a> + <span class="s">&quot;:&quot;</span> + <a href="#ac2b300b57168e7f" class="i field">Y</a> + <span class="s">&quot;:&quot;</span> + <a href="#ef3a8344de379d7b" class="i field">Z</a>;
+        }
+    }
+ 
+    <b>public enum</b> <a id="c8e287e54bda78a5" href="../../R/c8e287e54bda78a5.html" target="n" data-glyph="18,0" class="t t"><span id="3ef304e7a1800581">Fruit</span></a>
+    {
+        <a id="0d5ddb68ce06145f" href="../../R/../../0000000000.html" target="n" data-glyph="24,1" class="i field">Apple</a>, <a id="8f21574c3ff4de1a" href="../../R/../../0000000000.html" target="n" data-glyph="24,1" class="i field">Grape</a>
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="c0b3de1adfe64d6b" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">FruitReactiveProperty</a> : <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<a href="#c8e287e54bda78a5" class="t t">Fruit</a>&gt;
+    {
+        <b>public</b> <a id="a8d732f9b49e4270" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">FruitReactiveProperty</a>()
+        {
+ 
+        }
+ 
+        <b>public</b> <a id="46c42412542a9940" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">FruitReactiveProperty</a>(<a href="#c8e287e54bda78a5" class="t t">Fruit</a> <span id="r6 rd" class="r6 r">initialValue</span>)
+            : <a href="/Assembly-CSharp-firstpass/A.html#690c4a961d36d179" class="k">base</a>(<span class="r6 r">initialValue</span>)
+        {
+ 
+        }
+    }
+ 
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="ccf946db2f33bc64" href="../../R/ccf946db2f33bc64.html" target="n" data-glyph="0,0" class="t t">MikanReactiveProperty</a> : <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<a href="#0501f01d53703e99" class="t t">Mikan</a>&gt;
+    {
+        <b>public</b> <a id="9ed5d20af5e920b5" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">MikanReactiveProperty</a>()
+        {
+ 
+        }
+ 
+        <b>public</b> <a id="181f4f03a8456415" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">MikanReactiveProperty</a>(<a href="#0501f01d53703e99" class="t t">Mikan</a> <span id="r7 rd" class="r7 r">mikan</span>)
+            : <a href="/Assembly-CSharp-firstpass/A.html#690c4a961d36d179" class="k">base</a>(<span class="r7 r">mikan</span>)
+        {
+ 
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="d9e6c4616b5c2b52" href="../../R/d9e6c4616b5c2b52.html" target="n" data-glyph="0,0" class="t t"><span id="10d5ee16618379d6">MyContainerClass</span></a>
+    {
+        <b>public int</b> <a id="ead0d521633b2d2c" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">X</a>;
+        <b>public int</b> <a id="1ddd8d361245a3fc" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">Y</a>;
+    }
+ 
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="bfa558047c027b13" href="../../R/bfa558047c027b13.html" target="n" data-glyph="0,0" class="t t">MySuperStructReactiveProperty</a> : <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<a href="#7a9219b65b6842a7" class="t t">MySuperStruct</a>&gt;
+    {
+        <b>public</b> <a id="4eb0fc491537f28b" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">MySuperStructReactiveProperty</a>()
+        {
+ 
+        }
+    }
+ 
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="f4d69cbc896f0c56" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">MyContainerReactiveProperty</a> : <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<a href="#d9e6c4616b5c2b52" class="t t">MyContainerClass</a>&gt;
+    {
+        <b>public</b> <a id="2176d7bc66563171" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">MyContainerReactiveProperty</a>()
+        {
+ 
+        }
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="514f37ccfa895b41" href="../../R/514f37ccfa895b41.html" target="n" data-glyph="0,0" class="t t"><span id="7dfae3f6a2f4e5c7">UShortReactiveProeprty</span></a> : <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<b>ushort</b>&gt;
+    {
+ 
+    }
+ 
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+ 
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="#514f37ccfa895b41" class="t t">UShortReactiveProeprty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="#ccf946db2f33bc64" class="t t">MikanReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="#bfa558047c027b13" class="t t">MySuperStructReactiveProperty</a>))]
+    <b>public class</b> <a id="f49a0f8075bc8978" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="df32896135562069">ExtendInspectorDisplayDrawer</span></a> : <a href="/Assembly-CSharp-firstpass/A.html#e18668c7b08a8582" class="t t">InspectorDisplayDrawer</a>
+    {
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="4c57f36cd2eec8bf" href="../../R/4c57f36cd2eec8bf.html" target="n" data-glyph="0,0" class="t t"><span id="0a8164a91cf2ef52">StringReactiveCollection</span></a> : <a href="/Assembly-CSharp-firstpass/A.html#22992f386bb7d26e" class="t t">ReactiveCollection</a>&lt;<b>string</b>&gt;
+    {
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_5_3</span>
+<span class="e">
+    public class CustomYield : CustomYieldInstruction
+    {
+        public override bool keepWaiting
+        {
+            get
+            {
+                Debug.Log(&quot;FromCustomYield:&quot; + Time.frameCount);
+                return (Time.frameCount &gt;= 300) ? false : true;
+            }
+        }
+    }
+ 
+    public class TadanoIEnumerator : IEnumerator
+    {
+        public object Current
+        {
+            get
+            {
+                return null;
+            }
+        }
+ 
+        public bool MoveNext()
+        {
+            Debug.Log(&quot;TadanoIEnumerator:&quot; + Time.frameCount);
+            return (Time.frameCount &gt;= 300) ? false : true;
+        }
+ 
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+    }
+ 
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+ 
+ 
+    <span class="c">// test sandbox</span>
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="4d5c9561affa1c5e" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="f2a1f9fc58e249ae">UniRxTestSandbox</span></a> : <span class="i">MonoBehaviour</span>
+    {
+ 
+ 
+        <b>readonly static</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>.<a href="/Assembly-CSharp-firstpass/A.html#5edfe68a15b571a3" class="t t">Logger</a> <a id="9ec519c568880625" href="../../R/9ec519c568880625.html" target="n" data-glyph="46,1" class="i field">logger</a> = <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>.<a href="/Assembly-CSharp-firstpass/A.html#1b18fc7f400182b9" class="t constructor">Logger</a>(<span class="s">&quot;UniRx.Test.NewBehaviour&quot;</span>);
+ 
+        <span class="c">// public UnityEvent&lt;int&gt; SimpleEvent;</span>
+ 
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#028fffeeed10c472" class="t t">Vector2ReactiveProperty</a> <a id="32127ebf5d3a074c" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">V2R</a>;
+ 
+        <a href="@0@mscorlib/A.html#adf60ee46ebd299f" class="t t">StringBuilder</a> <a id="a9a5a50a0bea40ea" href="../../R/a9a5a50a0bea40ea.html" target="n" data-glyph="46,1" class="i field">logtext</a> = <b>new</b> <a href="@0@mscorlib/A.html#6e631639c1e2746b" class="t constructor">StringBuilder</a>();
+ 
+        <span class="c">//GameObject cube;</span>
+        <span class="c">//Clicker clicker;</span>
+ 
+        <span class="c">//[ThreadStatic]</span>
+        <span class="c">//static object threadstaticobj;</span>
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a> <a id="bdad31a8251f6e75" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">DateTimeSonomono</a>;
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<b>string</b>&gt; <a id="c4e8828d811f419c" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">arrayC</a>;
+ 
+        <b>public</b> <a href="#4c57f36cd2eec8bf" class="t t">StringReactiveCollection</a> <a id="d6957facc703babb" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">SerializableRxc</a>;
+ 
+        [<span class="i">Range</span>(1, 10)]
+        <b>public float</b> <a id="cabc29ab1dd350d6" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">TadanoRange</a>;
+ 
+        [<span class="i">RangeReactivePropertyAttribute</span>(1, 10)]
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#79e4005e5827f533" class="t t">IntReactiveProperty</a> <a id="7a6feba8ac02c12e" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">Intxxx</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#dc324e5416b27d5c" class="t t">LongReactiveProperty</a> <a id="c910c24f10d19b2a" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">LongxXXX</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#c4b0bfff3ced3836" class="t t">BoolReactiveProperty</a> <a id="f90a7b3141951ebc" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">Booxxx</a>;
+ 
+        [<span class="i">RangeReactivePropertyAttribute</span>(1, 10)]
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#ac3b132971821e19" class="t t">FloatReactiveProperty</a> <a id="420558c97455d659" href="../../R/420558c97455d659.html" target="n" data-glyph="42,1" class="i field">FloAAX</a>;
+ 
+        [<span class="i">RangeReactivePropertyAttribute</span>(1, 10)]
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#8bba996767ee5d10" class="t t">DoubleReactiveProperty</a> <a id="53c46b6285625043" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">DuAAX</a>;
+        <b>public</b> <a href="#ccf946db2f33bc64" class="t t">MikanReactiveProperty</a> <a id="0d3757a1b8505e0d" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">MikanRP</a>;
+        [<span class="i">RangeReactivePropertyAttribute</span>(1, 10)]
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#0c04ae5e1df85fb6" class="t t">StringReactiveProperty</a> <a id="1bf40e6d029227f8" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">Strrrrr</a>;
+ 
+        [<span class="i">Multiline</span>]
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#0c04ae5e1df85fb6" class="t t">StringReactiveProperty</a> <a id="7c3b3d519ed6672e" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">MultilineStrrrr</a>;
+ 
+        <b>public</b> <a href="#514f37ccfa895b41" class="t t">UShortReactiveProeprty</a> <a id="87a2e2ede633f358" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">USHHHH</a>;
+ 
+        <span class="c">//[InspectorDisplay]</span>
+        <span class="c">//public MyContainerReactiveProperty MCCCC;</span>
+ 
+        <span class="c">//public Vector4 V4;</span>
+        <span class="c">//public Rect REEEECT;</span>
+        <span class="c">//public AnimationCurve ACCCCCCC;</span>
+        <span class="c">//public Bounds BOO;</span>
+        <span class="c">//public Quaternion ZOOOM;</span>
+ 
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#028fffeeed10c472" class="t t">Vector2ReactiveProperty</a> <a id="8611a319b83e0d47" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">AAA</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#35868c8745156ef2" class="t t">Vector3ReactiveProperty</a> <a id="6d62a8064c732c44" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">BBB</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#cdeb5ca97b8fbc0b" class="t t">Vector4ReactiveProperty</a> <a id="f53417eac623189b" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">CCC</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#f5cd175b1119291f" class="t t">ColorReactiveProperty</a> <a id="384edeab93f30516" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">DDD</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#0c8e54406d2cf638" class="t t">RectReactiveProperty</a> <a id="f9ddd698dba85c17" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">EEE</a>;
+ 
+        <span class="c">// public Slider MySlider;</span>
+        <b>public</b> <a href="#bfa558047c027b13" class="t t">MySuperStructReactiveProperty</a> <a id="959fe26ca5a91076" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">SUPER_Rx</a>;
+ 
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#782ee6aac716af8b" class="t t">AnimationCurveReactiveProperty</a> <a id="a1acec68587b42cd" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">FFF</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#b4e4a39450ffb07e" class="t t">BoundsReactiveProperty</a> <a id="2a368002e65b718e" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">GGG</a>;
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#0f6e212fc5325faf" class="t t">QuaternionReactiveProperty</a> <a id="16c648bbdeed8e2e" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">HHH</a>;
+ 
+ 
+        <b>public void</b> <a id="7972f69d39233d4f" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Awake</a>()
+        {
+            <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+ 
+ 
+            <span class="i">Application</span>.<span class="i">targetFrameRate</span> = -1;
+ 
+            <span class="c">//LogHelper.LogCallbackAsObservable()</span>
+            <span class="c">//    .ObserveOnMainThread()</span>
+            <span class="c">//    .Where(x =&gt; x.LogType == LogType.Exception)</span>
+            <span class="c">//    .Subscribe(x =&gt; logtext.AppendLine(x.ToString()));</span>
+ 
+            <a href="/Assembly-CSharp-firstpass/A.html#84ef72fca7011312" class="t t">ObservableLogger</a>.<a href="/Assembly-CSharp-firstpass/A.html#9841e5b4591d8c1f" class="i field">Listener</a>.<a href="/Assembly-CSharp-firstpass/A.html#d0bb151e7fa1ef5f" class="i method">LogToUnityDebug</a>();
+            <a href="/Assembly-CSharp-firstpass/A.html#84ef72fca7011312" class="t t">ObservableLogger</a>.<a href="/Assembly-CSharp-firstpass/A.html#9841e5b4591d8c1f" class="i field">Listener</a>.<a href="/Assembly-CSharp-firstpass/A.html#b2a8bd8002c609a9" class="i method">ObserveOnMainThread</a>().<a href="/Assembly-CSharp-firstpass/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r8 rd" class="r8 r">x</span> =&gt;
+            {
+                <a href="#a9a5a50a0bea40ea" class="i field">logtext</a>.<a href="@0@mscorlib/A.html#73bc75596acbac77" class="i method">AppendLine</a>(<span class="r8 r">x</span>.<a href="/Assembly-CSharp-firstpass/A.html#0275a19b78bb29f7" class="i property">Message</a>);
+            });
+ 
+ 
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_5_3</span>
+<span class="e">
+            //button.OnClickAsObservable().Subscribe(_ =&gt;
+            //{
+            //    UnityEngine.Debug.Log(&quot;---&quot;);
+            //    Observable.EveryGameObjectUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryGameObjectUpdate&quot; + x));
+            //    Observable.EveryUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryUpdate:&quot; + x));
+            //    // Observable.EveryAfterUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryAfterUpdate:&quot; + x));
+            //    Observable.EveryLateUpdate().Subscribe(x =&gt; Debug.Log(&quot;EveryLateUpdate:&quot; + x));
+            //    Observable.EveryEndOfFrame().Subscribe(x =&gt; Debug.Log(&quot;EveryEndOfFrame:&quot; + x));
+            //    UnityEngine.Debug.Log(&quot;---&quot;);
+            //});
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+            <a href="#420558c97455d659" class="i field">FloAAX</a>.<span class="i">Subscribe</span>(<span id="r9 rd" class="r9 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;FloAAX:&quot;</span> + <span class="r9 r">x</span>));
+ 
+        }
+ 
+        <a href="/Assembly-CSharp-firstpass/A.html#fd453f2122f5c4b8" class="t t">CompositeDisposable</a> <a id="9f7db51bc55445a4" href="../../R/9f7db51bc55445a4.html" target="n" data-glyph="46,1" class="i field">disposables</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#b8fe93d2b696d1ee" class="t constructor">CompositeDisposable</a>();
+        <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>int</b>&gt; <a id="962c652afbb17923" href="../../R/../../0000000000.html" target="n" data-glyph="46,1" class="i field">Source</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+ 
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="86c27277d82232d8" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">TestEnumerator</a>()
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return null</b>;
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="23fdfa8087dccefc" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">MoreTestEnumerator</a>()
+        {
+            <b>for</b> (<a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r10 rd" class="r10 r">i</span> = 0; <span class="r10 r">i</span> &lt; 1;)
+            {
+                <b>yield return null</b>;
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="aa45b6b344525de8" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">GetResult</a>()
+        {
+            <b>long</b> <span id="r11 rd" class="r11 r">xxx</span> = -1;
+            <b>yield return</b> <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1)).<a href="/Assembly-CSharp-firstpass/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r12 rd" class="r12 r">x</span> =&gt; 999).<a href="/Assembly-CSharp-firstpass/A.html#c8325cf4290eb880" class="i method">StartAsCoroutine</a>(<span id="r13 rd" class="r13 r">x</span> =&gt;
+            {
+                <span class="r11 r">xxx</span> = <span class="r13 r">x</span>;
+            });
+ 
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r11 r">xxx</span>);
+ 
+            <span class="c">//var yi = Observable.Timer(TimeSpan.FromSeconds(1)).Select(x =&gt; 999).ToYieldInstruction();</span>
+            <span class="c">//yield return yi;</span>
+ 
+            <span class="c">//Debug.Log(yi.Result);</span>
+        }
+ 
+ 
+        <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>long</b>&gt; <a id="ffc2cfbc7ca388b4" href="../../R/ffc2cfbc7ca388b4.html" target="n" data-glyph="46,1" class="i field">subj</a>;
+        <b>object</b> <a id="5ee1732877636ac0" href="../../R/5ee1732877636ac0.html" target="n" data-glyph="46,1" class="i field">gate</a> = <b>new</b> <b>object</b>();
+ 
+        <b>int</b> <a id="63e1ac1dba224dc6" href="../../R/63e1ac1dba224dc6.html" target="n" data-glyph="46,1" class="i field">counter</a>;
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="a22c53a96bab1197" href="../../R/a22c53a96bab1197.html" target="n" data-glyph="76,1" class="i method">IncrCounter</a>()
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return null</b>;
+                <a href="#63e1ac1dba224dc6" class="i field">counter</a>++;
+            }
+        }
+ 
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="00196459633b3933" href="../../R/00196459633b3933.html" target="n" data-glyph="46,1" class="i field">cancelCoroutine</a>;
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="714ccd0c55035174" href="../../R/714ccd0c55035174.html" target="n" data-glyph="76,1" class="i method">TestCoroutine</a>(<a href="/Assembly-CSharp-firstpass/A.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>int</b>&gt; <span id="r14 rd" class="r14 r">observer</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r15 rd" class="r15 r">i</span> = 0;
+            <b>while</b> (<b>true</b>)
+            {
+                <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r15 r">i</span>++);
+                <span class="r14 r">observer</span>.<a href="/Assembly-CSharp-firstpass/A.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r15 r">i</span>);
+                <b>yield return null</b>;
+            }
+        }
+ 
+ 
+        <b>public void</b> <a id="20022d5411facf94" href="../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnGUI</a>()
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r16 rd" class="r16 r">xpos</span> = 0;
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r17 rd" class="r17 r">ypos</span> = 0;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Clear&quot;</span>))
+            {
+                <a href="#a9a5a50a0bea40ea" class="i field">logtext</a>.<a href="@0@mscorlib/A.html#7d7729bd88adac53" class="i property">Length</a> = 0;
+                <a href="#9f7db51bc55445a4" class="i field">disposables</a>.<a href="/Assembly-CSharp-firstpass/A.html#c9383d594becaf40" class="i method">Clear</a>();
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;StartCo&quot;</span>))
+            {
+                <a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                <a href="#2e9ce0ec5d28106a" class="i field">elapsed</a>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+                <b>for</b> (<b>int</b> <span id="r18 rd" class="r18 r">i</span> = 0; <span class="r18 r">i</span> &lt; 10000; <span class="r18 r">i</span>++)
+                {
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#4bb26026605c3a49" class="i method">FromCoroutine</a>(<a href="#a22c53a96bab1197" class="i method">IncrCounter</a>).<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>().<a href="/Assembly-CSharp-firstpass/A.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#9f7db51bc55445a4" class="i field">disposables</a>);
+                }
+                <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;StartCo&quot;</span>);
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;StartMicro&quot;</span>))
+            {
+                <a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                <a href="#2e9ce0ec5d28106a" class="i field">elapsed</a>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+                <b>for</b> (<b>int</b> <span id="r19 rd" class="r19 r">i</span> = 0; <span class="r19 r">i</span> &lt; 10000; <span class="r19 r">i</span>++)
+                {
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#df4e1532c85a744f" class="i method">FromMicroCoroutine</a>(<a href="#a22c53a96bab1197" class="i method">IncrCounter</a>).<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>().<a href="/Assembly-CSharp-firstpass/A.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#9f7db51bc55445a4" class="i field">disposables</a>);
+                }
+                <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;StartMicro&quot;</span>);
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Average&quot;</span>))
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r20 rd" class="r20 r">avg</span> = <a href="#2e9ce0ec5d28106a" class="i field">elapsed</a>.<a href="@0@System.Core/A.html#1749d0bf7b5af649" class="i method">Average</a>(<span id="r21 rd" class="r21 r">x</span> =&gt; <span class="r21 r">x</span>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a>) + <span class="s">&quot;ms&quot;</span>;
+                <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Average:&quot;</span> + <span class="r20 r">avg</span>);
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;ToYield&quot;</span>))
+            {
+                <span class="c">// StartCoroutine_Auto(ToYield());</span>
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Every&quot;</span>))
+            {
+                <a href="#4d5c9561affa1c5e" class="k">this</a>.<span class="i">UpdateAsObservable</span>().<a href="/Assembly-CSharp-firstpass/A.html#93d2aee26c1bff5b" class="i method">Take</a>(1).<span class="i">Subscribe</span>(<span id="r22 rd" class="r22 r">__</span> =&gt;
+                {
+                    <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Register Start&quot;</span>);
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#0b598eb30ad13dee" class="i method">EveryGameObjectUpdate</a>().<span class="i">Subscribe</span>(<span id="r23 rd" class="r23 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;EveryGameObjectUpdate&quot;</span> + <span class="r23 r">x</span>));
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#b63e651bf81ccb39" class="i method">EveryUpdate</a>().<span class="i">Subscribe</span>(<span id="r24 rd" class="r24 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;EveryUpdate:&quot;</span> + <span class="r24 r">x</span>));
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#e44ae3d6f87b8b7e" class="i method">EveryLateUpdate</a>().<span class="i">Subscribe</span>(<span id="r25 rd" class="r25 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;EveryLateUpdate:&quot;</span> + <span class="r25 r">x</span>));
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#015ca30a80479e53" class="i method">EveryEndOfFrame</a>().<span class="i">Subscribe</span>(<span id="r26 rd" class="r26 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;EveryEndOfFrame:&quot;</span> + <span class="r26 r">x</span>));
+                    <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#dedacff35d7d8a75" class="i method">EveryFixedUpdate</a>().<span class="i">Subscribe</span>(<span id="r27 rd" class="r27 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;EveryFixedUpdate:&quot;</span> + <span class="r27 r">x</span>));
+ 
+                    <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Register End&quot;</span>);
+                });
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Delay&quot;</span>))
+            {
+                <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#2843d6a6f424ac6b" class="i method">Return</a>(100).<a href="/Assembly-CSharp-firstpass/A.html#cb35014c0a6ada65" class="i method">DelayFrame</a>(25, <a href="/Assembly-CSharp-firstpass/A.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="/Assembly-CSharp-firstpass/A.html#52219005ab7cec81" class="i field">Update</a>).<span class="i">Subscribe</span>(<span id="r28 rd" class="r28 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;delayed&quot;</span>));
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;SubscribePerf1&quot;</span>))
+            {
+                <b>var</b> <span id="r29 rd" class="r29 r">list</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, 10000).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r30 rd" class="r30 r">x</span> =&gt; <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>int</b>&gt;(<span class="r30 r">x</span>)).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                {
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r31 rd" class="r31 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+                    <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r32 rd" class="r32 r">item</span> <b>in</b> <span class="r29 r">list</span>)
+                    {
+                        <span class="r32 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+                    }
+                    <span class="r31 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Direct Subscribe:&quot;</span> + <span class="r31 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+ 
+                {
+                    <b>var</b> <span id="r33 rd" class="r33 r">r</span> = <span class="i">UnityEngine</span>.<span class="i">Random</span>.<span class="i">Range</span>(1, 100);
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r34 rd" class="r34 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+                    <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r35 rd" class="r35 r">item</span> <b>in</b> <span class="r29 r">list</span>)
+                    {
+                        <span class="r35 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="r33 r">r</span>;
+                    }
+                    <span class="r34 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Push Direct Perf:&quot;</span> + <span class="r34 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;SubscribePerf2&quot;</span>))
+            {
+                <b>var</b> <span id="r36 rd" class="r36 r">list</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, 10000).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r37 rd" class="r37 r">x</span> =&gt; <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>int</b>&gt;(<span class="r37 r">x</span>)).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                {
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r38 rd" class="r38 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+                    <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r39 rd" class="r39 r">item</span> <b>in</b> <span class="r36 r">list</span>)
+                    {
+                        <span class="r39 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r40 rd" class="r40 r">x</span> =&gt; <span class="r40 r">x</span>).<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+                    }
+                    <span class="r38 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Select.Subscribe:&quot;</span> + <span class="r38 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+ 
+                {
+                    <b>var</b> <span id="r41 rd" class="r41 r">r</span> = <span class="i">UnityEngine</span>.<span class="i">Random</span>.<span class="i">Range</span>(1, 100);
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r42 rd" class="r42 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+                    <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r43 rd" class="r43 r">item</span> <b>in</b> <span class="r36 r">list</span>)
+                    {
+                        <span class="r43 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="r41 r">r</span>;
+                    }
+                    <span class="r42 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Push Select Perf:&quot;</span> + <span class="r42 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Subscribe Perf:&quot;</span>))
+            {
+                <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r44 rd" class="r44 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+ 
+                <b>var</b> <span id="r45 rd" class="r45 r">list</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, 10000).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r46 rd" class="r46 r">x</span> =&gt; <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;()).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+                <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r47 rd" class="r47 r">item</span> <b>in</b> <span class="r45 r">list</span>)
+                {
+                    <span class="r47 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r48 rd" class="r48 r">x</span> =&gt; <span class="r48 r">x</span> % 2 == 0).<a href="/Assembly-CSharp-firstpass/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r49 rd" class="r49 r">x</span> =&gt; <span class="r49 r">x</span> * <span class="r49 r">x</span>).<a href="/Assembly-CSharp-firstpass/A.html#93d2aee26c1bff5b" class="i method">Take</a>(10).<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+                }
+ 
+                <span class="r44 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Subscribe Perf:&quot;</span> + <span class="r44 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;OnNext Perf&quot;</span>))
+            {
+                <b>var</b> <span id="r50 rd" class="r50 r">list</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, 10000).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r51 rd" class="r51 r">x</span> =&gt; <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>int</b>&gt;(0)).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                {
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r52 rd" class="r52 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+                    <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r53 rd" class="r53 r">item</span> <b>in</b> <span class="r50 r">list</span>)
+                    {
+                        <span class="r53 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r54 rd" class="r54 r">x</span> =&gt; <span class="r54 r">x</span> % 2 == 0).<a href="/Assembly-CSharp-firstpass/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r55 rd" class="r55 r">x</span> =&gt; <span class="r55 r">x</span> * <span class="r55 r">x</span>).<a href="/Assembly-CSharp-firstpass/A.html#93d2aee26c1bff5b" class="i method">Take</a>(10).<a href="/Assembly-CSharp-firstpass/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+                    }
+                    <span class="r52 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Subscribe + OnNext Perf:&quot;</span> + <span class="r52 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+ 
+                {
+                    <b>var</b> <span id="r56 rd" class="r56 r">r</span> = <span class="i">UnityEngine</span>.<span class="i">Random</span>.<span class="i">Range</span>(1, 100);
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r57 rd" class="r57 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+                    <b>foreach</b> (<a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r58 rd" class="r58 r">item</span> <b>in</b> <span class="r50 r">list</span>)
+                    {
+                        <span class="r58 r">item</span>.<a href="/Assembly-CSharp-firstpass/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="r56 r">r</span>;
+                    }
+                    <span class="r57 r">sw</span>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;OnNext Perf:&quot;</span> + <span class="r57 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Check Compare Perf&quot;</span>))
+            {
+                {
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r59 rd" class="r59 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+ 
+                    <b>for</b> (<b>int</b> <span id="r60 rd" class="r60 r">i</span> = 0; <span class="r60 r">i</span> &lt; 10000; <span class="r60 r">i</span>++)
+                    {
+                        <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r61 rd" class="r61 r">s</span> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>long</b>&gt;();
+                        <a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#21b11108350025da" class="i method">CompareExchange</a>(<b>ref</b> <a href="#ffc2cfbc7ca388b4" class="i field">subj</a>, <span class="r61 r">s</span>, <b>null</b>);
+                    }
+ 
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Interlocked:&quot;</span> + <span class="r59 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+                {
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r62 rd" class="r62 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+ 
+                    <b>for</b> (<b>int</b> <span id="r63 rd" class="r63 r">i</span> = 0; <span class="r63 r">i</span> &lt; 10000; <span class="r63 r">i</span>++)
+                    {
+                        <b>lock</b> (<a href="#5ee1732877636ac0" class="i field">gate</a>)
+                        {
+                            <b>if</b> (<a href="#ffc2cfbc7ca388b4" class="i field">subj</a> == <b>null</b>)
+                            {
+                                <a href="#ffc2cfbc7ca388b4" class="i field">subj</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>long</b>&gt;();
+                            }
+                        }
+                        <a href="#ffc2cfbc7ca388b4" class="i field">subj</a> = <b>null</b>;
+                    }
+ 
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Lock:&quot;</span> + <span class="r62 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+                {
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#0a7c5667390b95d5" class="i method">WaitForPendingFinalizers</a>();
+                    <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#7abab96bebb051fd" class="i method">Collect</a>();
+                    <a href="@0@System/A.html#ceb0ba9cc88de82e" class="k">var</a> <span id="r64 rd" class="r64 r">sw</span> = <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+ 
+                    <b>for</b> (<b>int</b> <span id="r65 rd" class="r65 r">i</span> = 0; <span class="r65 r">i</span> &lt; 10000; <span class="r65 r">i</span>++)
+                    {
+                        <b>if</b> (<a href="#ffc2cfbc7ca388b4" class="i field">subj</a> == <b>null</b>)
+                        {
+                            <a href="#ffc2cfbc7ca388b4" class="i field">subj</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>long</b>&gt;();
+                        }
+                        <a href="#ffc2cfbc7ca388b4" class="i field">subj</a> = <b>null</b>;
+                    }
+ 
+                    <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Plain:&quot;</span> + <span class="r64 r">sw</span>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> + <span class="s">&quot;ms&quot;</span>);
+                }
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;ObserveOn Check:&quot;</span>))
+            {
+                <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r66 rd" class="r66 r">s</span> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+ 
+                <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Before ObserveOn:&quot;</span> + <span class="i">Time</span>.<span class="i">frameCount</span>);
+                <span class="r66 r">s</span>.<a href="/Assembly-CSharp-firstpass/A.html#b2a8bd8002c609a9" class="i method">ObserveOnMainThread</a>()
+                    .<span class="i">Subscribe</span>(<span id="r67 rd" class="r67 r">x</span> =&gt;
+                    {
+                        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Subscribe:&quot;</span> + <span class="i">Time</span>.<span class="i">frameCount</span> + <span class="s">&quot;|&quot;</span> + <span class="r67 r">x</span>);
+                    });
+ 
+                <span class="r66 r">s</span>.<a href="/Assembly-CSharp-firstpass/A.html#eb9ca668135f9655" class="i method">OnNext</a>(997);
+                <span class="r66 r">s</span>.<a href="/Assembly-CSharp-firstpass/A.html#eb9ca668135f9655" class="i method">OnNext</a>(998);
+                <span class="r66 r">s</span>.<a href="/Assembly-CSharp-firstpass/A.html#eb9ca668135f9655" class="i method">OnNext</a>(999);
+                <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;After OnNext:&quot;</span> + <span class="i">Time</span>.<span class="i">frameCount</span>);
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <span class="r17 r">ypos</span> = 0;
+            <span class="r16 r">xpos</span> += 100;
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Test for Where.Select&quot;</span>))
+            {
+                <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="k">var</a> <span id="r68 rd" class="r68 r">seq</span> = <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#72da3db51047e6df" class="i method">Range</a>(1, 10)
+                    .<a href="/Assembly-CSharp-firstpass/A.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r69 rd" class="r69 r">x</span> =&gt; <span class="r69 r">x</span> % 2 == 0) <span class="c">// 2, 4, 6, 8, 10</span>
+                    .<a href="/Assembly-CSharp-firstpass/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r70 rd" class="r70 r">x</span> =&gt; <span class="r70 r">x</span> * <span class="r70 r">x</span>); <span class="c">// 4, 16, 36, 64, 100</span>
+ 
+                <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="r68 r">seq</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>);
+ 
+                <span class="r68 r">seq</span>.<a href="/Assembly-CSharp-firstpass/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r71 rd" class="r71 r">x</span> =&gt; <a href="#9ec519c568880625" class="i field">logger</a>.<a href="/Assembly-CSharp-firstpass/A.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="r71 r">x</span>));
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;Run&quot;</span>))
+            {
+                <a href="#00196459633b3933" class="i field">cancelCoroutine</a> = <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/Assembly-CSharp-firstpass/A.html#6a538af15d258332" class="i method">FromCoroutine</a>&lt;<b>int</b>&gt;(<span id="r72 rd" class="r72 r">observer</span> =&gt; <a href="#714ccd0c55035174" class="i method">TestCoroutine</a>(<span class="r72 r">observer</span>))
+                    .<span class="i">Subscribe</span>(<span id="r73 rd" class="r73 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;Subs &quot;</span> + <span class="r73 r">x</span>));
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+            <b>if</b> (<span class="i">GUI</span>.<span class="i">Button</span>(<b>new</b> <span class="i">Rect</span>(<span class="r16 r">xpos</span>, <span class="r17 r">ypos</span>, 100, 100), <span class="s">&quot;return&quot;</span>))
+            {
+                <a href="#00196459633b3933" class="i field">cancelCoroutine</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+            }
+            <span class="r17 r">ypos</span> += 100;
+ 
+ 
+            <span class="c">//if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;CurrentThreadScheduler&quot;))</span>
+            <span class="c">//{</span>
+            <span class="c">//    try</span>
+            <span class="c">//    {</span>
+            <span class="c">//        Scheduler.CurrentThread.Schedule(() =&gt;</span>
+            <span class="c">//        {</span>
+            <span class="c">//            try</span>
+            <span class="c">//            {</span>
+            <span class="c">//                logtext.AppendLine(&quot;test threadscheduler&quot;);</span>
+            <span class="c">//            }</span>
+            <span class="c">//            catch (Exception ex)</span>
+            <span class="c">//            {</span>
+            <span class="c">//                logtext.AppendLine(&quot;innner ex&quot; + ex.ToString());</span>
+            <span class="c">//            }</span>
+            <span class="c">//        });</span>
+            <span class="c">//    }</span>
+            <span class="c">//    catch (Exception ex)</span>
+            <span class="c">//    {</span>
+            <span class="c">//        logtext.AppendLine(&quot;outer ex&quot; + ex.ToString());</span>
+            <span class="c">//    }</span>
+            <span class="c">//}</span>
+            <span class="c">//ypos += 100;</span>
+            <span class="c">//if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;EveryUpdate&quot;))</span>
+            <span class="c">//{</span>
+            <span class="c">//    Observable.EveryUpdate()</span>
+            <span class="c">//        .Subscribe(x =&gt; logtext.AppendLine(x.ToString()), ex =&gt; logtext.AppendLine(&quot;ex:&quot; + ex.ToString()))</span>
+            <span class="c">//        .AddTo(disposables);</span>
+            <span class="c">//}</span>
+            <span class="c">//ypos += 100;</span>
+            <span class="c">//if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;FromCoroutinePure&quot;))</span>
+            <span class="c">//{</span>
+            <span class="c">//    Observable.Create&lt;Unit&gt;(observer =&gt;</span>
+            <span class="c">//    {</span>
+            <span class="c">//        var cancel = new BooleanDisposable();</span>
+ 
+            <span class="c">//        MainThreadDispatcher.StartCoroutine(Hoge(observer));</span>
+ 
+            <span class="c">//        return cancel;</span>
+            <span class="c">//    })</span>
+            <span class="c">//    .Subscribe(x =&gt; logtext.AppendLine(x.ToString()), ex =&gt; logtext.AppendLine(&quot;ex:&quot; + ex.ToString()));</span>
+            <span class="c">//}</span>
+            <span class="c">//ypos += 100;</span>
+            <span class="c">//if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;FromCoroutine&quot;))</span>
+            <span class="c">//{</span>
+            <span class="c">//    Observable.FromCoroutine&lt;Unit&gt;(Hoge)</span>
+            <span class="c">//    .Subscribe(x =&gt; logtext.AppendLine(x.ToString()), ex =&gt; logtext.AppendLine(&quot;ex:&quot; + ex.ToString()));</span>
+            <span class="c">//}</span>
+ 
+ 
+            <span class="c">/*
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;TimeScale-1&quot;))
+            {
+                Time.timeScale -= 1f;
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;TimeScale+1&quot;))
+            {
+                Time.timeScale += 1f;
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;TimeScale=0&quot;))
+            {
+                Time.timeScale = 0;
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;TimeScale=100&quot;))
+            {
+                Time.timeScale = 100;
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Scheduler0&quot;))
+            {
+                logger.Debug(&quot;run&quot;);
+                Scheduler.MainThread.Schedule(TimeSpan.FromMilliseconds(5000), () =&gt;
+                {
+                    logger.Debug(DateTime.Now);
+                });
+            }
+ 
+            xpos += 100;
+            ypos = 0;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Scheduler1&quot;))
+            {
+                logger.Debug(&quot;Before Start&quot;);
+                Scheduler.MainThread.Schedule(() =&gt; logger.Debug(&quot;immediate&quot;));
+                Scheduler.MainThread.Schedule(TimeSpan.Zero, () =&gt; logger.Debug(&quot;zero span&quot;));
+                Scheduler.MainThread.Schedule(TimeSpan.FromMilliseconds(1), () =&gt; logger.Debug(&quot;0.1 span&quot;));
+                logger.Debug(&quot;After Start&quot;);
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Scheduler2&quot;))
+            {
+                logger.Debug(&quot;M:Before Start&quot;);
+                Scheduler.MainThread.Schedule(TimeSpan.FromSeconds(5), () =&gt; logger.Debug(&quot;M:after 5 minutes&quot;));
+                Scheduler.MainThread.Schedule(TimeSpan.FromMilliseconds(5500), () =&gt; logger.Debug(&quot;M:after 5.5 minutes&quot;));
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Realtime&quot;))
+            {
+                logger.Debug(&quot;R:Before Start&quot;);
+                Scheduler.MainThreadIgnoreTimeScale.Schedule(TimeSpan.FromSeconds(5), () =&gt; logger.Debug(&quot;R:after 5 minutes&quot;));
+                Scheduler.MainThreadIgnoreTimeScale.Schedule(TimeSpan.FromMilliseconds(5500), () =&gt; logger.Debug(&quot;R:after 5.5 minutes&quot;));
+            }
+ 
+#if !UNITY_METRO
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;ManagedThreadId&quot;))
+            {
+                logger.Debug(&quot;Current:&quot; + Thread.CurrentThread.ManagedThreadId);
+                new Thread(_ =&gt; logger.Debug(&quot;NewThread:&quot; + Thread.CurrentThread.ManagedThreadId)).Start();
+                ThreadPool.QueueUserWorkItem(_ =&gt;
+                {
+                    logger.Debug(&quot;ThraedPool:&quot; + Thread.CurrentThread.ManagedThreadId);
+                    this.transform.position = new Vector3(0, 0, 0); // exception
+                });
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;ThreadStatic&quot;))
+            {
+                logger.Debug(threadstaticobj != null);
+                new Thread(_ =&gt; logger.Debug(threadstaticobj != null)).Start();
+                ThreadPool.QueueUserWorkItem(_ =&gt; logger.Debug(threadstaticobj != null));
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Log&quot;))
+            {
+                logger.Debug(&quot;test&quot;, this);
+                ThreadPool.QueueUserWorkItem(_ =&gt; logger.Debug(&quot;test2&quot;, this));
+            }
+ 
+#endif
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;POST&quot;))
+            {
+                var form = new WWWForm();
+                form.AddField(&quot;test&quot;, &quot;abcdefg&quot;);
+                ObservableWWW.PostWWW(&quot;http://localhost:53395/Handler1.ashx&quot;, form, new Hash
+            {
+                {&quot;aaaa&quot;, &quot;bbb&quot;},
+                {&quot;User-Agent&quot;, &quot;HugaHuga&quot;}
+            })
+                .Subscribe(x =&gt; logger.Debug(x.text));
+            }
+ 
+            xpos += 100;
+            ypos = 0;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Yield&quot;))
+            {
+                yieldCancel = Observable.FromCoroutineValue&lt;string&gt;(StringYield, false)
+                    .Subscribe(x =&gt; logger.Debug(x), ex =&gt; logger.Debug(&quot;E-x:&quot; + ex));
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;YieldCancel&quot;))
+            {
+                yieldCancel.Dispose();
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;ThreadPool&quot;))
+            {
+                Observable.Timer(TimeSpan.FromMilliseconds(400), Scheduler.ThreadPool)
+                    .ObserveOnMainThread()
+                    .Subscribe(x =&gt; logger.Debug(x));
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Subscribe&quot;))
+            {
+                subscriber.InitSubscriptions();
+                logger.Debug(&quot;Subscribe++ : &quot; + subscriber.SubscriptionCount);
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Push&quot;))
+            {
+                Publisher.foo();
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;Unsubscriber&quot;))
+            {
+                subscriber.RemoveSubscriptions();
+                logger.Debug(&quot;UnsubscribeAll : &quot; + subscriber.SubscriptionCount);
+            }
+ 
+            ypos += 100;
+            if (GUI.Button(new Rect(xpos, ypos, 100, 100), &quot;DistinctUntilChanged&quot;))
+            {
+                new[] { &quot;hoge&quot;, null, null, &quot;huga&quot;, &quot;huga&quot;, &quot;hoge&quot; }
+                    .ToObservable()
+                    .DistinctUntilChanged()
+                    .Subscribe(x =&gt; logger.Debug(x));
+            }
+             * */</span>
+ 
+            <span class="c">// Time</span>
+ 
+            <a href="@0@mscorlib/A.html#adf60ee46ebd299f" class="k">var</a> <span id="r74 rd" class="r74 r">sb</span> = <b>new</b> <a href="@0@mscorlib/A.html#6e631639c1e2746b" class="t constructor">StringBuilder</a>();
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;CaptureFramerate:&quot;</span> + <span class="i">Time</span>.<span class="i">captureFramerate</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;deltaTime:&quot;</span> + <span class="i">Time</span>.<span class="i">deltaTime</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;fixedDeltaTime:&quot;</span> + <span class="i">Time</span>.<span class="i">fixedDeltaTime</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;fixedTime:&quot;</span> + <span class="i">Time</span>.<span class="i">fixedTime</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;frameCount:&quot;</span> + <span class="i">Time</span>.<span class="i">frameCount</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;maximumDeltaTime:&quot;</span> + <span class="i">Time</span>.<span class="i">maximumDeltaTime</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;realtimeSinceStartup:&quot;</span> + <span class="i">Time</span>.<span class="i">realtimeSinceStartup</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;renderedFrameCount:&quot;</span> + <span class="i">Time</span>.<span class="i">renderedFrameCount</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;smoothDeltaTime:&quot;</span> + <span class="i">Time</span>.<span class="i">smoothDeltaTime</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;time:&quot;</span> + <span class="i">Time</span>.<span class="i">time</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;timeScale:&quot;</span> + <span class="i">Time</span>.<span class="i">timeScale</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;timeSinceLevelLoad:&quot;</span> + <span class="i">Time</span>.<span class="i">timeSinceLevelLoad</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;unscaledDeltaTime:&quot;</span> + <span class="i">Time</span>.<span class="i">unscaledDeltaTime</span>);
+            <span class="r74 r">sb</span>.<span class="i">AppendLine</span>(<span class="s">&quot;unscaledTime:&quot;</span> + <span class="i">Time</span>.<span class="i">unscaledTime</span>);
+ 
+            <span class="c">//GUI.Box(new Rect(Screen.width - 300, Screen.height - 300, 300, 300), &quot;Time&quot;);</span>
+            <span class="c">//GUI.Label(new Rect(Screen.width - 290, Screen.height - 290, 290, 290), sb.ToString());</span>
+ 
+            <span class="c">// logtext only</span>
+            <span class="i">GUI</span>.<span class="i">Box</span>(<b>new</b> <span class="i">Rect</span>(<span class="i">Screen</span>.<span class="i">width</span> - 300, <span class="i">Screen</span>.<span class="i">height</span> - 300, 300, 300), <span class="s">&quot;logtext&quot;</span>);
+            <span class="i">GUI</span>.<span class="i">Label</span>(<b>new</b> <span class="i">Rect</span>(<span class="i">Screen</span>.<span class="i">width</span> - 290, <span class="i">Screen</span>.<span class="i">height</span> - 290, 290, 290), <a href="#a9a5a50a0bea40ea" class="i field">logtext</a>.<a href="@0@mscorlib/A.html#5a97da49a158a3c9" class="i method">ToString</a>());
+ 
+            <span class="c">// Log</span>
+            <span class="c">//GUI.Box(new Rect(Screen.width - 300, 0, 300, 300), &quot;Log&quot;);</span>
+            <span class="c">//GUI.Label(new Rect(Screen.width - 290, 10, 290, 290), logtext.ToString());</span>
+        }
+ 
+ 
+ 
+        <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>&gt; <a id="2e9ce0ec5d28106a" href="../../R/2e9ce0ec5d28106a.html" target="n" data-glyph="46,1" class="i field">elapsed</a> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>&gt;();
+        <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a> <a id="9315d7356e34ab71" href="../../R/9315d7356e34ab71.html" target="n" data-glyph="46,1" class="i field">stopwatch</a> = <b>new</b> <span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@System/A.html#e0a8bcc83e66a717" class="t constructor">Stopwatch</a>();
+ 
+        <b>void</b> <a id="a8cfae067071fbf2" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Update</a>()
+        {
+            <a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#e0ffb49b2a24b579" class="i method">Reset</a>();
+            <a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#f56fda03f3c59486" class="i method">Start</a>();
+        }
+ 
+        <b>void</b> <a id="2ef7d41a71a7d39e" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">LateUpdate</a>()
+        {
+            <b>if</b> (<a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#2821372d09531e34" class="i property">IsRunning</a>)
+            {
+                <a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#9dd6cac7fc1e2117" class="i method">Stop</a>();
+                <a href="#2e9ce0ec5d28106a" class="i field">elapsed</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>);
+                <a href="#9315d7356e34ab71" class="i field">stopwatch</a>.<a href="@0@System/A.html#e0ffb49b2a24b579" class="i method">Reset</a>();
+            }
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">restore</span> 0414
+</pre></td></tr></table></div></body></html>

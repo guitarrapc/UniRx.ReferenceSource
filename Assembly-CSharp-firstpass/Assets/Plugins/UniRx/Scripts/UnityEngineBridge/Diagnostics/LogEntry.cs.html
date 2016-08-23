@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html><head><title>LogEntry.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(50);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Diagnostics/LogEntry.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Diagnostics\LogEntry.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>
+{
+    <b>public struct</b> <a id="31ba9896acb11547" href="../../../../../../R/31ba9896acb11547.html" target="n" data-glyph="108,0" class="t t"><span id="56596fcbe7d9d928">LogEntry</span></a>
+    {
+        <span class="c">// requires</span>
+        <b>public string</b> <a id="d08d10ed08cae128" href="../../../../../../R/d08d10ed08cae128.html" target="n" data-glyph="102,1" class="i property">LoggerName</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="i">LogType</span> <a id="5a2c592b41d3b76a" href="../../../../../../R/5a2c592b41d3b76a.html" target="n" data-glyph="102,1" class="i property">LogType</a> { <b>get</b>; <b>private set</b>; }
+        <b>public string</b> <a id="0275a19b78bb29f7" href="../../../../../../R/0275a19b78bb29f7.html" target="n" data-glyph="102,1" class="i property">Message</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a> <a id="0bd649f6f69616db" href="../../../../../../R/0bd649f6f69616db.html" target="n" data-glyph="102,1" class="i property">Timestamp</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <span class="c">// options</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">[Optional]</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <span class="i">UnityEngine</span>.<span class="i">Object</span> <a id="c100c98a92328e76" href="../../../../../../R/c100c98a92328e76.html" target="n" data-glyph="102,1" class="i property">Context</a> { <b>get</b>; <b>private set</b>; }
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">[Optional]</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="e8c8ed6cc8b74937" href="../../../../../../R/e8c8ed6cc8b74937.html" target="n" data-glyph="102,1" class="i property">Exception</a> { <b>get</b>; <b>private set</b>; }
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">[Optional]</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public string</b> <a id="38a975c251bd474e" href="../../../../../../R/38a975c251bd474e.html" target="n" data-glyph="102,1" class="i property">StackTrace</a> { <b>get</b>; <b>private set</b>; }
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">[Optional]</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public object</b> <a id="51975ac9f9cf9cb9" href="../../../../../../R/51975ac9f9cf9cb9.html" target="n" data-glyph="102,1" class="i property">State</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="d29f04a0c619b1ae" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">LogEntry</a>(<b>string</b> <span id="r0 rd" class="r0 r">loggerName</span>, <span class="i">LogType</span> <span id="r1 rd" class="r1 r">logType</span>, <a href="@0@mscorlib/A.html#df6b1eba7461813b" class="t t">DateTime</a> <span id="r2 rd" class="r2 r">timestamp</span>, <b>string</b> <span id="r3 rd" class="r3 r">message</span>, <span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r4 rd" class="r4 r">context</span> = <b>null</b>, <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r5 rd" class="r5 r">exception</span> = <b>null</b>, <b>string</b> <span id="r6 rd" class="r6 r">stackTrace</span> = <b>null</b>, <b>object</b> <span id="r7 rd" class="r7 r">state</span> = <b>null</b>)
+        {
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#d08d10ed08cae128" class="i property">LoggerName</a> = <span class="r0 r">loggerName</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#5a2c592b41d3b76a" class="i property">LogType</a> = <span class="r1 r">logType</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#0bd649f6f69616db" class="i property">Timestamp</a> = <span class="r2 r">timestamp</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#0275a19b78bb29f7" class="i property">Message</a> = <span class="r3 r">message</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#c100c98a92328e76" class="i property">Context</a> = <span class="r4 r">context</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#e8c8ed6cc8b74937" class="i property">Exception</a> = <span class="r5 r">exception</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#38a975c251bd474e" class="i property">StackTrace</a> = <span class="r6 r">stackTrace</span>;
+            <a href="#31ba9896acb11547" class="k">this</a>.<a href="#51975ac9f9cf9cb9" class="i property">State</a> = <span class="r7 r">state</span>;
+        }
+ 
+        <b>public override string</b> <a id="299cb0cd544be1bf" href="../../../../../../R/299cb0cd544be1bf.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">plusEx</span> = (<a href="#e8c8ed6cc8b74937" class="i property">Exception</a> != <b>null</b>) ? (<a href="@0@mscorlib/A.html#7d2f1469d916fc63" class="t t">Environment</a>.<a href="@0@mscorlib/A.html#63a04833d43dd9d3" class="i property">NewLine</a> + <a href="#e8c8ed6cc8b74937" class="i property">Exception</a>.<a href="@0@mscorlib/A.html#e2e19f4ed8da81aa" class="i method">ToString</a>()) : <span class="s">&quot;&quot;</span>;
+            <b>return</b> <span class="s">&quot;[&quot;</span> + <a href="#0bd649f6f69616db" class="i property">Timestamp</a>.<a href="@0@mscorlib/A.html#11d38858dedad166" class="i method">ToString</a>() + <span class="s">&quot;]&quot;</span>
+                + <span class="s">&quot;[&quot;</span> + <a href="#d08d10ed08cae128" class="i property">LoggerName</a> + <span class="s">&quot;]&quot;</span>
+                + <span class="s">&quot;[&quot;</span> + <a href="#5a2c592b41d3b76a" class="i property">LogType</a>.<span class="i">ToString</span>() + <span class="s">&quot;]&quot;</span>
+                + <a href="#0275a19b78bb29f7" class="i property">Message</a>
+                + <span class="r8 r">plusEx</span>;
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

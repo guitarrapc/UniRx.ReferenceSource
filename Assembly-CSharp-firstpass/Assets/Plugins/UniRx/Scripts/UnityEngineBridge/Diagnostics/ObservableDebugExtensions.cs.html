@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableDebugExtensions.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Diagnostics/ObservableDebugExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Diagnostics\ObservableDebugExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>
+{
+    <b>public static class</b> <a id="e67cdcdf2753efdf" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ObservableDebugExtensions</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Debug helper of observbale stream. Works for only DEBUG symbol.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="1e1241aab7cde9ac" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Debug</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <b>string</b> <span id="r2 rd" class="r2 r">label</span> = <b>null</b>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">DEBUG</span>
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">l</span> = (<span class="r2 r">label</span> == <b>null</b>) ? <span class="s">&quot;&quot;</span> : <span class="s">&quot;[&quot;</span> + <span class="r2 r">label</span> + <span class="s">&quot;]&quot;</span>;
+            <b>return</b> <span class="r1 r">source</span>.<a href="../../Observable.cs.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<span class="i">Do</span>(<span id="r4 rd" class="r4 r">x</span> =&gt; <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">Log</span>(<span class="r3 r">l</span> + <span class="r4 r">x</span>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>()))
+                .<span class="i">Dematerialize</span>()
+                .<span class="i">DoOnCancel</span>(() =&gt; <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">Log</span>(<span class="r3 r">l</span> + <span class="s">&quot;OnCancel&quot;</span>))
+                .<span class="i">DoOnSubscribe</span>(() =&gt; <span class="i">UnityEngine</span>.<span class="i">Debug</span>.<span class="i">Log</span>(<span class="r3 r">l</span> + <span class="s">&quot;OnSubscribe&quot;</span>));
+ 
+<span class="k preprocess">#</span><span class="k preprocess">else</span>
+<span class="e">            return source;
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Debug helper of observbale stream. Works for only DEBUG symbol.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">T</span>&gt; <a id="3947fd93e25b2eb0" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Debug</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt;(<b>this</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">T</span>&gt; <span id="r6 rd" class="r6 r">source</span>, <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>.<a href="Logger.cs.html#5edfe68a15b571a3" class="t t">Logger</a> <span id="r7 rd" class="r7 r">logger</span>)
+        {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">DEBUG</span>
+            <b>return</b> <span class="r6 r">source</span>.<a href="../../Observable.cs.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="../../Observable.cs.html#5cfa3f7295a92210" class="i method">Do</a>(<span id="r8 rd" class="r8 r">x</span> =&gt; <span class="r7 r">logger</span>.<a href="Logger.cs.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="r8 r">x</span>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>()))
+                .<a href="../../Observable.cs.html#0bfe0128fed84b4b" class="i method">Dematerialize</a>()
+                .<a href="../../Observable.cs.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r7 r">logger</span>.<a href="Logger.cs.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;OnCancel&quot;</span>))
+                .<a href="../../Observable.cs.html#56ccc1f4cf377ddd" class="i method">DoOnSubscribe</a>(() =&gt; <span class="r7 r">logger</span>.<a href="Logger.cs.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;OnSubscribe&quot;</span>));
+ 
+<span class="k preprocess">#</span><span class="k preprocess">else</span>
+<span class="e">            return source;
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

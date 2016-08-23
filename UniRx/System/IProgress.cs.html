@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html><head><title>IProgress.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(30);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/System/IProgress.cs" target="_top">System\IProgress.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// defined from .NET Framework 4.5 and NETFX_CORE</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">NETFX_CORE</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="c6d4ad037d1c8e44" href="../R/c6d4ad037d1c8e44.html" target="n" data-glyph="48,0" class="t t">IProgress</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;
+    {
+        <b>void</b> <a id="b206f41e47afa71d" href="../R/b206f41e47afa71d.html" target="n" data-glyph="72,1" class="i method">Report</a>(<span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">value</span>);
+    }
+ 
+    <b>public class</b> <a id="230223d60001d690" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">Progress</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt; : <a href="#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<span class="r2 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r2 r t">T</span>&gt; <a id="c5c412151658c9b6" href="../R/c5c412151658c9b6.html" target="n" data-glyph="46,1" class="i field">report</a>;
+ 
+        <b>public</b> <a id="e856639587cf5abe" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">Progress</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r3 rd" class="r3 r">report</span>)
+        {
+            <a href="#230223d60001d690" class="k">this</a>.<a href="#c5c412151658c9b6" class="i field">report</a> = <span class="r3 r">report</span>;
+        }
+ 
+        <b>public void</b> <a id="6ff93986bfb453f6" href="../R/6ff93986bfb453f6.html" target="n" data-glyph="72,1" class="i method">Report</a>(<span class="r2 r t">T</span> <span id="r4 rd" class="r4 r">value</span>)
+        {
+            <a href="#c5c412151658c9b6" class="i field">report</a>(<span class="r4 r">value</span>);
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html><head><title>GameObjectDisplacer.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(50);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/GameObjectDisplacer.cs" target="_top">Assets\ObjectTest\GameObjectDisplacer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public class</b> <a id="297207ff25826203" href="../../R/297207ff25826203.html" target="n" data-glyph="0,0" class="t t"><span id="a22abc26fad353b8">GameObjectDisplacer</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public</b> <span class="i">GameObject</span> <a id="5338155a0898bd9b" href="../../R/5338155a0898bd9b.html" target="n" data-glyph="42,1" class="i field">originalObject</a>;
+        <b>public</b> <span class="i">Vector3</span> <a id="28f3c0b376c36996" href="../../R/28f3c0b376c36996.html" target="n" data-glyph="42,1" class="i field">displacement</a>;
+ 
+        <b>private int</b> <a id="cc4447235177c823" href="../../R/cc4447235177c823.html" target="n" data-glyph="46,1" class="i field">Counter</a> = 0;
+        <b>private static</b> <a href="#297207ff25826203" class="t t">GameObjectDisplacer</a> <a id="8383a8215329b686" href="../../R/8383a8215329b686.html" target="n" data-glyph="46,1" class="i field">_instance</a>;
+ 
+        <b>void</b> <a id="938b408de0b805cc" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <a href="#5338155a0898bd9b" class="i field">originalObject</a>.<span class="i">AddComponent</span>&lt;<a href="#abc88c172ade813a" class="t t">AwakeDetector</a>&gt;();
+ 
+            <b>if</b> (<a href="#8383a8215329b686" class="i field">_instance</a> == <b>null</b>)
+            {
+                <a href="#8383a8215329b686" class="i field">_instance</a> = <a href="#297207ff25826203" class="k">this</a>;
+ 
+                <a href="#abc88c172ade813a" class="t t">AwakeDetector</a>.<a href="#31eec5f857551a4e" class="i">OnAwake</a> += (<span id="r0 rd" class="r0 r">g</span>) =&gt; <a href="#fa31a7c56910b181" class="i method">GameObjectCloned</a>(<span class="r0 r">g</span>);
+            }
+            <b>else</b>
+            {
+                <span class="i">Destroy</span>(<a href="#297207ff25826203" class="k">this</a>.<span class="i">gameObject</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="fa31a7c56910b181" href="../../R/fa31a7c56910b181.html" target="n" data-glyph="72,1" class="i method">GameObjectCloned</a>(<span class="i">GameObject</span> <span id="r1 rd" class="r1 r">g</span>)
+        {
+            <b>if</b> (<a href="#5338155a0898bd9b" class="i field">originalObject</a> != <b>null</b>)
+            {
+                <span class="r1 r">g</span>.<span class="i">name</span> = <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;{0} #{1}&quot;</span>, <a href="#5338155a0898bd9b" class="i field">originalObject</a>.<span class="i">name</span>, <a href="#cc4447235177c823" class="i field">Counter</a>++);
+                <span class="r1 r">g</span>.<span class="i">transform</span>.<span class="i">position</span> += <a href="#28f3c0b376c36996" class="i field">displacement</a> * <a href="#cc4447235177c823" class="i field">Counter</a>;
+            }
+        }
+    }
+ 
+    <b>public class</b> <a id="abc88c172ade813a" href="../../R/abc88c172ade813a.html" target="n" data-glyph="0,0" class="t t"><span id="eeba5fbb31393238">AwakeDetector</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public static event</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="i">GameObject</span>&gt; <a id="31eec5f857551a4e" href="../../R/31eec5f857551a4e.html" target="n" data-glyph="30,1" class="i">OnAwake</a> = <b>delegate</b> { };
+ 
+        <b>void</b> <a id="c7e05f449ab8d2f8" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <a href="#31eec5f857551a4e" class="i">OnAwake</a>(<a href="#abc88c172ade813a" class="k">this</a>.<span class="i">gameObject</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html><head><title>Unit</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">1 instantiation of Unit</div><div class="rA">UniRx (1)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">System\Unit.cs (1)</div>
+<a href="../System/Unit.cs.html#10"><b>10</b>static readonly Unit @default = new <i>Unit</i>();</a>
+</div>
+</div>
+<div class="rH">180 references to Unit</div><div class="rA">UniRx (139)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Notifiers\MessageBroker.cs (12)</div>
+<a href="../Notifiers/MessageBroker.cs.html#32"><b>32</b>IObservable&lt;<i>Unit</i>&gt; PublishAsync&lt;T&gt;(T message);</a>
+<a href="../Notifiers/MessageBroker.cs.html#40"><b>40</b>IDisposable Subscribe&lt;T&gt;(Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncMessageReceiver);</a>
+<a href="../Notifiers/MessageBroker.cs.html#119"><b>119</b>public IObservable&lt;<i>Unit</i>&gt; PublishAsync&lt;T&gt;(T message)</a>
+<a href="../Notifiers/MessageBroker.cs.html#121"><b>121</b>UniRx.InternalUtil.ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt; notifier;</a>
+<a href="../Notifiers/MessageBroker.cs.html#129"><b>129</b>notifier = (UniRx.InternalUtil.ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt;)_notifier;</a>
+<a href="../Notifiers/MessageBroker.cs.html#138"><b>138</b>var awaiter = new IObservable&lt;<i>Unit</i>&gt;[data.Length];</a>
+<a href="../Notifiers/MessageBroker.cs.html#146"><b>146</b>public IDisposable Subscribe&lt;T&gt;(Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncMessageReceiver)</a>
+<a href="../Notifiers/MessageBroker.cs.html#155"><b>155</b>var notifier = UniRx.InternalUtil.ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt;.Empty;</a>
+<a href="../Notifiers/MessageBroker.cs.html#161"><b>161</b>var notifier = (ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt;)_notifier;</a>
+<a href="../Notifiers/MessageBroker.cs.html#185"><b>185</b>readonly Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncMessageReceiver;</a>
+<a href="../Notifiers/MessageBroker.cs.html#187"><b>187</b>public Subscription(AsyncMessageBroker parent, Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncMessageReceiver)</a>
+<a href="../Notifiers/MessageBroker.cs.html#200"><b>200</b>var notifier = (ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt;)_notifier;</a>
+</div>
+<div class="rF"><div class="rN">Observable.Concatenate.cs (5)</div>
+<a href="../Observable.Concatenate.cs.html#249"><b>249</b>public static IObservable&lt;<i>Unit</i>&gt; WhenAll(params IObservable&lt;<i>Unit</i>&gt;[] sources)</a>
+<a href="../Observable.Concatenate.cs.html#271"><b>271</b>public static IObservable&lt;<i>Unit</i>&gt; WhenAll(this IEnumerable&lt;IObservable&lt;<i>Unit</i>&gt;&gt; sources)</a>
+<a href="../Observable.Concatenate.cs.html#273"><b>273</b>var array = sources as IObservable&lt;<i>Unit</i>&gt;[];</a>
+</div>
+<div class="rF"><div class="rN">Observable.Conversions.cs (2)</div>
+<a href="../Observable.Conversions.cs.html#61"><b>61</b>public static IObservable&lt;<i>Unit</i>&gt; AsUnitObservable&lt;T&gt;(this IObservable&lt;T&gt; source)</a>
+<a href="../Observable.Conversions.cs.html#69"><b>69</b>public static IObservable&lt;<i>Unit</i>&gt; AsSingleUnitObservable&lt;T&gt;(this IObservable&lt;T&gt; source)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Creation.cs (15)</div>
+<a href="../Observable.Creation.cs.html#150"><b>150</b>public static IObservable&lt;<i>Unit</i>&gt; Return(<i>Unit</i> value)</a>
+<a href="../Observable.Creation.cs.html#168"><b>168</b>public static IObservable&lt;<i>Unit</i>&gt; ReturnUnit()</a>
+<a href="../Observable.Creation.cs.html#286"><b>286</b>public static IObservable&lt;<i>Unit</i>&gt; Start(Action action)</a>
+<a href="../Observable.Creation.cs.html#288"><b>288</b>return new StartObservable&lt;<i>Unit</i>&gt;(action, null, Scheduler.DefaultSchedulers.AsyncConversions);</a>
+<a href="../Observable.Creation.cs.html#291"><b>291</b>public static IObservable&lt;<i>Unit</i>&gt; Start(Action action, TimeSpan timeSpan)</a>
+<a href="../Observable.Creation.cs.html#293"><b>293</b>return new StartObservable&lt;<i>Unit</i>&gt;(action, timeSpan, Scheduler.DefaultSchedulers.AsyncConversions);</a>
+<a href="../Observable.Creation.cs.html#296"><b>296</b>public static IObservable&lt;<i>Unit</i>&gt; Start(Action action, IScheduler scheduler)</a>
+<a href="../Observable.Creation.cs.html#298"><b>298</b>return new StartObservable&lt;<i>Unit</i>&gt;(action, null, scheduler);</a>
+<a href="../Observable.Creation.cs.html#301"><b>301</b>public static IObservable&lt;<i>Unit</i>&gt; Start(Action action, TimeSpan timeSpan, IScheduler scheduler)</a>
+<a href="../Observable.Creation.cs.html#303"><b>303</b>return new StartObservable&lt;<i>Unit</i>&gt;(action, timeSpan, scheduler);</a>
+<a href="../Observable.Creation.cs.html#337"><b>337</b>public static Func&lt;IObservable&lt;<i>Unit</i>&gt;&gt; ToAsync(Action action)</a>
+<a href="../Observable.Creation.cs.html#342"><b>342</b>public static Func&lt;IObservable&lt;<i>Unit</i>&gt;&gt; ToAsync(Action action, IScheduler scheduler)</a>
+<a href="../Observable.Creation.cs.html#346"><b>346</b>var subject = new AsyncSubject&lt;<i>Unit</i>&gt;();</a>
+<a href="../Observable.Creation.cs.html#359"><b>359</b>subject.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Observable.cs (2)</div>
+<a href="../Observable.cs.html#281"><b>281</b>public static IObservable&lt;<i>Unit</i>&gt; ForEachAsync&lt;T&gt;(this IObservable&lt;T&gt; source, Action&lt;T&gt; onNext)</a>
+<a href="../Observable.cs.html#286"><b>286</b>public static IObservable&lt;<i>Unit</i>&gt; ForEachAsync&lt;T&gt;(this IObservable&lt;T&gt; source, Action&lt;T, int&gt; onNext)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Events.cs (2)</div>
+<a href="../Observable.Events.cs.html#14"><b>14</b>public static IObservable&lt;<i>Unit</i>&gt; FromEvent&lt;TDelegate&gt;(Func&lt;Action, TDelegate&gt; conversion, Action&lt;TDelegate&gt; addHandler, Action&lt;TDelegate&gt; removeHandler)</a>
+<a href="../Observable.Events.cs.html#24"><b>24</b>public static IObservable&lt;<i>Unit</i>&gt; FromEvent(Action&lt;Action&gt; addHandler, Action&lt;Action&gt; removeHandler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.FromAsync.cs (6)</div>
+<a href="../Observable.FromAsync.cs.html#100"><b>100</b>public static Func&lt;IObservable&lt;<i>Unit</i>&gt;&gt; FromAsyncPattern(Func&lt;AsyncCallback, object, IAsyncResult&gt; begin, Action&lt;IAsyncResult&gt; end)</a>
+<a href="../Observable.FromAsync.cs.html#105"><b>105</b>return <i>Unit</i>.Default;</a>
+<a href="../Observable.FromAsync.cs.html#109"><b>109</b>public static Func&lt;T1, IObservable&lt;<i>Unit</i>&gt;&gt; FromAsyncPattern&lt;T1&gt;(Func&lt;T1, AsyncCallback, object, IAsyncResult&gt; begin, Action&lt;IAsyncResult&gt; end)</a>
+<a href="../Observable.FromAsync.cs.html#114"><b>114</b>return <i>Unit</i>.Default;</a>
+<a href="../Observable.FromAsync.cs.html#118"><b>118</b>public static Func&lt;T1, T2, IObservable&lt;<i>Unit</i>&gt;&gt; FromAsyncPattern&lt;T1, T2&gt;(Func&lt;T1, T2, AsyncCallback, object, IAsyncResult&gt; begin, Action&lt;IAsyncResult&gt; end)</a>
+<a href="../Observable.FromAsync.cs.html#123"><b>123</b>return <i>Unit</i>.Default;</a>
+</div>
+<div class="rF"><div class="rN">Operators\AsSingleUnitObservable.cs (5)</div>
+<a href="../Operators/AsSingleUnitObservable.cs.html#6"><b>6</b>internal class AsSingleUnitObservableObservable&lt;T&gt; : OperatorObservableBase&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/AsSingleUnitObservable.cs.html#16"><b>16</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/AsSingleUnitObservable.cs.html#21"><b>21</b>class AsSingleUnitObservable : OperatorObserverBase&lt;T, <i>Unit</i>&gt;</a>
+<a href="../Operators/AsSingleUnitObservable.cs.html#23"><b>23</b>public AsSingleUnitObservable(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel) : base(observer, cancel)</a>
+<a href="../Operators/AsSingleUnitObservable.cs.html#39"><b>39</b>observer.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Operators\AsUnitObservable.cs (5)</div>
+<a href="../Operators/AsUnitObservable.cs.html#5"><b>5</b>internal class AsUnitObservableObservable&lt;T&gt; : OperatorObservableBase&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/AsUnitObservable.cs.html#15"><b>15</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/AsUnitObservable.cs.html#20"><b>20</b>class AsUnitObservable : OperatorObserverBase&lt;T, <i>Unit</i>&gt;</a>
+<a href="../Operators/AsUnitObservable.cs.html#22"><b>22</b>public AsUnitObservable(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/AsUnitObservable.cs.html#29"><b>29</b>base.observer.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Operators\ForEachAsync.cs (8)</div>
+<a href="../Operators/ForEachAsync.cs.html#6"><b>6</b>internal class ForEachAsyncObservable&lt;T&gt; : OperatorObservableBase&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/ForEachAsync.cs.html#26"><b>26</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/ForEachAsync.cs.html#38"><b>38</b>class ForEachAsync : OperatorObserverBase&lt;T, <i>Unit</i>&gt;</a>
+<a href="../Operators/ForEachAsync.cs.html#42"><b>42</b>public ForEachAsync(ForEachAsyncObservable&lt;T&gt; parent, IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel) : base(observer, cancel)</a>
+<a href="../Operators/ForEachAsync.cs.html#69"><b>69</b>observer.OnNext(<i>Unit</i>.Default);</a>
+<a href="../Operators/ForEachAsync.cs.html#77"><b>77</b>class ForEachAsync_ : OperatorObserverBase&lt;T, <i>Unit</i>&gt;</a>
+<a href="../Operators/ForEachAsync.cs.html#82"><b>82</b>public ForEachAsync_(ForEachAsyncObservable&lt;T&gt; parent, IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel) : base(observer, cancel)</a>
+<a href="../Operators/ForEachAsync.cs.html#109"><b>109</b>observer.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Operators\FromEvent.cs (10)</div>
+<a href="../Operators/FromEvent.cs.html#74"><b>74</b>internal class FromEventObservable&lt;TDelegate&gt; : OperatorObservableBase&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/FromEvent.cs.html#88"><b>88</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/FromEvent.cs.html#97"><b>97</b>readonly IObserver&lt;<i>Unit</i>&gt; observer;</a>
+<a href="../Operators/FromEvent.cs.html#100"><b>100</b>public FromEvent(FromEventObservable&lt;TDelegate&gt; parent, IObserver&lt;<i>Unit</i>&gt; observer)</a>
+<a href="../Operators/FromEvent.cs.html#124"><b>124</b>observer.OnNext(<i>Unit</i>.Default);</a>
+<a href="../Operators/FromEvent.cs.html#202"><b>202</b>internal class FromEventObservable : OperatorObservableBase&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/FromEvent.cs.html#214"><b>214</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/FromEvent.cs.html#223"><b>223</b>readonly IObserver&lt;<i>Unit</i>&gt; observer;</a>
+<a href="../Operators/FromEvent.cs.html#226"><b>226</b>public FromEvent(FromEventObservable parent, IObserver&lt;<i>Unit</i>&gt; observer)</a>
+<a href="../Operators/FromEvent.cs.html#249"><b>249</b>observer.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Operators\ObserveOn.cs (2)</div>
+<a href="../Operators/ObserveOn.cs.html#167"><b>167</b>void OnCompleted_(<i>Unit</i> _)</a>
+<a href="../Operators/ObserveOn.cs.html#184"><b>184</b>scheduler.ScheduleQueueing(isDisposed, <i>Unit</i>.Default, OnCompleted_);</a>
+</div>
+<div class="rF"><div class="rN">Operators\Return.cs (4)</div>
+<a href="../Operators/Return.cs.html#93"><b>93</b>internal class ImmutableReturnUnitObservable : IObservable&lt;<i>Unit</i>&gt;, IOptimizedObservable&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/Return.cs.html#107"><b>107</b>public IDisposable Subscribe(IObserver&lt;<i>Unit</i>&gt; observer)</a>
+<a href="../Operators/Return.cs.html#109"><b>109</b>observer.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Operators\WhenAll.cs (28)</div>
+<a href="../Operators/WhenAll.cs.html#257"><b>257</b>internal class WhenAllObservable : OperatorObservableBase&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/WhenAll.cs.html#259"><b>259</b>readonly IObservable&lt;<i>Unit</i>&gt;[] sources;</a>
+<a href="../Operators/WhenAll.cs.html#260"><b>260</b>readonly IEnumerable&lt;IObservable&lt;<i>Unit</i>&gt;&gt; sourcesEnumerable;</a>
+<a href="../Operators/WhenAll.cs.html#262"><b>262</b>public WhenAllObservable(IObservable&lt;<i>Unit</i>&gt;[] sources)</a>
+<a href="../Operators/WhenAll.cs.html#268"><b>268</b>public WhenAllObservable(IEnumerable&lt;IObservable&lt;<i>Unit</i>&gt;&gt; sources)</a>
+<a href="../Operators/WhenAll.cs.html#274"><b>274</b>protected override IDisposable SubscribeCore(IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/WhenAll.cs.html#282"><b>282</b>var xs = sourcesEnumerable as IList&lt;IObservable&lt;<i>Unit</i>&gt;&gt;;</a>
+<a href="../Operators/WhenAll.cs.html#285"><b>285</b>xs = new List&lt;IObservable&lt;<i>Unit</i>&gt;&gt;(sourcesEnumerable); // materialize observables</a>
+<a href="../Operators/WhenAll.cs.html#291"><b>291</b>class WhenAll : OperatorObserverBase&lt;<i>Unit</i>, <i>Unit</i>&gt;</a>
+<a href="../Operators/WhenAll.cs.html#293"><b>293</b>readonly IObservable&lt;<i>Unit</i>&gt;[] sources;</a>
+<a href="../Operators/WhenAll.cs.html#298"><b>298</b>public WhenAll(IObservable&lt;<i>Unit</i>&gt;[] sources, IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/WhenAll.cs.html#311"><b>311</b>OnNext(<i>Unit</i>.Default);</a>
+<a href="../Operators/WhenAll.cs.html#329"><b>329</b>public override void OnNext(<i>Unit</i> value)</a>
+<a href="../Operators/WhenAll.cs.html#344"><b>344</b>class WhenAllCollectionObserver : IObserver&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/WhenAll.cs.html#354"><b>354</b>public void OnNext(<i>Unit</i> value)</a>
+<a href="../Operators/WhenAll.cs.html#379"><b>379</b>parent.OnNext(<i>Unit</i>.Default);</a>
+<a href="../Operators/WhenAll.cs.html#388"><b>388</b>class WhenAll_ : OperatorObserverBase&lt;<i>Unit</i>, <i>Unit</i>&gt;</a>
+<a href="../Operators/WhenAll.cs.html#390"><b>390</b>readonly IList&lt;IObservable&lt;<i>Unit</i>&gt;&gt; sources;</a>
+<a href="../Operators/WhenAll.cs.html#395"><b>395</b>public WhenAll_(IList&lt;IObservable&lt;<i>Unit</i>&gt;&gt; sources, IObserver&lt;<i>Unit</i>&gt; observer, IDisposable cancel)</a>
+<a href="../Operators/WhenAll.cs.html#408"><b>408</b>OnNext(<i>Unit</i>.Default);</a>
+<a href="../Operators/WhenAll.cs.html#426"><b>426</b>public override void OnNext(<i>Unit</i> value)</a>
+<a href="../Operators/WhenAll.cs.html#441"><b>441</b>class WhenAllCollectionObserver : IObserver&lt;<i>Unit</i>&gt;</a>
+<a href="../Operators/WhenAll.cs.html#451"><b>451</b>public void OnNext(<i>Unit</i> value)</a>
+<a href="../Operators/WhenAll.cs.html#476"><b>476</b>parent.OnNext(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">System\Unit.cs (9)</div>
+<a href="../System/Unit.cs.html#8"><b>8</b>public struct Unit : IEquatable&lt;<i>Unit</i>&gt;</a>
+<a href="../System/Unit.cs.html#10"><b>10</b>static readonly <i>Unit</i> @default = new Unit();</a>
+<a href="../System/Unit.cs.html#12"><b>12</b>public static <i>Unit</i> Default { get { return @default; } }</a>
+<a href="../System/Unit.cs.html#14"><b>14</b>public static bool operator ==(<i>Unit</i> first, <i>Unit</i> second)</a>
+<a href="../System/Unit.cs.html#19"><b>19</b>public static bool operator !=(<i>Unit</i> first, <i>Unit</i> second)</a>
+<a href="../System/Unit.cs.html#24"><b>24</b>public bool Equals(<i>Unit</i> other)</a>
+<a href="../System/Unit.cs.html#30"><b>30</b>return obj is <i>Unit</i>;</a>
+</div>
+<div class="rF"><div class="rN">UnityEngineBridge\ReactiveCollection.cs (6)</div>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#135"><b>135</b>IObservable&lt;<i>Unit</i>&gt; ObserveReset();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#176"><b>176</b>if (collectionReset != null) collectionReset.OnNext(<i>Unit</i>.Default);</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#241"><b>241</b>Subject&lt;<i>Unit</i>&gt; collectionReset = null;</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#242"><b>242</b>public IObservable&lt;<i>Unit</i>&gt; ObserveReset()</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#244"><b>244</b>if (isDisposed) return Observable.Empty&lt;<i>Unit</i>&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#245"><b>245</b>return collectionReset ?? (collectionReset = new Subject&lt;<i>Unit</i>&gt;());</a>
+</div>
+<div class="rF"><div class="rN">UnityEngineBridge\ReactiveCommand.cs (12)</div>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#15"><b>15</b>IDisposable Subscribe(Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncAction);</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#21"><b>21</b>public class ReactiveCommand : ReactiveCommand&lt;<i>Unit</i>&gt;</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#41"><b>41</b>return Execute(<i>Unit</i>.Default);</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#47"><b>47</b>ForceExecute(<i>Unit</i>.Default);</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#131"><b>131</b>public class AsyncReactiveCommand : AsyncReactiveCommand&lt;<i>Unit</i>&gt;</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#161"><b>161</b>return base.Execute(<i>Unit</i>.Default);</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#170"><b>170</b>UniRx.InternalUtil.ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt; asyncActions = UniRx.InternalUtil.ImmutableList&lt;Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt;&gt;.Empty;</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#236"><b>236</b>var xs = new IObservable&lt;<i>Unit</i>&gt;[a.Length];</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#260"><b>260</b>public IDisposable Subscribe(Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncAction)</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#273"><b>273</b>readonly Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncAction;</a>
+<a href="../UnityEngineBridge/ReactiveCommand.cs.html#275"><b>275</b>public Subscription(AsyncReactiveCommand&lt;T&gt; parent, Func&lt;T, IObservable&lt;<i>Unit</i>&gt;&gt; asyncAction)</a>
+</div>
+<div class="rF"><div class="rN">UnityEngineBridge\ReactiveDictionary.cs (6)</div>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#106"><b>106</b>IObservable&lt;<i>Unit</i>&gt; ObserveReset();</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#203"><b>203</b>if (collectionReset != null) collectionReset.OnNext(<i>Unit</i>.Default);</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#300"><b>300</b>Subject&lt;<i>Unit</i>&gt; collectionReset = null;</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#301"><b>301</b>public IObservable&lt;<i>Unit</i>&gt; ObserveReset()</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#303"><b>303</b>if (isDisposed) return Observable.Empty&lt;<i>Unit</i>&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#304"><b>304</b>return collectionReset ?? (collectionReset = new Subject&lt;<i>Unit</i>&gt;());</a>
+</div>
+</div>
+<div class="rA">UniRx.Console (2)</div><div class="rG" id="UniRx.Console"><div class="rF"><div class="rN">Program.cs (2)</div>
+<a href="../../UniRx.Console/Program.cs.html#278"><b>278</b>var d = Observable.FromEvent&lt;Action, <i>Unit</i>&gt;(</a>
+<a href="../../UniRx.Console/Program.cs.html#279"><b>279</b>h =&gt; () =&gt; h(<i>Unit</i>.Default),</a>
+</div>
+</div>
+<div class="rA">UniRx.Tests (39)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">ConversionTest.cs (3)</div>
+<a href="../../UniRx.Tests/ConversionTest.cs.html#20"><b>20</b>Observable.Range(1, 3).AsUnitObservable().ToArrayWait().IsCollection(<i>Unit</i>.Default, <i>Unit</i>.Default, <i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">Observable.ConcatTest.cs (19)</div>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#30"><b>30</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#58"><b>58</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#83"><b>83</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#112"><b>112</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#135"><b>135</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0, z = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#167"><b>167</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#200"><b>200</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#237"><b>237</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#259"><b>259</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#281"><b>281</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#301"><b>301</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#335"><b>335</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#357"><b>357</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#379"><b>379</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#399"><b>399</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#432"><b>432</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#468"><b>468</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#487"><b>487</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#513"><b>513</b>var l = Enumerable.Empty&lt;<i>Unit</i>&gt;().Select(_ =&gt; Notification.CreateOnNext(new { x = 0, y = 0 })).ToList();</a>
+</div>
+<div class="rF"><div class="rN">Observable.Events.cs (2)</div>
+<a href="../../UniRx.Tests/Observable.Events.cs.html#159"><b>159</b>var d = Observable.FromEvent&lt;Action, <i>Unit</i>&gt;(</a>
+<a href="../../UniRx.Tests/Observable.Events.cs.html#160"><b>160</b>h =&gt; () =&gt; h(<i>Unit</i>.Default),</a>
+</div>
+<div class="rF"><div class="rN">Observable.GeneratorTest.cs (3)</div>
+<a href="../../UniRx.Tests/Observable.GeneratorTest.cs.html#13"><b>13</b>var material = Observable.Empty&lt;<i>Unit</i>&gt;().Materialize().ToArray().Wait();</a>
+<a href="../../UniRx.Tests/Observable.GeneratorTest.cs.html#14"><b>14</b>material.IsCollection(Notification.CreateOnCompleted&lt;<i>Unit</i>&gt;());</a>
+<a href="../../UniRx.Tests/Observable.GeneratorTest.cs.html#21"><b>21</b>Observable.Never&lt;<i>Unit</i>&gt;().Materialize().ToArray().Wait(TimeSpan.FromMilliseconds(10)));</a>
+</div>
+<div class="rF"><div class="rN">ObservableTest.cs (2)</div>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#332"><b>332</b>xs[0].Is(<i>Unit</i>.Default);</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#346"><b>346</b>xs[0].Is(<i>Unit</i>.Default);</a>
+</div>
+<div class="rF"><div class="rN">WhenAllTest.cs (10)</div>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#47"><b>47</b><i>var</i> xs = Observable.WhenAll(new IObservable&lt;<i>Unit</i>&gt;[0]).Wait();</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#48"><b>48</b>xs.Is(<i>Unit</i>.Default);</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#50"><b>50</b><i>var</i> xs2 = Observable.WhenAll(Enumerable.Empty&lt;IObservable&lt;<i>Unit</i>&gt;&gt;().Select(x =&gt; x)).Wait();</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#51"><b>51</b>xs2.Is(<i>Unit</i>.Default);</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#57"><b>57</b><i>var</i> xs = Observable.WhenAll(</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#63"><b>63</b>xs.Is(<i>Unit</i>.Default);</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#69"><b>69</b><i>var</i> xs = new[] {</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#75"><b>75</b>xs.Is(<i>Unit</i>.Default);</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html><head><title>StableCompositeDisposable.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(277);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Disposables/StableCompositeDisposable.cs" target="_top">Assets\Plugins\UniRx\Scripts\Disposables\StableCompositeDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Represents a group of disposable resources that are disposed together.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract class</b> <a id="471cc53ba427553f" href="../../../../../R/471cc53ba427553f.html" target="n" data-glyph="0,0" class="t t"><span id="442a953a5d1edeac">StableCompositeDisposable</span></a> : <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new group containing two disposable resources that are disposed together.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">disposable1</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r">disposable2</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Group of disposable resources that are disposed together.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="393dd3f08715b4a7" href="../../../../../R/393dd3f08715b4a7.html" target="n" data-glyph="72,1" class="i method">Create</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r0 rd" class="r0 r">disposable1</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r1 rd" class="r1 r">disposable2</span>)
+        {
+            <b>if</b> (<span class="r0 r">disposable1</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable1&quot;</span>);
+            <b>if</b> (<span class="r1 r">disposable2</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable2&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="#807e9e9f819c13c3" class="t constructor">Binary</a>(<span class="r0 r">disposable1</span>, <span class="r1 r">disposable2</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new group containing three disposable resources that are disposed together.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r2 r">disposable1</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r3 r">disposable2</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r">disposable3</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The third disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Group of disposable resources that are disposed together.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="53510a8871897d70" href="../../../../../R/53510a8871897d70.html" target="n" data-glyph="72,1" class="i method">Create</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r2 rd" class="r2 r">disposable1</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r3 rd" class="r3 r">disposable2</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r4 rd" class="r4 r">disposable3</span>)
+        {
+            <b>if</b> (<span class="r2 r">disposable1</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable1&quot;</span>);
+            <b>if</b> (<span class="r3 r">disposable2</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable2&quot;</span>);
+            <b>if</b> (<span class="r4 r">disposable3</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable3&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="#9b0ac41f00cef9db" class="t constructor">Trinary</a>(<span class="r2 r">disposable1</span>, <span class="r3 r">disposable2</span>, <span class="r4 r">disposable3</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new group containing four disposable resources that are disposed together.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r5 r">disposable1</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r6 r">disposable2</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r7 r">disposable3</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The three disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r8 r">disposable4</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The four disposable resoruce to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Group of disposable resources that are disposed together.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="0cf68341e0e3b5b4" href="../../../../../R/0cf68341e0e3b5b4.html" target="n" data-glyph="72,1" class="i method">Create</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">disposable1</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r6 rd" class="r6 r">disposable2</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">disposable3</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r8 rd" class="r8 r">disposable4</span>)
+        {
+            <b>if</b> (<span class="r5 r">disposable1</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable1&quot;</span>);
+            <b>if</b> (<span class="r6 r">disposable2</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable2&quot;</span>);
+            <b>if</b> (<span class="r7 r">disposable3</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable3&quot;</span>);
+            <b>if</b> (<span class="r8 r">disposable4</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable4&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="#6d3819219e0d98c4" class="t constructor">Quaternary</a>(<span class="r5 r">disposable1</span>, <span class="r6 r">disposable2</span>, <span class="r7 r">disposable3</span>, <span class="r8 r">disposable4</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new group of disposable resources that are disposed together.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r9 r">disposables</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Disposable resources to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Group of disposable resources that are disposed together.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="a90f48a712d3ffa3" href="../../../../../R/a90f48a712d3ffa3.html" target="n" data-glyph="72,1" class="i method">Create</a>(<b>params</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[] <span id="r9 rd" class="r9 r">disposables</span>)
+        {
+            <b>if</b> (<span class="r9 r">disposables</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposables&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="#0b4dd461d7299946" class="t constructor">NAry</a>(<span class="r9 r">disposables</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new group of disposable resources that are disposed together. Array is not copied, it&#39;s unsafe but optimized.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r10 r">disposables</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Disposable resources to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Group of disposable resources that are disposed together.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="1db7949183e1547d" href="../../../../../R/1db7949183e1547d.html" target="n" data-glyph="72,1" class="i method">CreateUnsafe</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[] <span id="r10 rd" class="r10 r">disposables</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#c1221cb1c9c939bc" class="t constructor">NAryUnsafe</a>(<span class="r10 r">disposables</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new group of disposable resources that are disposed together.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r11 r">disposables</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Disposable resources to add to the group.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Group of disposable resources that are disposed together.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <a id="754609d58a72ad00" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Create</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r11 rd" class="r11 r">disposables</span>)
+        {
+            <b>if</b> (<span class="r11 r">disposables</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposables&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="#c1fb48b07602eeb5" class="t constructor">NAry</a>(<span class="r11 r">disposables</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Disposes all disposables in the group.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public abstract void</b> <a id="b9553986d8f9b1f3" href="../../../../../R/b9553986d8f9b1f3.html" target="n" data-glyph="72,1" class="i method">Dispose</a>();
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Gets a value that indicates whether the object is disposed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public abstract bool</b> <a id="368ee2efd59e4273" href="../../../../../R/368ee2efd59e4273.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a>
+        {
+            <b>get</b>;
+        }
+ 
+        <b>class</b> <a id="3a5bd0a1ea9e7ce1" href="../../../../../R/3a5bd0a1ea9e7ce1.html" target="n" data-glyph="4,1" class="t t">Binary</a> : <a href="#471cc53ba427553f" class="t t">StableCompositeDisposable</a>
+        {
+            <b>int</b> <a id="b5fa32544c8344d4" href="../../../../../R/b5fa32544c8344d4.html" target="n" data-glyph="46,2" class="i field">disposedCallCount</a> = -1;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="99657dbd6faa6872" href="../../../../../R/99657dbd6faa6872.html" target="n" data-glyph="46,2" class="i field">_disposable1</a>;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="f17c630677ce708d" href="../../../../../R/f17c630677ce708d.html" target="n" data-glyph="46,2" class="i field">_disposable2</a>;
+ 
+            <b>public</b> <a id="807e9e9f819c13c3" href="../../../../../R/807e9e9f819c13c3.html" target="n" data-glyph="72,2" class="i constructor">Binary</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r12 rd" class="r12 r">disposable1</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r13 rd" class="r13 r">disposable2</span>)
+            {
+                <a href="#99657dbd6faa6872" class="i field">_disposable1</a> = <span class="r12 r">disposable1</span>;
+                <a href="#f17c630677ce708d" class="i field">_disposable2</a> = <span class="r13 r">disposable2</span>;
+            }
+ 
+            <b>public override bool</b> <a id="0b55aba198eebeb8" href="../../../../../R/0b55aba198eebeb8.html" target="n" data-glyph="102,2" class="i property">IsDisposed</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#b5fa32544c8344d4" class="i field">disposedCallCount</a> != -1;
+                }
+            }
+ 
+            <b>public override void</b> <a id="227e0536d854c463" href="../../../../../R/227e0536d854c463.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#b5fa32544c8344d4" class="i field">disposedCallCount</a>) == 0)
+                {
+                    <a href="#99657dbd6faa6872" class="i field">_disposable1</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#f17c630677ce708d" class="i field">_disposable2</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="5c1fd0026468a33b" href="../../../../../R/5c1fd0026468a33b.html" target="n" data-glyph="4,1" class="t t">Trinary</a> : <a href="#471cc53ba427553f" class="t t">StableCompositeDisposable</a>
+        {
+            <b>int</b> <a id="a131fc5b6c887c00" href="../../../../../R/a131fc5b6c887c00.html" target="n" data-glyph="46,2" class="i field">disposedCallCount</a> = -1;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="686611f3c825687e" href="../../../../../R/686611f3c825687e.html" target="n" data-glyph="46,2" class="i field">_disposable1</a>;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="905d10f02cd96920" href="../../../../../R/905d10f02cd96920.html" target="n" data-glyph="46,2" class="i field">_disposable2</a>;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a973e41d17b67481" href="../../../../../R/a973e41d17b67481.html" target="n" data-glyph="46,2" class="i field">_disposable3</a>;
+ 
+            <b>public</b> <a id="9b0ac41f00cef9db" href="../../../../../R/9b0ac41f00cef9db.html" target="n" data-glyph="72,2" class="i constructor">Trinary</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r14 rd" class="r14 r">disposable1</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r15 rd" class="r15 r">disposable2</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r16 rd" class="r16 r">disposable3</span>)
+            {
+                <a href="#686611f3c825687e" class="i field">_disposable1</a> = <span class="r14 r">disposable1</span>;
+                <a href="#905d10f02cd96920" class="i field">_disposable2</a> = <span class="r15 r">disposable2</span>;
+                <a href="#a973e41d17b67481" class="i field">_disposable3</a> = <span class="r16 r">disposable3</span>;
+            }
+ 
+            <b>public override bool</b> <a id="d5f68e2fa915594d" href="../../../../../R/d5f68e2fa915594d.html" target="n" data-glyph="102,2" class="i property">IsDisposed</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#a131fc5b6c887c00" class="i field">disposedCallCount</a> != -1;
+                }
+            }
+ 
+            <b>public override void</b> <a id="a92bd666bbc9258f" href="../../../../../R/a92bd666bbc9258f.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#a131fc5b6c887c00" class="i field">disposedCallCount</a>) == 0)
+                {
+                    <a href="#686611f3c825687e" class="i field">_disposable1</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#905d10f02cd96920" class="i field">_disposable2</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#a973e41d17b67481" class="i field">_disposable3</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="b59c8dc0edbd901c" href="../../../../../R/b59c8dc0edbd901c.html" target="n" data-glyph="4,1" class="t t">Quaternary</a> : <a href="#471cc53ba427553f" class="t t">StableCompositeDisposable</a>
+        {
+            <b>int</b> <a id="9bbde6aa125db854" href="../../../../../R/9bbde6aa125db854.html" target="n" data-glyph="46,2" class="i field">disposedCallCount</a> = -1;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="db962553de1c681b" href="../../../../../R/db962553de1c681b.html" target="n" data-glyph="46,2" class="i field">_disposable1</a>;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="25471db25b57b828" href="../../../../../R/25471db25b57b828.html" target="n" data-glyph="46,2" class="i field">_disposable2</a>;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="79627f67e6d482b2" href="../../../../../R/79627f67e6d482b2.html" target="n" data-glyph="46,2" class="i field">_disposable3</a>;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="44a62a0eb31235f6" href="../../../../../R/44a62a0eb31235f6.html" target="n" data-glyph="46,2" class="i field">_disposable4</a>;
+ 
+            <b>public</b> <a id="6d3819219e0d98c4" href="../../../../../R/6d3819219e0d98c4.html" target="n" data-glyph="72,2" class="i constructor">Quaternary</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r17 rd" class="r17 r">disposable1</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r18 rd" class="r18 r">disposable2</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r19 rd" class="r19 r">disposable3</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r20 rd" class="r20 r">disposable4</span>)
+            {
+                <a href="#db962553de1c681b" class="i field">_disposable1</a> = <span class="r17 r">disposable1</span>;
+                <a href="#25471db25b57b828" class="i field">_disposable2</a> = <span class="r18 r">disposable2</span>;
+                <a href="#79627f67e6d482b2" class="i field">_disposable3</a> = <span class="r19 r">disposable3</span>;
+                <a href="#44a62a0eb31235f6" class="i field">_disposable4</a> = <span class="r20 r">disposable4</span>;
+            }
+ 
+            <b>public override bool</b> <a id="e999ac462dd485ce" href="../../../../../R/e999ac462dd485ce.html" target="n" data-glyph="102,2" class="i property">IsDisposed</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#9bbde6aa125db854" class="i field">disposedCallCount</a> != -1;
+                }
+            }
+ 
+            <b>public override void</b> <a id="88d60203fbea3cfb" href="../../../../../R/88d60203fbea3cfb.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#9bbde6aa125db854" class="i field">disposedCallCount</a>) == 0)
+                {
+                    <a href="#db962553de1c681b" class="i field">_disposable1</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#25471db25b57b828" class="i field">_disposable2</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#79627f67e6d482b2" class="i field">_disposable3</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#44a62a0eb31235f6" class="i field">_disposable4</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="b8aecc4f962e77fa" href="../../../../../R/b8aecc4f962e77fa.html" target="n" data-glyph="4,1" class="t t">NAry</a> : <a href="#471cc53ba427553f" class="t t">StableCompositeDisposable</a>
+        {
+            <b>int</b> <a id="d6d4ac712ade1a25" href="../../../../../R/d6d4ac712ade1a25.html" target="n" data-glyph="46,2" class="i field">disposedCallCount</a> = -1;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <a id="0b968dc1296ba6ce" href="../../../../../R/0b968dc1296ba6ce.html" target="n" data-glyph="46,2" class="i field">_disposables</a>;
+ 
+            <b>public</b> <a id="0b4dd461d7299946" href="../../../../../R/0b4dd461d7299946.html" target="n" data-glyph="72,2" class="i constructor">NAry</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[] <span id="r21 rd" class="r21 r">disposables</span>)
+                : <a href="#c1fb48b07602eeb5" class="k">this</a>((<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt;)<span class="r21 r">disposables</span>)
+            {
+            }
+ 
+            <b>public</b> <a id="c1fb48b07602eeb5" href="../../../../../R/c1fb48b07602eeb5.html" target="n" data-glyph="72,2" class="i constructor">NAry</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r22 rd" class="r22 r">disposables</span>)
+            {
+                <a href="#0b968dc1296ba6ce" class="i field">_disposables</a> = <b>new</b> <a href="@0@mscorlib/A.html#d2ac2c19c9cf1d44" class="t constructor">List</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt;(<span class="r22 r">disposables</span>);
+ 
+                <span class="c">//</span>
+                <span class="c">// Doing this on the list to avoid duplicate enumeration of disposables.</span>
+                <span class="c">//</span>
+                <b>if</b> (<a href="#0b968dc1296ba6ce" class="i field">_disposables</a>.<a href="@0@mscorlib/A.html#521b9f7129105e15" class="i method">Contains</a>(<b>null</b>)) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#4b20cd3790b6426a" class="t constructor">ArgumentException</a>(<span class="s">&quot;Disposables can&#39;t contains null&quot;</span>, <span class="s">&quot;disposables&quot;</span>);
+            }
+ 
+            <b>public override bool</b> <a id="42424de472237dcd" href="../../../../../R/42424de472237dcd.html" target="n" data-glyph="102,2" class="i property">IsDisposed</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#d6d4ac712ade1a25" class="i field">disposedCallCount</a> != -1;
+                }
+            }
+ 
+            <b>public override void</b> <a id="4e85394c44df43a7" href="../../../../../R/4e85394c44df43a7.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#d6d4ac712ade1a25" class="i field">disposedCallCount</a>) == 0)
+                {
+                    <b>foreach</b> (<a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r23 rd" class="r23 r">d</span> <b>in</b> <a href="#0b968dc1296ba6ce" class="i field">_disposables</a>)
+                    {
+                        <span class="r23 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    }
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="252851eace23ad14" href="../../../../../R/252851eace23ad14.html" target="n" data-glyph="4,1" class="t t">NAryUnsafe</a> : <a href="#471cc53ba427553f" class="t t">StableCompositeDisposable</a>
+        {
+            <b>int</b> <a id="a41a38eda9d73c94" href="../../../../../R/a41a38eda9d73c94.html" target="n" data-glyph="46,2" class="i field">disposedCallCount</a> = -1;
+            <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[] <a id="a1f8812b2a21ef70" href="../../../../../R/a1f8812b2a21ef70.html" target="n" data-glyph="46,2" class="i field">_disposables</a>;
+ 
+            <b>public</b> <a id="c1221cb1c9c939bc" href="../../../../../R/c1221cb1c9c939bc.html" target="n" data-glyph="72,2" class="i constructor">NAryUnsafe</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[] <span id="r24 rd" class="r24 r">disposables</span>)
+            {
+                <a href="#a1f8812b2a21ef70" class="i field">_disposables</a> = <span class="r24 r">disposables</span>;
+            }
+ 
+            <b>public override bool</b> <a id="ac5d3a7623c5232b" href="../../../../../R/ac5d3a7623c5232b.html" target="n" data-glyph="102,2" class="i property">IsDisposed</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#a41a38eda9d73c94" class="i field">disposedCallCount</a> != -1;
+                }
+            }
+ 
+            <b>public override void</b> <a id="daeea932f2bf241f" href="../../../../../R/daeea932f2bf241f.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#a41a38eda9d73c94" class="i field">disposedCallCount</a>) == 0)
+                {
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r25 rd" class="r25 r">len</span> = <a href="#a1f8812b2a21ef70" class="i field">_disposables</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+                    <b>for</b> (<b>int</b> <span id="r26 rd" class="r26 r">i</span> = 0; <span class="r26 r">i</span> &lt; <span class="r25 r">len</span>; <span class="r26 r">i</span>++)
+                    {
+                        <a href="#a1f8812b2a21ef70" class="i field">_disposables</a>[<span class="r26 r">i</span>].<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

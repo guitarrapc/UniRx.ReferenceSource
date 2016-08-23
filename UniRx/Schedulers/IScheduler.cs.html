@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html><head><title>IScheduler.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(30);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Schedulers/IScheduler.cs" target="_top">Schedulers\IScheduler.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="23ddc6164c5c4a05" href="../R/23ddc6164c5c4a05.html" target="n" data-glyph="48,0" class="t t">IScheduler</a>
+    {
+        <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="26e5447b3b301f2d" href="../R/26e5447b3b301f2d.html" target="n" data-glyph="102,1" class="i property">Now</a> { <b>get</b>; }
+ 
+        <span class="c">// Interface is changed from official Rx for avoid iOS AOT problem (state is dangerous).</span>
+ 
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="e0dd22c68ad50c68" href="../R/e0dd22c68ad50c68.html" target="n" data-glyph="72,1" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r0 rd" class="r0 r">action</span>);
+ 
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="68ca5be6e564eaa1" href="../R/68ca5be6e564eaa1.html" target="n" data-glyph="72,1" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r1 rd" class="r1 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r2 rd" class="r2 r">action</span>);
+    }
+ 
+    <b>public interface</b> <a id="f59e5129868b12fd" href="../R/f59e5129868b12fd.html" target="n" data-glyph="48,0" class="t t">ISchedulerPeriodic</a>
+    {
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="2c8f85b074feba23" href="../R/2c8f85b074feba23.html" target="n" data-glyph="72,1" class="i method">SchedulePeriodic</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r3 rd" class="r3 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r4 rd" class="r4 r">action</span>);
+    }
+ 
+    <b>public interface</b> <a id="613acb31dc656e9c" href="../R/../../0000000000.html" target="n" data-glyph="48,0" class="t t">ISchedulerLongRunning</a>
+    {
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="001c21f8ebc65bcc" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ScheduleLongRunning</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>&gt; <span id="r5 rd" class="r5 r">action</span>);
+    }
+ 
+    <b>public interface</b> <a id="f569e3af81779a18" href="../R/f569e3af81779a18.html" target="n" data-glyph="48,0" class="t t">ISchedulerQueueing</a>
+    {
+        <b>void</b> <a id="6851b39d2bd6f5ec" href="../R/6851b39d2bd6f5ec.html" target="n" data-glyph="72,1" class="i method">ScheduleQueueing</a>&lt;<span id="r6 rd t" class="r6 r t">T</span>&gt;(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r7 rd" class="r7 r">cancel</span>, <span class="r6 r t">T</span> <span id="r8 rd" class="r8 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r6 r t">T</span>&gt; <span id="r9 rd" class="r9 r">action</span>);
+    }
+}</pre></td></tr></table></div></body></html>

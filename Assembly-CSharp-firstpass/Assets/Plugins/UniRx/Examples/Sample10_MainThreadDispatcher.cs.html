@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample10_MainThreadDispatcher.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(48);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample10_MainThreadDispatcher.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample10_MainThreadDispatcher.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="e10aa27d5f54a9af" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="67e545e4d01ce74c">Sample10_MainThreadDispatcher</span></a>
+    {
+        <b>public void</b> <a id="29580390221a98ae" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Run</a>()
+        {
+            <span class="c">// MainThreadDispatcher is heart of Rx and Unity integration</span>
+ 
+            <span class="c">// StartCoroutine can start coroutine besides MonoBehaviour.</span>
+            <a href="../Scripts/UnityEngineBridge/MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../Scripts/UnityEngineBridge/MainThreadDispatcher.cs.html#9ec383d3102b14f7" class="i method">StartCoroutine</a>(<a href="#dd04691db45428fa" class="i method">TestAsync</a>());
+ 
+            <span class="c">// We have two way of run coroutine, FromCoroutine or StartCoroutine.</span>
+            <span class="c">// StartCoroutine is Unity primitive way and it&#39;s awaitable by yield return.</span>
+            <span class="c">// FromCoroutine is Rx, it&#39;s composable and cancellable by subscription&#39;s IDisposable.</span>
+            <span class="c">// FromCoroutine&#39;s overload can have return value, see:Sample05_ConvertFromCoroutine</span>
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#4bb26026605c3a49" class="i method">FromCoroutine</a>(<a href="#dd04691db45428fa" class="i method">TestAsync</a>).<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+ 
+            <span class="c">// Add Action to MainThreadDispatcher. Action is saved queue, run on next update.</span>
+            <a href="../Scripts/UnityEngineBridge/MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<span class="i">Post</span>(<span id="r0 rd" class="r0 r">_</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;test&quot;</span>), <b>null</b>);
+ 
+            <span class="c">// Timebased operations is run on MainThread(as default)</span>
+            <span class="c">// All timebased operation(Interval, Timer, Delay, Buffer, etc...)is single thread, thread safe!</span>
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Time.cs.html#5a83b602fef2c922" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                .<span class="i">Subscribe</span>(<span id="r1 rd" class="r1 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r1 r">x</span>));
+ 
+            <span class="c">// Observable.Start use ThreadPool Scheduler as default.</span>
+            <span class="c">// ObserveOnMainThread return to mainthread</span>
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Creation.cs.html#4b9eec812b962b8f" class="i method">Start</a>(() =&gt; <a href="../Scripts/System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../Scripts/System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>) <span class="c">// asynchronous work</span>
+                .<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#b2a8bd8002c609a9" class="i method">ObserveOnMainThread</a>()
+                .<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r2 r">x</span>));
+        }
+ 
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="dd04691db45428fa" href="../../../../R/dd04691db45428fa.html" target="n" data-glyph="76,1" class="i method">TestAsync</a>()
+        {
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;a&quot;</span>);
+            <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>(1);
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;b&quot;</span>);
+            <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>(1);
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;c&quot;</span>);
+            <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>(1);
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;d&quot;</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

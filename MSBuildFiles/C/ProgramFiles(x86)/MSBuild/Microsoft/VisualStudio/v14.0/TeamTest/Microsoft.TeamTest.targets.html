@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.TeamTest.targets</title><link rel="stylesheet" href="../../../../../../../../styles.css"><script src="../../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(28);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/VisualStudio/v14.0/TeamTest/Microsoft.TeamTest.targets" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\VisualStudio\v14.0\TeamTest\Microsoft.TeamTest.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/BuildShadowTask.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.VisualStudio.TestTools.BuildShadowsTask/A.html#c67d636c7180af45" class="msbuildlink">BuildShadowTask</a></span>&quot; <span class="xan">AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath.html" target="n" class="msbuildlink">MSBuildExtensionsPath</a>)\Microsoft\VisualStudio\v14.0\TeamTest\Microsoft.VisualStudio.TestTools.BuildShadowsTask.dll</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ResolveReferencesDependsOn.html" target="n" class="msbuildlink">ResolveReferencesDependsOn</a></span><span class="xd">&gt;</span>
+      $(<a href="/MSBuildProperties/R/ResolveReferencesDependsOn.html" target="n" class="msbuildlink">ResolveReferencesDependsOn</a>);
+      <a href="/MSBuildTargets/R/ResolveTestReferences.html" target="n" class="msbuildlink">ResolveTestReferences</a>
+    <span class="xd">&lt;/</span><span class="xn">ResolveReferencesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+  &lt;!--</span><span class="c">
+       The condition here ensures that we aren&#39;t needlessly loaded into projects
+       that don&#39;t actually have shadow items in them
+  </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/ResolveTestReferences.html" target="n" class="msbuildlink">ResolveTestReferences</a></span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/Shadow.html" target="n" class="msbuildlink">Shadow</a>)&#39;!=&#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/BuildShadowTask.html" target="n" class="msbuildlink">BuildShadowTask</a></span><span class="xan">
+        ExecuteAsTool</span><span class="xd">=</span>&quot;<span class="xav">False</span>&quot;<span class="xan">
+        CurrentResolvedReferences</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+        CurrentCopyLocalFiles</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferenceCopyLocalPaths.html" target="n" class="msbuildlink">ReferenceCopyLocalPaths</a>)</span>&quot;<span class="xan">
+        Shadows</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Shadow.html" target="n" class="msbuildlink">Shadow</a>)</span>&quot;<span class="xan">
+        ProjectPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ProjectDir.html" target="n" class="msbuildlink">ProjectDir</a>)</span>&quot;<span class="xan">
+        IntermediatePath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)</span>&quot;<span class="xan">
+        SignAssembly</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SignAssembly.html" target="n" class="msbuildlink">SignAssembly</a>)</span>&quot;<span class="xan">
+        KeyFile</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/AssemblyOriginatorKeyFile.html" target="n" class="msbuildlink">AssemblyOriginatorKeyFile</a>)</span>&quot;<span class="xan">
+        DelaySign</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DelaySign.html" target="n" class="msbuildlink">DelaySign</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">FixedUpReferences</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">NewCopyLocalAssemblies</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/ReferenceCopyLocalPaths.html" target="n" class="msbuildlink">ReferenceCopyLocalPaths</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">BuildShadowTask</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span></pre></td></tr></table></div></body></html>

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample04_ConvertFromUnityCallback.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(66);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample04_ConvertFromUnityCallback.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample04_ConvertFromUnityCallback.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="75029207a361e98d" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="604764882aa5af82">Sample04_ConvertFromUnityCallback</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <span class="c">// This is about log but more reliable log sample =&gt; Sample11_Logger</span>
+ 
+        <b>private class</b> <a id="af9b6ff43e8db3ad" href="../../../../R/af9b6ff43e8db3ad.html" target="n" data-glyph="4,1" class="t t"><span id="ab836d6b0ea4fbc7">LogCallback</span></a>
+        {
+            <b>public string</b> <a id="320648613cf933b5" href="../../../../R/320648613cf933b5.html" target="n" data-glyph="42,2" class="i field">Condition</a>;
+            <b>public string</b> <a id="edad838c73ee05f6" href="../../../../R/edad838c73ee05f6.html" target="n" data-glyph="42,2" class="i field">StackTrace</a>;
+            <b>public</b> <span class="i">UnityEngine</span>.<span class="i">LogType</span> <a id="e1945a29735f1578" href="../../../../R/e1945a29735f1578.html" target="n" data-glyph="42,2" class="i field">LogType</a>;
+        }
+ 
+        <b>static class</b> <a id="4d81e4073e18846d" href="../../../../R/4d81e4073e18846d.html" target="n" data-glyph="4,1" class="t t">LogHelper</a>
+        {
+            <span class="c">// If static register callback, use Subject for event branching.</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> (<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span>)                    
+<span class="e">            static Subject&lt;LogCallback&gt; subject;
+ 
+            public static IObservable&lt;LogCallback&gt; LogCallbackAsObservable()
+            {
+                if (subject == null)
+                {
+                    subject = new Subject&lt;LogCallback&gt;();
+ 
+                    // Publish to Subject in callback
+ 
+ 
+                    UnityEngine.Application.RegisterLogCallback((condition, stackTrace, type) =&gt;
+                    {
+                        subject.OnNext(new LogCallback { Condition = condition, StackTrace = stackTrace, LogType = type });
+                    });
+                }
+ 
+                return subject.AsObservable();
+            }
+ 
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+            <span class="c">// If standard evetns, you can use Observable.FromEvent.</span>
+ 
+            <b>public static</b> <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#af9b6ff43e8db3ad" class="t t">LogCallback</a>&gt; <a id="8f5e87d9216fff9f" href="../../../../R/8f5e87d9216fff9f.html" target="n" data-glyph="72,2" class="i method">LogCallbackAsObservable</a>()
+            {
+                <b>return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">Application</span>.<span class="i">LogCallback</span>, <a href="#af9b6ff43e8db3ad" class="t t">LogCallback</a>&gt;(
+                    <span id="r0 rd" class="r0 r">h</span> =&gt; (<span id="r1 rd" class="r1 r">condition</span>, <span id="r2 rd" class="r2 r">stackTrace</span>, <span id="r3 rd" class="r3 r">type</span>) =&gt; <span class="r0 r">h</span>(<b>new</b> <a href="#af9b6ff43e8db3ad" class="t constructor">LogCallback</a> { <a href="#320648613cf933b5" class="i field">Condition</a> = <span class="r1 r">condition</span>, <a href="#edad838c73ee05f6" class="i field">StackTrace</a> = <span class="r2 r">stackTrace</span>, <a href="#e1945a29735f1578" class="i field">LogType</a> = <span class="r3 r">type</span> }),
+                    <span id="r4 rd" class="r4 r">h</span> =&gt; <span class="i">Application</span>.<span class="i">logMessageReceived</span> += <span class="r4 r">h</span>, <span id="r5 rd" class="r5 r">h</span> =&gt; <span class="i">Application</span>.<span class="i">logMessageReceived</span> -= <span class="r5 r">h</span>);
+            }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        }
+ 
+        <b>void</b> <a id="fc312b7e93539f2f" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <span class="c">// method is separatable and composable</span>
+            <a href="#4d81e4073e18846d" class="t t">LogHelper</a>.<a href="#8f5e87d9216fff9f" class="i method">LogCallbackAsObservable</a>()
+                .<span class="i">Where</span>(<span id="r6 rd" class="r6 r">x</span> =&gt; <span class="r6 r">x</span>.<a href="#e1945a29735f1578" class="i field">LogType</a> == <span class="i">LogType</span>.<span class="i">Warning</span>)
+                .<span class="i">Subscribe</span>(<span id="r7 rd" class="r7 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r7 r">x</span>));
+ 
+            <a href="#4d81e4073e18846d" class="t t">LogHelper</a>.<a href="#8f5e87d9216fff9f" class="i method">LogCallbackAsObservable</a>()
+                .<span class="i">Where</span>(<span id="r8 rd" class="r8 r">x</span> =&gt; <span class="r8 r">x</span>.<a href="#e1945a29735f1578" class="i field">LogType</a> == <span class="i">LogType</span>.<span class="i">Error</span>)
+                .<span class="i">Subscribe</span>(<span id="r9 rd" class="r9 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r9 r">x</span>));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

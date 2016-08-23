@@ -1,0 +1,1001 @@
+﻿<!DOCTYPE html>
+<html><head><title>ZipLatest.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(992);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/ZipLatest.cs" target="_top">Operators\ZipLatest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>public delegate</b> <span class="r0 r t">TR</span> <a id="2365894c95649917" href="../R/2365894c95649917.html" target="n" data-glyph="12,0" class="t t"><span id="0ba80278eaae7fff">ZipLatestFunc</span></a>&lt;<span id="r1 rd t" class="r1 r t">T1</span>, <span id="r2 rd t" class="r2 r t">T2</span>, <span id="r3 rd t" class="r3 r t">T3</span>, <span id="r0 rd t" class="r0 r t">TR</span>&gt;(<span class="r1 r t">T1</span> <span id="r4 rd" class="r4 r">arg1</span>, <span class="r2 r t">T2</span> <span id="r5 rd" class="r5 r">arg2</span>, <span class="r3 r t">T3</span> <span id="r6 rd" class="r6 r">arg3</span>);
+    <b>public delegate</b> <span class="r7 r t">TR</span> <a id="55e48b95b91b95d2" href="../R/55e48b95b91b95d2.html" target="n" data-glyph="12,0" class="t t"><span id="052c1354988b1946">ZipLatestFunc</span></a>&lt;<span id="r8 rd t" class="r8 r t">T1</span>, <span id="r9 rd t" class="r9 r t">T2</span>, <span id="r10 rd t" class="r10 r t">T3</span>, <span id="r11 rd t" class="r11 r t">T4</span>, <span id="r7 rd t" class="r7 r t">TR</span>&gt;(<span class="r8 r t">T1</span> <span id="r12 rd" class="r12 r">arg1</span>, <span class="r9 r t">T2</span> <span id="r13 rd" class="r13 r">arg2</span>, <span class="r10 r t">T3</span> <span id="r14 rd" class="r14 r">arg3</span>, <span class="r11 r t">T4</span> <span id="r15 rd" class="r15 r">arg4</span>);
+    <b>public delegate</b> <span class="r16 r t">TR</span> <a id="b6b36056c1cc1c66" href="../R/b6b36056c1cc1c66.html" target="n" data-glyph="12,0" class="t t"><span id="59b07b5c07d0941d">ZipLatestFunc</span></a>&lt;<span id="r17 rd t" class="r17 r t">T1</span>, <span id="r18 rd t" class="r18 r t">T2</span>, <span id="r19 rd t" class="r19 r t">T3</span>, <span id="r20 rd t" class="r20 r t">T4</span>, <span id="r21 rd t" class="r21 r t">T5</span>, <span id="r16 rd t" class="r16 r t">TR</span>&gt;(<span class="r17 r t">T1</span> <span id="r22 rd" class="r22 r">arg1</span>, <span class="r18 r t">T2</span> <span id="r23 rd" class="r23 r">arg2</span>, <span class="r19 r t">T3</span> <span id="r24 rd" class="r24 r">arg3</span>, <span class="r20 r t">T4</span> <span id="r25 rd" class="r25 r">arg4</span>, <span class="r21 r t">T5</span> <span id="r26 rd" class="r26 r">arg5</span>);
+    <b>public delegate</b> <span class="r27 r t">TR</span> <a id="65c49a098e9ee537" href="../R/65c49a098e9ee537.html" target="n" data-glyph="12,0" class="t t"><span id="aecc33d513b22bc3">ZipLatestFunc</span></a>&lt;<span id="r28 rd t" class="r28 r t">T1</span>, <span id="r29 rd t" class="r29 r t">T2</span>, <span id="r30 rd t" class="r30 r t">T3</span>, <span id="r31 rd t" class="r31 r t">T4</span>, <span id="r32 rd t" class="r32 r t">T5</span>, <span id="r33 rd t" class="r33 r t">T6</span>, <span id="r27 rd t" class="r27 r t">TR</span>&gt;(<span class="r28 r t">T1</span> <span id="r34 rd" class="r34 r">arg1</span>, <span class="r29 r t">T2</span> <span id="r35 rd" class="r35 r">arg2</span>, <span class="r30 r t">T3</span> <span id="r36 rd" class="r36 r">arg3</span>, <span class="r31 r t">T4</span> <span id="r37 rd" class="r37 r">arg4</span>, <span class="r32 r t">T5</span> <span id="r38 rd" class="r38 r">arg5</span>, <span class="r33 r t">T6</span> <span id="r39 rd" class="r39 r">arg6</span>);
+    <b>public delegate</b> <span class="r40 r t">TR</span> <a id="15a657f4b0d710ca" href="../R/15a657f4b0d710ca.html" target="n" data-glyph="12,0" class="t t"><span id="1df0315ed22f12c2">ZipLatestFunc</span></a>&lt;<span id="r41 rd t" class="r41 r t">T1</span>, <span id="r42 rd t" class="r42 r t">T2</span>, <span id="r43 rd t" class="r43 r t">T3</span>, <span id="r44 rd t" class="r44 r t">T4</span>, <span id="r45 rd t" class="r45 r t">T5</span>, <span id="r46 rd t" class="r46 r t">T6</span>, <span id="r47 rd t" class="r47 r t">T7</span>, <span id="r40 rd t" class="r40 r t">TR</span>&gt;(<span class="r41 r t">T1</span> <span id="r48 rd" class="r48 r">arg1</span>, <span class="r42 r t">T2</span> <span id="r49 rd" class="r49 r">arg2</span>, <span class="r43 r t">T3</span> <span id="r50 rd" class="r50 r">arg3</span>, <span class="r44 r t">T4</span> <span id="r51 rd" class="r51 r">arg4</span>, <span class="r45 r t">T5</span> <span id="r52 rd" class="r52 r">arg5</span>, <span class="r46 r t">T6</span> <span id="r53 rd" class="r53 r">arg6</span>, <span class="r47 r t">T7</span> <span id="r54 rd" class="r54 r">arg7</span>);
+ 
+    <span class="c">// binary</span>
+    <b>internal class</b> <a id="b047298c87816eac" href="../R/b047298c87816eac.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r55 rd t" class="r55 r t">TLeft</span>, <span id="r56 rd t" class="r56 r t">TRight</span>, <span id="r57 rd t" class="r57 r t">TResult</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r57 r t">TResult</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r55 r t">TLeft</span>&gt; <a id="838d1ba4b2014853" href="../R/838d1ba4b2014853.html" target="n" data-glyph="46,1" class="i field">left</a>;
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r56 r t">TRight</span>&gt; <a id="b4fad77d439eb1e1" href="../R/b4fad77d439eb1e1.html" target="n" data-glyph="46,1" class="i field">right</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r55 r t">TLeft</span>, <span class="r56 r t">TRight</span>, <span class="r57 r t">TResult</span>&gt; <a id="e981f1715b50b216" href="../R/e981f1715b50b216.html" target="n" data-glyph="46,1" class="i field">selector</a>;
+ 
+        <b>public</b> <a id="19fb1c47ba82b624" href="../R/19fb1c47ba82b624.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r55 r t">TLeft</span>&gt; <span id="r58 rd" class="r58 r">left</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r56 r t">TRight</span>&gt; <span id="r59 rd" class="r59 r">right</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r55 r t">TLeft</span>, <span class="r56 r t">TRight</span>, <span class="r57 r t">TResult</span>&gt; <span id="r60 rd" class="r60 r">selector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r58 r">left</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() || <span class="r59 r">right</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#b047298c87816eac" class="k">this</a>.<a href="#838d1ba4b2014853" class="i field">left</a> = <span class="r58 r">left</span>;
+            <a href="#b047298c87816eac" class="k">this</a>.<a href="#b4fad77d439eb1e1" class="i field">right</a> = <span class="r59 r">right</span>;
+            <a href="#b047298c87816eac" class="k">this</a>.<a href="#e981f1715b50b216" class="i field">selector</a> = <span class="r60 r">selector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="fb012f1ef1f13be9" href="../R/fb012f1ef1f13be9.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r57 r t">TResult</span>&gt; <span id="r61 rd" class="r61 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r62 rd" class="r62 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#c9511fddd162ba01" class="t constructor">ZipLatest</a>(<a href="#b047298c87816eac" class="k">this</a>, <span class="r61 r">observer</span>, <span class="r62 r">cancel</span>).<a href="#b6009bc96f674ae4" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="d2ef082403944450" href="../R/d2ef082403944450.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r57 r t">TResult</span>, <span class="r57 r t">TResult</span>&gt;
+        {
+            <b>readonly</b> <a href="#b047298c87816eac" class="t t">ZipLatestObservable</a>&lt;<span class="r55 r t">TLeft</span>, <span class="r56 r t">TRight</span>, <span class="r57 r t">TResult</span>&gt; <a id="b9c52a88acd474d1" href="../R/b9c52a88acd474d1.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="512f95b02eeea7e8" href="../R/512f95b02eeea7e8.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+ 
+            <span class="r55 r t">TLeft</span> <a id="860d67b4ef8b0a2e" href="../R/860d67b4ef8b0a2e.html" target="n" data-glyph="46,2" class="i field">leftValue</a> = <b>default</b>(<span class="r55 r t">TLeft</span>);
+            <b>bool</b> <a id="b309caa7fe4b95e5" href="../R/b309caa7fe4b95e5.html" target="n" data-glyph="46,2" class="i field">leftStarted</a> = <b>false</b>;
+            <b>bool</b> <a id="805385b9338fb1f1" href="../R/805385b9338fb1f1.html" target="n" data-glyph="46,2" class="i field">leftCompleted</a> = <b>false</b>;
+ 
+            <span class="r56 r t">TRight</span> <a id="b852ea6514f5125c" href="../R/b852ea6514f5125c.html" target="n" data-glyph="46,2" class="i field">rightValue</a> = <b>default</b>(<span class="r56 r t">TRight</span>);
+            <b>bool</b> <a id="3a6040123bd816b7" href="../R/3a6040123bd816b7.html" target="n" data-glyph="46,2" class="i field">rightStarted</a> = <b>false</b>;
+            <b>bool</b> <a id="7b9a93ec9b0e0c99" href="../R/7b9a93ec9b0e0c99.html" target="n" data-glyph="46,2" class="i field">rightCompleted</a> = <b>false</b>;
+ 
+            <b>public</b> <a id="c9511fddd162ba01" href="../R/c9511fddd162ba01.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<a href="#b047298c87816eac" class="t t">ZipLatestObservable</a>&lt;<span class="r55 r t">TLeft</span>, <span class="r56 r t">TRight</span>, <span class="r57 r t">TResult</span>&gt; <span id="r63 rd" class="r63 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r57 r t">TResult</span>&gt; <span id="r64 rd" class="r64 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r65 rd" class="r65 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r64 r">observer</span>, <span class="r65 r">cancel</span>)
+            {
+                <a href="#d2ef082403944450" class="k">this</a>.<a href="#b9c52a88acd474d1" class="i field">parent</a> = <span class="r63 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b6009bc96f674ae4" href="../R/b6009bc96f674ae4.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r66 rd" class="r66 r">l</span> = <a href="#b9c52a88acd474d1" class="i field">parent</a>.<a href="#838d1ba4b2014853" class="i field">left</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#28dd175f3a23663d" class="t constructor">LeftObserver</a>(<a href="#d2ef082403944450" class="k">this</a>));
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r67 rd" class="r67 r">r</span> = <a href="#b9c52a88acd474d1" class="i field">parent</a>.<a href="#b4fad77d439eb1e1" class="i field">right</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#0b1dd7167f4b1acc" class="t constructor">RightObserver</a>(<a href="#d2ef082403944450" class="k">this</a>));
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<span class="r66 r">l</span>, <span class="r67 r">r</span>);
+            }
+ 
+            <span class="c">// publish in lock</span>
+            <b>public void</b> <a id="4b65750c9fc66f85" href="../R/4b65750c9fc66f85.html" target="n" data-glyph="72,2" class="i method">Publish</a>()
+            {
+                <b>if</b> ((<a href="#805385b9338fb1f1" class="i field">leftCompleted</a> &amp;&amp; !<a href="#b309caa7fe4b95e5" class="i field">leftStarted</a>) || (<a href="#7b9a93ec9b0e0c99" class="i field">rightCompleted</a> &amp;&amp; !<a href="#3a6040123bd816b7" class="i field">rightStarted</a>))
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+                <b>else if</b> (!(<a href="#b309caa7fe4b95e5" class="i field">leftStarted</a> &amp;&amp; <a href="#3a6040123bd816b7" class="i field">rightStarted</a>))
+                {
+                    <b>return</b>;
+                }
+ 
+                <span class="r57 r t">TResult</span> <span id="r68 rd" class="r68 r">v</span>;
+                <b>try</b>
+                {
+                    <span class="r68 r">v</span> = <a href="#b9c52a88acd474d1" class="i field">parent</a>.<a href="#e981f1715b50b216" class="i field">selector</a>(<a href="#860d67b4ef8b0a2e" class="i field">leftValue</a>, <a href="#b852ea6514f5125c" class="i field">rightValue</a>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r69 rd" class="r69 r">ex</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r69 r">ex</span>); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+ 
+                <a href="#f9f223c0109c360d" class="i method">OnNext</a>(<span class="r68 r">v</span>);
+                <a href="#b309caa7fe4b95e5" class="i field">leftStarted</a> = <b>false</b>;
+                <a href="#3a6040123bd816b7" class="i field">rightStarted</a> = <b>false</b>;
+ 
+                <b>if</b> (<a href="#805385b9338fb1f1" class="i field">leftCompleted</a> || <a href="#7b9a93ec9b0e0c99" class="i field">rightCompleted</a>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+            }
+ 
+            <b>public override void</b> <a id="f9f223c0109c360d" href="../R/f9f223c0109c360d.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r57 r t">TResult</span> <span id="r70 rd" class="r70 r">value</span>)
+            {
+                <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r70 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="46875119f5956dfb" href="../R/46875119f5956dfb.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r71 rd" class="r71 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r71 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="90be91132c25ed01" href="../R/90be91132c25ed01.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>class</b> <a id="37431ed51bf55bbe" href="../R/37431ed51bf55bbe.html" target="n" data-glyph="4,2" class="t t">LeftObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r55 r t">TLeft</span>&gt;
+            {
+                <b>readonly</b> <a href="#d2ef082403944450" class="t t">ZipLatest</a> <a id="23d37a7f55b9f70e" href="../R/23d37a7f55b9f70e.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+ 
+                <b>public</b> <a id="28dd175f3a23663d" href="../R/28dd175f3a23663d.html" target="n" data-glyph="72,3" class="i constructor">LeftObserver</a>(<a href="#d2ef082403944450" class="t t">ZipLatest</a> <span id="r72 rd" class="r72 r">parent</span>)
+                {
+                    <a href="#37431ed51bf55bbe" class="k">this</a>.<a href="#23d37a7f55b9f70e" class="i field">parent</a> = <span class="r72 r">parent</span>;
+                }
+ 
+                <b>public void</b> <a id="7d199c31c8745d20" href="../R/7d199c31c8745d20.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r55 r t">TLeft</span> <span id="r73 rd" class="r73 r">value</span>)
+                {
+                    <b>lock</b> (<a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#512f95b02eeea7e8" class="i field">gate</a>)
+                    {
+                        <a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#b309caa7fe4b95e5" class="i field">leftStarted</a> = <b>true</b>;
+                        <a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#860d67b4ef8b0a2e" class="i field">leftValue</a> = <span class="r73 r">value</span>;
+                        <a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#4b65750c9fc66f85" class="i method">Publish</a>();
+                    }
+                }
+ 
+                <b>public void</b> <a id="7027f35ec4a032c8" href="../R/7027f35ec4a032c8.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r74 rd" class="r74 r">error</span>)
+                {
+                    <b>lock</b> (<a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#512f95b02eeea7e8" class="i field">gate</a>)
+                    {
+                        <a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#46875119f5956dfb" class="i method">OnError</a>(<span class="r74 r">error</span>);
+                    }
+                }
+ 
+                <b>public void</b> <a id="594ba53c70bcaf5a" href="../R/594ba53c70bcaf5a.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <b>lock</b> (<a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#512f95b02eeea7e8" class="i field">gate</a>)
+                    {
+                        <a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#805385b9338fb1f1" class="i field">leftCompleted</a> = <b>true</b>;
+                        <b>if</b> (<a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#7b9a93ec9b0e0c99" class="i field">rightCompleted</a>) <a href="#23d37a7f55b9f70e" class="i field">parent</a>.<a href="#90be91132c25ed01" class="i method">OnCompleted</a>();
+                    }
+                }
+            }
+ 
+            <b>class</b> <a id="3e628491d8329866" href="../R/3e628491d8329866.html" target="n" data-glyph="4,2" class="t t">RightObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r56 r t">TRight</span>&gt;
+            {
+                <b>readonly</b> <a href="#d2ef082403944450" class="t t">ZipLatest</a> <a id="fd231e0f0d6239a5" href="../R/fd231e0f0d6239a5.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+ 
+                <b>public</b> <a id="0b1dd7167f4b1acc" href="../R/0b1dd7167f4b1acc.html" target="n" data-glyph="72,3" class="i constructor">RightObserver</a>(<a href="#d2ef082403944450" class="t t">ZipLatest</a> <span id="r75 rd" class="r75 r">parent</span>)
+                {
+                    <a href="#3e628491d8329866" class="k">this</a>.<a href="#fd231e0f0d6239a5" class="i field">parent</a> = <span class="r75 r">parent</span>;
+                }
+ 
+ 
+                <b>public void</b> <a id="c449e7fbf8673626" href="../R/c449e7fbf8673626.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r56 r t">TRight</span> <span id="r76 rd" class="r76 r">value</span>)
+                {
+                    <b>lock</b> (<a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#512f95b02eeea7e8" class="i field">gate</a>)
+                    {
+                        <a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#3a6040123bd816b7" class="i field">rightStarted</a> = <b>true</b>;
+                        <a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#b852ea6514f5125c" class="i field">rightValue</a> = <span class="r76 r">value</span>;
+                        <a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#4b65750c9fc66f85" class="i method">Publish</a>();
+                    }
+                }
+ 
+                <b>public void</b> <a id="f7261a8ad1f1f558" href="../R/f7261a8ad1f1f558.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r77 rd" class="r77 r">error</span>)
+                {
+                    <b>lock</b> (<a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#512f95b02eeea7e8" class="i field">gate</a>)
+                    {
+                        <a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#46875119f5956dfb" class="i method">OnError</a>(<span class="r77 r">error</span>);
+                    }
+                }
+ 
+                <b>public void</b> <a id="c2193eaa4c64d2ea" href="../R/c2193eaa4c64d2ea.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <b>lock</b> (<a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#512f95b02eeea7e8" class="i field">gate</a>)
+                    {
+                        <a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#7b9a93ec9b0e0c99" class="i field">rightCompleted</a> = <b>true</b>;
+                        <b>if</b> (<a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#805385b9338fb1f1" class="i field">leftCompleted</a>) <a href="#fd231e0f0d6239a5" class="i field">parent</a>.<a href="#90be91132c25ed01" class="i method">OnCompleted</a>();
+                    }
+                }
+            }
+        }
+    }
+ 
+    <span class="c">// array</span>
+    <b>internal class</b> <a id="62539610f3db6500" href="../R/62539610f3db6500.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r78 rd t" class="r78 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r78 r t">T</span>&gt;&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r78 r t">T</span>&gt;[] <a id="a15d2ce4aecd282d" href="../R/a15d2ce4aecd282d.html" target="n" data-glyph="46,1" class="i field">sources</a>;
+ 
+        <b>public</b> <a id="5d2838ceb982d210" href="../R/5d2838ceb982d210.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r78 r t">T</span>&gt;[] <span id="r79 rd" class="r79 r">sources</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>true</b>)
+        {
+            <a href="#62539610f3db6500" class="k">this</a>.<a href="#a15d2ce4aecd282d" class="i field">sources</a> = <span class="r79 r">sources</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="97d27c7827cea502" href="../R/97d27c7827cea502.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r78 r t">T</span>&gt;&gt; <span id="r80 rd" class="r80 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r81 rd" class="r81 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#e3828090ea383a9f" class="t constructor">ZipLatest</a>(<a href="#62539610f3db6500" class="k">this</a>, <span class="r80 r">observer</span>, <span class="r81 r">cancel</span>).<a href="#904a463d9de9b3eb" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="1af4e36820c6adce" href="../R/1af4e36820c6adce.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r78 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r78 r t">T</span>&gt;&gt;
+        {
+            <b>readonly</b> <a href="#62539610f3db6500" class="t t">ZipLatestObservable</a>&lt;<span class="r78 r t">T</span>&gt; <a id="687d7c55204e2522" href="../R/687d7c55204e2522.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="09fd6d7400819bdd" href="../R/09fd6d7400819bdd.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+ 
+            <b>int</b> <a id="2b7655c59935f66b" href="../R/2b7655c59935f66b.html" target="n" data-glyph="46,2" class="i field">length</a>;
+            <span class="r78 r t">T</span>[] <a id="f5e39179200891e7" href="../R/f5e39179200891e7.html" target="n" data-glyph="46,2" class="i field">values</a>;
+            <b>bool</b>[] <a id="0e457675e7f3f64a" href="../R/0e457675e7f3f64a.html" target="n" data-glyph="46,2" class="i field">isStarted</a>;
+            <b>bool</b>[] <a id="8f3961b6d6a75039" href="../R/8f3961b6d6a75039.html" target="n" data-glyph="46,2" class="i field">isCompleted</a>;
+ 
+            <b>public</b> <a id="e3828090ea383a9f" href="../R/e3828090ea383a9f.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<a href="#62539610f3db6500" class="t t">ZipLatestObservable</a>&lt;<span class="r78 r t">T</span>&gt; <span id="r82 rd" class="r82 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r78 r t">T</span>&gt;&gt; <span id="r83 rd" class="r83 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r84 rd" class="r84 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r83 r">observer</span>, <span class="r84 r">cancel</span>)
+            {
+                <a href="#1af4e36820c6adce" class="k">this</a>.<a href="#687d7c55204e2522" class="i field">parent</a> = <span class="r82 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="904a463d9de9b3eb" href="../R/904a463d9de9b3eb.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#2b7655c59935f66b" class="i field">length</a> = <a href="#687d7c55204e2522" class="i field">parent</a>.<a href="#a15d2ce4aecd282d" class="i field">sources</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+                <a href="#f5e39179200891e7" class="i field">values</a> = <b>new</b> <span class="r78 r t">T</span>[<a href="#2b7655c59935f66b" class="i field">length</a>];
+                <a href="#0e457675e7f3f64a" class="i field">isStarted</a> = <b>new</b> <b>bool</b>[<a href="#2b7655c59935f66b" class="i field">length</a>];
+                <a href="#8f3961b6d6a75039" class="i field">isCompleted</a> = <b>new</b> <b>bool</b>[<a href="#2b7655c59935f66b" class="i field">length</a>];
+ 
+                <b>var</b> <span id="r85 rd" class="r85 r">disposables</span> = <b>new</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[<a href="#2b7655c59935f66b" class="i field">length</a>];
+                <b>for</b> (<b>int</b> <span id="r86 rd" class="r86 r">i</span> = 0; <span class="r86 r">i</span> &lt; <a href="#2b7655c59935f66b" class="i field">length</a>; <span class="r86 r">i</span>++)
+                {
+                    <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r87 rd" class="r87 r">source</span> = <a href="#687d7c55204e2522" class="i field">parent</a>.<a href="#a15d2ce4aecd282d" class="i field">sources</a>[<span class="r86 r">i</span>];
+                    <span class="r85 r">disposables</span>[<span class="r86 r">i</span>] = <span class="r87 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#961d1e9f376fdd08" class="t constructor">ZipLatestObserver</a>(<a href="#1af4e36820c6adce" class="k">this</a>, <span class="r86 r">i</span>));
+                }
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#1db7949183e1547d" class="i method">CreateUnsafe</a>(<span class="r85 r">disposables</span>);
+            }
+ 
+            <span class="c">// publish is in the lock</span>
+            <b>void</b> <a id="254fd16319912038" href="../R/254fd16319912038.html" target="n" data-glyph="76,2" class="i method">Publish</a>(<b>int</b> <span id="r88 rd" class="r88 r">index</span>)
+            {
+                <a href="#0e457675e7f3f64a" class="i field">isStarted</a>[<span class="r88 r">index</span>] = <b>true</b>;
+ 
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r89 rd" class="r89 r">hasOnCompleted</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r90 rd" class="r90 r">allValueStarted</span> = <b>true</b>;
+                <b>for</b> (<b>int</b> <span id="r91 rd" class="r91 r">i</span> = 0; <span class="r91 r">i</span> &lt; <a href="#2b7655c59935f66b" class="i field">length</a>; <span class="r91 r">i</span>++)
+                {
+                    <b>if</b> (!<a href="#0e457675e7f3f64a" class="i field">isStarted</a>[<span class="r91 r">i</span>])
+                    {
+                        <span class="r90 r">allValueStarted</span> = <b>false</b>;
+                        <b>break</b>;
+                    }
+                    <b>if</b> (<span class="r91 r">i</span> == <span class="r88 r">index</span>) <b>continue</b>;
+                    <b>if</b> (<a href="#8f3961b6d6a75039" class="i field">isCompleted</a>[<span class="r91 r">i</span>]) <span class="r89 r">hasOnCompleted</span> = <b>true</b>;
+                }
+ 
+                <b>if</b> (<span class="r90 r">allValueStarted</span>)
+                {
+                    <a href="#2634c3c792764fda" class="i method">OnNext</a>(<b>new</b> <a href="@0@mscorlib/A.html#d2ac2c19c9cf1d44" class="t constructor">List</a>&lt;<span class="r78 r t">T</span>&gt;(<a href="#f5e39179200891e7" class="i field">values</a>));
+                    <b>if</b> (<span class="r89 r">hasOnCompleted</span>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                        <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        <b>return</b>;
+                    }
+                    <b>else</b>
+                    {
+                        <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#bed27cecfb5f7a6c" class="i method">Clear</a>(<a href="#0e457675e7f3f64a" class="i field">isStarted</a>, 0, <a href="#2b7655c59935f66b" class="i field">length</a>); <span class="c">// reset</span>
+                        <b>return</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>for</b> (<b>int</b> <span id="r92 rd" class="r92 r">i</span> = 0; <span class="r92 r">i</span> &lt; <a href="#2b7655c59935f66b" class="i field">length</a>; <span class="r92 r">i</span>++)
+                    {
+                        <b>if</b> (<span class="r92 r">i</span> == <span class="r88 r">index</span>) <b>continue</b>;
+                        <b>if</b> (<a href="#8f3961b6d6a75039" class="i field">isCompleted</a>[<span class="r92 r">i</span>] &amp;&amp; !<a href="#0e457675e7f3f64a" class="i field">isStarted</a>[<span class="r92 r">i</span>])
+                        {
+                            <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                            <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                            <b>return</b>;
+                        }
+                    }
+                }
+            }
+ 
+            <b>public override void</b> <a id="2634c3c792764fda" href="../R/2634c3c792764fda.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r78 r t">T</span>&gt; <span id="r93 rd" class="r93 r">value</span>)
+            {
+                <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r93 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="9755bbbb63f578ad" href="../R/9755bbbb63f578ad.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r94 rd" class="r94 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r94 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="6fff8c812b6eb641" href="../R/6fff8c812b6eb641.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>class</b> <a id="4c183dcf954a5de3" href="../R/4c183dcf954a5de3.html" target="n" data-glyph="4,2" class="t t">ZipLatestObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r78 r t">T</span>&gt;
+            {
+                <b>readonly</b> <a href="#1af4e36820c6adce" class="t t">ZipLatest</a> <a id="8d0325088d46ff2d" href="../R/8d0325088d46ff2d.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+                <b>readonly int</b> <a id="409da910f2d746f0" href="../R/409da910f2d746f0.html" target="n" data-glyph="46,3" class="i field">index</a>;
+ 
+                <b>public</b> <a id="961d1e9f376fdd08" href="../R/961d1e9f376fdd08.html" target="n" data-glyph="72,3" class="i constructor">ZipLatestObserver</a>(<a href="#1af4e36820c6adce" class="t t">ZipLatest</a> <span id="r95 rd" class="r95 r">parent</span>, <b>int</b> <span id="r96 rd" class="r96 r">index</span>)
+                {
+                    <a href="#4c183dcf954a5de3" class="k">this</a>.<a href="#8d0325088d46ff2d" class="i field">parent</a> = <span class="r95 r">parent</span>;
+                    <a href="#4c183dcf954a5de3" class="k">this</a>.<a href="#409da910f2d746f0" class="i field">index</a> = <span class="r96 r">index</span>;
+                }
+ 
+                <b>public void</b> <a id="0b648690c8bbfd7d" href="../R/0b648690c8bbfd7d.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r78 r t">T</span> <span id="r97 rd" class="r97 r">value</span>)
+                {
+                    <b>lock</b> (<a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#09fd6d7400819bdd" class="i field">gate</a>)
+                    {
+                        <a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#f5e39179200891e7" class="i field">values</a>[<a href="#409da910f2d746f0" class="i field">index</a>] = <span class="r97 r">value</span>;
+                        <a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#254fd16319912038" class="i method">Publish</a>(<a href="#409da910f2d746f0" class="i field">index</a>);
+                    }
+                }
+ 
+                <b>public void</b> <a id="9e8e72c0151dccd8" href="../R/9e8e72c0151dccd8.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r98 rd" class="r98 r">ex</span>)
+                {
+                    <b>lock</b> (<a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#09fd6d7400819bdd" class="i field">gate</a>)
+                    {
+                        <a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#9755bbbb63f578ad" class="i method">OnError</a>(<span class="r98 r">ex</span>);
+                    }
+                }
+ 
+                <b>public void</b> <a id="553cddb6bfa2d63f" href="../R/553cddb6bfa2d63f.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <b>lock</b> (<a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#09fd6d7400819bdd" class="i field">gate</a>)
+                    {
+                        <a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#8f3961b6d6a75039" class="i field">isCompleted</a>[<a href="#409da910f2d746f0" class="i field">index</a>] = <b>true</b>;
+ 
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r99 rd" class="r99 r">allTrue</span> = <b>true</b>;
+                        <b>for</b> (<b>int</b> <span id="r100 rd" class="r100 r">i</span> = 0; <span class="r100 r">i</span> &lt; <a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#2b7655c59935f66b" class="i field">length</a>; <span class="r100 r">i</span>++)
+                        {
+                            <b>if</b> (!<a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#8f3961b6d6a75039" class="i field">isCompleted</a>[<span class="r100 r">i</span>])
+                            {
+                                <span class="r99 r">allTrue</span> = <b>false</b>;
+                                <b>break</b>;
+                            }
+                        }
+ 
+                        <b>if</b> (<span class="r99 r">allTrue</span>)
+                        {
+                            <a href="#8d0325088d46ff2d" class="i field">parent</a>.<a href="#6fff8c812b6eb641" class="i method">OnCompleted</a>();
+                        }
+                    }
+                }
+            }
+        }
+    }
+ 
+    <span class="c">// generated from UniRx.Console.ZipLatestGenerator.tt</span>
+    <span class="k preprocess">#</span><span class="k preprocess">region</span> NTH
+ 
+    <b>internal class</b> <a id="fac7e227950fbec5" href="../R/fac7e227950fbec5.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r101 rd t" class="r101 r t">T1</span>, <span id="r102 rd t" class="r102 r t">T2</span>, <span id="r103 rd t" class="r103 r t">T3</span>, <span id="r104 rd t" class="r104 r t">TR</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r104 r t">TR</span>&gt;
+    {
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r101 r t">T1</span>&gt; <a id="611edb039e74a4b4" href="../R/611edb039e74a4b4.html" target="n" data-glyph="46,1" class="i field">source1</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r102 r t">T2</span>&gt; <a id="46fe675032343f9b" href="../R/46fe675032343f9b.html" target="n" data-glyph="46,1" class="i field">source2</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r103 r t">T3</span>&gt; <a id="b9bd4d361407878c" href="../R/b9bd4d361407878c.html" target="n" data-glyph="46,1" class="i field">source3</a>;
+        <a href="#2365894c95649917" class="t t">ZipLatestFunc</a>&lt;<span class="r101 r t">T1</span>, <span class="r102 r t">T2</span>, <span class="r103 r t">T3</span>, <span class="r104 r t">TR</span>&gt; <a id="1cda1098f4706cf3" href="../R/1cda1098f4706cf3.html" target="n" data-glyph="46,1" class="i field">resultSelector</a>;
+ 
+        <b>public</b> <a id="4005cdfb9f7facff" href="../R/4005cdfb9f7facff.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r101 r t">T1</span>&gt; <span id="r105 rd" class="r105 r">source1</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r102 r t">T2</span>&gt; <span id="r106 rd" class="r106 r">source2</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r103 r t">T3</span>&gt; <span id="r107 rd" class="r107 r">source3</span>,
+              <a href="#2365894c95649917" class="t t">ZipLatestFunc</a>&lt;<span class="r101 r t">T1</span>, <span class="r102 r t">T2</span>, <span class="r103 r t">T3</span>, <span class="r104 r t">TR</span>&gt; <span id="r108 rd" class="r108 r">resultSelector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(
+                <span class="r105 r">source1</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r106 r">source2</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r107 r">source3</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <b>false</b>)
+        {
+            <a href="#fac7e227950fbec5" class="k">this</a>.<a href="#611edb039e74a4b4" class="i field">source1</a> = <span class="r105 r">source1</span>;
+            <a href="#fac7e227950fbec5" class="k">this</a>.<a href="#46fe675032343f9b" class="i field">source2</a> = <span class="r106 r">source2</span>;
+            <a href="#fac7e227950fbec5" class="k">this</a>.<a href="#b9bd4d361407878c" class="i field">source3</a> = <span class="r107 r">source3</span>;
+            <a href="#fac7e227950fbec5" class="k">this</a>.<a href="#1cda1098f4706cf3" class="i field">resultSelector</a> = <span class="r108 r">resultSelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="c84ebbc0b7940a58" href="../R/c84ebbc0b7940a58.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r104 r t">TR</span>&gt; <span id="r109 rd" class="r109 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r110 rd" class="r110 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#506b8062992571d8" class="t constructor">ZipLatest</a>(3, <a href="#fac7e227950fbec5" class="k">this</a>, <span class="r109 r">observer</span>, <span class="r110 r">cancel</span>).<a href="#1f8d56dacc3bff97" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="44a391fb2555e5da" href="../R/44a391fb2555e5da.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="#798ea4bb7332f78e" class="t t">NthZipLatestObserverBase</a>&lt;<span class="r104 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#fac7e227950fbec5" class="t t">ZipLatestObservable</a>&lt;<span class="r101 r t">T1</span>, <span class="r102 r t">T2</span>, <span class="r103 r t">T3</span>, <span class="r104 r t">TR</span>&gt; <a id="e1bb90179b6d26bf" href="../R/e1bb90179b6d26bf.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="a5f9c2fd96769896" href="../R/a5f9c2fd96769896.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r101 r t">T1</span>&gt; <a id="61f802bcce4aaabd" href="../R/61f802bcce4aaabd.html" target="n" data-glyph="46,2" class="i field">c1</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r102 r t">T2</span>&gt; <a id="d1a281c1fa417e10" href="../R/d1a281c1fa417e10.html" target="n" data-glyph="46,2" class="i field">c2</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r103 r t">T3</span>&gt; <a id="a71b5f5ecf1a528f" href="../R/a71b5f5ecf1a528f.html" target="n" data-glyph="46,2" class="i field">c3</a>;
+ 
+            <b>public</b> <a id="506b8062992571d8" href="../R/506b8062992571d8.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<b>int</b> <span id="r111 rd" class="r111 r">length</span>, <a href="#fac7e227950fbec5" class="t t">ZipLatestObservable</a>&lt;<span class="r101 r t">T1</span>, <span class="r102 r t">T2</span>, <span class="r103 r t">T3</span>, <span class="r104 r t">TR</span>&gt; <span id="r112 rd" class="r112 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r104 r t">TR</span>&gt; <span id="r113 rd" class="r113 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r114 rd" class="r114 r">cancel</span>)
+                : <a href="#a5f0eaa410bfe7bf" class="k">base</a>(<span class="r111 r">length</span>, <span class="r113 r">observer</span>, <span class="r114 r">cancel</span>)
+            {
+                <a href="#44a391fb2555e5da" class="k">this</a>.<a href="#e1bb90179b6d26bf" class="i field">parent</a> = <span class="r112 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1f8d56dacc3bff97" href="../R/1f8d56dacc3bff97.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#61f802bcce4aaabd" class="i field">c1</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r101 r t">T1</span>&gt;(<a href="#a5f9c2fd96769896" class="i field">gate</a>, <a href="#44a391fb2555e5da" class="k">this</a>, 0);
+                <a href="#d1a281c1fa417e10" class="i field">c2</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r102 r t">T2</span>&gt;(<a href="#a5f9c2fd96769896" class="i field">gate</a>, <a href="#44a391fb2555e5da" class="k">this</a>, 1);
+                <a href="#a71b5f5ecf1a528f" class="i field">c3</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r103 r t">T3</span>&gt;(<a href="#a5f9c2fd96769896" class="i field">gate</a>, <a href="#44a391fb2555e5da" class="k">this</a>, 2);
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r115 rd" class="r115 r">s1</span> = <a href="#e1bb90179b6d26bf" class="i field">parent</a>.<a href="#611edb039e74a4b4" class="i field">source1</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#61f802bcce4aaabd" class="i field">c1</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r116 rd" class="r116 r">s2</span> = <a href="#e1bb90179b6d26bf" class="i field">parent</a>.<a href="#46fe675032343f9b" class="i field">source2</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#d1a281c1fa417e10" class="i field">c2</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r117 rd" class="r117 r">s3</span> = <a href="#e1bb90179b6d26bf" class="i field">parent</a>.<a href="#b9bd4d361407878c" class="i field">source3</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#a71b5f5ecf1a528f" class="i field">c3</a>);
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#53510a8871897d70" class="i method">Create</a>(<span class="r115 r">s1</span>, <span class="r116 r">s2</span>, <span class="r117 r">s3</span>);
+            }
+ 
+            <b>public override</b> <span class="r104 r t">TR</span> <a id="cfac24acc804b038" href="../R/cfac24acc804b038.html" target="n" data-glyph="72,2" class="i method">GetResult</a>()
+            {
+                <b>return</b> <a href="#e1bb90179b6d26bf" class="i field">parent</a>.<a href="#1cda1098f4706cf3" class="i field">resultSelector</a>(<a href="#61f802bcce4aaabd" class="i field">c1</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#d1a281c1fa417e10" class="i field">c2</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#a71b5f5ecf1a528f" class="i field">c3</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>);
+            }
+ 
+            <b>public override void</b> <a id="a32e85783df5240c" href="../R/a32e85783df5240c.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r104 r t">TR</span> <span id="r118 rd" class="r118 r">value</span>)
+            {
+                <a href="#798ea4bb7332f78e" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r118 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="ceb02e8dffdf0779" href="../R/ceb02e8dffdf0779.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r119 rd" class="r119 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r119 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="788922eb1fd243e8" href="../R/788922eb1fd243e8.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+ 
+    <b>internal class</b> <a id="0ec159b0b95bb182" href="../R/0ec159b0b95bb182.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r120 rd t" class="r120 r t">T1</span>, <span id="r121 rd t" class="r121 r t">T2</span>, <span id="r122 rd t" class="r122 r t">T3</span>, <span id="r123 rd t" class="r123 r t">T4</span>, <span id="r124 rd t" class="r124 r t">TR</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r124 r t">TR</span>&gt;
+    {
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r120 r t">T1</span>&gt; <a id="c50b61590e688a9a" href="../R/c50b61590e688a9a.html" target="n" data-glyph="46,1" class="i field">source1</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r121 r t">T2</span>&gt; <a id="0a883ce73cd6ccf8" href="../R/0a883ce73cd6ccf8.html" target="n" data-glyph="46,1" class="i field">source2</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r122 r t">T3</span>&gt; <a id="8cb4a68866e25977" href="../R/8cb4a68866e25977.html" target="n" data-glyph="46,1" class="i field">source3</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r123 r t">T4</span>&gt; <a id="a6d82ca879af9f7b" href="../R/a6d82ca879af9f7b.html" target="n" data-glyph="46,1" class="i field">source4</a>;
+        <a href="#55e48b95b91b95d2" class="t t">ZipLatestFunc</a>&lt;<span class="r120 r t">T1</span>, <span class="r121 r t">T2</span>, <span class="r122 r t">T3</span>, <span class="r123 r t">T4</span>, <span class="r124 r t">TR</span>&gt; <a id="7d2034106e01c4d0" href="../R/7d2034106e01c4d0.html" target="n" data-glyph="46,1" class="i field">resultSelector</a>;
+ 
+        <b>public</b> <a id="e64e547235c1a58f" href="../R/e64e547235c1a58f.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r120 r t">T1</span>&gt; <span id="r125 rd" class="r125 r">source1</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r121 r t">T2</span>&gt; <span id="r126 rd" class="r126 r">source2</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r122 r t">T3</span>&gt; <span id="r127 rd" class="r127 r">source3</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r123 r t">T4</span>&gt; <span id="r128 rd" class="r128 r">source4</span>,
+              <a href="#55e48b95b91b95d2" class="t t">ZipLatestFunc</a>&lt;<span class="r120 r t">T1</span>, <span class="r121 r t">T2</span>, <span class="r122 r t">T3</span>, <span class="r123 r t">T4</span>, <span class="r124 r t">TR</span>&gt; <span id="r129 rd" class="r129 r">resultSelector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(
+                <span class="r125 r">source1</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r126 r">source2</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r127 r">source3</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r128 r">source4</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <b>false</b>)
+        {
+            <a href="#0ec159b0b95bb182" class="k">this</a>.<a href="#c50b61590e688a9a" class="i field">source1</a> = <span class="r125 r">source1</span>;
+            <a href="#0ec159b0b95bb182" class="k">this</a>.<a href="#0a883ce73cd6ccf8" class="i field">source2</a> = <span class="r126 r">source2</span>;
+            <a href="#0ec159b0b95bb182" class="k">this</a>.<a href="#8cb4a68866e25977" class="i field">source3</a> = <span class="r127 r">source3</span>;
+            <a href="#0ec159b0b95bb182" class="k">this</a>.<a href="#a6d82ca879af9f7b" class="i field">source4</a> = <span class="r128 r">source4</span>;
+            <a href="#0ec159b0b95bb182" class="k">this</a>.<a href="#7d2034106e01c4d0" class="i field">resultSelector</a> = <span class="r129 r">resultSelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="c085cdd8caaf8d5e" href="../R/c085cdd8caaf8d5e.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r124 r t">TR</span>&gt; <span id="r130 rd" class="r130 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r131 rd" class="r131 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#0200128a9b29a0c5" class="t constructor">ZipLatest</a>(4, <a href="#0ec159b0b95bb182" class="k">this</a>, <span class="r130 r">observer</span>, <span class="r131 r">cancel</span>).<a href="#675aecef78cf5162" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="f0dc85e4ff129387" href="../R/f0dc85e4ff129387.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="#798ea4bb7332f78e" class="t t">NthZipLatestObserverBase</a>&lt;<span class="r124 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#0ec159b0b95bb182" class="t t">ZipLatestObservable</a>&lt;<span class="r120 r t">T1</span>, <span class="r121 r t">T2</span>, <span class="r122 r t">T3</span>, <span class="r123 r t">T4</span>, <span class="r124 r t">TR</span>&gt; <a id="38305b05aca6e97f" href="../R/38305b05aca6e97f.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="e9c30c80e33d56e4" href="../R/e9c30c80e33d56e4.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r120 r t">T1</span>&gt; <a id="08c420f6828860d4" href="../R/08c420f6828860d4.html" target="n" data-glyph="46,2" class="i field">c1</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r121 r t">T2</span>&gt; <a id="273a699bbf41bbe3" href="../R/273a699bbf41bbe3.html" target="n" data-glyph="46,2" class="i field">c2</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r122 r t">T3</span>&gt; <a id="5c349060dffa4dd9" href="../R/5c349060dffa4dd9.html" target="n" data-glyph="46,2" class="i field">c3</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r123 r t">T4</span>&gt; <a id="eded61b1162fe833" href="../R/eded61b1162fe833.html" target="n" data-glyph="46,2" class="i field">c4</a>;
+ 
+            <b>public</b> <a id="0200128a9b29a0c5" href="../R/0200128a9b29a0c5.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<b>int</b> <span id="r132 rd" class="r132 r">length</span>, <a href="#0ec159b0b95bb182" class="t t">ZipLatestObservable</a>&lt;<span class="r120 r t">T1</span>, <span class="r121 r t">T2</span>, <span class="r122 r t">T3</span>, <span class="r123 r t">T4</span>, <span class="r124 r t">TR</span>&gt; <span id="r133 rd" class="r133 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r124 r t">TR</span>&gt; <span id="r134 rd" class="r134 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r135 rd" class="r135 r">cancel</span>)
+                : <a href="#a5f0eaa410bfe7bf" class="k">base</a>(<span class="r132 r">length</span>, <span class="r134 r">observer</span>, <span class="r135 r">cancel</span>)
+            {
+                <a href="#f0dc85e4ff129387" class="k">this</a>.<a href="#38305b05aca6e97f" class="i field">parent</a> = <span class="r133 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="675aecef78cf5162" href="../R/675aecef78cf5162.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#08c420f6828860d4" class="i field">c1</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r120 r t">T1</span>&gt;(<a href="#e9c30c80e33d56e4" class="i field">gate</a>, <a href="#f0dc85e4ff129387" class="k">this</a>, 0);
+                <a href="#273a699bbf41bbe3" class="i field">c2</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r121 r t">T2</span>&gt;(<a href="#e9c30c80e33d56e4" class="i field">gate</a>, <a href="#f0dc85e4ff129387" class="k">this</a>, 1);
+                <a href="#5c349060dffa4dd9" class="i field">c3</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r122 r t">T3</span>&gt;(<a href="#e9c30c80e33d56e4" class="i field">gate</a>, <a href="#f0dc85e4ff129387" class="k">this</a>, 2);
+                <a href="#eded61b1162fe833" class="i field">c4</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r123 r t">T4</span>&gt;(<a href="#e9c30c80e33d56e4" class="i field">gate</a>, <a href="#f0dc85e4ff129387" class="k">this</a>, 3);
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r136 rd" class="r136 r">s1</span> = <a href="#38305b05aca6e97f" class="i field">parent</a>.<a href="#c50b61590e688a9a" class="i field">source1</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#08c420f6828860d4" class="i field">c1</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r137 rd" class="r137 r">s2</span> = <a href="#38305b05aca6e97f" class="i field">parent</a>.<a href="#0a883ce73cd6ccf8" class="i field">source2</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#273a699bbf41bbe3" class="i field">c2</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r138 rd" class="r138 r">s3</span> = <a href="#38305b05aca6e97f" class="i field">parent</a>.<a href="#8cb4a68866e25977" class="i field">source3</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#5c349060dffa4dd9" class="i field">c3</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r139 rd" class="r139 r">s4</span> = <a href="#38305b05aca6e97f" class="i field">parent</a>.<a href="#a6d82ca879af9f7b" class="i field">source4</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#eded61b1162fe833" class="i field">c4</a>);
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#0cf68341e0e3b5b4" class="i method">Create</a>(<span class="r136 r">s1</span>, <span class="r137 r">s2</span>, <span class="r138 r">s3</span>, <span class="r139 r">s4</span>);
+            }
+ 
+            <b>public override</b> <span class="r124 r t">TR</span> <a id="de0055f7042861f7" href="../R/de0055f7042861f7.html" target="n" data-glyph="72,2" class="i method">GetResult</a>()
+            {
+                <b>return</b> <a href="#38305b05aca6e97f" class="i field">parent</a>.<a href="#7d2034106e01c4d0" class="i field">resultSelector</a>(<a href="#08c420f6828860d4" class="i field">c1</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#273a699bbf41bbe3" class="i field">c2</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#5c349060dffa4dd9" class="i field">c3</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#eded61b1162fe833" class="i field">c4</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>);
+            }
+ 
+            <b>public override void</b> <a id="f3dc98c442834f87" href="../R/f3dc98c442834f87.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r124 r t">TR</span> <span id="r140 rd" class="r140 r">value</span>)
+            {
+                <a href="#798ea4bb7332f78e" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r140 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="09499576c48fd6df" href="../R/09499576c48fd6df.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r141 rd" class="r141 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r141 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="eefebb9d78d772c1" href="../R/eefebb9d78d772c1.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+ 
+    <b>internal class</b> <a id="1aa88bd1fb4a89cd" href="../R/1aa88bd1fb4a89cd.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r142 rd t" class="r142 r t">T1</span>, <span id="r143 rd t" class="r143 r t">T2</span>, <span id="r144 rd t" class="r144 r t">T3</span>, <span id="r145 rd t" class="r145 r t">T4</span>, <span id="r146 rd t" class="r146 r t">T5</span>, <span id="r147 rd t" class="r147 r t">TR</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r147 r t">TR</span>&gt;
+    {
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r142 r t">T1</span>&gt; <a id="92e7f7dcf91b5feb" href="../R/92e7f7dcf91b5feb.html" target="n" data-glyph="46,1" class="i field">source1</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r143 r t">T2</span>&gt; <a id="5f7bc596dbcb1aea" href="../R/5f7bc596dbcb1aea.html" target="n" data-glyph="46,1" class="i field">source2</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r144 r t">T3</span>&gt; <a id="52788992663d47a0" href="../R/52788992663d47a0.html" target="n" data-glyph="46,1" class="i field">source3</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r145 r t">T4</span>&gt; <a id="4c9f6a6961cbb4ad" href="../R/4c9f6a6961cbb4ad.html" target="n" data-glyph="46,1" class="i field">source4</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r146 r t">T5</span>&gt; <a id="e521c59bd65686d0" href="../R/e521c59bd65686d0.html" target="n" data-glyph="46,1" class="i field">source5</a>;
+        <a href="#b6b36056c1cc1c66" class="t t">ZipLatestFunc</a>&lt;<span class="r142 r t">T1</span>, <span class="r143 r t">T2</span>, <span class="r144 r t">T3</span>, <span class="r145 r t">T4</span>, <span class="r146 r t">T5</span>, <span class="r147 r t">TR</span>&gt; <a id="23441be80efab5f7" href="../R/23441be80efab5f7.html" target="n" data-glyph="46,1" class="i field">resultSelector</a>;
+ 
+        <b>public</b> <a id="1438d4d481a92c37" href="../R/1438d4d481a92c37.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r142 r t">T1</span>&gt; <span id="r148 rd" class="r148 r">source1</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r143 r t">T2</span>&gt; <span id="r149 rd" class="r149 r">source2</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r144 r t">T3</span>&gt; <span id="r150 rd" class="r150 r">source3</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r145 r t">T4</span>&gt; <span id="r151 rd" class="r151 r">source4</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r146 r t">T5</span>&gt; <span id="r152 rd" class="r152 r">source5</span>,
+              <a href="#b6b36056c1cc1c66" class="t t">ZipLatestFunc</a>&lt;<span class="r142 r t">T1</span>, <span class="r143 r t">T2</span>, <span class="r144 r t">T3</span>, <span class="r145 r t">T4</span>, <span class="r146 r t">T5</span>, <span class="r147 r t">TR</span>&gt; <span id="r153 rd" class="r153 r">resultSelector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(
+                <span class="r148 r">source1</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r149 r">source2</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r150 r">source3</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r151 r">source4</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r152 r">source5</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <b>false</b>)
+        {
+            <a href="#1aa88bd1fb4a89cd" class="k">this</a>.<a href="#92e7f7dcf91b5feb" class="i field">source1</a> = <span class="r148 r">source1</span>;
+            <a href="#1aa88bd1fb4a89cd" class="k">this</a>.<a href="#5f7bc596dbcb1aea" class="i field">source2</a> = <span class="r149 r">source2</span>;
+            <a href="#1aa88bd1fb4a89cd" class="k">this</a>.<a href="#52788992663d47a0" class="i field">source3</a> = <span class="r150 r">source3</span>;
+            <a href="#1aa88bd1fb4a89cd" class="k">this</a>.<a href="#4c9f6a6961cbb4ad" class="i field">source4</a> = <span class="r151 r">source4</span>;
+            <a href="#1aa88bd1fb4a89cd" class="k">this</a>.<a href="#e521c59bd65686d0" class="i field">source5</a> = <span class="r152 r">source5</span>;
+            <a href="#1aa88bd1fb4a89cd" class="k">this</a>.<a href="#23441be80efab5f7" class="i field">resultSelector</a> = <span class="r153 r">resultSelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="bbbc849dc21b3428" href="../R/bbbc849dc21b3428.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r147 r t">TR</span>&gt; <span id="r154 rd" class="r154 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r155 rd" class="r155 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#09450f8eb2f07fad" class="t constructor">ZipLatest</a>(5, <a href="#1aa88bd1fb4a89cd" class="k">this</a>, <span class="r154 r">observer</span>, <span class="r155 r">cancel</span>).<a href="#95517ec8c89a6418" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="8df6daae2b5b8588" href="../R/8df6daae2b5b8588.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="#798ea4bb7332f78e" class="t t">NthZipLatestObserverBase</a>&lt;<span class="r147 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#1aa88bd1fb4a89cd" class="t t">ZipLatestObservable</a>&lt;<span class="r142 r t">T1</span>, <span class="r143 r t">T2</span>, <span class="r144 r t">T3</span>, <span class="r145 r t">T4</span>, <span class="r146 r t">T5</span>, <span class="r147 r t">TR</span>&gt; <a id="e10238cf7de8feeb" href="../R/e10238cf7de8feeb.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="5dd3e92e191a4aed" href="../R/5dd3e92e191a4aed.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r142 r t">T1</span>&gt; <a id="0792446e71d6e1e0" href="../R/0792446e71d6e1e0.html" target="n" data-glyph="46,2" class="i field">c1</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r143 r t">T2</span>&gt; <a id="af9fb8cf0d3d7a67" href="../R/af9fb8cf0d3d7a67.html" target="n" data-glyph="46,2" class="i field">c2</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r144 r t">T3</span>&gt; <a id="ee640d997b0ff204" href="../R/ee640d997b0ff204.html" target="n" data-glyph="46,2" class="i field">c3</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r145 r t">T4</span>&gt; <a id="833552a92f479f48" href="../R/833552a92f479f48.html" target="n" data-glyph="46,2" class="i field">c4</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r146 r t">T5</span>&gt; <a id="f20f9ba34136d989" href="../R/f20f9ba34136d989.html" target="n" data-glyph="46,2" class="i field">c5</a>;
+ 
+            <b>public</b> <a id="09450f8eb2f07fad" href="../R/09450f8eb2f07fad.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<b>int</b> <span id="r156 rd" class="r156 r">length</span>, <a href="#1aa88bd1fb4a89cd" class="t t">ZipLatestObservable</a>&lt;<span class="r142 r t">T1</span>, <span class="r143 r t">T2</span>, <span class="r144 r t">T3</span>, <span class="r145 r t">T4</span>, <span class="r146 r t">T5</span>, <span class="r147 r t">TR</span>&gt; <span id="r157 rd" class="r157 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r147 r t">TR</span>&gt; <span id="r158 rd" class="r158 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r159 rd" class="r159 r">cancel</span>)
+                : <a href="#a5f0eaa410bfe7bf" class="k">base</a>(<span class="r156 r">length</span>, <span class="r158 r">observer</span>, <span class="r159 r">cancel</span>)
+            {
+                <a href="#8df6daae2b5b8588" class="k">this</a>.<a href="#e10238cf7de8feeb" class="i field">parent</a> = <span class="r157 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="95517ec8c89a6418" href="../R/95517ec8c89a6418.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#0792446e71d6e1e0" class="i field">c1</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r142 r t">T1</span>&gt;(<a href="#5dd3e92e191a4aed" class="i field">gate</a>, <a href="#8df6daae2b5b8588" class="k">this</a>, 0);
+                <a href="#af9fb8cf0d3d7a67" class="i field">c2</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r143 r t">T2</span>&gt;(<a href="#5dd3e92e191a4aed" class="i field">gate</a>, <a href="#8df6daae2b5b8588" class="k">this</a>, 1);
+                <a href="#ee640d997b0ff204" class="i field">c3</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r144 r t">T3</span>&gt;(<a href="#5dd3e92e191a4aed" class="i field">gate</a>, <a href="#8df6daae2b5b8588" class="k">this</a>, 2);
+                <a href="#833552a92f479f48" class="i field">c4</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r145 r t">T4</span>&gt;(<a href="#5dd3e92e191a4aed" class="i field">gate</a>, <a href="#8df6daae2b5b8588" class="k">this</a>, 3);
+                <a href="#f20f9ba34136d989" class="i field">c5</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r146 r t">T5</span>&gt;(<a href="#5dd3e92e191a4aed" class="i field">gate</a>, <a href="#8df6daae2b5b8588" class="k">this</a>, 4);
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r160 rd" class="r160 r">s1</span> = <a href="#e10238cf7de8feeb" class="i field">parent</a>.<a href="#92e7f7dcf91b5feb" class="i field">source1</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#0792446e71d6e1e0" class="i field">c1</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r161 rd" class="r161 r">s2</span> = <a href="#e10238cf7de8feeb" class="i field">parent</a>.<a href="#5f7bc596dbcb1aea" class="i field">source2</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#af9fb8cf0d3d7a67" class="i field">c2</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r162 rd" class="r162 r">s3</span> = <a href="#e10238cf7de8feeb" class="i field">parent</a>.<a href="#52788992663d47a0" class="i field">source3</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#ee640d997b0ff204" class="i field">c3</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r163 rd" class="r163 r">s4</span> = <a href="#e10238cf7de8feeb" class="i field">parent</a>.<a href="#4c9f6a6961cbb4ad" class="i field">source4</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#833552a92f479f48" class="i field">c4</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r164 rd" class="r164 r">s5</span> = <a href="#e10238cf7de8feeb" class="i field">parent</a>.<a href="#e521c59bd65686d0" class="i field">source5</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#f20f9ba34136d989" class="i field">c5</a>);
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#a90f48a712d3ffa3" class="i method">Create</a>(<span class="r160 r">s1</span>, <span class="r161 r">s2</span>, <span class="r162 r">s3</span>, <span class="r163 r">s4</span>, <span class="r164 r">s5</span>);
+            }
+ 
+            <b>public override</b> <span class="r147 r t">TR</span> <a id="1536627cb05bfab1" href="../R/1536627cb05bfab1.html" target="n" data-glyph="72,2" class="i method">GetResult</a>()
+            {
+                <b>return</b> <a href="#e10238cf7de8feeb" class="i field">parent</a>.<a href="#23441be80efab5f7" class="i field">resultSelector</a>(<a href="#0792446e71d6e1e0" class="i field">c1</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#af9fb8cf0d3d7a67" class="i field">c2</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#ee640d997b0ff204" class="i field">c3</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#833552a92f479f48" class="i field">c4</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#f20f9ba34136d989" class="i field">c5</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>);
+            }
+ 
+            <b>public override void</b> <a id="58cc36c3b0fac9bc" href="../R/58cc36c3b0fac9bc.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r147 r t">TR</span> <span id="r165 rd" class="r165 r">value</span>)
+            {
+                <a href="#798ea4bb7332f78e" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r165 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="1340a604dbfde15f" href="../R/1340a604dbfde15f.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r166 rd" class="r166 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r166 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="7f594aa2ed707605" href="../R/7f594aa2ed707605.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+ 
+    <b>internal class</b> <a id="753f207d470cc192" href="../R/753f207d470cc192.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r167 rd t" class="r167 r t">T1</span>, <span id="r168 rd t" class="r168 r t">T2</span>, <span id="r169 rd t" class="r169 r t">T3</span>, <span id="r170 rd t" class="r170 r t">T4</span>, <span id="r171 rd t" class="r171 r t">T5</span>, <span id="r172 rd t" class="r172 r t">T6</span>, <span id="r173 rd t" class="r173 r t">TR</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r173 r t">TR</span>&gt;
+    {
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r167 r t">T1</span>&gt; <a id="672c356792dd6d44" href="../R/672c356792dd6d44.html" target="n" data-glyph="46,1" class="i field">source1</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r168 r t">T2</span>&gt; <a id="1c849f016e7a55e2" href="../R/1c849f016e7a55e2.html" target="n" data-glyph="46,1" class="i field">source2</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r169 r t">T3</span>&gt; <a id="ba09e342a27a5ec3" href="../R/ba09e342a27a5ec3.html" target="n" data-glyph="46,1" class="i field">source3</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r170 r t">T4</span>&gt; <a id="533e6e4c3809e7fb" href="../R/533e6e4c3809e7fb.html" target="n" data-glyph="46,1" class="i field">source4</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r171 r t">T5</span>&gt; <a id="513e0b85b3472f43" href="../R/513e0b85b3472f43.html" target="n" data-glyph="46,1" class="i field">source5</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r172 r t">T6</span>&gt; <a id="aab0b81d98cb3a65" href="../R/aab0b81d98cb3a65.html" target="n" data-glyph="46,1" class="i field">source6</a>;
+        <a href="#65c49a098e9ee537" class="t t">ZipLatestFunc</a>&lt;<span class="r167 r t">T1</span>, <span class="r168 r t">T2</span>, <span class="r169 r t">T3</span>, <span class="r170 r t">T4</span>, <span class="r171 r t">T5</span>, <span class="r172 r t">T6</span>, <span class="r173 r t">TR</span>&gt; <a id="0d0ee70fb523a7cc" href="../R/0d0ee70fb523a7cc.html" target="n" data-glyph="46,1" class="i field">resultSelector</a>;
+ 
+        <b>public</b> <a id="5e0e7c68f126479c" href="../R/5e0e7c68f126479c.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r167 r t">T1</span>&gt; <span id="r174 rd" class="r174 r">source1</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r168 r t">T2</span>&gt; <span id="r175 rd" class="r175 r">source2</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r169 r t">T3</span>&gt; <span id="r176 rd" class="r176 r">source3</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r170 r t">T4</span>&gt; <span id="r177 rd" class="r177 r">source4</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r171 r t">T5</span>&gt; <span id="r178 rd" class="r178 r">source5</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r172 r t">T6</span>&gt; <span id="r179 rd" class="r179 r">source6</span>,
+              <a href="#65c49a098e9ee537" class="t t">ZipLatestFunc</a>&lt;<span class="r167 r t">T1</span>, <span class="r168 r t">T2</span>, <span class="r169 r t">T3</span>, <span class="r170 r t">T4</span>, <span class="r171 r t">T5</span>, <span class="r172 r t">T6</span>, <span class="r173 r t">TR</span>&gt; <span id="r180 rd" class="r180 r">resultSelector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(
+                <span class="r174 r">source1</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r175 r">source2</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r176 r">source3</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r177 r">source4</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r178 r">source5</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r179 r">source6</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <b>false</b>)
+        {
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#672c356792dd6d44" class="i field">source1</a> = <span class="r174 r">source1</span>;
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#1c849f016e7a55e2" class="i field">source2</a> = <span class="r175 r">source2</span>;
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#ba09e342a27a5ec3" class="i field">source3</a> = <span class="r176 r">source3</span>;
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#533e6e4c3809e7fb" class="i field">source4</a> = <span class="r177 r">source4</span>;
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#513e0b85b3472f43" class="i field">source5</a> = <span class="r178 r">source5</span>;
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#aab0b81d98cb3a65" class="i field">source6</a> = <span class="r179 r">source6</span>;
+            <a href="#753f207d470cc192" class="k">this</a>.<a href="#0d0ee70fb523a7cc" class="i field">resultSelector</a> = <span class="r180 r">resultSelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="9c234eeb64fdcc02" href="../R/9c234eeb64fdcc02.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r173 r t">TR</span>&gt; <span id="r181 rd" class="r181 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r182 rd" class="r182 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#28ba3353c1786a4d" class="t constructor">ZipLatest</a>(6, <a href="#753f207d470cc192" class="k">this</a>, <span class="r181 r">observer</span>, <span class="r182 r">cancel</span>).<a href="#198665be4a500865" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="79e82632765c7b15" href="../R/79e82632765c7b15.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="#798ea4bb7332f78e" class="t t">NthZipLatestObserverBase</a>&lt;<span class="r173 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#753f207d470cc192" class="t t">ZipLatestObservable</a>&lt;<span class="r167 r t">T1</span>, <span class="r168 r t">T2</span>, <span class="r169 r t">T3</span>, <span class="r170 r t">T4</span>, <span class="r171 r t">T5</span>, <span class="r172 r t">T6</span>, <span class="r173 r t">TR</span>&gt; <a id="b49e50caead59d9a" href="../R/b49e50caead59d9a.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="ac5e648fa071cbd5" href="../R/ac5e648fa071cbd5.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r167 r t">T1</span>&gt; <a id="cc765fc604c6f483" href="../R/cc765fc604c6f483.html" target="n" data-glyph="46,2" class="i field">c1</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r168 r t">T2</span>&gt; <a id="2d14293d194c4b00" href="../R/2d14293d194c4b00.html" target="n" data-glyph="46,2" class="i field">c2</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r169 r t">T3</span>&gt; <a id="55d59fd0b95d3aa8" href="../R/55d59fd0b95d3aa8.html" target="n" data-glyph="46,2" class="i field">c3</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r170 r t">T4</span>&gt; <a id="c86c5763e119ab2c" href="../R/c86c5763e119ab2c.html" target="n" data-glyph="46,2" class="i field">c4</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r171 r t">T5</span>&gt; <a id="8c8c0679b68a641f" href="../R/8c8c0679b68a641f.html" target="n" data-glyph="46,2" class="i field">c5</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r172 r t">T6</span>&gt; <a id="031b82a92c0c5738" href="../R/031b82a92c0c5738.html" target="n" data-glyph="46,2" class="i field">c6</a>;
+ 
+            <b>public</b> <a id="28ba3353c1786a4d" href="../R/28ba3353c1786a4d.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<b>int</b> <span id="r183 rd" class="r183 r">length</span>, <a href="#753f207d470cc192" class="t t">ZipLatestObservable</a>&lt;<span class="r167 r t">T1</span>, <span class="r168 r t">T2</span>, <span class="r169 r t">T3</span>, <span class="r170 r t">T4</span>, <span class="r171 r t">T5</span>, <span class="r172 r t">T6</span>, <span class="r173 r t">TR</span>&gt; <span id="r184 rd" class="r184 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r173 r t">TR</span>&gt; <span id="r185 rd" class="r185 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r186 rd" class="r186 r">cancel</span>)
+                : <a href="#a5f0eaa410bfe7bf" class="k">base</a>(<span class="r183 r">length</span>, <span class="r185 r">observer</span>, <span class="r186 r">cancel</span>)
+            {
+                <a href="#79e82632765c7b15" class="k">this</a>.<a href="#b49e50caead59d9a" class="i field">parent</a> = <span class="r184 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="198665be4a500865" href="../R/198665be4a500865.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#cc765fc604c6f483" class="i field">c1</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r167 r t">T1</span>&gt;(<a href="#ac5e648fa071cbd5" class="i field">gate</a>, <a href="#79e82632765c7b15" class="k">this</a>, 0);
+                <a href="#2d14293d194c4b00" class="i field">c2</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r168 r t">T2</span>&gt;(<a href="#ac5e648fa071cbd5" class="i field">gate</a>, <a href="#79e82632765c7b15" class="k">this</a>, 1);
+                <a href="#55d59fd0b95d3aa8" class="i field">c3</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r169 r t">T3</span>&gt;(<a href="#ac5e648fa071cbd5" class="i field">gate</a>, <a href="#79e82632765c7b15" class="k">this</a>, 2);
+                <a href="#c86c5763e119ab2c" class="i field">c4</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r170 r t">T4</span>&gt;(<a href="#ac5e648fa071cbd5" class="i field">gate</a>, <a href="#79e82632765c7b15" class="k">this</a>, 3);
+                <a href="#8c8c0679b68a641f" class="i field">c5</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r171 r t">T5</span>&gt;(<a href="#ac5e648fa071cbd5" class="i field">gate</a>, <a href="#79e82632765c7b15" class="k">this</a>, 4);
+                <a href="#031b82a92c0c5738" class="i field">c6</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r172 r t">T6</span>&gt;(<a href="#ac5e648fa071cbd5" class="i field">gate</a>, <a href="#79e82632765c7b15" class="k">this</a>, 5);
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r187 rd" class="r187 r">s1</span> = <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#672c356792dd6d44" class="i field">source1</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#cc765fc604c6f483" class="i field">c1</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r188 rd" class="r188 r">s2</span> = <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#1c849f016e7a55e2" class="i field">source2</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#2d14293d194c4b00" class="i field">c2</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r189 rd" class="r189 r">s3</span> = <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#ba09e342a27a5ec3" class="i field">source3</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#55d59fd0b95d3aa8" class="i field">c3</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r190 rd" class="r190 r">s4</span> = <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#533e6e4c3809e7fb" class="i field">source4</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#c86c5763e119ab2c" class="i field">c4</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r191 rd" class="r191 r">s5</span> = <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#513e0b85b3472f43" class="i field">source5</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#8c8c0679b68a641f" class="i field">c5</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r192 rd" class="r192 r">s6</span> = <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#aab0b81d98cb3a65" class="i field">source6</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#031b82a92c0c5738" class="i field">c6</a>);
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#a90f48a712d3ffa3" class="i method">Create</a>(<span class="r187 r">s1</span>, <span class="r188 r">s2</span>, <span class="r189 r">s3</span>, <span class="r190 r">s4</span>, <span class="r191 r">s5</span>, <span class="r192 r">s6</span>);
+            }
+ 
+            <b>public override</b> <span class="r173 r t">TR</span> <a id="98bb8eafe40b0164" href="../R/98bb8eafe40b0164.html" target="n" data-glyph="72,2" class="i method">GetResult</a>()
+            {
+                <b>return</b> <a href="#b49e50caead59d9a" class="i field">parent</a>.<a href="#0d0ee70fb523a7cc" class="i field">resultSelector</a>(<a href="#cc765fc604c6f483" class="i field">c1</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#2d14293d194c4b00" class="i field">c2</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#55d59fd0b95d3aa8" class="i field">c3</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#c86c5763e119ab2c" class="i field">c4</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#8c8c0679b68a641f" class="i field">c5</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#031b82a92c0c5738" class="i field">c6</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>);
+            }
+ 
+            <b>public override void</b> <a id="61a53f751b5e7ee4" href="../R/61a53f751b5e7ee4.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r173 r t">TR</span> <span id="r193 rd" class="r193 r">value</span>)
+            {
+                <a href="#798ea4bb7332f78e" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r193 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="96c91fcc29d83142" href="../R/96c91fcc29d83142.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r194 rd" class="r194 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r194 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="c7bdcb3eb765a765" href="../R/c7bdcb3eb765a765.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+ 
+    <b>internal class</b> <a id="e5e6fd6791578eb4" href="../R/e5e6fd6791578eb4.html" target="n" data-glyph="2,0" class="t t">ZipLatestObservable</a>&lt;<span id="r195 rd t" class="r195 r t">T1</span>, <span id="r196 rd t" class="r196 r t">T2</span>, <span id="r197 rd t" class="r197 r t">T3</span>, <span id="r198 rd t" class="r198 r t">T4</span>, <span id="r199 rd t" class="r199 r t">T5</span>, <span id="r200 rd t" class="r200 r t">T6</span>, <span id="r201 rd t" class="r201 r t">T7</span>, <span id="r202 rd t" class="r202 r t">TR</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r202 r t">TR</span>&gt;
+    {
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r195 r t">T1</span>&gt; <a id="aab4078a96cf4d5e" href="../R/aab4078a96cf4d5e.html" target="n" data-glyph="46,1" class="i field">source1</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r196 r t">T2</span>&gt; <a id="aeb74f02dd36b6cc" href="../R/aeb74f02dd36b6cc.html" target="n" data-glyph="46,1" class="i field">source2</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r197 r t">T3</span>&gt; <a id="50009741cc9dd5e5" href="../R/50009741cc9dd5e5.html" target="n" data-glyph="46,1" class="i field">source3</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r198 r t">T4</span>&gt; <a id="c7ea4a4b821755cb" href="../R/c7ea4a4b821755cb.html" target="n" data-glyph="46,1" class="i field">source4</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r199 r t">T5</span>&gt; <a id="e460dee61707982c" href="../R/e460dee61707982c.html" target="n" data-glyph="46,1" class="i field">source5</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r200 r t">T6</span>&gt; <a id="0e878e415b10860e" href="../R/0e878e415b10860e.html" target="n" data-glyph="46,1" class="i field">source6</a>;
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r201 r t">T7</span>&gt; <a id="7a29fa9806f3dcda" href="../R/7a29fa9806f3dcda.html" target="n" data-glyph="46,1" class="i field">source7</a>;
+        <a href="#15a657f4b0d710ca" class="t t">ZipLatestFunc</a>&lt;<span class="r195 r t">T1</span>, <span class="r196 r t">T2</span>, <span class="r197 r t">T3</span>, <span class="r198 r t">T4</span>, <span class="r199 r t">T5</span>, <span class="r200 r t">T6</span>, <span class="r201 r t">T7</span>, <span class="r202 r t">TR</span>&gt; <a id="16e284fcf308fed5" href="../R/16e284fcf308fed5.html" target="n" data-glyph="46,1" class="i field">resultSelector</a>;
+ 
+        <b>public</b> <a id="9417382fe55703fd" href="../R/9417382fe55703fd.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObservable</a>(
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r195 r t">T1</span>&gt; <span id="r203 rd" class="r203 r">source1</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r196 r t">T2</span>&gt; <span id="r204 rd" class="r204 r">source2</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r197 r t">T3</span>&gt; <span id="r205 rd" class="r205 r">source3</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r198 r t">T4</span>&gt; <span id="r206 rd" class="r206 r">source4</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r199 r t">T5</span>&gt; <span id="r207 rd" class="r207 r">source5</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r200 r t">T6</span>&gt; <span id="r208 rd" class="r208 r">source6</span>,
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r201 r t">T7</span>&gt; <span id="r209 rd" class="r209 r">source7</span>,
+              <a href="#15a657f4b0d710ca" class="t t">ZipLatestFunc</a>&lt;<span class="r195 r t">T1</span>, <span class="r196 r t">T2</span>, <span class="r197 r t">T3</span>, <span class="r198 r t">T4</span>, <span class="r199 r t">T5</span>, <span class="r200 r t">T6</span>, <span class="r201 r t">T7</span>, <span class="r202 r t">TR</span>&gt; <span id="r210 rd" class="r210 r">resultSelector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(
+                <span class="r203 r">source1</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r204 r">source2</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r205 r">source3</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r206 r">source4</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r207 r">source5</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r208 r">source6</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <span class="r209 r">source7</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() ||
+                <b>false</b>)
+        {
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#aab4078a96cf4d5e" class="i field">source1</a> = <span class="r203 r">source1</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#aeb74f02dd36b6cc" class="i field">source2</a> = <span class="r204 r">source2</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#50009741cc9dd5e5" class="i field">source3</a> = <span class="r205 r">source3</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#c7ea4a4b821755cb" class="i field">source4</a> = <span class="r206 r">source4</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#e460dee61707982c" class="i field">source5</a> = <span class="r207 r">source5</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#0e878e415b10860e" class="i field">source6</a> = <span class="r208 r">source6</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#7a29fa9806f3dcda" class="i field">source7</a> = <span class="r209 r">source7</span>;
+            <a href="#e5e6fd6791578eb4" class="k">this</a>.<a href="#16e284fcf308fed5" class="i field">resultSelector</a> = <span class="r210 r">resultSelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="d05ae0837d3a8540" href="../R/d05ae0837d3a8540.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r202 r t">TR</span>&gt; <span id="r211 rd" class="r211 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r212 rd" class="r212 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#c71ffc7735b44fd6" class="t constructor">ZipLatest</a>(7, <a href="#e5e6fd6791578eb4" class="k">this</a>, <span class="r211 r">observer</span>, <span class="r212 r">cancel</span>).<a href="#1894e77bf65952de" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="067aa4e2a5d1bb11" href="../R/067aa4e2a5d1bb11.html" target="n" data-glyph="4,1" class="t t">ZipLatest</a> : <a href="#798ea4bb7332f78e" class="t t">NthZipLatestObserverBase</a>&lt;<span class="r202 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#e5e6fd6791578eb4" class="t t">ZipLatestObservable</a>&lt;<span class="r195 r t">T1</span>, <span class="r196 r t">T2</span>, <span class="r197 r t">T3</span>, <span class="r198 r t">T4</span>, <span class="r199 r t">T5</span>, <span class="r200 r t">T6</span>, <span class="r201 r t">T7</span>, <span class="r202 r t">TR</span>&gt; <a id="6de1ec3a01c6532a" href="../R/6de1ec3a01c6532a.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="e208c6d33f1118bc" href="../R/e208c6d33f1118bc.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r195 r t">T1</span>&gt; <a id="aa57721649db9798" href="../R/aa57721649db9798.html" target="n" data-glyph="46,2" class="i field">c1</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r196 r t">T2</span>&gt; <a id="5204d92ace892901" href="../R/5204d92ace892901.html" target="n" data-glyph="46,2" class="i field">c2</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r197 r t">T3</span>&gt; <a id="5c7eba0aae2de94a" href="../R/5c7eba0aae2de94a.html" target="n" data-glyph="46,2" class="i field">c3</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r198 r t">T4</span>&gt; <a id="60f6a7066afbca03" href="../R/60f6a7066afbca03.html" target="n" data-glyph="46,2" class="i field">c4</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r199 r t">T5</span>&gt; <a id="07afe3dd191bdc03" href="../R/07afe3dd191bdc03.html" target="n" data-glyph="46,2" class="i field">c5</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r200 r t">T6</span>&gt; <a id="37896a9509ae21c9" href="../R/37896a9509ae21c9.html" target="n" data-glyph="46,2" class="i field">c6</a>;
+            <a href="#39038968f7300db4" class="t t">ZipLatestObserver</a>&lt;<span class="r201 r t">T7</span>&gt; <a id="4b77513e912d3cf6" href="../R/4b77513e912d3cf6.html" target="n" data-glyph="46,2" class="i field">c7</a>;
+ 
+            <b>public</b> <a id="c71ffc7735b44fd6" href="../R/c71ffc7735b44fd6.html" target="n" data-glyph="72,2" class="i constructor">ZipLatest</a>(<b>int</b> <span id="r213 rd" class="r213 r">length</span>, <a href="#e5e6fd6791578eb4" class="t t">ZipLatestObservable</a>&lt;<span class="r195 r t">T1</span>, <span class="r196 r t">T2</span>, <span class="r197 r t">T3</span>, <span class="r198 r t">T4</span>, <span class="r199 r t">T5</span>, <span class="r200 r t">T6</span>, <span class="r201 r t">T7</span>, <span class="r202 r t">TR</span>&gt; <span id="r214 rd" class="r214 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r202 r t">TR</span>&gt; <span id="r215 rd" class="r215 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r216 rd" class="r216 r">cancel</span>)
+                : <a href="#a5f0eaa410bfe7bf" class="k">base</a>(<span class="r213 r">length</span>, <span class="r215 r">observer</span>, <span class="r216 r">cancel</span>)
+            {
+                <a href="#067aa4e2a5d1bb11" class="k">this</a>.<a href="#6de1ec3a01c6532a" class="i field">parent</a> = <span class="r214 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1894e77bf65952de" href="../R/1894e77bf65952de.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#aa57721649db9798" class="i field">c1</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r195 r t">T1</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 0);
+                <a href="#5204d92ace892901" class="i field">c2</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r196 r t">T2</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 1);
+                <a href="#5c7eba0aae2de94a" class="i field">c3</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r197 r t">T3</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 2);
+                <a href="#60f6a7066afbca03" class="i field">c4</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r198 r t">T4</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 3);
+                <a href="#07afe3dd191bdc03" class="i field">c5</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r199 r t">T5</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 4);
+                <a href="#37896a9509ae21c9" class="i field">c6</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r200 r t">T6</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 5);
+                <a href="#4b77513e912d3cf6" class="i field">c7</a> = <b>new</b> <a href="#1b01ba03ec66c358" class="t constructor">ZipLatestObserver</a>&lt;<span class="r201 r t">T7</span>&gt;(<a href="#e208c6d33f1118bc" class="i field">gate</a>, <a href="#067aa4e2a5d1bb11" class="k">this</a>, 6);
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r217 rd" class="r217 r">s1</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#aab4078a96cf4d5e" class="i field">source1</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#aa57721649db9798" class="i field">c1</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r218 rd" class="r218 r">s2</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#aeb74f02dd36b6cc" class="i field">source2</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#5204d92ace892901" class="i field">c2</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r219 rd" class="r219 r">s3</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#50009741cc9dd5e5" class="i field">source3</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#5c7eba0aae2de94a" class="i field">c3</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r220 rd" class="r220 r">s4</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#c7ea4a4b821755cb" class="i field">source4</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#60f6a7066afbca03" class="i field">c4</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r221 rd" class="r221 r">s5</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#e460dee61707982c" class="i field">source5</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#07afe3dd191bdc03" class="i field">c5</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r222 rd" class="r222 r">s6</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#0e878e415b10860e" class="i field">source6</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#37896a9509ae21c9" class="i field">c6</a>);
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r223 rd" class="r223 r">s7</span> = <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#7a29fa9806f3dcda" class="i field">source7</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#4b77513e912d3cf6" class="i field">c7</a>);
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#a90f48a712d3ffa3" class="i method">Create</a>(<span class="r217 r">s1</span>, <span class="r218 r">s2</span>, <span class="r219 r">s3</span>, <span class="r220 r">s4</span>, <span class="r221 r">s5</span>, <span class="r222 r">s6</span>, <span class="r223 r">s7</span>);
+            }
+ 
+            <b>public override</b> <span class="r202 r t">TR</span> <a id="d64c315a2cafaf35" href="../R/d64c315a2cafaf35.html" target="n" data-glyph="72,2" class="i method">GetResult</a>()
+            {
+                <b>return</b> <a href="#6de1ec3a01c6532a" class="i field">parent</a>.<a href="#16e284fcf308fed5" class="i field">resultSelector</a>(<a href="#aa57721649db9798" class="i field">c1</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#5204d92ace892901" class="i field">c2</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#5c7eba0aae2de94a" class="i field">c3</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#60f6a7066afbca03" class="i field">c4</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#07afe3dd191bdc03" class="i field">c5</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#37896a9509ae21c9" class="i field">c6</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>, <a href="#4b77513e912d3cf6" class="i field">c7</a>.<a href="#c9ed247e551a258d" class="i property">Value</a>);
+            }
+ 
+            <b>public override void</b> <a id="6ad1e9a3f68a2211" href="../R/6ad1e9a3f68a2211.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r202 r t">TR</span> <span id="r224 rd" class="r224 r">value</span>)
+            {
+                <a href="#798ea4bb7332f78e" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r224 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="412ef0b808099691" href="../R/412ef0b808099691.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r225 rd" class="r225 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r225 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="79ea5c5a602ec468" href="../R/79ea5c5a602ec468.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+    <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+    <span class="c">// Nth infrastructure</span>
+ 
+    <b>internal interface</b> <a id="107d826be8d82074" href="../R/107d826be8d82074.html" target="n" data-glyph="50,0" class="t t">IZipLatestObservable</a>
+    {
+        <b>void</b> <a id="cd0df29e4fa62ffd" href="../R/cd0df29e4fa62ffd.html" target="n" data-glyph="72,1" class="i method">Publish</a>(<b>int</b> <span id="r226 rd" class="r226 r">index</span>);
+        <b>void</b> <a id="3d2db6232da2563d" href="../R/3d2db6232da2563d.html" target="n" data-glyph="72,1" class="i method">Fail</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r227 rd" class="r227 r">error</span>);
+        <b>void</b> <a id="658c7bf6641d34d8" href="../R/658c7bf6641d34d8.html" target="n" data-glyph="72,1" class="i method">Done</a>(<b>int</b> <span id="r228 rd" class="r228 r">index</span>);
+    }
+ 
+    <b>internal abstract class</b> <a id="798ea4bb7332f78e" href="../R/798ea4bb7332f78e.html" target="n" data-glyph="2,0" class="t t">NthZipLatestObserverBase</a>&lt;<span id="r229 rd t" class="r229 r t">T</span>&gt; : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r229 r t">T</span>, <span class="r229 r t">T</span>&gt;, <a href="#107d826be8d82074" class="t t">IZipLatestObservable</a>
+    {
+        <b>readonly int</b> <a id="2e95112211eca064" href="../R/2e95112211eca064.html" target="n" data-glyph="46,1" class="i field">length</a>;
+        <b>readonly bool</b>[] <a id="69369f29ea336ee6" href="../R/69369f29ea336ee6.html" target="n" data-glyph="46,1" class="i field">isStarted</a>;
+        <b>readonly bool</b>[] <a id="afd7b342bd12074c" href="../R/afd7b342bd12074c.html" target="n" data-glyph="46,1" class="i field">isCompleted</a>;
+ 
+        <b>public</b> <a id="a5f0eaa410bfe7bf" href="../R/a5f0eaa410bfe7bf.html" target="n" data-glyph="72,1" class="i constructor">NthZipLatestObserverBase</a>(<b>int</b> <span id="r230 rd" class="r230 r">length</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r229 r t">T</span>&gt; <span id="r231 rd" class="r231 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r232 rd" class="r232 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r231 r">observer</span>, <span class="r232 r">cancel</span>)
+        {
+            <a href="#798ea4bb7332f78e" class="k">this</a>.<a href="#2e95112211eca064" class="i field">length</a> = <span class="r230 r">length</span>;
+            <a href="#798ea4bb7332f78e" class="k">this</a>.<a href="#69369f29ea336ee6" class="i field">isStarted</a> = <b>new</b> <b>bool</b>[<span class="r230 r">length</span>];
+            <a href="#798ea4bb7332f78e" class="k">this</a>.<a href="#afd7b342bd12074c" class="i field">isCompleted</a> = <b>new</b> <b>bool</b>[<span class="r230 r">length</span>];
+        }
+ 
+        <b>public abstract</b> <span class="r229 r t">T</span> <a id="3b0cab009c94f352" href="../R/3b0cab009c94f352.html" target="n" data-glyph="72,1" class="i method">GetResult</a>();
+ 
+        <span class="c">// operators in lock</span>
+        <b>public void</b> <a id="e141764a445df30e" href="../R/e141764a445df30e.html" target="n" data-glyph="72,1" class="i method">Publish</a>(<b>int</b> <span id="r233 rd" class="r233 r">index</span>)
+        {
+            <a href="#69369f29ea336ee6" class="i field">isStarted</a>[<span class="r233 r">index</span>] = <b>true</b>;
+ 
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r234 rd" class="r234 r">hasOnCompleted</span> = <b>false</b>;
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r235 rd" class="r235 r">allValueStarted</span> = <b>true</b>;
+            <b>for</b> (<b>int</b> <span id="r236 rd" class="r236 r">i</span> = 0; <span class="r236 r">i</span> &lt; <a href="#2e95112211eca064" class="i field">length</a>; <span class="r236 r">i</span>++)
+            {
+                <b>if</b> (!<a href="#69369f29ea336ee6" class="i field">isStarted</a>[<span class="r236 r">i</span>])
+                {
+                    <span class="r235 r">allValueStarted</span> = <b>false</b>;
+                    <b>break</b>;
+                }
+                <b>if</b> (<span class="r236 r">i</span> == <span class="r233 r">index</span>) <b>continue</b>;
+                <b>if</b> (<a href="#afd7b342bd12074c" class="i field">isCompleted</a>[<span class="r236 r">i</span>]) <span class="r234 r">hasOnCompleted</span> = <b>true</b>;
+            }
+ 
+            <b>if</b> (<span class="r235 r">allValueStarted</span>)
+            {
+                <span class="r229 r t">var</span> <span id="r237 rd" class="r237 r">result</span> = <b>default</b>(<span class="r229 r t">T</span>);
+                <b>try</b>
+                {
+                    <span class="r237 r">result</span> = <a href="#3b0cab009c94f352" class="i method">GetResult</a>();
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r238 rd" class="r238 r">ex</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r238 r">ex</span>); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+                <a href="OperatorObserverBase.cs.html#85ca74cd4ce6d3b2" class="i method">OnNext</a>(<span class="r237 r">result</span>);
+ 
+                <b>if</b> (<span class="r234 r">hasOnCompleted</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                    <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+                <b>else</b>
+                {
+                    <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#bed27cecfb5f7a6c" class="i method">Clear</a>(<a href="#69369f29ea336ee6" class="i field">isStarted</a>, 0, <a href="#2e95112211eca064" class="i field">length</a>); <span class="c">// reset</span>
+                    <b>return</b>;
+                }
+            }
+            <b>else</b>
+            {
+                <b>for</b> (<b>int</b> <span id="r239 rd" class="r239 r">i</span> = 0; <span class="r239 r">i</span> &lt; <a href="#2e95112211eca064" class="i field">length</a>; <span class="r239 r">i</span>++)
+                {
+                    <b>if</b> (<span class="r239 r">i</span> == <span class="r233 r">index</span>) <b>continue</b>;
+                    <b>if</b> (<a href="#afd7b342bd12074c" class="i field">isCompleted</a>[<span class="r239 r">i</span>] &amp;&amp; !<a href="#69369f29ea336ee6" class="i field">isStarted</a>[<span class="r239 r">i</span>])
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                        <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        <b>return</b>;
+                    }
+                }
+            }
+        }
+ 
+        <b>public void</b> <a id="23bbc4cd9f4e4c90" href="../R/23bbc4cd9f4e4c90.html" target="n" data-glyph="72,1" class="i method">Done</a>(<b>int</b> <span id="r240 rd" class="r240 r">index</span>)
+        {
+            <a href="#afd7b342bd12074c" class="i field">isCompleted</a>[<span class="r240 r">index</span>] = <b>true</b>;
+ 
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r241 rd" class="r241 r">allTrue</span> = <b>true</b>;
+            <b>for</b> (<b>int</b> <span id="r242 rd" class="r242 r">i</span> = 0; <span class="r242 r">i</span> &lt; <a href="#2e95112211eca064" class="i field">length</a>; <span class="r242 r">i</span>++)
+            {
+                <b>if</b> (!<a href="#afd7b342bd12074c" class="i field">isCompleted</a>[<span class="r242 r">i</span>])
+                {
+                    <span class="r241 r">allTrue</span> = <b>false</b>;
+                    <b>break</b>;
+                }
+            }
+ 
+            <b>if</b> (<span class="r241 r">allTrue</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+ 
+        <b>public void</b> <a id="a6bc3113db933cbd" href="../R/a6bc3113db933cbd.html" target="n" data-glyph="72,1" class="i method">Fail</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r243 rd" class="r243 r">error</span>)
+        {
+            <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r243 r">error</span>); }
+            <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+        }
+    }
+ 
+    <span class="c">// Nth</span>
+    <b>internal class</b> <a id="39038968f7300db4" href="../R/39038968f7300db4.html" target="n" data-glyph="2,0" class="t t">ZipLatestObserver</a>&lt;<span id="r244 rd t" class="r244 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r244 r t">T</span>&gt;
+    {
+        <b>readonly object</b> <a id="fdee0bf64d52e900" href="../R/fdee0bf64d52e900.html" target="n" data-glyph="46,1" class="i field">gate</a>;
+        <b>readonly</b> <a href="#107d826be8d82074" class="t t">IZipLatestObservable</a> <a id="46fc89cf608a352c" href="../R/46fc89cf608a352c.html" target="n" data-glyph="46,1" class="i field">parent</a>;
+        <b>readonly int</b> <a id="ed7ed7ff58f789e6" href="../R/ed7ed7ff58f789e6.html" target="n" data-glyph="46,1" class="i field">index</a>;
+        <span class="r244 r t">T</span> <a id="7d0d57649ff97198" href="../R/7d0d57649ff97198.html" target="n" data-glyph="46,1" class="i field">value</a>;
+ 
+        <b>public</b> <span class="r244 r t">T</span> <a id="c9ed247e551a258d" href="../R/c9ed247e551a258d.html" target="n" data-glyph="102,1" class="i property">Value</a> { <b>get</b> { <b>return</b> <a href="#7d0d57649ff97198" class="i field">value</a>; } }
+ 
+        <b>public</b> <a id="1b01ba03ec66c358" href="../R/1b01ba03ec66c358.html" target="n" data-glyph="72,1" class="i constructor">ZipLatestObserver</a>(<b>object</b> <span id="r245 rd" class="r245 r">gate</span>, <a href="#107d826be8d82074" class="t t">IZipLatestObservable</a> <span id="r246 rd" class="r246 r">parent</span>, <b>int</b> <span id="r247 rd" class="r247 r">index</span>)
+        {
+            <a href="#39038968f7300db4" class="k">this</a>.<a href="#fdee0bf64d52e900" class="i field">gate</a> = <span class="r245 r">gate</span>;
+            <a href="#39038968f7300db4" class="k">this</a>.<a href="#46fc89cf608a352c" class="i field">parent</a> = <span class="r246 r">parent</span>;
+            <a href="#39038968f7300db4" class="k">this</a>.<a href="#ed7ed7ff58f789e6" class="i field">index</a> = <span class="r247 r">index</span>;
+        }
+ 
+        <b>public void</b> <a id="06d2694ab4ce3dd5" href="../R/06d2694ab4ce3dd5.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r244 r t">T</span> <span id="r248 rd" class="r248 r">value</span>)
+        {
+            <b>lock</b> (<a href="#fdee0bf64d52e900" class="i field">gate</a>)
+            {
+                <a href="#39038968f7300db4" class="k">this</a>.<a href="#7d0d57649ff97198" class="i field">value</a> = <span class="r248 r">value</span>;
+                <a href="#46fc89cf608a352c" class="i field">parent</a>.<a href="#cd0df29e4fa62ffd" class="i method">Publish</a>(<a href="#ed7ed7ff58f789e6" class="i field">index</a>);
+            }
+        }
+ 
+        <b>public void</b> <a id="f5f1925d3d6e46b4" href="../R/f5f1925d3d6e46b4.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r249 rd" class="r249 r">error</span>)
+        {
+            <b>lock</b> (<a href="#fdee0bf64d52e900" class="i field">gate</a>)
+            {
+                <a href="#46fc89cf608a352c" class="i field">parent</a>.<a href="#3d2db6232da2563d" class="i method">Fail</a>(<span class="r249 r">error</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="61fa84f3c2429a0c" href="../R/61fa84f3c2429a0c.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <b>lock</b> (<a href="#fdee0bf64d52e900" class="i field">gate</a>)
+            {
+                <a href="#46fc89cf608a352c" class="i field">parent</a>.<a href="#658c7bf6641d34d8" class="i method">Done</a>(<a href="#ed7ed7ff58f789e6" class="i field">index</a>);
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

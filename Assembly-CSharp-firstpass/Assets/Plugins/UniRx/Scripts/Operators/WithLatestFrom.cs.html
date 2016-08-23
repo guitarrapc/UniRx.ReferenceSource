@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html><head><title>WithLatestFrom.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(149);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/WithLatestFrom.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\WithLatestFrom.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="ab47ff699579a9f0" href="../../../../../R/ab47ff699579a9f0.html" target="n" data-glyph="2,0" class="t t">WithLatestFromObservable</a>&lt;<span id="r0 rd t" class="r0 r t">TLeft</span>, <span id="r1 rd t" class="r1 r t">TRight</span>, <span id="r2 rd t" class="r2 r t">TResult</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r2 r t">TResult</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TLeft</span>&gt; <a id="9bde7c6c56339bbf" href="../../../../../R/9bde7c6c56339bbf.html" target="n" data-glyph="46,1" class="i field">left</a>;
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">TRight</span>&gt; <a id="29743f28e8f859c7" href="../../../../../R/29743f28e8f859c7.html" target="n" data-glyph="46,1" class="i field">right</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r0 r t">TLeft</span>, <span class="r1 r t">TRight</span>, <span class="r2 r t">TResult</span>&gt; <a id="8ed275e538c4ac4f" href="../../../../../R/8ed275e538c4ac4f.html" target="n" data-glyph="46,1" class="i field">selector</a>;
+ 
+        <b>public</b> <a id="440c0728f75d4de7" href="../../../../../R/440c0728f75d4de7.html" target="n" data-glyph="72,1" class="i constructor">WithLatestFromObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TLeft</span>&gt; <span id="r3 rd" class="r3 r">left</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">TRight</span>&gt; <span id="r4 rd" class="r4 r">right</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r0 r t">TLeft</span>, <span class="r1 r t">TRight</span>, <span class="r2 r t">TResult</span>&gt; <span id="r5 rd" class="r5 r">selector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r3 r">left</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>() || <span class="r4 r">right</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#ab47ff699579a9f0" class="k">this</a>.<a href="#9bde7c6c56339bbf" class="i field">left</a> = <span class="r3 r">left</span>;
+            <a href="#ab47ff699579a9f0" class="k">this</a>.<a href="#29743f28e8f859c7" class="i field">right</a> = <span class="r4 r">right</span>;
+            <a href="#ab47ff699579a9f0" class="k">this</a>.<a href="#8ed275e538c4ac4f" class="i field">selector</a> = <span class="r5 r">selector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b5dfe866fc5b4517" href="../../../../../R/b5dfe866fc5b4517.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r2 r t">TResult</span>&gt; <span id="r6 rd" class="r6 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#ea0f9b0ed0561fe8" class="t constructor">WithLatestFrom</a>(<a href="#ab47ff699579a9f0" class="k">this</a>, <span class="r6 r">observer</span>, <span class="r7 r">cancel</span>).<a href="#adee43221fb852a7" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="71eea7de448161d2" href="../../../../../R/71eea7de448161d2.html" target="n" data-glyph="4,1" class="t t">WithLatestFrom</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r2 r t">TResult</span>, <span class="r2 r t">TResult</span>&gt;
+        {
+            <b>readonly</b> <a href="#ab47ff699579a9f0" class="t t">WithLatestFromObservable</a>&lt;<span class="r0 r t">TLeft</span>, <span class="r1 r t">TRight</span>, <span class="r2 r t">TResult</span>&gt; <a id="67277cc4e8b057f0" href="../../../../../R/67277cc4e8b057f0.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="fb026135b8e2980b" href="../../../../../R/fb026135b8e2980b.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+ 
+            <b>volatile bool</b> <a id="fd5fc108eb55db37" href="../../../../../R/fd5fc108eb55db37.html" target="n" data-glyph="46,2" class="i field">hasLatest</a>;
+            <span class="r1 r t">TRight</span> <a id="dcac8573ca53aa58" href="../../../../../R/dcac8573ca53aa58.html" target="n" data-glyph="46,2" class="i field">latestValue</a> = <b>default</b>(<span class="r1 r t">TRight</span>);
+ 
+            <b>public</b> <a id="ea0f9b0ed0561fe8" href="../../../../../R/ea0f9b0ed0561fe8.html" target="n" data-glyph="72,2" class="i constructor">WithLatestFrom</a>(<a href="#ab47ff699579a9f0" class="t t">WithLatestFromObservable</a>&lt;<span class="r0 r t">TLeft</span>, <span class="r1 r t">TRight</span>, <span class="r2 r t">TResult</span>&gt; <span id="r8 rd" class="r8 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r2 r t">TResult</span>&gt; <span id="r9 rd" class="r9 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r10 rd" class="r10 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r9 r">observer</span>, <span class="r10 r">cancel</span>)
+            {
+                <a href="#71eea7de448161d2" class="k">this</a>.<a href="#67277cc4e8b057f0" class="i field">parent</a> = <span class="r8 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="adee43221fb852a7" href="../../../../../R/adee43221fb852a7.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r11 rd" class="r11 r">l</span> = <a href="#67277cc4e8b057f0" class="i field">parent</a>.<a href="#9bde7c6c56339bbf" class="i field">left</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#a12ff51b459288e2" class="t constructor">LeftObserver</a>(<a href="#71eea7de448161d2" class="k">this</a>));
+                <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r12 rd" class="r12 r">rSubscription</span> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <span class="r12 r">rSubscription</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a>  = <a href="#67277cc4e8b057f0" class="i field">parent</a>.<a href="#29743f28e8f859c7" class="i field">right</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#eadbcc4e9c781604" class="t constructor">RightObserver</a>(<a href="#71eea7de448161d2" class="k">this</a>, <span class="r12 r">rSubscription</span>));
+ 
+                <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<span class="r11 r">l</span>, <span class="r12 r">rSubscription</span>);
+            }
+ 
+            <b>public override void</b> <a id="a0e7c5e9ed4fd529" href="../../../../../R/a0e7c5e9ed4fd529.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r2 r t">TResult</span> <span id="r13 rd" class="r13 r">value</span>)
+            {
+                <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r13 r">value</span>);
+            }
+ 
+            <b>public override void</b> <a id="5856bdaf7c12164c" href="../../../../../R/5856bdaf7c12164c.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r14 rd" class="r14 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r14 r">error</span>); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="4f217cb497af9e47" href="../../../../../R/4f217cb497af9e47.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>class</b> <a id="cfd399ea13057df5" href="../../../../../R/cfd399ea13057df5.html" target="n" data-glyph="4,2" class="t t">LeftObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">TLeft</span>&gt;
+            {
+                <b>readonly</b> <a href="#71eea7de448161d2" class="t t">WithLatestFrom</a> <a id="d76dab6bfb6ae694" href="../../../../../R/d76dab6bfb6ae694.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+ 
+                <b>public</b> <a id="a12ff51b459288e2" href="../../../../../R/a12ff51b459288e2.html" target="n" data-glyph="72,3" class="i constructor">LeftObserver</a>(<a href="#71eea7de448161d2" class="t t">WithLatestFrom</a> <span id="r15 rd" class="r15 r">parent</span>)
+                {
+                    <a href="#cfd399ea13057df5" class="k">this</a>.<a href="#d76dab6bfb6ae694" class="i field">parent</a> = <span class="r15 r">parent</span>;
+                }
+ 
+                <b>public void</b> <a id="cd785d31a3718b4b" href="../../../../../R/cd785d31a3718b4b.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r0 r t">TLeft</span> <span id="r16 rd" class="r16 r">value</span>)
+                {
+                    <b>if</b> (<a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#fd5fc108eb55db37" class="i field">hasLatest</a>)
+                    {
+                        <span class="r2 r t">var</span> <span id="r17 rd" class="r17 r">result</span> = <b>default</b>(<span class="r2 r t">TResult</span>);
+                        <b>try</b>
+                        {
+                            <span class="r17 r">result</span> = <a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#67277cc4e8b057f0" class="i field">parent</a>.<a href="#8ed275e538c4ac4f" class="i field">selector</a>(<span class="r16 r">value</span>, <a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#dcac8573ca53aa58" class="i field">latestValue</a>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r18 rd" class="r18 r">ex</span>)
+                        {
+                            <b>lock</b> (<a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#fb026135b8e2980b" class="i field">gate</a>)
+                            {
+                                <a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#5856bdaf7c12164c" class="i method">OnError</a>(<span class="r18 r">ex</span>);
+                            }
+                            <b>return</b>;
+                        }
+ 
+                        <b>lock</b> (<a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#fb026135b8e2980b" class="i field">gate</a>)
+                        {
+                            <a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#a0e7c5e9ed4fd529" class="i method">OnNext</a>(<span class="r17 r">result</span>);
+                        }
+                    }
+                }
+ 
+                <b>public void</b> <a id="3c5c7ff10177ab5c" href="../../../../../R/3c5c7ff10177ab5c.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r19 rd" class="r19 r">error</span>)
+                {
+                    <b>lock</b> (<a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#fb026135b8e2980b" class="i field">gate</a>)
+                    {
+                        <a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#5856bdaf7c12164c" class="i method">OnError</a>(<span class="r19 r">error</span>);
+                    }
+                }
+ 
+                <b>public void</b> <a id="202eecae5ed43dc5" href="../../../../../R/202eecae5ed43dc5.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <b>lock</b> (<a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#fb026135b8e2980b" class="i field">gate</a>)
+                    {
+                        <a href="#d76dab6bfb6ae694" class="i field">parent</a>.<a href="#4f217cb497af9e47" class="i method">OnCompleted</a>();
+                    }
+                }
+            }
+ 
+            <b>class</b> <a id="6de6c7a1e807c3bb" href="../../../../../R/6de6c7a1e807c3bb.html" target="n" data-glyph="4,2" class="t t">RightObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r1 r t">TRight</span>&gt;
+            {
+                <b>readonly</b> <a href="#71eea7de448161d2" class="t t">WithLatestFrom</a> <a id="6a2b71daeead304b" href="../../../../../R/6a2b71daeead304b.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+                <b>readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a15e1348b974ff72" href="../../../../../R/a15e1348b974ff72.html" target="n" data-glyph="46,3" class="i field">selfSubscription</a>;
+ 
+                <b>public</b> <a id="eadbcc4e9c781604" href="../../../../../R/eadbcc4e9c781604.html" target="n" data-glyph="72,3" class="i constructor">RightObserver</a>(<a href="#71eea7de448161d2" class="t t">WithLatestFrom</a> <span id="r20 rd" class="r20 r">parent</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r21 rd" class="r21 r">subscription</span>)
+                {
+                    <a href="#6de6c7a1e807c3bb" class="k">this</a>.<a href="#6a2b71daeead304b" class="i field">parent</a> = <span class="r20 r">parent</span>;
+                    <a href="#6de6c7a1e807c3bb" class="k">this</a>.<a href="#a15e1348b974ff72" class="i field">selfSubscription</a> = <span class="r21 r">subscription</span>;
+                }
+ 
+                <b>public void</b> <a id="3a2a28aa6f79778d" href="../../../../../R/3a2a28aa6f79778d.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r1 r t">TRight</span> <span id="r22 rd" class="r22 r">value</span>)
+                {
+                    <a href="#6a2b71daeead304b" class="i field">parent</a>.<a href="#dcac8573ca53aa58" class="i field">latestValue</a> = <span class="r22 r">value</span>;
+                    <a href="#6a2b71daeead304b" class="i field">parent</a>.<a href="#fd5fc108eb55db37" class="i field">hasLatest</a> = <b>true</b>;
+                }
+ 
+                <b>public void</b> <a id="6e2a4550bf6768c9" href="../../../../../R/6e2a4550bf6768c9.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r23 rd" class="r23 r">error</span>)
+                {
+                    <b>lock</b> (<a href="#6a2b71daeead304b" class="i field">parent</a>.<a href="#fb026135b8e2980b" class="i field">gate</a>)
+                    {
+                        <a href="#6a2b71daeead304b" class="i field">parent</a>.<a href="#5856bdaf7c12164c" class="i method">OnError</a>(<span class="r23 r">error</span>);
+                    }
+                }
+ 
+                <b>public void</b> <a id="6cd46571d744da14" href="../../../../../R/6cd46571d744da14.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <a href="#a15e1348b974ff72" class="i field">selfSubscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

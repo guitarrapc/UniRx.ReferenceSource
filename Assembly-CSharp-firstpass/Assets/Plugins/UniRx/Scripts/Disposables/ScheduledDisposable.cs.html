@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html><head><title>ScheduledDisposable.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(47);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Disposables/ScheduledDisposable.cs" target="_top">Assets\Plugins\UniRx\Scripts\Disposables\ScheduledDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="eeea46b1edde79ab" href="../../../../../R/eeea46b1edde79ab.html" target="n" data-glyph="0,0" class="t t">ScheduledDisposable</a> : <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>
+    {
+        <b>private readonly</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="4034d6a6e8e6605a" href="../../../../../R/4034d6a6e8e6605a.html" target="n" data-glyph="46,1" class="i field">scheduler</a>;
+        <b>private volatile</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="90849fd6dd1e7ab1" href="../../../../../R/90849fd6dd1e7ab1.html" target="n" data-glyph="46,1" class="i field">disposable</a>;
+        <b>private int</b> <a id="6b935de583bb351d" href="../../../../../R/6b935de583bb351d.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = 0;
+ 
+        <b>public</b> <a id="d8830e04232eeb4f" href="../../../../../R/d8830e04232eeb4f.html" target="n" data-glyph="72,1" class="i constructor">ScheduledDisposable</a>(<a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r0 rd" class="r0 r">scheduler</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r1 rd" class="r1 r">disposable</span>)
+        {
+            <a href="#eeea46b1edde79ab" class="k">this</a>.<a href="#4034d6a6e8e6605a" class="i field">scheduler</a> = <span class="r0 r">scheduler</span>;
+            <a href="#eeea46b1edde79ab" class="k">this</a>.<a href="#90849fd6dd1e7ab1" class="i field">disposable</a> = <span class="r1 r">disposable</span>;
+        }
+ 
+        <b>public</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="2e3fa60b8a783684" href="../../../../../R/2e3fa60b8a783684.html" target="n" data-glyph="102,1" class="i property">Scheduler</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#4034d6a6e8e6605a" class="i field">scheduler</a>; }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="5be0da09c42024cc" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Disposable</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#90849fd6dd1e7ab1" class="i field">disposable</a>; }
+        }
+ 
+        <b>public bool</b> <a id="cb12ad690c12668d" href="../../../../../R/cb12ad690c12668d.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#6b935de583bb351d" class="i field">isDisposed</a> != 0; }
+        }
+ 
+        <b>public void</b> <a id="9b07fd87748feba2" href="../../../../../R/9b07fd87748feba2.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#2e3fa60b8a783684" class="i property">Scheduler</a>.<a href="../Schedulers/IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<a href="#26cc1ab8f8089ea3" class="i method">DisposeInner</a>);
+        }
+ 
+        <b>private void</b> <a id="26cc1ab8f8089ea3" href="../../../../../R/26cc1ab8f8089ea3.html" target="n" data-glyph="76,1" class="i method">DisposeInner</a>()
+        {
+            <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#6b935de583bb351d" class="i field">isDisposed</a>) == 1)
+            {
+                <a href="#90849fd6dd1e7ab1" class="i field">disposable</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

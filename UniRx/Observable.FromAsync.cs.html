@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.FromAsync.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(127);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Observable.FromAsync.cs" target="_top">Observable.FromAsync.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TResult</span>&gt;&gt; <a id="950883fffb69fdc2" href="R/950883fffb69fdc2.html" target="n" data-glyph="72,1" class="i method">FromAsyncPattern</a>&lt;<span id="r0 rd t" class="r0 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r1 rd" class="r1 r">begin</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>, <span class="r0 r t">TResult</span>&gt; <span id="r2 rd" class="r2 r">end</span>)
+        {
+            <b>return</b> () =&gt;
+            {
+                <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="k">var</a> <span id="r3 rd" class="r3 r">subject</span> = <b>new</b> <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="t constructor">AsyncSubject</a>&lt;<span class="r0 r t">TResult</span>&gt;();
+                <b>try</b>
+                {
+                    <span class="r1 r">begin</span>(<span id="r4 rd" class="r4 r">iar</span> =&gt;
+                    {
+                        <span class="r0 r t">TResult</span> <span id="r5 rd" class="r5 r">result</span>;
+                        <b>try</b>
+                        {
+                            <span class="r5 r">result</span> = <span class="r2 r">end</span>(<span class="r4 r">iar</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r6 rd" class="r6 r">exception</span>)
+                        {
+                            <span class="r3 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#cefae23e795da878" class="i method">OnError</a>(<span class="r6 r">exception</span>);
+                            <b>return</b>;
+                        }
+                        <span class="r3 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#fb8fe68424d2cb76" class="i method">OnNext</a>(<span class="r5 r">result</span>);
+                        <span class="r3 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#48f07d1bfb5d534d" class="i method">OnCompleted</a>();
+                    }, <b>null</b>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r7 rd" class="r7 r">exception</span>)
+                {
+                    <b>return</b> <a href="P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#8f63aab25286a4a7" class="i method">Throw</a>&lt;<span class="r0 r t">TResult</span>&gt;(<span class="r7 r">exception</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+                }
+                <b>return</b> <span class="r3 r">subject</span>.<a href="Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+            };
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r8 r t">T1</span>, <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r9 r t">TResult</span>&gt;&gt; <a id="f4823ec6c90c921d" href="R/f4823ec6c90c921d.html" target="n" data-glyph="72,1" class="i method">FromAsyncPattern</a>&lt;<span id="r8 rd t" class="r8 r t">T1</span>, <span id="r9 rd t" class="r9 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#d6a8fafda0383fc5" class="t t">Func</a>&lt;<span class="r8 r t">T1</span>, <a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r10 rd" class="r10 r">begin</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>, <span class="r9 r t">TResult</span>&gt; <span id="r11 rd" class="r11 r">end</span>)
+        {
+            <b>return</b> <span id="r12 rd" class="r12 r">x</span> =&gt;
+            {
+                <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="k">var</a> <span id="r13 rd" class="r13 r">subject</span> = <b>new</b> <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="t constructor">AsyncSubject</a>&lt;<span class="r9 r t">TResult</span>&gt;();
+                <b>try</b>
+                {
+                    <span class="r10 r">begin</span>(<span class="r12 r">x</span>, <span id="r14 rd" class="r14 r">iar</span> =&gt;
+                    {
+                        <span class="r9 r t">TResult</span> <span id="r15 rd" class="r15 r">result</span>;
+                        <b>try</b>
+                        {
+                            <span class="r15 r">result</span> = <span class="r11 r">end</span>(<span class="r14 r">iar</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r16 rd" class="r16 r">exception</span>)
+                        {
+                            <span class="r13 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#cefae23e795da878" class="i method">OnError</a>(<span class="r16 r">exception</span>);
+                            <b>return</b>;
+                        }
+                        <span class="r13 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#fb8fe68424d2cb76" class="i method">OnNext</a>(<span class="r15 r">result</span>);
+                        <span class="r13 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#48f07d1bfb5d534d" class="i method">OnCompleted</a>();
+                    }, <b>null</b>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r17 rd" class="r17 r">exception</span>)
+                {
+                    <b>return</b> <a href="P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#8f63aab25286a4a7" class="i method">Throw</a>&lt;<span class="r9 r t">TResult</span>&gt;(<span class="r17 r">exception</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+                }
+                <b>return</b> <span class="r13 r">subject</span>.<a href="Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+            };
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>, <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r20 r t">TResult</span>&gt;&gt; <a id="0f1202d33fabb4ce" href="R/0f1202d33fabb4ce.html" target="n" data-glyph="72,1" class="i method">FromAsyncPattern</a>&lt;<span id="r18 rd t" class="r18 r t">T1</span>, <span id="r19 rd t" class="r19 r t">T2</span>, <span id="r20 rd t" class="r20 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#dd88852b83582863" class="t t">Func</a>&lt;<span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>, <a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r21 rd" class="r21 r">begin</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>, <span class="r20 r t">TResult</span>&gt; <span id="r22 rd" class="r22 r">end</span>)
+        {
+            <b>return</b> (<span id="r23 rd" class="r23 r">x</span>, <span id="r24 rd" class="r24 r">y</span>) =&gt;
+            {
+                <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="k">var</a> <span id="r25 rd" class="r25 r">subject</span> = <b>new</b> <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="t constructor">AsyncSubject</a>&lt;<span class="r20 r t">TResult</span>&gt;();
+                <b>try</b>
+                {
+                    <span class="r21 r">begin</span>(<span class="r23 r">x</span>, <span class="r24 r">y</span>, <span id="r26 rd" class="r26 r">iar</span> =&gt;
+                    {
+                        <span class="r20 r t">TResult</span> <span id="r27 rd" class="r27 r">result</span>;
+                        <b>try</b>
+                        {
+                            <span class="r27 r">result</span> = <span class="r22 r">end</span>(<span class="r26 r">iar</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r28 rd" class="r28 r">exception</span>)
+                        {
+                            <span class="r25 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#cefae23e795da878" class="i method">OnError</a>(<span class="r28 r">exception</span>);
+                            <b>return</b>;
+                        }
+                        <span class="r25 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#fb8fe68424d2cb76" class="i method">OnNext</a>(<span class="r27 r">result</span>);
+                        <span class="r25 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#48f07d1bfb5d534d" class="i method">OnCompleted</a>();
+                    }, <b>null</b>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r29 rd" class="r29 r">exception</span>)
+                {
+                    <b>return</b> <a href="P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#8f63aab25286a4a7" class="i method">Throw</a>&lt;<span class="r20 r t">TResult</span>&gt;(<span class="r29 r">exception</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+                }
+                <b>return</b> <span class="r25 r">subject</span>.<a href="Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+            };
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="fc88ad126deb788c" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromAsyncPattern</a>(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r30 rd" class="r30 r">begin</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r31 rd" class="r31 r">end</span>)
+        {
+            <b>return</b> <a href="#950883fffb69fdc2" class="i method">FromAsyncPattern</a>(<span class="r30 r">begin</span>, <span id="r32 rd" class="r32 r">iar</span> =&gt;
+            {
+                <span class="r31 r">end</span>(<span class="r32 r">iar</span>);
+                <b>return</b> <a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>;
+            });
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r33 r t">T1</span>, <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="bf01985bd7e3cea1" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromAsyncPattern</a>&lt;<span id="r33 rd t" class="r33 r t">T1</span>&gt;(<a href="@0@System.Core/A.html#d6a8fafda0383fc5" class="t t">Func</a>&lt;<span class="r33 r t">T1</span>, <a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r34 rd" class="r34 r">begin</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r35 rd" class="r35 r">end</span>)
+        {
+            <b>return</b> <a href="#f4823ec6c90c921d" class="i method">FromAsyncPattern</a>(<span class="r34 r">begin</span>, <span id="r36 rd" class="r36 r">iar</span> =&gt;
+            {
+                <span class="r35 r">end</span>(<span class="r36 r">iar</span>);
+                <b>return</b> <a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>;
+            });
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r37 r t">T1</span>, <span class="r38 r t">T2</span>, <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="2fd337557a69b919" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromAsyncPattern</a>&lt;<span id="r37 rd t" class="r37 r t">T1</span>, <span id="r38 rd t" class="r38 r t">T2</span>&gt;(<a href="@0@System.Core/A.html#dd88852b83582863" class="t t">Func</a>&lt;<span class="r37 r t">T1</span>, <span class="r38 r t">T2</span>, <a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r39 rd" class="r39 r">begin</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r40 rd" class="r40 r">end</span>)
+        {
+            <b>return</b> <a href="#0f1202d33fabb4ce" class="i method">FromAsyncPattern</a>(<span class="r39 r">begin</span>, <span id="r41 rd" class="r41 r">iar</span> =&gt;
+            {
+                <span class="r40 r">end</span>(<span class="r41 r">iar</span>);
+                <b>return</b> <a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>;
+            });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

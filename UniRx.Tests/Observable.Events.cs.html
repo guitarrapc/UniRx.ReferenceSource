@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Events.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(228);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/Observable.Events.cs" target="_top">Observable.Events.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="3d1a7c23b9729763" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="5da0e46d298bf6e4">ObservableEventsTest</span></a>
+    {
+        <b>class</b> <a id="18cd99d3f3668754" href="R/18cd99d3f3668754.html" target="n" data-glyph="4,1" class="t t"><span id="aad77df2fd3d73f5">EventTestesr</span></a>
+        {
+            <b>public event</b> <a href="@0@mscorlib/A.html#3b79d2b06c15f250" class="t t">EventHandler</a> <a id="f9c55edeef52f0ad" href="R/f9c55edeef52f0ad.html" target="n" data-glyph="30,2" class="i">Event1</a>;
+            <b>public event</b> <a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt; <a id="bcbbf0d6118b7630" href="R/bcbbf0d6118b7630.html" target="n" data-glyph="30,2" class="i">Event2</a>;
+            <b>public event</b> <a href="#de5068b5a80c3841" class="t t">MyEventHandler</a> <a id="a696ff3425c48305" href="R/a696ff3425c48305.html" target="n" data-glyph="30,2" class="i">Event3</a>;
+            <b>public event</b> <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="0fbac00dd9818802" href="R/0fbac00dd9818802.html" target="n" data-glyph="30,2" class="i">Event4</a>;
+            <b>public event</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt; <a id="630d4417045d8632" href="R/630d4417045d8632.html" target="n" data-glyph="30,2" class="i">Event5</a>;
+            <b>public event</b> <a href="@0@mscorlib/A.html#27863de72c2c9b49" class="t t">Action</a>&lt;<b>int</b>, <b>string</b>&gt; <a id="fdf12e5258488ba1" href="R/fdf12e5258488ba1.html" target="n" data-glyph="30,2" class="i">Event6</a>;
+ 
+            <b>public void</b> <a id="ffea61839c52ef2a" href="R/ffea61839c52ef2a.html" target="n" data-glyph="72,2" class="i method">Fire</a>(<b>int</b> <span id="r0 rd" class="r0 r">num</span>)
+            {
+                <b>switch</b> (<span class="r0 r">num</span>)
+                {
+                    <b>case</b> 1:
+                        <b>if</b> (<a href="#f9c55edeef52f0ad" class="i">Event1</a> == <b>null</b>) <b>return</b>;
+                        <a href="#f9c55edeef52f0ad" class="i">Event1</a>(<a href="#18cd99d3f3668754" class="k">this</a>, <b>new</b> <a href="@0@mscorlib/A.html#99ae272fd6e74a90" class="t constructor">EventArgs</a>());
+                        <b>break</b>;
+                    <b>case</b> 2:
+                        <b>if</b> (<a href="#bcbbf0d6118b7630" class="i">Event2</a> == <b>null</b>) <b>return</b>;
+                        <a href="#bcbbf0d6118b7630" class="i">Event2</a>(<a href="#18cd99d3f3668754" class="k">this</a>, <b>new</b> <a href="#55cf03b71f8561e2" class="t constructor">MyEventArgs</a>());
+                        <b>break</b>;
+                    <b>case</b> 3:
+                        <b>if</b> (<a href="#a696ff3425c48305" class="i">Event3</a> == <b>null</b>) <b>return</b>;
+                        <a href="#a696ff3425c48305" class="i">Event3</a>(<a href="#18cd99d3f3668754" class="k">this</a>, <b>new</b> <a href="#55cf03b71f8561e2" class="t constructor">MyEventArgs</a>());
+                        <b>break</b>;
+                    <b>case</b> 4:
+                        <b>if</b> (<a href="#0fbac00dd9818802" class="i">Event4</a> == <b>null</b>) <b>return</b>;
+                        <a href="#0fbac00dd9818802" class="i">Event4</a>();
+                        <b>break</b>;
+                    <b>case</b> 5:
+                        <b>if</b> (<a href="#630d4417045d8632" class="i">Event5</a> == <b>null</b>) <b>return</b>;
+                        <a href="#630d4417045d8632" class="i">Event5</a>(100);
+                        <b>break</b>;
+                    <b>case</b> 6:
+                        <b>if</b> (<a href="#fdf12e5258488ba1" class="i">Event6</a> == <b>null</b>) <b>return</b>;
+                        <a href="#fdf12e5258488ba1" class="i">Event6</a>(100, <span class="s">&quot;hogehoge&quot;</span>);
+                        <b>break</b>;
+                    <b>default</b>:
+                        <b>break</b>;
+                }
+            }
+        }
+ 
+        <b>delegate void</b> <a id="de5068b5a80c3841" href="R/de5068b5a80c3841.html" target="n" data-glyph="16,1" class="t t"><span id="7ed6e4bacae9adbb">MyEventHandler</span></a>(<b>object</b> <span id="r1 rd" class="r1 r">sender</span>, <a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a> <span id="r2 rd" class="r2 r">eventArgs</span>);
+ 
+        <b>class</b> <a id="55cf03b71f8561e2" href="R/55cf03b71f8561e2.html" target="n" data-glyph="4,1" class="t t"><span id="30ee1a34726deee7">MyEventArgs</span></a> : <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>
+        {
+ 
+        }
+ 
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="453b4e74acbdee85" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromEventPattern</a>()
+        {
+            <a href="#18cd99d3f3668754" class="k">var</a> <span id="r3 rd" class="r3 r">test</span> = <b>new</b> <a href="#18cd99d3f3668754" class="t constructor">EventTestesr</a>();
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r4 rd" class="r4 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r5 rd" class="r5 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#686fa5d634964d8e" class="i method">FromEventPattern</a>&lt;<a href="@0@mscorlib/A.html#3b79d2b06c15f250" class="t t">EventHandler</a>, <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>&gt;(
+                    <span id="r6 rd" class="r6 r">h</span> =&gt; <span class="r6 r">h</span>.<a href="@0@mscorlib/A.html#48225ee7c18a0e20" class="i method">Invoke</a>,
+                    <span id="r7 rd" class="r7 r">h</span> =&gt; <span class="r3 r">test</span>.<a href="#f9c55edeef52f0ad" class="i">Event1</a> += <span class="r7 r">h</span>, <span id="r8 rd" class="r8 r">h</span> =&gt; <span class="r3 r">test</span>.<a href="#f9c55edeef52f0ad" class="i">Event1</a> -= <span class="r8 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r9 rd" class="r9 r">x</span> =&gt; <span class="r4 r">isRaised</span> = <b>true</b>);
+                <span class="r3 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(1);
+                <span class="r4 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r4 r">isRaised</span> = <b>false</b>;
+                <span class="r5 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r3 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(1);
+                <span class="r4 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r10 rd" class="r10 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r11 rd" class="r11 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#686fa5d634964d8e" class="i method">FromEventPattern</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt;, <a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt;(
+                    <span id="r12 rd" class="r12 r">h</span> =&gt; <span class="r12 r">h</span>.<a href="@0@mscorlib/A.html#48225ee7c18a0e20" class="i method">Invoke</a>,
+                    <span id="r13 rd" class="r13 r">h</span> =&gt; <span class="r3 r">test</span>.<a href="#bcbbf0d6118b7630" class="i">Event2</a> += <span class="r13 r">h</span>, <span id="r14 rd" class="r14 r">h</span> =&gt; <span class="r3 r">test</span>.<a href="#bcbbf0d6118b7630" class="i">Event2</a> -= <span class="r14 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r15 rd" class="r15 r">x</span> =&gt; <span class="r10 r">isRaised</span> = <b>true</b>);
+                <span class="r3 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(2);
+                <span class="r10 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r10 r">isRaised</span> = <b>false</b>;
+                <span class="r11 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r3 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(2);
+                <span class="r10 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r16 rd" class="r16 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r17 rd" class="r17 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#686fa5d634964d8e" class="i method">FromEventPattern</a>&lt;<a href="#de5068b5a80c3841" class="t t">MyEventHandler</a>, <a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt;(
+                    <span id="r18 rd" class="r18 r">h</span> =&gt; <span class="r18 r">h</span>.<a href="@0@mscorlib/A.html#48225ee7c18a0e20" class="i method">Invoke</a>,
+                    <span id="r19 rd" class="r19 r">h</span> =&gt; <span class="r3 r">test</span>.<a href="#a696ff3425c48305" class="i">Event3</a> += <span class="r19 r">h</span>, <span id="r20 rd" class="r20 r">h</span> =&gt; <span class="r3 r">test</span>.<a href="#a696ff3425c48305" class="i">Event3</a> -= <span class="r20 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r21 rd" class="r21 r">x</span> =&gt; <span class="r16 r">isRaised</span> = <b>true</b>);
+                <span class="r3 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(3);
+                <span class="r16 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r16 r">isRaised</span> = <b>false</b>;
+                <span class="r17 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r3 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(3);
+                <span class="r16 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="d65d15d2a9447d76" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromEvent</a>()
+        {
+            <a href="#18cd99d3f3668754" class="k">var</a> <span id="r22 rd" class="r22 r">test</span> = <b>new</b> <a href="#18cd99d3f3668754" class="t constructor">EventTestesr</a>();
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r23 rd" class="r23 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r24 rd" class="r24 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="@0@mscorlib/A.html#3b79d2b06c15f250" class="t t">EventHandler</a>, <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>&gt;(
+                    <span id="r25 rd" class="r25 r">h</span> =&gt; (<span id="r26 rd" class="r26 r">sender</span>, <span id="r27 rd" class="r27 r">e</span>) =&gt; <span class="r25 r">h</span>.<a href="@0@mscorlib/A.html#2d4ce5e8c3a9aa80" class="i method">Invoke</a>(<span class="r27 r">e</span>),
+                    <span id="r28 rd" class="r28 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#f9c55edeef52f0ad" class="i">Event1</a> += <span class="r28 r">h</span>, <span id="r29 rd" class="r29 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#f9c55edeef52f0ad" class="i">Event1</a> -= <span class="r29 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r30 rd" class="r30 r">x</span> =&gt; <span class="r23 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(1);
+                <span class="r23 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r23 r">isRaised</span> = <b>false</b>;
+                <span class="r24 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(1);
+                <span class="r23 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r31 rd" class="r31 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r32 rd" class="r32 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt;, <a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt;(
+                    <span id="r33 rd" class="r33 r">h</span> =&gt; (<span id="r34 rd" class="r34 r">sender</span>, <span id="r35 rd" class="r35 r">e</span>) =&gt; <span class="r33 r">h</span>.<a href="@0@mscorlib/A.html#2d4ce5e8c3a9aa80" class="i method">Invoke</a>(<span class="r35 r">e</span>),
+                    <span id="r36 rd" class="r36 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#bcbbf0d6118b7630" class="i">Event2</a> += <span class="r36 r">h</span>, <span id="r37 rd" class="r37 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#bcbbf0d6118b7630" class="i">Event2</a> -= <span class="r37 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r38 rd" class="r38 r">x</span> =&gt; <span class="r31 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(2);
+                <span class="r31 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r31 r">isRaised</span> = <b>false</b>;
+                <span class="r32 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(2);
+                <span class="r31 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r39 rd" class="r39 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r40 rd" class="r40 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="#de5068b5a80c3841" class="t t">MyEventHandler</a>, <a href="#55cf03b71f8561e2" class="t t">MyEventArgs</a>&gt;(
+                    <span id="r41 rd" class="r41 r">h</span> =&gt; (<span id="r42 rd" class="r42 r">sender</span>, <span id="r43 rd" class="r43 r">e</span>) =&gt; <span class="r41 r">h</span>.<a href="@0@mscorlib/A.html#2d4ce5e8c3a9aa80" class="i method">Invoke</a>(<span class="r43 r">e</span>),
+                    <span id="r44 rd" class="r44 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#a696ff3425c48305" class="i">Event3</a> += <span class="r44 r">h</span>, <span id="r45 rd" class="r45 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#a696ff3425c48305" class="i">Event3</a> -= <span class="r45 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r46 rd" class="r46 r">x</span> =&gt; <span class="r39 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(3);
+                <span class="r39 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r39 r">isRaised</span> = <b>false</b>;
+                <span class="r40 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(3);
+                <span class="r39 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r47 rd" class="r47 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r48 rd" class="r48 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a>, <a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(
+                    <span id="r49 rd" class="r49 r">h</span> =&gt; () =&gt; <span class="r49 r">h</span>(<a href="/UniRx/A.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="/UniRx/A.html#e18d6ffbae9cfbc4" class="i property">Default</a>),
+                    <span id="r50 rd" class="r50 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#0fbac00dd9818802" class="i">Event4</a> += <span class="r50 r">h</span>, <span id="r51 rd" class="r51 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#0fbac00dd9818802" class="i">Event4</a> -= <span class="r51 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r52 rd" class="r52 r">x</span> =&gt; <span class="r47 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(4);
+                <span class="r47 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r47 r">isRaised</span> = <b>false</b>;
+                <span class="r48 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(4);
+                <span class="r47 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            <span class="c">// shortcut</span>
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r53 rd" class="r53 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r54 rd" class="r54 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#e6eb6a54762eb8cb" class="i method">FromEvent</a>(
+                    <span id="r55 rd" class="r55 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#0fbac00dd9818802" class="i">Event4</a> += <span class="r55 r">h</span>, <span id="r56 rd" class="r56 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#0fbac00dd9818802" class="i">Event4</a> -= <span class="r56 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r57 rd" class="r57 r">x</span> =&gt; <span class="r53 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(4);
+                <span class="r53 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r53 r">isRaised</span> = <b>false</b>;
+                <span class="r54 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(4);
+                <span class="r53 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r58 rd" class="r58 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r59 rd" class="r59 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt;, <b>int</b>&gt;(
+                    <span id="r60 rd" class="r60 r">h</span> =&gt; <span class="r60 r">h</span>,
+                    <span id="r61 rd" class="r61 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#630d4417045d8632" class="i">Event5</a> += <span class="r61 r">h</span>, <span id="r62 rd" class="r62 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#630d4417045d8632" class="i">Event5</a> -= <span class="r62 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r63 rd" class="r63 r">x</span> =&gt; <span class="r58 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(5);
+                <span class="r58 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r58 r">isRaised</span> = <b>false</b>;
+                <span class="r59 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(5);
+                <span class="r58 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            <span class="c">// shortcut</span>
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r64 rd" class="r64 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r65 rd" class="r65 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#80ac43fafe1e905c" class="i method">FromEvent</a>&lt;<b>int</b>&gt;(
+                    <span id="r66 rd" class="r66 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#630d4417045d8632" class="i">Event5</a> += <span class="r66 r">h</span>, <span id="r67 rd" class="r67 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#630d4417045d8632" class="i">Event5</a> -= <span class="r67 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r68 rd" class="r68 r">x</span> =&gt; <span class="r64 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(5);
+                <span class="r64 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r64 r">isRaised</span> = <b>false</b>;
+                <span class="r65 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(5);
+                <span class="r64 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+ 
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r69 rd" class="r69 r">isRaised</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r70 rd" class="r70 r">d</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="@0@mscorlib/A.html#27863de72c2c9b49" class="t t">Action</a>&lt;<b>int</b>, <b>string</b>&gt;, <a href="/UniRx/A.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<b>int</b>, <b>string</b>&gt;&gt;(
+                    <span id="r71 rd" class="r71 r">h</span> =&gt; (<span id="r72 rd" class="r72 r">x</span>, <span id="r73 rd" class="r73 r">y</span>) =&gt; <span class="r71 r">h</span>(<a href="/UniRx/A.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="/UniRx/A.html#f9644928b1f50449" class="i method">Create</a>(<span class="r72 r">x</span>, <span class="r73 r">y</span>)),
+                    <span id="r74 rd" class="r74 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#fdf12e5258488ba1" class="i">Event6</a> += <span class="r74 r">h</span>, <span id="r75 rd" class="r75 r">h</span> =&gt; <span class="r22 r">test</span>.<a href="#fdf12e5258488ba1" class="i">Event6</a> -= <span class="r75 r">h</span>)
+                    .<a href="/UniRx/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r76 rd" class="r76 r">x</span> =&gt; <span class="r69 r">isRaised</span> = <b>true</b>);
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(6);
+                <span class="r69 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+                <span class="r69 r">isRaised</span> = <b>false</b>;
+                <span class="r70 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <span class="r22 r">test</span>.<a href="#ffea61839c52ef2a" class="i method">Fire</a>(6);
+                <span class="r69 r">isRaised</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

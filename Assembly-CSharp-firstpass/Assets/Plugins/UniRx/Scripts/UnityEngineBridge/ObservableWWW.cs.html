@@ -1,0 +1,443 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableWWW.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(434);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObservableWWW.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ObservableWWW.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+<b>using</b> <span class="t">ObservableUnity</span> = <span class="i n">UniRx</span>.<a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_METRO</span> || <span class="i">UNITY_WP8</span>) &amp;&amp; (<span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_0_1</span> || <span class="i">UNITY_4_0</span> || <span class="i">UNITY_3_5</span> || <span class="i">UNITY_3_4</span> || <span class="i">UNITY_3_3</span> || <span class="i">UNITY_3_2</span> || <span class="i">UNITY_3_1</span> || <span class="i">UNITY_3_0_0</span> || <span class="i">UNITY_3_0</span> || <span class="i">UNITY_2_6_1</span> || <span class="i">UNITY_2_6</span>)
+<span class="e">    // Fallback for Unity versions below 4.5
+    using Hash = System.Collections.Hashtable;
+    using HashEntry = System.Collections.DictionaryEntry;    
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+    <span class="c">// Unity 4.5 release notes: </span>
+    <span class="c">// WWW: deprecated &#39;WWW(string url, byte[] postData, Hashtable headers)&#39;, </span>
+    <span class="c">// use &#39;public WWW(string url, byte[] postData, Dictionary&lt;string, string&gt; headers)&#39; instead.</span>
+    <b>using</b> <span class="t">Hash</span> = <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>.<a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<b>string</b>, <b>string</b>&gt;;
+    <b>using</b> <span class="t">HashEntry</span> = <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>.<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">KeyValuePair</a>&lt;<b>string</b>, <b>string</b>&gt;;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="627ef1841f3e038b" href="../../../../../R/627ef1841f3e038b.html" target="n" data-glyph="0,0" class="t t">ObservableWWW</a>
+    {
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="ce01d6c2ee39f096" href="../../../../../R/ce01d6c2ee39f096.html" target="n" data-glyph="72,1" class="i method">Get</a>(<b>string</b> <span id="r0 rd" class="r0 r">url</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r1 rd" class="r1 r">headers</span> = <b>null</b>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r2 rd" class="r2 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>string</b>&gt;((<span id="r3 rd" class="r3 r">observer</span>, <span id="r4 rd" class="r4 r">cancellation</span>) =&gt; <a href="#e2efa1f44d131dc3" class="i method">FetchText</a>(<b>new</b> <span class="i">WWW</span>(<span class="r0 r">url</span>, <b>null</b>, (<span class="r1 r">headers</span> ?? <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Hash</a>())), <span class="r3 r">observer</span>, <span class="r2 r">progress</span>, <span class="r4 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>byte</b>[]&gt; <a id="909b272ea4a36edf" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">GetAndGetBytes</a>(<b>string</b> <span id="r5 rd" class="r5 r">url</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r6 rd" class="r6 r">headers</span> = <b>null</b>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r7 rd" class="r7 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>byte</b>[]&gt;((<span id="r8 rd" class="r8 r">observer</span>, <span id="r9 rd" class="r9 r">cancellation</span>) =&gt; <a href="#f6a3a8f832742764" class="i method">FetchBytes</a>(<b>new</b> <span class="i">WWW</span>(<span class="r5 r">url</span>, <b>null</b>, (<span class="r6 r">headers</span> ?? <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Hash</a>())), <span class="r8 r">observer</span>, <span class="r7 r">progress</span>, <span class="r9 r">cancellation</span>));
+        }
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">WWW</span>&gt; <a id="2d3f31b99ec45d5e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">GetWWW</a>(<b>string</b> <span id="r10 rd" class="r10 r">url</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r11 rd" class="r11 r">headers</span> = <b>null</b>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r12 rd" class="r12 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">WWW</span>&gt;((<span id="r13 rd" class="r13 r">observer</span>, <span id="r14 rd" class="r14 r">cancellation</span>) =&gt; <a href="#cce5c8def0f6e773" class="i method">Fetch</a>(<b>new</b> <span class="i">WWW</span>(<span class="r10 r">url</span>, <b>null</b>, (<span class="r11 r">headers</span> ?? <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Hash</a>())), <span class="r13 r">observer</span>, <span class="r12 r">progress</span>, <span class="r14 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="9074758b8cb02690" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Post</a>(<b>string</b> <span id="r15 rd" class="r15 r">url</span>, <b>byte</b>[] <span id="r16 rd" class="r16 r">postData</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r17 rd" class="r17 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>string</b>&gt;((<span id="r18 rd" class="r18 r">observer</span>, <span id="r19 rd" class="r19 r">cancellation</span>) =&gt; <a href="#e2efa1f44d131dc3" class="i method">FetchText</a>(<b>new</b> <span class="i">WWW</span>(<span class="r15 r">url</span>, <span class="r16 r">postData</span>), <span class="r18 r">observer</span>, <span class="r17 r">progress</span>, <span class="r19 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="0d055de244fff1f2" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Post</a>(<b>string</b> <span id="r20 rd" class="r20 r">url</span>, <b>byte</b>[] <span id="r21 rd" class="r21 r">postData</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r22 rd" class="r22 r">headers</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r23 rd" class="r23 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>string</b>&gt;((<span id="r24 rd" class="r24 r">observer</span>, <span id="r25 rd" class="r25 r">cancellation</span>) =&gt; <a href="#e2efa1f44d131dc3" class="i method">FetchText</a>(<b>new</b> <span class="i">WWW</span>(<span class="r20 r">url</span>, <span class="r21 r">postData</span>, <span class="r22 r">headers</span>), <span class="r24 r">observer</span>, <span class="r23 r">progress</span>, <span class="r25 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="7bd3c813f70a0153" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Post</a>(<b>string</b> <span id="r26 rd" class="r26 r">url</span>, <span class="i">WWWForm</span> <span id="r27 rd" class="r27 r">content</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r28 rd" class="r28 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>string</b>&gt;((<span id="r29 rd" class="r29 r">observer</span>, <span id="r30 rd" class="r30 r">cancellation</span>) =&gt; <a href="#e2efa1f44d131dc3" class="i method">FetchText</a>(<b>new</b> <span class="i">WWW</span>(<span class="r26 r">url</span>, <span class="r27 r">content</span>), <span class="r29 r">observer</span>, <span class="r28 r">progress</span>, <span class="r30 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="f3b9cb7e1c3b5e68" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Post</a>(<b>string</b> <span id="r31 rd" class="r31 r">url</span>, <span class="i">WWWForm</span> <span id="r32 rd" class="r32 r">content</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r33 rd" class="r33 r">headers</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r34 rd" class="r34 r">progress</span> = <b>null</b>)
+        {
+            <b>var</b> <span id="r35 rd" class="r35 r">contentHeaders</span> = <span class="r32 r">content</span>.<span class="i">headers</span>;
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>string</b>&gt;((<span id="r36 rd" class="r36 r">observer</span>, <span id="r37 rd" class="r37 r">cancellation</span>) =&gt; <a href="#e2efa1f44d131dc3" class="i method">FetchText</a>(<b>new</b> <span class="i">WWW</span>(<span class="r31 r">url</span>, <span class="r32 r">content</span>.<span class="i">data</span>, <span class="i">MergeHash</span>(<span class="r35 r">contentHeaders</span>, <span class="r33 r">headers</span>)), <span class="r36 r">observer</span>, <span class="r34 r">progress</span>, <span class="r37 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>byte</b>[]&gt; <a id="ab334291b2e42606" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostAndGetBytes</a>(<b>string</b> <span id="r38 rd" class="r38 r">url</span>, <b>byte</b>[] <span id="r39 rd" class="r39 r">postData</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r40 rd" class="r40 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>byte</b>[]&gt;((<span id="r41 rd" class="r41 r">observer</span>, <span id="r42 rd" class="r42 r">cancellation</span>) =&gt; <a href="#f6a3a8f832742764" class="i method">FetchBytes</a>(<b>new</b> <span class="i">WWW</span>(<span class="r38 r">url</span>, <span class="r39 r">postData</span>), <span class="r41 r">observer</span>, <span class="r40 r">progress</span>, <span class="r42 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>byte</b>[]&gt; <a id="ef7474479b0d072e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostAndGetBytes</a>(<b>string</b> <span id="r43 rd" class="r43 r">url</span>, <b>byte</b>[] <span id="r44 rd" class="r44 r">postData</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r45 rd" class="r45 r">headers</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r46 rd" class="r46 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>byte</b>[]&gt;((<span id="r47 rd" class="r47 r">observer</span>, <span id="r48 rd" class="r48 r">cancellation</span>) =&gt; <a href="#f6a3a8f832742764" class="i method">FetchBytes</a>(<b>new</b> <span class="i">WWW</span>(<span class="r43 r">url</span>, <span class="r44 r">postData</span>, <span class="r45 r">headers</span>), <span class="r47 r">observer</span>, <span class="r46 r">progress</span>, <span class="r48 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>byte</b>[]&gt; <a id="39ec51e65ad76fef" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostAndGetBytes</a>(<b>string</b> <span id="r49 rd" class="r49 r">url</span>, <span class="i">WWWForm</span> <span id="r50 rd" class="r50 r">content</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r51 rd" class="r51 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>byte</b>[]&gt;((<span id="r52 rd" class="r52 r">observer</span>, <span id="r53 rd" class="r53 r">cancellation</span>) =&gt; <a href="#f6a3a8f832742764" class="i method">FetchBytes</a>(<b>new</b> <span class="i">WWW</span>(<span class="r49 r">url</span>, <span class="r50 r">content</span>), <span class="r52 r">observer</span>, <span class="r51 r">progress</span>, <span class="r53 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>byte</b>[]&gt; <a id="b04c427ec8fc9496" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostAndGetBytes</a>(<b>string</b> <span id="r54 rd" class="r54 r">url</span>, <span class="i">WWWForm</span> <span id="r55 rd" class="r55 r">content</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r56 rd" class="r56 r">headers</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r57 rd" class="r57 r">progress</span> = <b>null</b>)
+        {
+            <b>var</b> <span id="r58 rd" class="r58 r">contentHeaders</span> = <span class="r55 r">content</span>.<span class="i">headers</span>;
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<b>byte</b>[]&gt;((<span id="r59 rd" class="r59 r">observer</span>, <span id="r60 rd" class="r60 r">cancellation</span>) =&gt; <a href="#f6a3a8f832742764" class="i method">FetchBytes</a>(<b>new</b> <span class="i">WWW</span>(<span class="r54 r">url</span>, <span class="r55 r">content</span>.<span class="i">data</span>, <span class="i">MergeHash</span>(<span class="r58 r">contentHeaders</span>, <span class="r56 r">headers</span>)), <span class="r59 r">observer</span>, <span class="r57 r">progress</span>, <span class="r60 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">WWW</span>&gt; <a id="d8b1dcee8fa5f2e1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostWWW</a>(<b>string</b> <span id="r61 rd" class="r61 r">url</span>, <b>byte</b>[] <span id="r62 rd" class="r62 r">postData</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r63 rd" class="r63 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">WWW</span>&gt;((<span id="r64 rd" class="r64 r">observer</span>, <span id="r65 rd" class="r65 r">cancellation</span>) =&gt; <a href="#cce5c8def0f6e773" class="i method">Fetch</a>(<b>new</b> <span class="i">WWW</span>(<span class="r61 r">url</span>, <span class="r62 r">postData</span>), <span class="r64 r">observer</span>, <span class="r63 r">progress</span>, <span class="r65 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">WWW</span>&gt; <a id="c25fbbd7469bd05f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostWWW</a>(<b>string</b> <span id="r66 rd" class="r66 r">url</span>, <b>byte</b>[] <span id="r67 rd" class="r67 r">postData</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r68 rd" class="r68 r">headers</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r69 rd" class="r69 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">WWW</span>&gt;((<span id="r70 rd" class="r70 r">observer</span>, <span id="r71 rd" class="r71 r">cancellation</span>) =&gt; <a href="#cce5c8def0f6e773" class="i method">Fetch</a>(<b>new</b> <span class="i">WWW</span>(<span class="r66 r">url</span>, <span class="r67 r">postData</span>, <span class="r68 r">headers</span>), <span class="r70 r">observer</span>, <span class="r69 r">progress</span>, <span class="r71 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">WWW</span>&gt; <a id="cbd44ec4b651faaa" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostWWW</a>(<b>string</b> <span id="r72 rd" class="r72 r">url</span>, <span class="i">WWWForm</span> <span id="r73 rd" class="r73 r">content</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r74 rd" class="r74 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">WWW</span>&gt;((<span id="r75 rd" class="r75 r">observer</span>, <span id="r76 rd" class="r76 r">cancellation</span>) =&gt; <a href="#cce5c8def0f6e773" class="i method">Fetch</a>(<b>new</b> <span class="i">WWW</span>(<span class="r72 r">url</span>, <span class="r73 r">content</span>), <span class="r75 r">observer</span>, <span class="r74 r">progress</span>, <span class="r76 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">WWW</span>&gt; <a id="3a15a2b3ea0b17c5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">PostWWW</a>(<b>string</b> <span id="r77 rd" class="r77 r">url</span>, <span class="i">WWWForm</span> <span id="r78 rd" class="r78 r">content</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r79 rd" class="r79 r">headers</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r80 rd" class="r80 r">progress</span> = <b>null</b>)
+        {
+            <b>var</b> <span id="r81 rd" class="r81 r">contentHeaders</span> = <span class="r78 r">content</span>.<span class="i">headers</span>;
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">WWW</span>&gt;((<span id="r82 rd" class="r82 r">observer</span>, <span id="r83 rd" class="r83 r">cancellation</span>) =&gt; <a href="#cce5c8def0f6e773" class="i method">Fetch</a>(<b>new</b> <span class="i">WWW</span>(<span class="r77 r">url</span>, <span class="r78 r">content</span>.<span class="i">data</span>, <span class="i">MergeHash</span>(<span class="r81 r">contentHeaders</span>, <span class="r79 r">headers</span>)), <span class="r82 r">observer</span>, <span class="r80 r">progress</span>, <span class="r83 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">AssetBundle</span>&gt; <a id="c767debc15ad5cf0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LoadFromCacheOrDownload</a>(<b>string</b> <span id="r84 rd" class="r84 r">url</span>, <b>int</b> <span id="r85 rd" class="r85 r">version</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r86 rd" class="r86 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">AssetBundle</span>&gt;((<span id="r87 rd" class="r87 r">observer</span>, <span id="r88 rd" class="r88 r">cancellation</span>) =&gt; <span class="i">FetchAssetBundle</span>(<span class="i">WWW</span>.<span class="i">LoadFromCacheOrDownload</span>(<span class="r84 r">url</span>, <span class="r85 r">version</span>), <span class="r87 r">observer</span>, <span class="r86 r">progress</span>, <span class="r88 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">AssetBundle</span>&gt; <a id="cf3d474f27318303" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LoadFromCacheOrDownload</a>(<b>string</b> <span id="r89 rd" class="r89 r">url</span>, <b>int</b> <span id="r90 rd" class="r90 r">version</span>, <b>uint</b> <span id="r91 rd" class="r91 r">crc</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r92 rd" class="r92 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">AssetBundle</span>&gt;((<span id="r93 rd" class="r93 r">observer</span>, <span id="r94 rd" class="r94 r">cancellation</span>) =&gt; <span class="i">FetchAssetBundle</span>(<span class="i">WWW</span>.<span class="i">LoadFromCacheOrDownload</span>(<span class="r89 r">url</span>, <span class="r90 r">version</span>, <span class="r91 r">crc</span>), <span class="r93 r">observer</span>, <span class="r92 r">progress</span>, <span class="r94 r">cancellation</span>));
+        }
+ 
+        <span class="c">// over Unity5 supports Hash128</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_7</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_0_1</span> || <span class="i">UNITY_4_0</span> || <span class="i">UNITY_3_5</span> || <span class="i">UNITY_3_4</span> || <span class="i">UNITY_3_3</span> || <span class="i">UNITY_3_2</span> || <span class="i">UNITY_3_1</span> || <span class="i">UNITY_3_0_0</span> || <span class="i">UNITY_3_0</span> || <span class="i">UNITY_2_6_1</span> || <span class="i">UNITY_2_6</span>)
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">AssetBundle</span>&gt; <a id="8b89f7c2aeef6bc2" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LoadFromCacheOrDownload</a>(<b>string</b> <span id="r95 rd" class="r95 r">url</span>, <span class="i">Hash128</span> <span id="r96 rd" class="r96 r">hash128</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r97 rd" class="r97 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">AssetBundle</span>&gt;((<span id="r98 rd" class="r98 r">observer</span>, <span id="r99 rd" class="r99 r">cancellation</span>) =&gt; <span class="i">FetchAssetBundle</span>(<span class="i">WWW</span>.<span class="i">LoadFromCacheOrDownload</span>(<span class="r95 r">url</span>, <span class="r96 r">hash128</span>), <span class="r98 r">observer</span>, <span class="r97 r">progress</span>, <span class="r99 r">cancellation</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">AssetBundle</span>&gt; <a id="49c2025113b2e155" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LoadFromCacheOrDownload</a>(<b>string</b> <span id="r100 rd" class="r100 r">url</span>, <span class="i">Hash128</span> <span id="r101 rd" class="r101 r">hash128</span>, <b>uint</b> <span id="r102 rd" class="r102 r">crc</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r103 rd" class="r103 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="i">AssetBundle</span>&gt;((<span id="r104 rd" class="r104 r">observer</span>, <span id="r105 rd" class="r105 r">cancellation</span>) =&gt; <span class="i">FetchAssetBundle</span>(<span class="i">WWW</span>.<span class="i">LoadFromCacheOrDownload</span>(<span class="r100 r">url</span>, <span class="r101 r">hash128</span>, <span class="r102 r">crc</span>), <span class="r104 r">observer</span>, <span class="r103 r">progress</span>, <span class="r105 r">cancellation</span>));
+        }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="c">// over 4.5, Hash define is Dictionary.</span>
+        <span class="c">// below Unity 4.5, WWW only supports Hashtable.</span>
+        <span class="c">// Unity 4.5, 4.6 WWW supports Dictionary and [Obsolete]Hashtable but WWWForm.content is Hashtable.</span>
+        <span class="c">// Unity 5.0 WWW only supports Dictionary and WWWForm.content is also Dictionary.</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_METRO</span> || <span class="i">UNITY_WP8</span>) &amp;&amp; (<span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span>)
+<span class="e">        static Hash MergeHash(Hashtable wwwFormHeaders, Hash externalHeaders)
+        {
+            var newHeaders = new Hash();
+            foreach (DictionaryEntry item in wwwFormHeaders)
+            {
+                newHeaders[item.Key.ToString()] = item.Value.ToString();
+            }
+            foreach (HashEntry item in externalHeaders)
+            {
+                newHeaders[item.Key] =  item.Value;
+            }
+            return newHeaders;
+        }
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+        <b>static</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <a id="28bb8cfe4a576d85" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">MergeHash</a>(<a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r106 rd" class="r106 r">wwwFormHeaders</span>, <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Hash</a> <span id="r107 rd" class="r107 r">externalHeaders</span>)
+        {
+            <b>foreach</b> (<a href="@0@mscorlib/A.html#8585965bb176a426" class="t t">HashEntry</a> <span id="r108 rd" class="r108 r">item</span> <b>in</b> <span class="r107 r">externalHeaders</span>)
+            {
+                <span class="r106 r">wwwFormHeaders</span><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><span class="r108 r">item</span>.<a href="@0@mscorlib/A.html#f9d1c04feb1af032" class="i property">Key</a>] = <span class="r108 r">item</span>.<a href="@0@mscorlib/A.html#38c0e86cc4b30170" class="i property">Value</a>;
+            }
+            <b>return</b> <span class="r106 r">wwwFormHeaders</span>;
+        }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="cce5c8def0f6e773" href="../../../../../R/cce5c8def0f6e773.html" target="n" data-glyph="76,1" class="i method">Fetch</a>(<span class="i">WWW</span> <span id="r109 rd" class="r109 r">www</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="i">WWW</span>&gt; <span id="r110 rd" class="r110 r">observer</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r111 rd" class="r111 r">reportProgress</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r112 rd" class="r112 r">cancel</span>)
+        {
+            <b>using</b> (<span class="r109 r">www</span>)
+            {
+                <b>if</b> (<span class="r111 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>while</b> (!<span class="r109 r">www</span>.<span class="i">isDone</span> &amp;&amp; !<span class="r112 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                    {
+                        <b>try</b>
+                        {
+                            <span class="r111 r">reportProgress</span>.<span class="i">Report</span>(<span class="r109 r">www</span>.<span class="i">progress</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r113 rd" class="r113 r">ex</span>)
+                        {
+                            <span class="r110 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r113 r">ex</span>);
+                            <b>yield break</b>;
+                        }
+                        <b>yield return null</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (!<span class="r109 r">www</span>.<span class="i">isDone</span>)
+                    {
+                        <b>yield return</b> <span class="r109 r">www</span>;
+                    }
+                }
+ 
+                <b>if</b> (<span class="r112 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <b>if</b> (!<span class="r109 r">www</span>.<span class="i">isDone</span>) <b>yield return</b> <span class="r109 r">www</span>; <span class="c">// workaround for freeze bug of dispose WWW when WWW is not completed</span>
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (<span class="r111 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r111 r">reportProgress</span>.<span class="i">Report</span>(<span class="r109 r">www</span>.<span class="i">progress</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r114 rd" class="r114 r">ex</span>)
+                    {
+                        <span class="r110 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r114 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                }
+ 
+                <b>if</b> (!<b>string</b>.<span class="i">IsNullOrEmpty</span>(<span class="r109 r">www</span>.<span class="i">error</span>))
+                {
+                    <span class="r110 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<b>new</b> <span class="t">WWWErrorException</span>(<span class="r109 r">www</span>, <span class="r109 r">www</span>.<span class="i">text</span>));
+                }
+                <b>else</b>
+                {
+                    <span class="r110 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r109 r">www</span>);
+                    <span class="r110 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+            }
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="e2efa1f44d131dc3" href="../../../../../R/e2efa1f44d131dc3.html" target="n" data-glyph="76,1" class="i method">FetchText</a>(<span class="i">WWW</span> <span id="r115 rd" class="r115 r">www</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>string</b>&gt; <span id="r116 rd" class="r116 r">observer</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r117 rd" class="r117 r">reportProgress</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r118 rd" class="r118 r">cancel</span>)
+        {
+            <b>using</b> (<span class="r115 r">www</span>)
+            {
+                <b>if</b> (<span class="r117 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>while</b> (!<span class="r115 r">www</span>.<span class="i">isDone</span> &amp;&amp; !<span class="r118 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                    {
+                        <b>try</b>
+                        {
+                            <span class="r117 r">reportProgress</span>.<span class="i">Report</span>(<span class="r115 r">www</span>.<span class="i">progress</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r119 rd" class="r119 r">ex</span>)
+                        {
+                            <span class="r116 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r119 r">ex</span>);
+                            <b>yield break</b>;
+                        }
+                        <b>yield return null</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (!<span class="r115 r">www</span>.<span class="i">isDone</span>)
+                    {
+                        <b>yield return</b> <span class="r115 r">www</span>;
+                    }
+                }
+ 
+                <b>if</b> (<span class="r118 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <b>if</b> (!<span class="r115 r">www</span>.<span class="i">isDone</span>) <b>yield return</b> <span class="r115 r">www</span>; <span class="c">// workaround for freeze bug of dispose WWW when WWW is not completed</span>
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (<span class="r117 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r117 r">reportProgress</span>.<span class="i">Report</span>(<span class="r115 r">www</span>.<span class="i">progress</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r120 rd" class="r120 r">ex</span>)
+                    {
+                        <span class="r116 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r120 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                }
+ 
+                <b>if</b> (!<b>string</b>.<span class="i">IsNullOrEmpty</span>(<span class="r115 r">www</span>.<span class="i">error</span>))
+                {
+                    <span class="r116 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<b>new</b> <span class="t">WWWErrorException</span>(<span class="r115 r">www</span>, <span class="r115 r">www</span>.<span class="i">text</span>));
+                }
+                <b>else</b>
+                {
+                    <span class="r116 r">observer</span>.<span class="i">OnNext</span>(<span class="r115 r">www</span>.<span class="i">text</span>);
+                    <span class="r116 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+            }
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="f6a3a8f832742764" href="../../../../../R/f6a3a8f832742764.html" target="n" data-glyph="76,1" class="i method">FetchBytes</a>(<span class="i">WWW</span> <span id="r121 rd" class="r121 r">www</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>byte</b>[]&gt; <span id="r122 rd" class="r122 r">observer</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r123 rd" class="r123 r">reportProgress</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r124 rd" class="r124 r">cancel</span>)
+        {
+            <b>using</b> (<span class="r121 r">www</span>)
+            {
+                <b>if</b> (<span class="r123 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>while</b> (!<span class="r121 r">www</span>.<span class="i">isDone</span> &amp;&amp; !<span class="r124 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                    {
+                        <b>try</b>
+                        {
+                            <span class="r123 r">reportProgress</span>.<span class="i">Report</span>(<span class="r121 r">www</span>.<span class="i">progress</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r125 rd" class="r125 r">ex</span>)
+                        {
+                            <span class="r122 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r125 r">ex</span>);
+                            <b>yield break</b>;
+                        }
+                        <b>yield return null</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (!<span class="r121 r">www</span>.<span class="i">isDone</span>)
+                    {
+                        <b>yield return</b> <span class="r121 r">www</span>;
+                    }
+                }
+ 
+                <b>if</b> (<span class="r124 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <b>if</b> (!<span class="r121 r">www</span>.<span class="i">isDone</span>) <b>yield return</b> <span class="r121 r">www</span>; <span class="c">// workaround for freeze bug of dispose WWW when WWW is not completed</span>
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (<span class="r123 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r123 r">reportProgress</span>.<span class="i">Report</span>(<span class="r121 r">www</span>.<span class="i">progress</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r126 rd" class="r126 r">ex</span>)
+                    {
+                        <span class="r122 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r126 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                }
+ 
+                <b>if</b> (!<b>string</b>.<span class="i">IsNullOrEmpty</span>(<span class="r121 r">www</span>.<span class="i">error</span>))
+                {
+                    <span class="r122 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<b>new</b> <span class="t">WWWErrorException</span>(<span class="r121 r">www</span>, <span class="r121 r">www</span>.<span class="i">text</span>));
+                }
+                <b>else</b>
+                {
+                    <span class="r122 r">observer</span>.<span class="i">OnNext</span>(<span class="r121 r">www</span>.<span class="i">bytes</span>);
+                    <span class="r122 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+            }
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="47360635f7387434" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">FetchAssetBundle</a>(<span class="i">WWW</span> <span id="r127 rd" class="r127 r">www</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="i">AssetBundle</span>&gt; <span id="r128 rd" class="r128 r">observer</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r129 rd" class="r129 r">reportProgress</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r130 rd" class="r130 r">cancel</span>)
+        {
+            <b>using</b> (<span class="r127 r">www</span>)
+            {
+                <b>if</b> (<span class="r129 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>while</b> (!<span class="r127 r">www</span>.<span class="i">isDone</span> &amp;&amp; !<span class="r130 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                    {
+                        <b>try</b>
+                        {
+                            <span class="r129 r">reportProgress</span>.<span class="i">Report</span>(<span class="r127 r">www</span>.<span class="i">progress</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r131 rd" class="r131 r">ex</span>)
+                        {
+                            <span class="r128 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r131 r">ex</span>);
+                            <b>yield break</b>;
+                        }
+                        <b>yield return null</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (!<span class="r127 r">www</span>.<span class="i">isDone</span>)
+                    {
+                        <b>yield return</b> <span class="r127 r">www</span>;
+                    }
+                }
+ 
+                <b>if</b> (<span class="r130 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <b>if</b> (!<span class="r127 r">www</span>.<span class="i">isDone</span>) <b>yield return</b> <span class="r127 r">www</span>; <span class="c">// workaround for freeze bug of dispose WWW when WWW is not completed</span>
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (<span class="r129 r">reportProgress</span> != <b>null</b>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r129 r">reportProgress</span>.<span class="i">Report</span>(<span class="r127 r">www</span>.<span class="i">progress</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r132 rd" class="r132 r">ex</span>)
+                    {
+                        <span class="r128 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r132 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                }
+ 
+                <b>if</b> (!<b>string</b>.<span class="i">IsNullOrEmpty</span>(<span class="r127 r">www</span>.<span class="i">error</span>))
+                {
+                    <span class="r128 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<b>new</b> <a href="#9a378db3ff21c507" class="t constructor">WWWErrorException</a>(<span class="r127 r">www</span>, <span class="s">&quot;&quot;</span>));
+                }
+                <b>else</b>
+                {
+                    <span class="r128 r">observer</span>.<span class="i">OnNext</span>(<span class="r127 r">www</span>.<span class="i">assetBundle</span>);
+                    <span class="r128 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+            }
+        }
+    }
+ 
+    <b>public class</b> <a id="9155c59d0fefd54a" href="../../../../../R/9155c59d0fefd54a.html" target="n" data-glyph="0,0" class="t t">WWWErrorException</a> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+    {
+        <b>public string</b> <a id="4f59d8f549775c41" href="../../../../../R/4f59d8f549775c41.html" target="n" data-glyph="102,1" class="i property">RawErrorMessage</a> { <b>get</b>; <b>private set</b>; }
+        <b>public bool</b> <a id="a30c328f258d9b4a" href="../../../../../R/a30c328f258d9b4a.html" target="n" data-glyph="102,1" class="i property">HasResponse</a> { <b>get</b>; <b>private set</b>; }
+        <b>public string</b> <a id="24a66311aee7111b" href="../../../../../R/24a66311aee7111b.html" target="n" data-glyph="102,1" class="i property">Text</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="i n">System</span>.<span class="i n">Net</span>.<a href="@0@System/A.html#9b95c882b40ef96e" class="t t">HttpStatusCode</a> <a id="b33a8f660b02d20c" href="../../../../../R/b33a8f660b02d20c.html" target="n" data-glyph="102,1" class="i property">StatusCode</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>.<a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<b>string</b>, <b>string</b>&gt; <a id="172a7c4c6c28bdf2" href="../../../../../R/172a7c4c6c28bdf2.html" target="n" data-glyph="102,1" class="i property">ResponseHeaders</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="i">WWW</span> <a id="f9c4c81abd1be47c" href="../../../../../R/f9c4c81abd1be47c.html" target="n" data-glyph="102,1" class="i property">WWW</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <span class="c">// cache the text because if www was disposed, can&#39;t access it.</span>
+        <b>public</b> <a id="9a378db3ff21c507" href="../../../../../R/9a378db3ff21c507.html" target="n" data-glyph="72,1" class="i constructor">WWWErrorException</a>(<span class="i">WWW</span> <span id="r133 rd" class="r133 r">www</span>, <b>string</b> <span id="r134 rd" class="r134 r">text</span>)
+        {
+            <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#f9c4c81abd1be47c" class="i property">WWW</a> = <span class="r133 r">www</span>;
+            <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#4f59d8f549775c41" class="i property">RawErrorMessage</a> = <span class="r133 r">www</span>.<span class="i">error</span>;
+            <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#172a7c4c6c28bdf2" class="i property">ResponseHeaders</a> = <span class="r133 r">www</span>.<span class="i">responseHeaders</span>;
+            <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#a30c328f258d9b4a" class="i property">HasResponse</a> = <b>false</b>;
+            <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#24a66311aee7111b" class="i property">Text</a> = <span class="r134 r">text</span>; 
+ 
+            <b>var</b> <span id="r135 rd" class="r135 r">splitted</span> = <a href="#4f59d8f549775c41" class="i property">RawErrorMessage</a>.<a href="@0@mscorlib/A.html#1c4a9dc78ba38999" class="i method">Split</a>(<span class="s">&#39; &#39;</span>, <span class="s">&#39;:&#39;</span>);
+            <b>if</b> (<span class="r135 r">splitted</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> != 0)
+            {
+                <b>int</b> <span id="r136 rd" class="r136 r">statusCode</span>;
+                <b>if</b> (<b>int</b>.<a href="@0@mscorlib/A.html#325507e509229dbc" class="i method">TryParse</a>(<span class="r135 r">splitted</span>[0], <b>out</b> <span class="r136 r">statusCode</span>))
+                {
+                    <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#a30c328f258d9b4a" class="i property">HasResponse</a> = <b>true</b>;
+                    <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#b33a8f660b02d20c" class="i property">StatusCode</a> = (<span class="i n">System</span>.<span class="i n">Net</span>.<a href="@0@System/A.html#9b95c882b40ef96e" class="t t">HttpStatusCode</a>)<span class="r136 r">statusCode</span>;
+                }
+            }
+        }
+ 
+        <b>public override string</b> <a id="617377e4086c4771" href="../../../../../R/617377e4086c4771.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r137 rd" class="r137 r">text</span> = <a href="#9155c59d0fefd54a" class="k">this</a>.<a href="#24a66311aee7111b" class="i property">Text</a>;
+            <b>if</b> (<b>string</b>.<a href="@0@mscorlib/A.html#23a8597f842071f4" class="i method">IsNullOrEmpty</a>(<span class="r137 r">text</span>))
+            {
+                <b>return</b> <a href="#4f59d8f549775c41" class="i property">RawErrorMessage</a>;
+            }
+            <b>else</b>
+            {
+                <b>return</b> <a href="#4f59d8f549775c41" class="i property">RawErrorMessage</a> + <span class="s">&quot; &quot;</span> + <span class="r137 r">text</span>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

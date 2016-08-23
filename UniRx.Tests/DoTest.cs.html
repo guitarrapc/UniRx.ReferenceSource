@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html><head><title>DoTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(166);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/DoTest.cs" target="_top">DoTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>.<span class="i n">Operators</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="fd45ab5314e8c53b" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="07949ee4ac772c49">DoTest</span></a>
+    {
+        <b>class</b> <a id="789bc7e8354dbd31" href="R/789bc7e8354dbd31.html" target="n" data-glyph="4,1" class="t t"><span id="51f0180d83e43a2f">ListObserver</span></a> : <a href="/UniRx/A.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>int</b>&gt;
+        {
+            <b>public</b> <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<b>int</b>&gt; <a id="9aa3c9e6b7610883" href="R/9aa3c9e6b7610883.html" target="n" data-glyph="42,2" class="i field">list</a> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+ 
+            <b>public void</b> <a id="ea63a7406128e629" href="R/ea63a7406128e629.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="#9aa3c9e6b7610883" class="i field">list</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000);
+            }
+ 
+            <b>public void</b> <a id="279b63fff2bde844" href="R/279b63fff2bde844.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r0 rd" class="r0 r">error</span>)
+            {
+                <a href="#9aa3c9e6b7610883" class="i field">list</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100);
+            }
+ 
+            <b>public void</b> <a id="5cb0fce21c2964cc" href="R/5cb0fce21c2964cc.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<b>int</b> <span id="r1 rd" class="r1 r">value</span>)
+            {
+                <a href="#9aa3c9e6b7610883" class="i field">list</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r1 r">value</span>);
+            }
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="91e4f0cf52962784" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Do</a>()
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r2 rd" class="r2 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r3 rd" class="r3 r">x</span> =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r3 r">x</span>), <span id="r4 rd" class="r4 r">ex</span> =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r2 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r5 rd" class="r5 r">x</span> =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r5 r">x</span>), <span id="r6 rd" class="r6 r">ex</span> =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r2 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 2, 3, 4, 5, 1000);
+ 
+            <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())).<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r7 rd" class="r7 r">x</span> =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r7 r">x</span>), <span id="r8 rd" class="r8 r">ex</span> =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r2 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r9 rd" class="r9 r">_</span> =&gt; { }, <span id="r10 rd" class="r10 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r2 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 2, 3, 4, 5, 100);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="93c54a1a8b8bf2be" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoObserver</a>()
+        {
+            <a href="#789bc7e8354dbd31" class="k">var</a> <span id="r11 rd" class="r11 r">observer</span> = <b>new</b> <a href="#789bc7e8354dbd31" class="t constructor">ListObserver</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#91d77aa28b64c459" class="i method">Do</a>(<span class="r11 r">observer</span>).<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r11 r">observer</span>.<a href="#9aa3c9e6b7610883" class="i field">list</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r11 r">observer</span> = <b>new</b> <a href="#789bc7e8354dbd31" class="t constructor">ListObserver</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#91d77aa28b64c459" class="i method">Do</a>(<span class="r11 r">observer</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r11 r">observer</span>.<a href="#9aa3c9e6b7610883" class="i field">list</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 2, 3, 4, 5, 1000);
+ 
+            <span class="r11 r">observer</span> = <b>new</b> <a href="#789bc7e8354dbd31" class="t constructor">ListObserver</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())).<a href="/UniRx/A.html#91d77aa28b64c459" class="i method">Do</a>(<span class="r11 r">observer</span>).<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r12 rd" class="r12 r">_</span> =&gt; { }, <span id="r13 rd" class="r13 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r11 r">observer</span>.<a href="#9aa3c9e6b7610883" class="i field">list</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 2, 3, 4, 5, 100);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="cc6d9a501ddf631f" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoOnError</a>()
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r14 rd" class="r14 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#708984efbff1f1b8" class="i method">DoOnError</a>(<span id="r15 rd" class="r15 r">_</span> =&gt; <span class="r14 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100)).<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r14 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>();
+ 
+            <span class="r14 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#708984efbff1f1b8" class="i method">DoOnError</a>(<span id="r16 rd" class="r16 r">_</span> =&gt; <span class="r14 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r14 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>();
+ 
+            <span class="r14 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())).<a href="/UniRx/A.html#708984efbff1f1b8" class="i method">DoOnError</a>(<span id="r17 rd" class="r17 r">_</span> =&gt; <span class="r14 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100)).<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r18 rd" class="r18 r">_</span> =&gt; { }, <span id="r19 rd" class="r19 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r14 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(100);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="9e0bd82e853ec3fd" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoOnCompleted</a>()
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r20 rd" class="r20 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#edc939cc86bf8061" class="i method">DoOnCompleted</a>(() =&gt; <span class="r20 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r20 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r20 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#edc939cc86bf8061" class="i method">DoOnCompleted</a>(() =&gt; <span class="r20 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r20 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r20 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())).<a href="/UniRx/A.html#edc939cc86bf8061" class="i method">DoOnCompleted</a>(() =&gt; <span class="r20 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r21 rd" class="r21 r">_</span> =&gt; { }, <span id="r22 rd" class="r22 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r20 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="0a8524785da58291" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoOnTerminate</a>()
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r23 rd" class="r23 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#f1129018080ed3f2" class="i method">DoOnTerminate</a>(() =&gt; <span class="r23 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r23 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r23 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#f1129018080ed3f2" class="i method">DoOnTerminate</a>(() =&gt; <span class="r23 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r23 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r23 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())).<a href="/UniRx/A.html#f1129018080ed3f2" class="i method">DoOnTerminate</a>(() =&gt; <span class="r23 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000)).<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r24 rd" class="r24 r">_</span> =&gt; { }, <span id="r25 rd" class="r25 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r23 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="38eff5b59fad93ab" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoOnSubscribe</a>()
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r26 rd" class="r26 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;()
+                .<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r27 rd" class="r27 r">x</span> =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r27 r">x</span>), <span id="r28 rd" class="r28 r">ex</span> =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000))
+                .<a href="/UniRx/A.html#56ccc1f4cf377ddd" class="i method">DoOnSubscribe</a>(() =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(10000)).<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>().<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r26 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(10000, 1000);
+ 
+            <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5)
+                .<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r29 rd" class="r29 r">x</span> =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r29 r">x</span>), <span id="r30 rd" class="r30 r">ex</span> =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000))
+                .<a href="/UniRx/A.html#56ccc1f4cf377ddd" class="i method">DoOnSubscribe</a>(() =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(10000)).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>();
+            <span class="r26 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(10000, 1, 2, 3, 4, 5, 1000);
+ 
+            <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>()))
+                .<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r31 rd" class="r31 r">x</span> =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r31 r">x</span>), <span id="r32 rd" class="r32 r">ex</span> =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000))
+                .<a href="/UniRx/A.html#56ccc1f4cf377ddd" class="i method">DoOnSubscribe</a>(() =&gt; <span class="r26 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(10000)).<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r33 rd" class="r33 r">_</span> =&gt; { }, <span id="r34 rd" class="r34 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r26 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(10000, 1, 2, 3, 4, 5, 100);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="784f10c73a0438ff" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoOnCancel</a>()
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r35 rd" class="r35 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;()
+                .<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r36 rd" class="r36 r">x</span> =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r36 r">x</span>), <span id="r37 rd" class="r37 r">ex</span> =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000))
+                .<a href="/UniRx/A.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(5000))
+                .<a href="/UniRx/A.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(10000))
+                .<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>()
+                .<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r38 rd" class="r38 r">_</span> =&gt; { }, <span id="r39 rd" class="r39 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r35 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1000);
+ 
+            <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())
+                .<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r40 rd" class="r40 r">x</span> =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r40 r">x</span>), <span id="r41 rd" class="r41 r">ex</span> =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000))
+                .<a href="/UniRx/A.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(5000))
+                .<a href="/UniRx/A.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(10000))
+                .<a href="/UniRx/A.html#17eeda3f7730ac7d" class="i method">DefaultIfEmpty</a>()
+                .<a href="/UniRx/A.html#dc16f8d89326d6e6" class="i method">Subscribe</a>(<span id="r42 rd" class="r42 r">_</span> =&gt; { }, <span id="r43 rd" class="r43 r">_</span> =&gt; { }, () =&gt; { });
+            <span class="r35 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(100);
+ 
+            <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#ca7bce81a50b0aeb" class="i method">Clear</a>();
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r44 rd" class="r44 r">subscription</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#b4fca3e8d91a2bd3" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(1000)).<a href="/UniRx/A.html#79105120ffc929e6" class="i method">Select</a>(<span id="r45 rd" class="r45 r">x</span> =&gt; (<b>int</b>)<span class="r45 r">x</span>)
+                .<a href="/UniRx/A.html#5b42d7801ed9ddd1" class="i method">Do</a>(<span id="r46 rd" class="r46 r">x</span> =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r46 r">x</span>), <span id="r47 rd" class="r47 r">ex</span> =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100), () =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000))
+                .<a href="/UniRx/A.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(5000))
+                .<a href="/UniRx/A.html#1fac05c07b0e99cb" class="i method">DoOnCancel</a>(() =&gt; <span class="r35 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(10000))
+                .<a href="/UniRx/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+            <span class="r44 r">subscription</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+            <span class="r35 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(5000, 10000);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

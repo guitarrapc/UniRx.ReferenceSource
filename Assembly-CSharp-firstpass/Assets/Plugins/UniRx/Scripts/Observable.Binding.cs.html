@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Binding.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(76);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Observable.Binding.cs" target="_top">Assets\Plugins\UniRx\Scripts\Observable.Binding.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../../../../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="30a2ba141e888d4f" href="../../../../R/30a2ba141e888d4f.html" target="n" data-glyph="220,1" class="i method">Multicast</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r2 rd" class="r2 r">subject</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Subjects/ConnectableObservable.cs.html#08710253a329ddc0" class="t constructor">ConnectableObservable</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r1 r">source</span>, <span class="r2 r">subject</span>);
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r3 r t">T</span>&gt; <a id="459b6ae2d852df41" href="../../../../R/459b6ae2d852df41.html" target="n" data-glyph="220,1" class="i method">Publish</a>&lt;<span id="r3 rd t" class="r3 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">T</span>&gt; <span id="r4 rd" class="r4 r">source</span>)
+        {
+            <b>return</b> <span class="r4 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r3 r t">T</span>&gt;());
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r5 r t">T</span>&gt; <a id="c09e15e3c71ea287" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Publish</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">T</span>&gt; <span id="r6 rd" class="r6 r">source</span>, <span class="r5 r t">T</span> <span id="r7 rd" class="r7 r">initialValue</span>)
+        {
+            <b>return</b> <span class="r6 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/BehaviorSubject.cs.html#58c38d028718056f" class="t constructor">BehaviorSubject</a>&lt;<span class="r5 r t">T</span>&gt;(<span class="r7 r">initialValue</span>));
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r8 r t">T</span>&gt; <a id="3fbb60567b60a1d7" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">PublishLast</a>&lt;<span id="r8 rd t" class="r8 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">T</span>&gt; <span id="r9 rd" class="r9 r">source</span>)
+        {
+            <b>return</b> <span class="r9 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="t constructor">AsyncSubject</a>&lt;<span class="r8 r t">T</span>&gt;());
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r10 r t">T</span>&gt; <a id="3c71360f0568c42d" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r10 rd t" class="r10 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r10 r t">T</span>&gt; <span id="r11 rd" class="r11 r">source</span>)
+        {
+            <b>return</b> <span class="r11 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#3e81797da863d480" class="t constructor">ReplaySubject</a>&lt;<span class="r10 r t">T</span>&gt;());
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r12 r t">T</span>&gt; <a id="52697c812fad3a3e" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r12 rd t" class="r12 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r12 r t">T</span>&gt; <span id="r13 rd" class="r13 r">source</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r14 rd" class="r14 r">scheduler</span>)
+        {
+            <b>return</b> <span class="r13 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#cba084109fea78df" class="t constructor">ReplaySubject</a>&lt;<span class="r12 r t">T</span>&gt;(<span class="r14 r">scheduler</span>));
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r15 r t">T</span>&gt; <a id="2d714aa39d813e02" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r15 rd t" class="r15 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r16 rd" class="r16 r">source</span>, <b>int</b> <span id="r17 rd" class="r17 r">bufferSize</span>)
+        {
+            <b>return</b> <span class="r16 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#590cb5eca33a8438" class="t constructor">ReplaySubject</a>&lt;<span class="r15 r t">T</span>&gt;(<span class="r17 r">bufferSize</span>));
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r18 r t">T</span>&gt; <a id="0f6f62a01e993cd5" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r18 rd t" class="r18 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r18 r t">T</span>&gt; <span id="r19 rd" class="r19 r">source</span>, <b>int</b> <span id="r20 rd" class="r20 r">bufferSize</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r21 rd" class="r21 r">scheduler</span>)
+        {
+            <b>return</b> <span class="r19 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#96888f5db357eab5" class="t constructor">ReplaySubject</a>&lt;<span class="r18 r t">T</span>&gt;(<span class="r20 r">bufferSize</span>, <span class="r21 r">scheduler</span>));
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r22 r t">T</span>&gt; <a id="d8f6f95ca2e9b14b" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r22 rd t" class="r22 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r22 r t">T</span>&gt; <span id="r23 rd" class="r23 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r24 rd" class="r24 r">window</span>)
+        {
+            <b>return</b> <span class="r23 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#bd4159a27f399b15" class="t constructor">ReplaySubject</a>&lt;<span class="r22 r t">T</span>&gt;(<span class="r24 r">window</span>));
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r25 r t">T</span>&gt; <a id="e1a59efdffc6ee02" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r25 rd t" class="r25 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r25 r t">T</span>&gt; <span id="r26 rd" class="r26 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r27 rd" class="r27 r">window</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r28 rd" class="r28 r">scheduler</span>)
+        {
+            <b>return</b> <span class="r26 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#bb1facec3ca2715f" class="t constructor">ReplaySubject</a>&lt;<span class="r25 r t">T</span>&gt;(<span class="r27 r">window</span>, <span class="r28 r">scheduler</span>));
+        }
+ 
+        <b>public static</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r29 r t">T</span>&gt; <a id="f3354e5582e17bed" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Replay</a>&lt;<span id="r29 rd t" class="r29 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r29 r t">T</span>&gt; <span id="r30 rd" class="r30 r">source</span>, <b>int</b> <span id="r31 rd" class="r31 r">bufferSize</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r32 rd" class="r32 r">window</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r33 rd" class="r33 r">scheduler</span>)
+        {
+            <b>return</b> <span class="r30 r">source</span>.<a href="#30a2ba141e888d4f" class="i method">Multicast</a>(<b>new</b> <a href="Subjects/ReplaySubject.cs.html#a3a8f6ac887c045e" class="t constructor">ReplaySubject</a>&lt;<span class="r29 r t">T</span>&gt;(<span class="r31 r">bufferSize</span>, <span class="r32 r">window</span>, <span class="r33 r">scheduler</span>));
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r34 r t">T</span>&gt; <a id="48d56c07cb99e8dc" href="../../../../R/48d56c07cb99e8dc.html" target="n" data-glyph="220,1" class="i method">RefCount</a>&lt;<span id="r34 rd t" class="r34 r t">T</span>&gt;(<b>this</b> <a href="Subjects/ConnectableObservable.cs.html#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r34 r t">T</span>&gt; <span id="r35 rd" class="r35 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/RefCount.cs.html#ee23389962e96b86" class="t constructor">RefCountObservable</a>&lt;<span class="r34 r t">T</span>&gt;(<span class="r35 r">source</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> same as Publish().RefCount()</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r36 r t">T</span>&gt; <a id="b962971cf1f9604e" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Share</a>&lt;<span id="r36 rd t" class="r36 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r36 r t">T</span>&gt; <span id="r37 rd" class="r37 r">source</span>)
+        {
+            <b>return</b> <span class="r37 r">source</span>.<a href="#459b6ae2d852df41" class="i method">Publish</a>().<a href="#48d56c07cb99e8dc" class="i method">RefCount</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

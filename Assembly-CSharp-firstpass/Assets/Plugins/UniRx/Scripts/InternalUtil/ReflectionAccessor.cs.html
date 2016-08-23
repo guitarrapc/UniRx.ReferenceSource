@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReflectionAccessor.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(114);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/InternalUtil/ReflectionAccessor.cs" target="_top">Assets\Plugins\UniRx\Scripts\InternalUtil\ReflectionAccessor.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// no use</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <b>false</b>
+<span class="e">
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
+ 
+namespace UniRx.InternalUtil
+{
+    public interface IReflectionAccessor
+    {
+        object GetValue(object source);
+    }
+ 
+    public static class ReflectionAccessor
+    {
+        public static IReflectionAccessor Create(MemberInfo memberInfo)
+        {
+            var propInfo = memberInfo as PropertyInfo;
+            if (propInfo != null)
+            {
+                return new PropertyInfoAccessor(propInfo);
+            }
+ 
+            var fieldInfo = memberInfo as FieldInfo;
+            if (fieldInfo != null)
+            {
+                return new FieldInfoAccessor(fieldInfo);
+            }
+ 
+            throw new ArgumentException(&quot;invalid member info:&quot; + memberInfo.GetType());
+        }
+ 
+        public static IReflectionAccessor Create(MemberExpression rootExpression)
+        {
+            if (rootExpression == null) throw new ArgumentNullException(&quot;rootExpression&quot;);
+ 
+            var accessor = new RecursiveAccessor(rootExpression);
+            // minimum optimization
+            return (accessor.AccessorCount == 1)
+                ? accessor.GetFirstAccessor()
+                : accessor;
+        }
+ 
+        class PropertyInfoAccessor : IReflectionAccessor
+        {
+            readonly MethodInfo methodInfo;
+ 
+            public PropertyInfoAccessor(PropertyInfo propInfo)
+            {
+                methodInfo = propInfo.GetGetMethod();
+            }
+ 
+            public object GetValue(object source)
+            {
+                return methodInfo.Invoke(source, null);
+            }
+        }
+ 
+        class FieldInfoAccessor : IReflectionAccessor
+        {
+            readonly FieldInfo fieldInfo;
+ 
+            public FieldInfoAccessor(FieldInfo fieldInfo)
+            {
+                this.fieldInfo = fieldInfo;
+            }
+ 
+            public object GetValue(object source)
+            {
+                return fieldInfo.GetValue(source);
+            }
+        }
+ 
+        class RecursiveAccessor : IReflectionAccessor
+        {
+            readonly List&lt;IReflectionAccessor&gt; accessors;
+ 
+            public int AccessorCount { get { return accessors.Count; } }
+            public IReflectionAccessor GetFirstAccessor()
+            {
+                return accessors[0];
+            }
+ 
+            public RecursiveAccessor(Expression expression)
+            {
+                var reflectionAccessors = new List&lt;IReflectionAccessor&gt;();
+                while (expression is MemberExpression)
+                {
+                    var memberExpression = (MemberExpression)expression;
+                    reflectionAccessors.Add(ReflectionAccessor.Create(memberExpression.Member));
+                    expression = memberExpression.Expression;
+                }
+ 
+                this.accessors = reflectionAccessors;
+            }
+ 
+            public object GetValue(object source)
+            {
+                var result = source;
+                for (int i = accessors.Count - 1; i &gt;= 0; i--)
+                {
+                    var accessor = accessors[i];
+                    result = accessor.GetValue(result);
+                }
+                return result;
+            }
+        }
+    }
+}
+ 
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

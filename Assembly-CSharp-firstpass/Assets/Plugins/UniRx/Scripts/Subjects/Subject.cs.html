@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html><head><title>Subject.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(169);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Subjects/Subject.cs" target="_top">Assets\Plugins\UniRx\Scripts\Subjects\Subject.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="e84fb44e794ec78c" href="../../../../../R/e84fb44e794ec78c.html" target="n" data-glyph="0,0" class="t t"><span id="fc688a66499dc806">Subject</span></a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="../System/IOptimizedObservable.cs.html#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>object</b> <a id="c99ef3f4e017a3f7" href="../../../../../R/c99ef3f4e017a3f7.html" target="n" data-glyph="46,1" class="i field">observerLock</a> = <b>new</b> <b>object</b>();
+ 
+        <b>bool</b> <a id="db2b0205afdb376e" href="../../../../../R/db2b0205afdb376e.html" target="n" data-glyph="46,1" class="i field">isStopped</a>;
+        <b>bool</b> <a id="68193787513484eb" href="../../../../../R/68193787513484eb.html" target="n" data-glyph="46,1" class="i field">isDisposed</a>;
+        <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="0765ab45a37d5c13" href="../../../../../R/0765ab45a37d5c13.html" target="n" data-glyph="46,1" class="i field">lastError</a>;
+        <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="99db4a25cb2393a5" href="../../../../../R/99db4a25cb2393a5.html" target="n" data-glyph="46,1" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+ 
+        <b>public bool</b> <a id="7804b59681992ae6" href="../../../../../R/7804b59681992ae6.html" target="n" data-glyph="102,1" class="i property">HasObservers</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> !(<a href="#99db4a25cb2393a5" class="i field">outObserver</a> <b>is</b> <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;) &amp;&amp; !<a href="#db2b0205afdb376e" class="i field">isStopped</a> &amp;&amp; !<a href="#68193787513484eb" class="i field">isDisposed</a>;
+            }
+        }
+ 
+        <b>public void</b> <a id="519e9dfb8c056031" href="../../../../../R/519e9dfb8c056031.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">old</span>;
+            <b>lock</b> (<a href="#c99ef3f4e017a3f7" class="i field">observerLock</a>)
+            {
+                <a href="#539905bd13a95e81" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (<a href="#db2b0205afdb376e" class="i field">isStopped</a>) <b>return</b>;
+ 
+                <span class="r1 r">old</span> = <a href="#99db4a25cb2393a5" class="i field">outObserver</a>;
+                <a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+                <a href="#db2b0205afdb376e" class="i field">isStopped</a> = <b>true</b>;
+            }
+ 
+            <span class="r1 r">old</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+        }
+ 
+        <b>public void</b> <a id="6a7fea54dc5dd054" href="../../../../../R/6a7fea54dc5dd054.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r2 rd" class="r2 r">error</span>)
+        {
+            <b>if</b> (<span class="r2 r">error</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;error&quot;</span>);
+ 
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r3 rd" class="r3 r">old</span>;
+            <b>lock</b> (<a href="#c99ef3f4e017a3f7" class="i field">observerLock</a>)
+            {
+                <a href="#539905bd13a95e81" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (<a href="#db2b0205afdb376e" class="i field">isStopped</a>) <b>return</b>;
+ 
+                <span class="r3 r">old</span> = <a href="#99db4a25cb2393a5" class="i field">outObserver</a>;
+                <a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+                <a href="#db2b0205afdb376e" class="i field">isStopped</a> = <b>true</b>;
+                <a href="#0765ab45a37d5c13" class="i field">lastError</a> = <span class="r2 r">error</span>;
+            }
+ 
+            <span class="r3 r">old</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r2 r">error</span>);
+        }
+ 
+        <b>public void</b> <a id="eb9ca668135f9655" href="../../../../../R/eb9ca668135f9655.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r4 rd" class="r4 r">value</span>)
+        {
+            <a href="#99db4a25cb2393a5" class="i field">outObserver</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r4 r">value</span>);
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="04b6b0a3ab880230" href="../../../../../R/04b6b0a3ab880230.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r5 rd" class="r5 r">observer</span>)
+        {
+            <b>if</b> (<span class="r5 r">observer</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="k">var</a> <span id="r6 rd" class="r6 r">ex</span> = <b>default</b>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>);
+ 
+            <b>lock</b> (<a href="#c99ef3f4e017a3f7" class="i field">observerLock</a>)
+            {
+                <a href="#539905bd13a95e81" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (!<a href="#db2b0205afdb376e" class="i field">isStopped</a>)
+                {
+                    <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="k">var</a> <span id="r7 rd" class="r7 r">listObserver</span> = <a href="#99db4a25cb2393a5" class="i field">outObserver</a> <b>as</b> <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="t t">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;;
+                    <b>if</b> (<span class="r7 r">listObserver</span> != <b>null</b>)
+                    {
+                        <a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <span class="r7 r">listObserver</span>.<a href="../InternalUtil/ListObserver.cs.html#68c71fee4b650776" class="i method">Add</a>(<span class="r5 r">observer</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="k">var</a> <span id="r8 rd" class="r8 r">current</span> = <a href="#99db4a25cb2393a5" class="i field">outObserver</a>;
+                        <b>if</b> (<span class="r8 r">current</span> <b>is</b> <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;)
+                        {
+                            <a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <span class="r5 r">observer</span>;
+                        }
+                        <b>else</b>
+                        {
+                            <a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <b>new</b> <a href="../InternalUtil/ListObserver.cs.html#51d639679a0129ad" class="t constructor">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;(<b>new</b> <a href="../InternalUtil/ImmutableList.cs.html#2182b22b2e2f9d75" class="t constructor">ImmutableList</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;&gt;(<b>new</b>[] { <span class="r8 r">current</span>, <span class="r5 r">observer</span> }));
+                        }
+                    }
+ 
+                    <b>return</b> <b>new</b> <a href="#fc2a5b63b99d1c55" class="t constructor">Subscription</a>(<a href="#e84fb44e794ec78c" class="k">this</a>, <span class="r5 r">observer</span>);
+                }
+ 
+                <span class="r6 r">ex</span> = <a href="#0765ab45a37d5c13" class="i field">lastError</a>;
+            }
+ 
+            <b>if</b> (<span class="r6 r">ex</span> != <b>null</b>)
+            {
+                <span class="r5 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r6 r">ex</span>);
+            }
+            <b>else</b>
+            {
+                <span class="r5 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+ 
+            <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>public void</b> <a id="9aa899d2278a4ad0" href="../../../../../R/9aa899d2278a4ad0.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>lock</b> (<a href="#c99ef3f4e017a3f7" class="i field">observerLock</a>)
+            {
+                <a href="#68193787513484eb" class="i field">isDisposed</a> = <b>true</b>;
+                <a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#3935b7140bd22864" class="t t">DisposedObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#115281850ddc85a7" class="i field">Instance</a>;
+            }
+        }
+ 
+        <b>void</b> <a id="539905bd13a95e81" href="../../../../../R/539905bd13a95e81.html" target="n" data-glyph="76,1" class="i method">ThrowIfDisposed</a>()
+        {
+            <b>if</b> (<a href="#68193787513484eb" class="i field">isDisposed</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;&quot;</span>);
+        }
+ 
+        <b>public bool</b> <a id="3f22708d8b87d182" href="../../../../../R/3f22708d8b87d182.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>()
+        {
+            <b>return false</b>;
+        }
+ 
+        <b>class</b> <a id="e77b363e45038847" href="../../../../../R/e77b363e45038847.html" target="n" data-glyph="4,1" class="t t">Subscription</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly object</b> <a id="317a904b2e35448a" href="../../../../../R/317a904b2e35448a.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r0 r t">T</span>&gt; <a id="c84e66921a8b87fa" href="../../../../../R/c84e66921a8b87fa.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="dc2250597963bda9" href="../../../../../R/dc2250597963bda9.html" target="n" data-glyph="46,2" class="i field">unsubscribeTarget</a>;
+ 
+            <b>public</b> <a id="fc2a5b63b99d1c55" href="../../../../../R/fc2a5b63b99d1c55.html" target="n" data-glyph="72,2" class="i constructor">Subscription</a>(<a href="#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r9 rd" class="r9 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r10 rd" class="r10 r">unsubscribeTarget</span>)
+            {
+                <a href="#e77b363e45038847" class="k">this</a>.<a href="#c84e66921a8b87fa" class="i field">parent</a> = <span class="r9 r">parent</span>;
+                <a href="#e77b363e45038847" class="k">this</a>.<a href="#dc2250597963bda9" class="i field">unsubscribeTarget</a> = <span class="r10 r">unsubscribeTarget</span>;
+            }
+ 
+            <b>public void</b> <a id="703902f2c5f679e9" href="../../../../../R/703902f2c5f679e9.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>lock</b> (<a href="#317a904b2e35448a" class="i field">gate</a>)
+                {
+                    <b>if</b> (<a href="#c84e66921a8b87fa" class="i field">parent</a> != <b>null</b>)
+                    {
+                        <b>lock</b> (<a href="#c84e66921a8b87fa" class="i field">parent</a>.<a href="#c99ef3f4e017a3f7" class="i field">observerLock</a>)
+                        {
+                            <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="k">var</a> <span id="r11 rd" class="r11 r">listObserver</span> = <a href="#c84e66921a8b87fa" class="i field">parent</a>.<a href="#99db4a25cb2393a5" class="i field">outObserver</a> <b>as</b> <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="t t">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;;
+                            <b>if</b> (<span class="r11 r">listObserver</span> != <b>null</b>)
+                            {
+                                <a href="#c84e66921a8b87fa" class="i field">parent</a>.<a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <span class="r11 r">listObserver</span>.<a href="../InternalUtil/ListObserver.cs.html#32cb63dd18624969" class="i method">Remove</a>(<a href="#dc2250597963bda9" class="i field">unsubscribeTarget</a>);
+                            }
+                            <b>else</b>
+                            {
+                                <a href="#c84e66921a8b87fa" class="i field">parent</a>.<a href="#99db4a25cb2393a5" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+                            }
+ 
+                            <a href="#dc2250597963bda9" class="i field">unsubscribeTarget</a> = <b>null</b>;
+                            <a href="#c84e66921a8b87fa" class="i field">parent</a> = <b>null</b>;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableCollision2DTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(67);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableCollision2DTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableCollision2DTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="6c5c5749406b21a6" href="../../../../../../R/6c5c5749406b21a6.html" target="n" data-glyph="0,0" class="t t"><span id="7b870b77f0903e3d">ObservableCollision2DTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>
+    {
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision2D</span>&gt; <a id="473131beae7edfb7" href="../../../../../../R/473131beae7edfb7.html" target="n" data-glyph="46,1" class="i field">onCollisionEnter2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when an incoming collider makes contact with this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="136ab4decb88c35b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCollisionEnter2D</a>(<span class="i">Collision2D</span> <span id="r0 rd" class="r0 r">coll</span>)
+        {
+            <b>if</b> (<a href="#473131beae7edfb7" class="i field">onCollisionEnter2D</a> != <b>null</b>) <a href="#473131beae7edfb7" class="i field">onCollisionEnter2D</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r0 r">coll</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when an incoming collider makes contact with this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="69a8772ca5a72afe" href="../../../../../../R/69a8772ca5a72afe.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnter2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#473131beae7edfb7" class="i field">onCollisionEnter2D</a> ?? (<a href="#473131beae7edfb7" class="i field">onCollisionEnter2D</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision2D</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision2D</span>&gt; <a id="b43e169fce29088b" href="../../../../../../R/b43e169fce29088b.html" target="n" data-glyph="46,1" class="i field">onCollisionExit2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when a collider on another object stops touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="c1808f7b85e9838b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCollisionExit2D</a>(<span class="i">Collision2D</span> <span id="r1 rd" class="r1 r">coll</span>)
+        {
+            <b>if</b> (<a href="#b43e169fce29088b" class="i field">onCollisionExit2D</a> != <b>null</b>) <a href="#b43e169fce29088b" class="i field">onCollisionExit2D</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r1 r">coll</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when a collider on another object stops touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="d95114d4e0b96d88" href="../../../../../../R/d95114d4e0b96d88.html" target="n" data-glyph="72,1" class="i method">OnCollisionExit2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#b43e169fce29088b" class="i field">onCollisionExit2D</a> ?? (<a href="#b43e169fce29088b" class="i field">onCollisionExit2D</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision2D</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision2D</span>&gt; <a id="897884c72dd1e145" href="../../../../../../R/897884c72dd1e145.html" target="n" data-glyph="46,1" class="i field">onCollisionStay2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where a collider on another object is touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="a9364fb36694e37a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCollisionStay2D</a>(<span class="i">Collision2D</span> <span id="r2 rd" class="r2 r">coll</span>)
+        {
+            <b>if</b> (<a href="#897884c72dd1e145" class="i field">onCollisionStay2D</a> != <b>null</b>) <a href="#897884c72dd1e145" class="i field">onCollisionStay2D</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">coll</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where a collider on another object is touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision2D</span>&gt; <a id="16a0594f72164b4e" href="../../../../../../R/16a0594f72164b4e.html" target="n" data-glyph="72,1" class="i method">OnCollisionStay2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#897884c72dd1e145" class="i field">onCollisionStay2D</a> ?? (<a href="#897884c72dd1e145" class="i field">onCollisionStay2D</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision2D</span>&gt;());
+        }
+ 
+        <b>protected override void</b> <a id="0e76b7249e8876dc" href="../../../../../../R/0e76b7249e8876dc.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#473131beae7edfb7" class="i field">onCollisionEnter2D</a> != <b>null</b>)
+            {
+                <a href="#473131beae7edfb7" class="i field">onCollisionEnter2D</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#b43e169fce29088b" class="i field">onCollisionExit2D</a> != <b>null</b>)
+            {
+                <a href="#b43e169fce29088b" class="i field">onCollisionExit2D</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#897884c72dd1e145" class="i field">onCollisionStay2D</a> != <b>null</b>)
+            {
+                <a href="#897884c72dd1e145" class="i field">onCollisionStay2D</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

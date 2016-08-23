@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html><head><title>Disposable.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(76);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Disposables/Disposable.cs" target="_top">Assets\Plugins\UniRx\Scripts\Disposables\Disposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static class</b> <a id="c3a12a687132a528" href="../../../../../R/c3a12a687132a528.html" target="n" data-glyph="0,0" class="t t">Disposable</a>
+    {
+        <b>public static readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="3fefdbd38ef98838" href="../../../../../R/3fefdbd38ef98838.html" target="n" data-glyph="42,1" class="i field">Empty</a> = <a href="#102d6dcba7992f29" class="t t">EmptyDisposable</a>.<a href="#bcae272e6ec6047a" class="i field">Singleton</a>;
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b275cfac3821c494" href="../../../../../R/b275cfac3821c494.html" target="n" data-glyph="72,1" class="i method">Create</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r0 rd" class="r0 r">disposeAction</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#442642b28ab99ff5" class="t constructor">AnonymousDisposable</a>(<span class="r0 r">disposeAction</span>);
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="35a7f11f3d2fc9c1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CreateWithState</a>&lt;<span id="r1 rd t" class="r1 r t">TState</span>&gt;(<span class="r1 r t">TState</span> <span id="r2 rd" class="r2 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r1 r t">TState</span>&gt; <span id="r3 rd" class="r3 r">disposeAction</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#828177458b86ba8f" class="t constructor">AnonymousDisposable</a>&lt;<span class="r1 r t">TState</span>&gt;(<span class="r2 r">state</span>, <span class="r3 r">disposeAction</span>);
+        }
+ 
+        <b>class</b> <a id="102d6dcba7992f29" href="../../../../../R/102d6dcba7992f29.html" target="n" data-glyph="4,1" class="t t">EmptyDisposable</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>public static</b> <a href="#102d6dcba7992f29" class="t t">EmptyDisposable</a> <a id="bcae272e6ec6047a" href="../../../../../R/bcae272e6ec6047a.html" target="n" data-glyph="42,2" class="i field">Singleton</a> = <b>new</b> <a href="#6fdbccf4ecff716b" class="t constructor">EmptyDisposable</a>();
+ 
+            <b>private</b> <a id="6fdbccf4ecff716b" href="../../../../../R/6fdbccf4ecff716b.html" target="n" data-glyph="76,2" class="i constructor">EmptyDisposable</a>()
+            {
+ 
+            }
+ 
+            <b>public void</b> <a id="43573c8ef22eae61" href="../../../../../R/43573c8ef22eae61.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+            }
+        }
+ 
+        <b>class</b> <a id="e7108685545b7af4" href="../../../../../R/e7108685545b7af4.html" target="n" data-glyph="4,1" class="t t">AnonymousDisposable</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>bool</b> <a id="a869de59be8d8fe8" href="../../../../../R/a869de59be8d8fe8.html" target="n" data-glyph="46,2" class="i field">isDisposed</a> = <b>false</b>;
+            <b>readonly</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="4113135a4723f6aa" href="../../../../../R/4113135a4723f6aa.html" target="n" data-glyph="46,2" class="i field">dispose</a>;
+ 
+            <b>public</b> <a id="442642b28ab99ff5" href="../../../../../R/442642b28ab99ff5.html" target="n" data-glyph="72,2" class="i constructor">AnonymousDisposable</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r4 rd" class="r4 r">dispose</span>)
+            {
+                <a href="#e7108685545b7af4" class="k">this</a>.<a href="#4113135a4723f6aa" class="i field">dispose</a> = <span class="r4 r">dispose</span>;
+            }
+ 
+            <b>public void</b> <a id="d239be277c94e21e" href="../../../../../R/d239be277c94e21e.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (!<a href="#a869de59be8d8fe8" class="i field">isDisposed</a>)
+                {
+                    <a href="#a869de59be8d8fe8" class="i field">isDisposed</a> = <b>true</b>;
+                    <a href="#4113135a4723f6aa" class="i field">dispose</a>();
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="d39b47d88cdb7563" href="../../../../../R/d39b47d88cdb7563.html" target="n" data-glyph="4,1" class="t t">AnonymousDisposable</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>bool</b> <a id="dbd52b1ec2a202c2" href="../../../../../R/dbd52b1ec2a202c2.html" target="n" data-glyph="46,2" class="i field">isDisposed</a> = <b>false</b>;
+            <b>readonly</b> <span class="r5 r t">T</span> <a id="c3212490f9059420" href="../../../../../R/c3212490f9059420.html" target="n" data-glyph="46,2" class="i field">state</a>;
+            <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r5 r t">T</span>&gt; <a id="7ef37a8230358da5" href="../../../../../R/7ef37a8230358da5.html" target="n" data-glyph="46,2" class="i field">dispose</a>;
+ 
+            <b>public</b> <a id="828177458b86ba8f" href="../../../../../R/828177458b86ba8f.html" target="n" data-glyph="72,2" class="i constructor">AnonymousDisposable</a>(<span class="r5 r t">T</span> <span id="r6 rd" class="r6 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r5 r t">T</span>&gt; <span id="r7 rd" class="r7 r">dispose</span>)
+            {
+                <a href="#d39b47d88cdb7563" class="k">this</a>.<a href="#c3212490f9059420" class="i field">state</a> = <span class="r6 r">state</span>;
+                <a href="#d39b47d88cdb7563" class="k">this</a>.<a href="#7ef37a8230358da5" class="i field">dispose</a> = <span class="r7 r">dispose</span>;
+            }
+ 
+            <b>public void</b> <a id="a189e2bf41339aa4" href="../../../../../R/a189e2bf41339aa4.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>if</b> (!<a href="#dbd52b1ec2a202c2" class="i field">isDisposed</a>)
+                {
+                    <a href="#dbd52b1ec2a202c2" class="i field">isDisposed</a> = <b>true</b>;
+                    <a href="#7ef37a8230358da5" class="i field">dispose</a>(<a href="#c3212490f9059420" class="i field">state</a>);
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample01_ObservableWWW.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(82);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample01_ObservableWWW.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample01_ObservableWWW.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_METRO</span> || <span class="i">UNITY_WP8</span>)
+ 
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <span class="c">// sample script, attach your object.</span>
+    <b>public class</b> <a id="88e80a23d5ddb53e" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="6bc45272865123df">Sample01_ObservableWWW</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>void</b> <a id="d7d7e58667a20a4b" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// Basic: Download from google.</span>
+            {
+                <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://google.co.jp/&quot;</span>)
+                    .<span class="i">Subscribe</span>(
+                        <span id="r0 rd" class="r0 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r0 r">x</span>.<a href="@0@mscorlib/A.html#8124961f027d9ac9" class="i method">Substring</a>(0, 100)), <span class="c">// onSuccess</span>
+                        <span id="r1 rd" class="r1 r">ex</span> =&gt; <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r1 r">ex</span>)); <span class="c">// onError</span>
+            }
+ 
+            <span class="c">// Linear Pattern with LINQ Query Expressions</span>
+            <span class="c">// download after google, start bing download</span>
+            {
+                <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r2 rd" class="r2 r">query</span> = <b>from</b> <span class="i">google</span> <b>in</b> <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://google.com/&quot;</span>)
+                            <b>from</b> <span class="i">bing</span> <b>in</b> <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://bing.com/&quot;</span>)
+                            <b>select</b> <b>new</b> { <span class="i">google</span>, <span class="i">bing</span> };
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r3 rd" class="r3 r">cancel</span> = <span class="r2 r">query</span>.<span class="i">Subscribe</span>(<span id="r4 rd" class="r4 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r4 r">x</span>.<a href="#002f74aecbe3fbd9" class="i property">google</a>.<a href="@0@mscorlib/A.html#8124961f027d9ac9" class="i method">Substring</a>(0, 100) + <span class="s">&quot;:&quot;</span> + <span class="r4 r">x</span>.<a href="#4909053ce4b7bfc9" class="i property">bing</a>.<a href="@0@mscorlib/A.html#8124961f027d9ac9" class="i method">Substring</a>(0, 100)));
+ 
+                <span class="c">// Call Dispose is cancel downloading.</span>
+                <span class="r3 r">cancel</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+            }
+ 
+            <span class="c">// Observable.WhenAll is for parallel asynchronous operation</span>
+            <span class="c">// (It&#39;s like Observable.Zip but specialized for single async operations like Task.WhenAll of .NET 4)</span>
+            {
+                <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r5 rd" class="r5 r">parallel</span> = <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Concatenate.cs.html#33021115c6e0ee99" class="i method">WhenAll</a>(
+                    <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://google.com/&quot;</span>),
+                    <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://bing.com/&quot;</span>),
+                    <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://unity3d.com/&quot;</span>));
+ 
+                <span class="r5 r">parallel</span>.<span class="i">Subscribe</span>(<span id="r6 rd" class="r6 r">xs</span> =&gt;
+                {
+                    <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r6 r">xs</span>[0].<a href="@0@mscorlib/A.html#8124961f027d9ac9" class="i method">Substring</a>(0, 100)); <span class="c">// google</span>
+                    <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r6 r">xs</span>[1].<a href="@0@mscorlib/A.html#8124961f027d9ac9" class="i method">Substring</a>(0, 100)); <span class="c">// bing</span>
+                    <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r6 r">xs</span>[2].<a href="@0@mscorlib/A.html#8124961f027d9ac9" class="i method">Substring</a>(0, 100)); <span class="c">// unity</span>
+                });
+            }
+ 
+            <span class="c">// with Progress</span>
+            {
+                <span class="c">// notifier for progress</span>
+                <a href="../Scripts/Notifiers/ScheduledNotifier.cs.html#98ec41de600a9d1c" class="k">var</a> <span id="r7 rd" class="r7 r">progressNotifier</span> = <b>new</b> <a href="../Scripts/Notifiers/ScheduledNotifier.cs.html#4fcbaf055adf1fe8" class="t constructor">ScheduledNotifier</a>&lt;<b>float</b>&gt;();
+                <span class="r7 r">progressNotifier</span>.<span class="i">Subscribe</span>(<span id="r8 rd" class="r8 r">x</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r8 r">x</span>)); <span class="c">// write www.progress</span>
+ 
+                <span class="c">// pass notifier to WWW.Get/Post</span>
+                <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://google.com/&quot;</span>, <span class="r9 r">progress</span>: <span class="r7 r">progressNotifier</span>).<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+            }
+ 
+            <span class="c">// with Error</span>
+            {
+                <span class="c">// If WWW has .error, ObservableWWW throws WWWErrorException to onError pipeline.</span>
+                <span class="c">// WWWErrorException has RawErrorMessage, HasResponse, StatusCode, ResponseHeaders</span>
+                <a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#627ef1841f3e038b" class="t t">ObservableWWW</a>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#ce01d6c2ee39f096" class="i method">Get</a>(<span class="s">&quot;http://www.google.com/404&quot;</span>)
+                    .<span class="i">CatchIgnore</span>((<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#9155c59d0fefd54a" class="t t">WWWErrorException</a> <span id="r10 rd" class="r10 r">ex</span>) =&gt;
+                    {
+                        <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r10 r">ex</span>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#4f59d8f549775c41" class="i property">RawErrorMessage</a>);
+                        <b>if</b> (<span class="r10 r">ex</span>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#a30c328f258d9b4a" class="i property">HasResponse</a>)
+                        {
+                            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r10 r">ex</span>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#b33a8f660b02d20c" class="i property">StatusCode</a>);
+                        }
+                        <b>foreach</b> (<a href="@0@mscorlib/A.html#8585965bb176a426" class="k">var</a> <span id="r11 rd" class="r11 r">item</span> <b>in</b> <span class="r10 r">ex</span>.<a href="../Scripts/UnityEngineBridge/ObservableWWW.cs.html#172a7c4c6c28bdf2" class="i property">ResponseHeaders</a>)
+                        {
+                            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r11 r">item</span>.<a href="@0@mscorlib/A.html#f9d1c04feb1af032" class="i property">Key</a> + <span class="s">&quot;:&quot;</span> + <span class="r11 r">item</span>.<a href="@0@mscorlib/A.html#38c0e86cc4b30170" class="i property">Value</a>);
+                        }
+                    })
+                    .<span class="i">Subscribe</span>();
+            }
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

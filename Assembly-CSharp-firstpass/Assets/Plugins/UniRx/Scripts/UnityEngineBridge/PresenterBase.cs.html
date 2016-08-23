@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html><head><title>PresenterBase.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(228);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/PresenterBase.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\PresenterBase.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">// InEditor : Construct Children Dependency</span>
+    <span class="c">// Awake : Construct Parent Dependency</span>
+    <span class="c">// Start(Capture phase)  : Parent to Child, pass argument</span>
+    <span class="c">// Start(Bubbling phase) : Child to Parent, initialize(like constructor)</span>
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Infrastructure interface for PresenterBase`T</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public interface</b> <a id="37414ce34e07779c" href="../../../../../R/37414ce34e07779c.html" target="n" data-glyph="48,0" class="t t">IPresenter</a>
+    {
+        <a href="#37414ce34e07779c" class="t t">IPresenter</a> <a id="2faad1a88f3155e2" href="../../../../../R/2faad1a88f3155e2.html" target="n" data-glyph="102,1" class="i property">Parent</a> { <b>get</b>; }
+        <span class="i">GameObject</span> <a id="888483bc63f8d1b6" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">gameObject</a> { <b>get</b>; }
+        <b>void</b> <a id="729f2dda1f529fc0" href="../../../../../R/729f2dda1f529fc0.html" target="n" data-glyph="72,1" class="i method">RegisterParent</a>(<a href="#37414ce34e07779c" class="t t">IPresenter</a> <span id="r0 rd" class="r0 r">parent</span>);
+        <b>void</b> <a id="71e0cb6699986acc" href="../../../../../R/71e0cb6699986acc.html" target="n" data-glyph="72,1" class="i method">InitializeCore</a>();
+        <b>void</b> <a id="dfe01abce174111f" href="../../../../../R/dfe01abce174111f.html" target="n" data-glyph="72,1" class="i method">StartCapturePhase</a>();
+        <b>void</b> <a id="e54aafbfa724e5c6" href="../../../../../R/e54aafbfa724e5c6.html" target="n" data-glyph="72,1" class="i method">Awake</a>();
+        <b>void</b> <a id="47b80bd6a8ef5904" href="../../../../../R/47b80bd6a8ef5904.html" target="n" data-glyph="72,1" class="i method">ForceInitialize</a>(<b>object</b> <span id="r1 rd" class="r1 r">argument</span>);
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> PresenterBase can control dependency of presenter&#39;s hierarchy.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract class</b> <a id="e78f50387c6ecbbd" href="../../../../../R/e78f50387c6ecbbd.html" target="n" data-glyph="0,0" class="t t"><span id="2d34492dd9932aab">PresenterBase</span></a> : <a href="#e2409cb7857cbe5f" class="t t">PresenterBase</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <b>protected sealed override void</b> <a id="8fc388eaef33c4fa" href="../../../../../R/8fc388eaef33c4fa.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a> <span id="r2 rd" class="r2 r">argument</span>)
+        {
+            <a href="#4771f2b381e29d5d" class="i method">BeforeInitialize</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as Start but called before children initialized, it&#39;s chance for propagate argument to children.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract void</b> <a id="4771f2b381e29d5d" href="../../../../../R/4771f2b381e29d5d.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>();
+ 
+        <b>protected override void</b> <a id="bc75b3bbaf42012e" href="../../../../../R/bc75b3bbaf42012e.html" target="n" data-glyph="75,1" class="i method">Initialize</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a> <span id="r3 rd" class="r3 r">argument</span>)
+        {
+            <a href="#7ec56228ba9c361d" class="i method">Initialize</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Force Start BeforeInitialize/Initialize. If you create presenter dynamically, maybe useful.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="47653f8640188dd9" href="../../../../../R/47653f8640188dd9.html" target="n" data-glyph="72,1" class="i method">ForceInitialize</a>()
+        {
+            <a href="#82d2d279058dcef9" class="i method">ForceInitialize</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as Start but called after all children are initialized.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract void</b> <a id="7ec56228ba9c361d" href="../../../../../R/7ec56228ba9c361d.html" target="n" data-glyph="75,1" class="i method">Initialize</a>();
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> PresenterBase can control dependency of presenter&#39;s hierarchy.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract class</b> <a id="e2409cb7857cbe5f" href="../../../../../R/e2409cb7857cbe5f.html" target="n" data-glyph="0,0" class="t t"><span id="2694580a29bb7bd8">PresenterBase</span></a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt; : <span class="i">MonoBehaviour</span>, <a href="#37414ce34e07779c" class="t t">IPresenter</a>
+    {
+        <b>protected static readonly</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="527c962370ffd5e4" href="../../../../../R/527c962370ffd5e4.html" target="n" data-glyph="45,1" class="i field">EmptyChildren</a> = <b>new</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>[0];
+ 
+        <b>int</b> <a id="00f040e3290bf6d7" href="../../../../../R/00f040e3290bf6d7.html" target="n" data-glyph="46,1" class="i field">childrenCount</a> = 0;
+        <b>int</b> <a id="7e9d38349fe9c7d7" href="../../../../../R/7e9d38349fe9c7d7.html" target="n" data-glyph="46,1" class="i field">currentCalledCount</a> = 0;
+        <b>bool</b> <a id="11d51f7c35c21557" href="../../../../../R/11d51f7c35c21557.html" target="n" data-glyph="46,1" class="i field">isAwaken</a> = <b>false</b>;
+        <b>bool</b> <a id="4829168c5053900a" href="../../../../../R/4829168c5053900a.html" target="n" data-glyph="46,1" class="i field">isInitialized</a> = <b>false</b>;
+        <b>bool</b> <a id="b73f92273494eb12" href="../../../../../R/b73f92273494eb12.html" target="n" data-glyph="46,1" class="i field">isStartedCapturePhase</a> = <b>false</b>;
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="77ad54a6a95149d7" href="../../../../../R/77ad54a6a95149d7.html" target="n" data-glyph="46,1" class="i field">initializeSubject</a> = <b>null</b>;
+        <a href="#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="40721135e849014d" href="../../../../../R/40721135e849014d.html" target="n" data-glyph="46,1" class="i field">children</a> = <b>null</b>; <span class="c">// set from awake</span>
+ 
+        <a href="#37414ce34e07779c" class="t t">IPresenter</a> <a id="43470dce81b54e87" href="../../../../../R/43470dce81b54e87.html" target="n" data-glyph="46,1" class="i field">parent</a> = <b>null</b>;
+        <span class="r4 r t">T</span> <a id="025401fd32b743ee" href="../../../../../R/025401fd32b743ee.html" target="n" data-glyph="46,1" class="i field">argument</a> = <b>default</b>(<span class="r4 r t">T</span>);
+ 
+        <b>public</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a> <a id="e046e43c16524681" href="../../../../../R/e046e43c16524681.html" target="n" data-glyph="102,1" class="i property">Parent</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#43470dce81b54e87" class="i field">parent</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Observable sequence called after initialize completed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="6ca83a97238b107a" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">InitializeAsObservable</a>()
+        {
+            <b>if</b> (<a href="#4829168c5053900a" class="i field">isInitialized</a>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#77ad54a6a95149d7" class="i field">initializeSubject</a> ?? (<a href="#77ad54a6a95149d7" class="i field">initializeSubject</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Propagate(Set) argument.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="280a6c0bc93226a0" href="../../../../../R/280a6c0bc93226a0.html" target="n" data-glyph="72,1" class="i method">PropagateArgument</a>(<span class="r4 r t">T</span> <span id="r5 rd" class="r5 r">argument</span>)
+        {
+            <a href="#e2409cb7857cbe5f" class="k">this</a>.<a href="#025401fd32b743ee" class="i field">argument</a> = <span class="r5 r">argument</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Dependency on hierarchy of this presenter. If Children is empty, you can return this.EmptyChildren.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="327f5cbeef3dfd05" href="../../../../../R/327f5cbeef3dfd05.html" target="n" data-glyph="105,1" class="i property">Children</a> { <b>get</b>; }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as Start but called before children initialized, it&#39;s chance for propagate argument to children.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract void</b> <a id="ca96d3cf7ef02bd3" href="../../../../../R/ca96d3cf7ef02bd3.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>(<span class="r4 r t">T</span> <span id="r6 rd" class="r6 r">argument</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as Start but called after all children are initialized.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected abstract void</b> <a id="2fe917801f6fae0d" href="../../../../../R/2fe917801f6fae0d.html" target="n" data-glyph="75,1" class="i method">Initialize</a>(<span class="r4 r t">T</span> <span id="r7 rd" class="r7 r">argument</span>);
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Force Start BeforeInitialize/Initialize. If you create presenter dynamically, maybe useful.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="82d2d279058dcef9" href="../../../../../R/82d2d279058dcef9.html" target="n" data-glyph="72,1" class="i method">ForceInitialize</a>(<span class="r4 r t">T</span> <span id="r8 rd" class="r8 r">argument</span>)
+        {
+            <a href="#0aaf272e9a61e602" class="i method">Awake</a>();
+            <a href="#280a6c0bc93226a0" class="i method">PropagateArgument</a>(<span class="r8 r">argument</span>);
+            <a href="#c1efe3022b543e51" class="i method">Start</a>();
+        }
+ 
+        <b>void</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>.<a href="#47b80bd6a8ef5904" class="i method">ForceInitialize</a>(<b>object</b> <span id="r9 rd" class="r9 r">argument</span>)
+        {
+            <a href="#82d2d279058dcef9" class="i method">ForceInitialize</a>((<span class="r4 r t">T</span>)<span class="r9 r">argument</span>);
+        }
+ 
+        <b>void</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>.<a href="#e54aafbfa724e5c6" class="i method">Awake</a>()
+        {
+            <b>if</b> (<a href="#11d51f7c35c21557" class="i field">isAwaken</a>) <b>return</b>;
+            <a href="#11d51f7c35c21557" class="i field">isAwaken</a> = <b>true</b>;
+ 
+            <a href="#40721135e849014d" class="i field">children</a> = <a href="#327f5cbeef3dfd05" class="i property">Children</a>;
+            <a href="#00f040e3290bf6d7" class="i field">childrenCount</a> = <a href="#40721135e849014d" class="i field">children</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+ 
+            <b>for</b> (<b>int</b> <span id="r10 rd" class="r10 r">i</span> = 0; <span class="r10 r">i</span> &lt; <a href="#40721135e849014d" class="i field">children</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r10 r">i</span>++)
+            {
+                <a href="#37414ce34e07779c" class="k">var</a> <span id="r11 rd" class="r11 r">child</span> = <a href="#40721135e849014d" class="i field">children</a>[<span class="r10 r">i</span>];
+                <span class="r11 r">child</span>.<a href="#729f2dda1f529fc0" class="i method">RegisterParent</a>(<a href="#e2409cb7857cbe5f" class="k">this</a>);
+                <span class="r11 r">child</span>.<a href="#e54aafbfa724e5c6" class="i method">Awake</a>(); <span class="c">// call Awake directly</span>
+            }
+            <a href="#dfa6fa2da43c62ad" class="i method">OnAwake</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Infrastructure method called by UnityEngine. If you needs override Awake, override OnAwake.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="0aaf272e9a61e602" href="../../../../../R/0aaf272e9a61e602.html" target="n" data-glyph="75,1" class="i method">Awake</a>()
+        {
+            (<a href="#e2409cb7857cbe5f" class="k">this</a> <b>as</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>).<a href="#e54aafbfa724e5c6" class="i method">Awake</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">An alternative of Awake.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual void</b> <a id="dfa6fa2da43c62ad" href="../../../../../R/dfa6fa2da43c62ad.html" target="n" data-glyph="75,1" class="i method">OnAwake</a>()
+        {
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Infrastructure method called by UnityEngine. don&#39;t call directly, don&#39;t override, don&#39;t hide!</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="c1efe3022b543e51" href="../../../../../R/c1efe3022b543e51.html" target="n" data-glyph="75,1" class="i method">Start</a>()
+        {
+            <b>if</b> (<a href="#b73f92273494eb12" class="i field">isStartedCapturePhase</a>) <b>return</b>;
+            <a href="#37414ce34e07779c" class="k">var</a> <span id="r12 rd" class="r12 r">root</span> = <a href="#43470dce81b54e87" class="i field">parent</a>;
+ 
+            <span class="c">// Search root object</span>
+            <b>if</b> (<span class="r12 r">root</span> == <b>null</b>)
+            {
+                <span class="r12 r">root</span> = <a href="#e2409cb7857cbe5f" class="k">this</a>;
+            }
+            <b>else</b>
+            {
+                <b>while</b> (<span class="r12 r">root</span>.<a href="#2faad1a88f3155e2" class="i property">Parent</a> != <b>null</b>)
+                {
+                    <span class="r12 r">root</span> = <span class="r12 r">root</span>.<a href="#2faad1a88f3155e2" class="i property">Parent</a>;
+                }
+            }
+ 
+            <span class="r12 r">root</span>.<a href="#dfe01abce174111f" class="i method">StartCapturePhase</a>();
+        }
+ 
+        <b>void</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>.<a href="#dfe01abce174111f" class="i method">StartCapturePhase</a>()
+        {
+            <a href="#b73f92273494eb12" class="i field">isStartedCapturePhase</a> = <b>true</b>;
+            <a href="#ca96d3cf7ef02bd3" class="i method">BeforeInitialize</a>(<a href="#025401fd32b743ee" class="i field">argument</a>);
+ 
+            <b>for</b> (<b>int</b> <span id="r13 rd" class="r13 r">i</span> = 0; <span class="r13 r">i</span> &lt; <a href="#40721135e849014d" class="i field">children</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r13 r">i</span>++)
+            {
+                <a href="#37414ce34e07779c" class="k">var</a> <span id="r14 rd" class="r14 r">child</span> = <a href="#40721135e849014d" class="i field">children</a>[<span class="r13 r">i</span>];
+                <span class="r14 r">child</span>.<a href="#dfe01abce174111f" class="i method">StartCapturePhase</a>();
+            }
+ 
+            <span class="c">// Start Bubbling phase</span>
+            <b>if</b> (<a href="#40721135e849014d" class="i field">children</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == 0)
+            {
+                <a href="#2fe917801f6fae0d" class="i method">Initialize</a>(<a href="#025401fd32b743ee" class="i field">argument</a>);
+                <a href="#4829168c5053900a" class="i field">isInitialized</a> = <b>true</b>;
+                <b>if</b> (<a href="#77ad54a6a95149d7" class="i field">initializeSubject</a> != <b>null</b>) { <a href="#77ad54a6a95149d7" class="i field">initializeSubject</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#77ad54a6a95149d7" class="i field">initializeSubject</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+                <b>if</b> (<a href="#43470dce81b54e87" class="i field">parent</a> != <b>null</b>)
+                {
+                    <a href="#43470dce81b54e87" class="i field">parent</a>.<a href="#71e0cb6699986acc" class="i method">InitializeCore</a>();
+                }
+            }
+        }
+ 
+        <b>void</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>.<a href="#729f2dda1f529fc0" class="i method">RegisterParent</a>(<a href="#37414ce34e07779c" class="t t">IPresenter</a> <span id="r15 rd" class="r15 r">parent</span>)
+        {
+            <b>if</b> (<a href="#e2409cb7857cbe5f" class="k">this</a>.<a href="#43470dce81b54e87" class="i field">parent</a> != <b>null</b>) <b>throw</b> <b>new</b> <span class="t">InvalidOperationException</span>(<span class="s">&quot;PresenterBase can&#39;t register multiple parent. Name:&quot;</span> + <a href="#e2409cb7857cbe5f" class="k">this</a>.<span class="i">name</span>);
+ 
+            <a href="#e2409cb7857cbe5f" class="k">this</a>.<a href="#43470dce81b54e87" class="i field">parent</a> = <span class="r15 r">parent</span>;
+        }
+ 
+        <b>void</b> <a href="#37414ce34e07779c" class="t t">IPresenter</a>.<a href="#71e0cb6699986acc" class="i method">InitializeCore</a>()
+        {
+            <a href="#7e9d38349fe9c7d7" class="i field">currentCalledCount</a> += 1;
+            <b>if</b> (<a href="#00f040e3290bf6d7" class="i field">childrenCount</a> == <a href="#7e9d38349fe9c7d7" class="i field">currentCalledCount</a>)
+            {
+                <a href="#2fe917801f6fae0d" class="i method">Initialize</a>(<a href="#025401fd32b743ee" class="i field">argument</a>);
+                <a href="#4829168c5053900a" class="i field">isInitialized</a> = <b>true</b>;
+                <b>if</b> (<a href="#77ad54a6a95149d7" class="i field">initializeSubject</a> != <b>null</b>) { <a href="#77ad54a6a95149d7" class="i field">initializeSubject</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#77ad54a6a95149d7" class="i field">initializeSubject</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+                <b>if</b> (<a href="#43470dce81b54e87" class="i field">parent</a> != <b>null</b>)
+                {
+                    <a href="#43470dce81b54e87" class="i field">parent</a>.<a href="#71e0cb6699986acc" class="i method">InitializeCore</a>();
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

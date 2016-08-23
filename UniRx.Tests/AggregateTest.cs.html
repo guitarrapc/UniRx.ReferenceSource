@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html><head><title>AggregateTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(35);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/AggregateTest.cs" target="_top">AggregateTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>.<span class="i n">Operators</span>
+{
+    [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="e5e8be770263104f" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="2eb911539feed84e">AggregateTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="7fbcd49e7abe6475" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Scan</a>()
+        {
+            <a href="/UniRx/A.html#eddc496e11ca2570" class="k">var</a> <span id="r0 rd" class="r0 r">range</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5);
+ 
+            <span class="r0 r">range</span>.<a href="/UniRx/A.html#59a9f276fb3a7db3" class="i method">Scan</a>((<span id="r1 rd" class="r1 r">x</span>, <span id="r2 rd" class="r2 r">y</span>) =&gt; <span class="r1 r">x</span> + <span class="r2 r">y</span>).<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(1, 3, 6, 10, 15);
+            <span class="r0 r">range</span>.<a href="/UniRx/A.html#fab4f269f6171d74" class="i method">Scan</a>(100, (<span id="r3 rd" class="r3 r">x</span>, <span id="r4 rd" class="r4 r">y</span>) =&gt; <span class="r3 r">x</span> + <span class="r4 r">y</span>).<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(101, 103, 106, 110, 115);
+ 
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#59a9f276fb3a7db3" class="i method">Scan</a>((<span id="r5 rd" class="r5 r">x</span>, <span id="r6 rd" class="r6 r">y</span>) =&gt; <span class="r5 r">x</span> + <span class="r6 r">y</span>).<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>();
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#fab4f269f6171d74" class="i method">Scan</a>(100, (<span id="r7 rd" class="r7 r">x</span>, <span id="r8 rd" class="r8 r">y</span>) =&gt; <span class="r7 r">x</span> + <span class="r8 r">y</span>).<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="a03ab98dbdf63d7b" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Aggregate</a>()
+        {
+            <a href="Tools/ChainingAssertion.Unity.cs.html#3aeb75bd766c7c2b" class="t t">AssertEx</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#d78e2baeb229601c" class="i method">Throws</a>&lt;<a href="@0@mscorlib/A.html#beac22dfca574cd4" class="t t">InvalidOperationException</a>&gt;(() =&gt; <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#eeb2b9c0c750d738" class="i method">Aggregate</a>((<span id="r9 rd" class="r9 r">x</span>, <span id="r10 rd" class="r10 r">y</span>) =&gt; <span class="r9 r">x</span> + <span class="r10 r">y</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>());
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#eeb2b9c0c750d738" class="i method">Aggregate</a>((<span id="r11 rd" class="r11 r">x</span>, <span id="r12 rd" class="r12 r">y</span>) =&gt; <span class="r11 r">x</span> + <span class="r12 r">y</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(15);
+ 
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#724129f75426324e" class="i method">Aggregate</a>(100, (<span id="r13 rd" class="r13 r">x</span>, <span id="r14 rd" class="r14 r">y</span>) =&gt; <span class="r13 r">x</span> + <span class="r14 r">y</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(100);
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#724129f75426324e" class="i method">Aggregate</a>(100, (<span id="r15 rd" class="r15 r">x</span>, <span id="r16 rd" class="r16 r">y</span>) =&gt; <span class="r15 r">x</span> + <span class="r16 r">y</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(115);
+ 
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;().<a href="/UniRx/A.html#ab8b059326ac3794" class="i method">Aggregate</a>(100, (<span id="r17 rd" class="r17 r">x</span>, <span id="r18 rd" class="r18 r">y</span>) =&gt; <span class="r17 r">x</span> + <span class="r18 r">y</span>, <span id="r19 rd" class="r19 r">x</span> =&gt; <span class="r19 r">x</span> + <span class="r19 r">x</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(200);
+            <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 5).<a href="/UniRx/A.html#ab8b059326ac3794" class="i method">Aggregate</a>(100, (<span id="r20 rd" class="r20 r">x</span>, <span id="r21 rd" class="r21 r">y</span>) =&gt; <span class="r20 r">x</span> + <span class="r21 r">y</span>, <span id="r22 rd" class="r22 r">x</span> =&gt; <span class="r22 r">x</span> + <span class="r22 r">x</span>).<a href="/UniRx/A.html#5b4996ad0a23a062" class="i method">Wait</a>().<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(230);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

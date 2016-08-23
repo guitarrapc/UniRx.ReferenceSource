@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html><head><title>MultipleAssignmentDisposable.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(69);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Disposables/MultipleAssignmentDisposable.cs" target="_top">Assets\Plugins\UniRx\Scripts\Disposables\MultipleAssignmentDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="34d257b3f0ebdeee" href="../../../../../R/34d257b3f0ebdeee.html" target="n" data-glyph="0,0" class="t t"><span id="74913845da81a391">MultipleAssignmentDisposable</span></a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>
+    {
+        <b>static readonly</b> <a href="BooleanDisposable.cs.html#45b9c7444c27222b" class="t t">BooleanDisposable</a> <a id="85b9f2f2a69e984e" href="../../../../../R/85b9f2f2a69e984e.html" target="n" data-glyph="46,1" class="i field">True</a> = <b>new</b> <a href="BooleanDisposable.cs.html#88739c7f5f8c7727" class="t constructor">BooleanDisposable</a>(<b>true</b>);
+ 
+        <b>object</b> <a id="ce1fc6beae028673" href="../../../../../R/ce1fc6beae028673.html" target="n" data-glyph="46,1" class="i field">gate</a> = <b>new</b> <b>object</b>();
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="65aedc3df65089dd" href="../../../../../R/65aedc3df65089dd.html" target="n" data-glyph="46,1" class="i field">current</a>;
+ 
+        <b>public bool</b> <a id="4fc7785dcd92e557" href="../../../../../R/4fc7785dcd92e557.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a>
+        {
+            <b>get</b>
+            {
+                <b>lock</b> (<a href="#ce1fc6beae028673" class="i field">gate</a>)
+                {
+                    <b>return</b> <a href="#65aedc3df65089dd" class="i field">current</a> == <a href="#85b9f2f2a69e984e" class="i field">True</a>;
+                }
+            }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a340c8e5dd3c2d29" href="../../../../../R/a340c8e5dd3c2d29.html" target="n" data-glyph="102,1" class="i property">Disposable</a>
+        {
+            <b>get</b>
+            {
+                <b>lock</b> (<a href="#ce1fc6beae028673" class="i field">gate</a>)
+                {
+                    <b>return</b> (<a href="#65aedc3df65089dd" class="i field">current</a> == <a href="#85b9f2f2a69e984e" class="i field">True</a>)
+                        ? <span class="i n">UniRx</span>.<a href="Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>
+                        : <a href="#65aedc3df65089dd" class="i field">current</a>;
+                }
+            }
+            <b>set</b>
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r0 rd" class="r0 r">shouldDispose</span> = <b>false</b>;
+                <b>lock</b> (<a href="#ce1fc6beae028673" class="i field">gate</a>)
+                {
+                    <span class="r0 r">shouldDispose</span> = (<a href="#65aedc3df65089dd" class="i field">current</a> == <a href="#85b9f2f2a69e984e" class="i field">True</a>);
+                    <b>if</b> (!<span class="r0 r">shouldDispose</span>)
+                    {
+                        <a href="#65aedc3df65089dd" class="i field">current</a> = <b>value</b>;
+                    }
+                }
+                <b>if</b> (<span class="r0 r">shouldDispose</span> &amp;&amp; <b>value</b> != <b>null</b>)
+                {
+                    <b>value</b>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+ 
+        <b>public void</b> <a id="abcea6fd68e799a4" href="../../../../../R/abcea6fd68e799a4.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r1 rd" class="r1 r">old</span> = <b>null</b>;
+ 
+            <b>lock</b> (<a href="#ce1fc6beae028673" class="i field">gate</a>)
+            {
+                <b>if</b> (<a href="#65aedc3df65089dd" class="i field">current</a> != <a href="#85b9f2f2a69e984e" class="i field">True</a>)
+                {
+                    <span class="r1 r">old</span> = <a href="#65aedc3df65089dd" class="i field">current</a>;
+                    <a href="#65aedc3df65089dd" class="i field">current</a> = <a href="#85b9f2f2a69e984e" class="i field">True</a>;
+                }
+            }
+ 
+            <b>if</b> (<span class="r1 r">old</span> != <b>null</b>) <span class="r1 r">old</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

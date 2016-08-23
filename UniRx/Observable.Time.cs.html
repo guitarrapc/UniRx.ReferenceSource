@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Time.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(140);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Observable.Time.cs" target="_top">Observable.Time.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">// Timer, Interval, etc...</span>
+    <b>public static</b> <a href="P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="5a83b602fef2c922" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r0 rd" class="r0 r">period</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#d38b722fb6cacee4" class="t constructor">TimerObservable</a>(<span class="r0 r">period</span>, <span class="r0 r">period</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="acbea51cd555225d" href="R/acbea51cd555225d.html" target="n" data-glyph="72,1" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r1 rd" class="r1 r">period</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r2 rd" class="r2 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#d38b722fb6cacee4" class="t constructor">TimerObservable</a>(<span class="r1 r">period</span>, <span class="r1 r">period</span>, <span class="r2 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="b4fca3e8d91a2bd3" href="R/b4fca3e8d91a2bd3.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r3 rd" class="r3 r">dueTime</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#d38b722fb6cacee4" class="t constructor">TimerObservable</a>(<span class="r3 r">dueTime</span>, <b>null</b>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="dc83463e9965c7cd" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r4 rd" class="r4 r">dueTime</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#3f122b11393e4395" class="t constructor">TimerObservable</a>(<span class="r4 r">dueTime</span>, <b>null</b>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="0d920bee156e6019" href="R/0d920bee156e6019.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r5 rd" class="r5 r">dueTime</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r6 rd" class="r6 r">period</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#d38b722fb6cacee4" class="t constructor">TimerObservable</a>(<span class="r5 r">dueTime</span>, <span class="r6 r">period</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="55937492b8ef853c" href="R/55937492b8ef853c.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r7 rd" class="r7 r">dueTime</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r8 rd" class="r8 r">period</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#3f122b11393e4395" class="t constructor">TimerObservable</a>(<span class="r7 r">dueTime</span>, <span class="r8 r">period</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="08e19f452b85bc58" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r9 rd" class="r9 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r10 rd" class="r10 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#d38b722fb6cacee4" class="t constructor">TimerObservable</a>(<span class="r9 r">dueTime</span>, <b>null</b>, <span class="r10 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="b780010db85016d9" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r11 rd" class="r11 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r12 rd" class="r12 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#3f122b11393e4395" class="t constructor">TimerObservable</a>(<span class="r11 r">dueTime</span>, <b>null</b>, <span class="r12 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="5ac66b03ea88dc59" href="R/5ac66b03ea88dc59.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r13 rd" class="r13 r">dueTime</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r14 rd" class="r14 r">period</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r15 rd" class="r15 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#d38b722fb6cacee4" class="t constructor">TimerObservable</a>(<span class="r13 r">dueTime</span>, <span class="r14 r">period</span>, <span class="r15 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="1986b1ce44aa04e4" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Timer</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r16 rd" class="r16 r">dueTime</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r17 rd" class="r17 r">period</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r18 rd" class="r18 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timer.cs.html#3f122b11393e4395" class="t constructor">TimerObservable</a>(<span class="r16 r">dueTime</span>, <span class="r17 r">period</span>, <span class="r18 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="Timestamped.cs.html#f2d16e0ebc3cf315" class="t t">Timestamped</a>&lt;<span class="r19 r t">TSource</span>&gt;&gt; <a id="023623f2b8633453" href="R/023623f2b8633453.html" target="n" data-glyph="220,1" class="i method">Timestamp</a>&lt;<span id="r19 rd t" class="r19 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r19 r t">TSource</span>&gt; <span id="r20 rd" class="r20 r">source</span>)
+        {
+            <b>return</b> <a href="#f678319c1a8d815b" class="i method">Timestamp</a>&lt;<span class="r19 r t">TSource</span>&gt;(<span class="r20 r">source</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="Timestamped.cs.html#f2d16e0ebc3cf315" class="t t">Timestamped</a>&lt;<span class="r21 r t">TSource</span>&gt;&gt; <a id="f678319c1a8d815b" href="R/f678319c1a8d815b.html" target="n" data-glyph="220,1" class="i method">Timestamp</a>&lt;<span id="r21 rd t" class="r21 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r21 r t">TSource</span>&gt; <span id="r22 rd" class="r22 r">source</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r23 rd" class="r23 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timestamp.cs.html#5d65070b7d5ac903" class="t constructor">TimestampObservable</a>&lt;<span class="r21 r t">TSource</span>&gt;(<span class="r22 r">source</span>, <span class="r23 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i n">UniRx</span>.<a href="TimeInterval.cs.html#92d2b7cdb34901ec" class="t t">TimeInterval</a>&lt;<span class="r24 r t">TSource</span>&gt;&gt; <a id="6ed6a121e5de823f" href="R/6ed6a121e5de823f.html" target="n" data-glyph="220,1" class="i method">TimeInterval</a>&lt;<span id="r24 rd t" class="r24 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r24 r t">TSource</span>&gt; <span id="r25 rd" class="r25 r">source</span>)
+        {
+            <b>return</b> <a href="#728e618634b0e72c" class="i method">TimeInterval</a>(<span class="r25 r">source</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i n">UniRx</span>.<a href="TimeInterval.cs.html#92d2b7cdb34901ec" class="t t">TimeInterval</a>&lt;<span class="r26 r t">TSource</span>&gt;&gt; <a id="728e618634b0e72c" href="R/728e618634b0e72c.html" target="n" data-glyph="220,1" class="i method">TimeInterval</a>&lt;<span id="r26 rd t" class="r26 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r26 r t">TSource</span>&gt; <span id="r27 rd" class="r27 r">source</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r28 rd" class="r28 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/TimeInterval.cs.html#750b42bad634a0ce" class="t constructor">TimeIntervalObservable</a>&lt;<span class="r26 r t">TSource</span>&gt;(<span class="r27 r">source</span>, <span class="r28 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r29 r t">T</span>&gt; <a id="ab50c0034dec7f59" href="R/ab50c0034dec7f59.html" target="n" data-glyph="220,1" class="i method">Delay</a>&lt;<span id="r29 rd t" class="r29 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r29 r t">T</span>&gt; <span id="r30 rd" class="r30 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r31 rd" class="r31 r">dueTime</span>)
+        {
+            <b>return</b> <span class="r30 r">source</span>.<a href="#89ac35e3bfbe9cce" class="i method">Delay</a>(<span class="r31 r">dueTime</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r32 r t">TSource</span>&gt; <a id="89ac35e3bfbe9cce" href="R/89ac35e3bfbe9cce.html" target="n" data-glyph="220,1" class="i method">Delay</a>&lt;<span id="r32 rd t" class="r32 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r32 r t">TSource</span>&gt; <span id="r33 rd" class="r33 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r34 rd" class="r34 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r35 rd" class="r35 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Delay.cs.html#a060571d158f1b6f" class="t constructor">DelayObservable</a>&lt;<span class="r32 r t">TSource</span>&gt;(<span class="r33 r">source</span>, <span class="r34 r">dueTime</span>, <span class="r35 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r36 r t">T</span>&gt; <a id="8ac01ebe7b9e230d" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Sample</a>&lt;<span id="r36 rd t" class="r36 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r36 r t">T</span>&gt; <span id="r37 rd" class="r37 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r38 rd" class="r38 r">interval</span>)
+        {
+            <b>return</b> <span class="r37 r">source</span>.<a href="#1a18810c0b83f41d" class="i method">Sample</a>(<span class="r38 r">interval</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r39 r t">T</span>&gt; <a id="1a18810c0b83f41d" href="R/1a18810c0b83f41d.html" target="n" data-glyph="220,1" class="i method">Sample</a>&lt;<span id="r39 rd t" class="r39 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r39 r t">T</span>&gt; <span id="r40 rd" class="r40 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r41 rd" class="r41 r">interval</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r42 rd" class="r42 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Sample.cs.html#5b41d3ba6c78ca82" class="t constructor">SampleObservable</a>&lt;<span class="r39 r t">T</span>&gt;(<span class="r40 r">source</span>, <span class="r41 r">interval</span>, <span class="r42 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r43 r t">TSource</span>&gt; <a id="b11b67c121f34201" href="R/b11b67c121f34201.html" target="n" data-glyph="220,1" class="i method">Throttle</a>&lt;<span id="r43 rd t" class="r43 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r43 r t">TSource</span>&gt; <span id="r44 rd" class="r44 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r45 rd" class="r45 r">dueTime</span>)
+        {
+            <b>return</b> <span class="r44 r">source</span>.<a href="#30056d6297b77248" class="i method">Throttle</a>(<span class="r45 r">dueTime</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r46 r t">TSource</span>&gt; <a id="30056d6297b77248" href="R/30056d6297b77248.html" target="n" data-glyph="220,1" class="i method">Throttle</a>&lt;<span id="r46 rd t" class="r46 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r46 r t">TSource</span>&gt; <span id="r47 rd" class="r47 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r48 rd" class="r48 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r49 rd" class="r49 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Throttle.cs.html#88bc6f820391944c" class="t constructor">ThrottleObservable</a>&lt;<span class="r46 r t">TSource</span>&gt;(<span class="r47 r">source</span>, <span class="r48 r">dueTime</span>, <span class="r49 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r50 r t">TSource</span>&gt; <a id="1fb7c80eee525412" href="R/1fb7c80eee525412.html" target="n" data-glyph="220,1" class="i method">ThrottleFirst</a>&lt;<span id="r50 rd t" class="r50 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r50 r t">TSource</span>&gt; <span id="r51 rd" class="r51 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r52 rd" class="r52 r">dueTime</span>)
+        {
+            <b>return</b> <span class="r51 r">source</span>.<a href="#4ff639fcec41d8f0" class="i method">ThrottleFirst</a>(<span class="r52 r">dueTime</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r53 r t">TSource</span>&gt; <a id="4ff639fcec41d8f0" href="R/4ff639fcec41d8f0.html" target="n" data-glyph="220,1" class="i method">ThrottleFirst</a>&lt;<span id="r53 rd t" class="r53 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r53 r t">TSource</span>&gt; <span id="r54 rd" class="r54 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r55 rd" class="r55 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r56 rd" class="r56 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/ThrottleFirst.cs.html#dbb79b9821cd887f" class="t constructor">ThrottleFirstObservable</a>&lt;<span class="r53 r t">TSource</span>&gt;(<span class="r54 r">source</span>, <span class="r55 r">dueTime</span>, <span class="r56 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r57 r t">T</span>&gt; <a id="a048e8930c90f84f" href="R/a048e8930c90f84f.html" target="n" data-glyph="220,1" class="i method">Timeout</a>&lt;<span id="r57 rd t" class="r57 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r57 r t">T</span>&gt; <span id="r58 rd" class="r58 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r59 rd" class="r59 r">dueTime</span>)
+        {
+            <b>return</b> <span class="r58 r">source</span>.<a href="#69363bf8c2e4dd5f" class="i method">Timeout</a>(<span class="r59 r">dueTime</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r60 r t">T</span>&gt; <a id="69363bf8c2e4dd5f" href="R/69363bf8c2e4dd5f.html" target="n" data-glyph="220,1" class="i method">Timeout</a>&lt;<span id="r60 rd t" class="r60 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r60 r t">T</span>&gt; <span id="r61 rd" class="r61 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r62 rd" class="r62 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r63 rd" class="r63 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timeout.cs.html#5846847aa75e61d3" class="t constructor">TimeoutObservable</a>&lt;<span class="r60 r t">T</span>&gt;(<span class="r61 r">source</span>, <span class="r62 r">dueTime</span>, <span class="r63 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r64 r t">T</span>&gt; <a id="a466aead9e29fe79" href="R/a466aead9e29fe79.html" target="n" data-glyph="220,1" class="i method">Timeout</a>&lt;<span id="r64 rd t" class="r64 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r64 r t">T</span>&gt; <span id="r65 rd" class="r65 r">source</span>, <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r66 rd" class="r66 r">dueTime</span>)
+        {
+            <b>return</b> <span class="r65 r">source</span>.<a href="#79b7e0f0c249c5fa" class="i method">Timeout</a>(<span class="r66 r">dueTime</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r67 r t">T</span>&gt; <a id="79b7e0f0c249c5fa" href="R/79b7e0f0c249c5fa.html" target="n" data-glyph="220,1" class="i method">Timeout</a>&lt;<span id="r67 rd t" class="r67 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r67 r t">T</span>&gt; <span id="r68 rd" class="r68 r">source</span>, <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r69 rd" class="r69 r">dueTime</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r70 rd" class="r70 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Timeout.cs.html#64195d90b9dabf25" class="t constructor">TimeoutObservable</a>&lt;<span class="r67 r t">T</span>&gt;(<span class="r68 r">source</span>, <span class="r69 r">dueTime</span>, <span class="r70 r">scheduler</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

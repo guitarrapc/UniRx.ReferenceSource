@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableTrigger2DTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(67);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTrigger2DTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTrigger2DTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="b9c0b85bb1322a9b" href="../../../../../../R/b9c0b85bb1322a9b.html" target="n" data-glyph="0,0" class="t t"><span id="c38fcf475b15bc0b">ObservableTrigger2DTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>
+    {
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider2D</span>&gt; <a id="cb0e4491e0584967" href="../../../../../../R/cb0e4491e0584967.html" target="n" data-glyph="46,1" class="i field">onTriggerEnter2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object enters a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="6487a830e4b705b9" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnTriggerEnter2D</a>(<span class="i">Collider2D</span> <span id="r0 rd" class="r0 r">other</span>)
+        {
+            <b>if</b> (<a href="#cb0e4491e0584967" class="i field">onTriggerEnter2D</a> != <b>null</b>) <a href="#cb0e4491e0584967" class="i field">onTriggerEnter2D</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r0 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object enters a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="cecbb459820f94ac" href="../../../../../../R/cecbb459820f94ac.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnter2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#cb0e4491e0584967" class="i field">onTriggerEnter2D</a> ?? (<a href="#cb0e4491e0584967" class="i field">onTriggerEnter2D</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider2D</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider2D</span>&gt; <a id="a7801fbdf6a0cad1" href="../../../../../../R/a7801fbdf6a0cad1.html" target="n" data-glyph="46,1" class="i field">onTriggerExit2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object leaves a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="4f7ce1d65177a7bd" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnTriggerExit2D</a>(<span class="i">Collider2D</span> <span id="r1 rd" class="r1 r">other</span>)
+        {
+            <b>if</b> (<a href="#a7801fbdf6a0cad1" class="i field">onTriggerExit2D</a> != <b>null</b>) <a href="#a7801fbdf6a0cad1" class="i field">onTriggerExit2D</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r1 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object leaves a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="fd93a6f9cb5445d3" href="../../../../../../R/fd93a6f9cb5445d3.html" target="n" data-glyph="72,1" class="i method">OnTriggerExit2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#a7801fbdf6a0cad1" class="i field">onTriggerExit2D</a> ?? (<a href="#a7801fbdf6a0cad1" class="i field">onTriggerExit2D</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider2D</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collider2D</span>&gt; <a id="339f0f1195c316d3" href="../../../../../../R/339f0f1195c316d3.html" target="n" data-glyph="46,1" class="i field">onTriggerStay2D</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where another object is within a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="5f3649ded716b179" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnTriggerStay2D</a>(<span class="i">Collider2D</span> <span id="r2 rd" class="r2 r">other</span>)
+        {
+            <b>if</b> (<a href="#339f0f1195c316d3" class="i field">onTriggerStay2D</a> != <b>null</b>) <a href="#339f0f1195c316d3" class="i field">onTriggerStay2D</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">other</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where another object is within a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collider2D</span>&gt; <a id="b17b3bd71d99d4c0" href="../../../../../../R/b17b3bd71d99d4c0.html" target="n" data-glyph="72,1" class="i method">OnTriggerStay2DAsObservable</a>()
+        {
+            <b>return</b> <a href="#339f0f1195c316d3" class="i field">onTriggerStay2D</a> ?? (<a href="#339f0f1195c316d3" class="i field">onTriggerStay2D</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collider2D</span>&gt;());
+        }
+ 
+        <b>protected override void</b> <a id="91ce118926bd9d1f" href="../../../../../../R/91ce118926bd9d1f.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#cb0e4491e0584967" class="i field">onTriggerEnter2D</a> != <b>null</b>)
+            {
+                <a href="#cb0e4491e0584967" class="i field">onTriggerEnter2D</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#a7801fbdf6a0cad1" class="i field">onTriggerExit2D</a> != <b>null</b>)
+            {
+                <a href="#a7801fbdf6a0cad1" class="i field">onTriggerExit2D</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#339f0f1195c316d3" class="i field">onTriggerStay2D</a> != <b>null</b>)
+            {
+                <a href="#339f0f1195c316d3" class="i field">onTriggerStay2D</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

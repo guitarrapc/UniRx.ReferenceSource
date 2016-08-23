@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html><head><title>ToArray</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">75 references to ToArray</div><div class="rA">Assembly-CSharp (75)</div><div class="rG" id="Assembly-CSharp"><div class="rF"><div class="rN">Assets\UnitTests\Tools\TestUtil.cs (1)</div>
+<a href="../../Assembly-CSharp/Assets/UnitTests/Tools/TestUtil.cs.html#12"><b>12</b>return source.<i>ToArray</i>().Wait();</a>
+</div>
+<div class="rF"><div class="rN">Assets\UnitTests\UnitTests.cs (74)</div>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3075"><b>3075</b>Observable.Concat(a, b, c).<i>ToArray</i>().Wait().IsCollection(1, 2, 3, 4, 5, 10, 11, 12, 300);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3153"><b>3153</b>seq.StartWith(100).<i>ToArray</i>().Wait().IsCollection(100, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3154"><b>3154</b>seq.StartWith(() =&gt; 100).<i>ToArray</i>().Wait().IsCollection(100, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3155"><b>3155</b>seq.StartWith(100, 1000, 10000).<i>ToArray</i>().Wait().IsCollection(100, 1000, 10000, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3156"><b>3156</b>seq.StartWith(Enumerable.Range(100, 3)).<i>ToArray</i>().Wait().IsCollection(100, 101, 102, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3158"><b>3158</b>seq.StartWith(Scheduler.ThreadPool, 100).<i>ToArray</i>().Wait().IsCollection(100, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3159"><b>3159</b>seq.StartWith(Scheduler.ThreadPool, 100, 1000, 10000).<i>ToArray</i>().Wait().IsCollection(100, 1000, 10000, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3160"><b>3160</b>seq.StartWith(Scheduler.ThreadPool, Enumerable.Range(100, 3)).<i>ToArray</i>().Wait().IsCollection(100, 101, 102, 1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3721"><b>3721</b>var result = Observable.Amb(xs, ys, zs).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3729"><b>3729</b>result = Observable.Amb(new[] { ys, xs, zs }.AsEnumerable()).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3737"><b>3737</b>result = Observable.Amb(new[] { zs, xs, ys }.AsEnumerable()).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3754"><b>3754</b>xss.<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3755"><b>3755</b>xss.<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3756"><b>3756</b>xss.<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3762"><b>3762</b>var result = xs.Amb(ys).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#3770"><b>3770</b>result = ys.Amb(xs).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4293"><b>4293</b>var material = Observable.Empty&lt;Unit&gt;().Materialize().<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4304"><b>4304</b>Observable.Never&lt;Unit&gt;().Materialize().<i>ToArray</i>().Wait(TimeSpan.FromMilliseconds(10)));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4313"><b>4313</b>Observable.Range(1, 5).<i>ToArray</i>().Wait().IsCollection(1, 2, 3, 4, 5);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4326"><b>4326</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4329"><b>4329</b>Observable.Repeat(100).Take(5).<i>ToArray</i>().Wait().IsCollection(100, 100, 100, 100, 100);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4347"><b>4347</b>var xss = Observable.Repeat(5, 3).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4357"><b>4357</b>Observable.Return(100).Materialize().<i>ToArray</i>().Wait().IsCollection(Notification.CreateOnNext(100), Notification.CreateOnCompleted&lt;int&gt;());</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#4367"><b>4367</b>Observable.Throw&lt;string&gt;(ex).Materialize().<i>ToArray</i>().Wait().IsCollection(Notification.CreateOnError&lt;string&gt;(ex));</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5210"><b>5210</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5226"><b>5226</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5241"><b>5241</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5256"><b>5256</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5271"><b>5271</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5289"><b>5289</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5301"><b>5301</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5322"><b>5322</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5341"><b>5341</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5357"><b>5357</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5379"><b>5379</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5416"><b>5416</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5432"><b>5432</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#5450"><b>5450</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6090"><b>6090</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6099"><b>6099</b>range.Skip(10).<i>ToArray</i>().Wait().Length.Is(0);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6195"><b>6195</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6208"><b>6208</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6310"><b>6310</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6704"><b>6704</b>subject.Distinct().<i>ToArray</i>().Subscribe(xs =&gt; array = xs);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6715"><b>6715</b>subject.Distinct(x =&gt; x, EqualityComparer&lt;int&gt;.Default).<i>ToArray</i>().Subscribe(xs =&gt; array = xs);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6734"><b>6734</b>subject.DistinctUntilChanged().<i>ToArray</i>().Subscribe(xs =&gt; array = xs);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6747"><b>6747</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6756"><b>6756</b>subject.DistinctUntilChanged(x =&gt; x, EqualityComparer&lt;int&gt;.Default).<i>ToArray</i>().Subscribe(xs =&gt; array = xs);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6773"><b>6773</b>var xs = Observable.Range(1, 10).ForEachAsync(x =&gt; list.Add(x)).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6786"><b>6786</b>}).<i>ToArray</i>().Wait();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6918"><b>6918</b>subject.<i>ToArray</i>().Subscribe(xs =&gt; array = xs);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#6937"><b>6937</b>var disp = subject.<i>ToArray</i>().Subscribe(xs =&gt; array = xs);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7299"><b>7299</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7323"><b>7323</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7352"><b>7352</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7381"><b>7381</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7403"><b>7403</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7427"><b>7427</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7450"><b>7450</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7470"><b>7470</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7490"><b>7490</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7505"><b>7505</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7519"><b>7519</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7532"><b>7532</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7554"><b>7554</b>.<i>ToArray</i>()</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7727"><b>7727</b>AssertEx.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt; Observable.Range(1, -1).<i>ToArray</i>().Wait());</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7729"><b>7729</b>Observable.Range(1, 0).<i>ToArray</i>().Wait().Length.Is(0);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7730"><b>7730</b>Observable.Range(1, 10).<i>ToArray</i>().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7732"><b>7732</b>Observable.Range(1, 0, Scheduler.Immediate).<i>ToArray</i>().Wait().Length.Is(0);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#7733"><b>7733</b>Observable.Range(1, 10, Scheduler.Immediate).<i>ToArray</i>().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9463"><b>9463</b>range.Take(0).<i>ToArray</i>().Wait().Length.Is(0);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9539"><b>9539</b>Observable.Empty&lt;int&gt;().<i>ToArray</i>().Wait().IsCollection();</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9540"><b>9540</b>Observable.Return(10).<i>ToArray</i>().Wait().IsCollection(10);</a>
+<a href="../../Assembly-CSharp/Assets/UnitTests/UnitTests.cs.html#9541"><b>9541</b>Observable.Range(1, 10).<i>ToArray</i>().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+</div>
+</div>
+</body></html>

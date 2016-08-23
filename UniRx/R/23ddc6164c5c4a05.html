@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html><head><title>IScheduler</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">3 implementations of IScheduler</div><div class="rA">UniRx (3)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Schedulers\CurrentThreadScheduler.cs (1)</div>
+<a href="../Schedulers/CurrentThreadScheduler.cs.html#26"><b>26</b>class CurrentThreadScheduler : <i>IScheduler</i></a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ImmediateScheduler.cs (1)</div>
+<a href="../Schedulers/ImmediateScheduler.cs.html#13"><b>13</b>class ImmediateScheduler : <i>IScheduler</i></a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ThreadPoolScheduler.cs (1)</div>
+<a href="../Schedulers/ThreadPoolScheduler.cs.html#15"><b>15</b>class ThreadPoolScheduler : <i>IScheduler</i>, ISchedulerPeriodic, ISchedulerQueueing</a>
+</div>
+</div>
+<div class="rH">131 references to IScheduler</div><div class="rA">UniRx (128)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Disposables\ScheduledDisposable.cs (3)</div>
+<a href="../Disposables/ScheduledDisposable.cs.html#8"><b>8</b>private readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Disposables/ScheduledDisposable.cs.html#12"><b>12</b>public ScheduledDisposable(<i>IScheduler</i> scheduler, IDisposable disposable)</a>
+<a href="../Disposables/ScheduledDisposable.cs.html#18"><b>18</b>public <i>IScheduler</i> Scheduler</a>
+</div>
+<div class="rF"><div class="rN">Notification.cs (1)</div>
+<a href="../Notification.cs.html#619"><b>619</b>public IObservable&lt;T&gt; ToObservable(<i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Notifiers\ScheduledNotifier.cs (2)</div>
+<a href="../Notifiers/ScheduledNotifier.cs.html#10"><b>10</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Notifiers/ScheduledNotifier.cs.html#23"><b>23</b>public ScheduledNotifier(<i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Binding.cs (4)</div>
+<a href="../Observable.Binding.cs.html#33"><b>33</b>public static IConnectableObservable&lt;T&gt; Replay&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Binding.cs.html#43"><b>43</b>public static IConnectableObservable&lt;T&gt; Replay&lt;T&gt;(this IObservable&lt;T&gt; source, int bufferSize, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Binding.cs.html#53"><b>53</b>public static IConnectableObservable&lt;T&gt; Replay&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan window, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Binding.cs.html#58"><b>58</b>public static IConnectableObservable&lt;T&gt; Replay&lt;T&gt;(this IObservable&lt;T&gt; source, int bufferSize, TimeSpan window, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Concatenate.cs (7)</div>
+<a href="../Observable.Concatenate.cs.html#60"><b>60</b>public static IObservable&lt;TSource&gt; Merge&lt;TSource&gt;(this IEnumerable&lt;IObservable&lt;TSource&gt;&gt; sources, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Concatenate.cs.html#70"><b>70</b>public static IObservable&lt;TSource&gt; Merge&lt;TSource&gt;(this IEnumerable&lt;IObservable&lt;TSource&gt;&gt; sources, int maxConcurrent, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Concatenate.cs.html#80"><b>80</b>public static IObservable&lt;TSource&gt; Merge&lt;TSource&gt;(<i>IScheduler</i> scheduler, params IObservable&lt;TSource&gt;[] sources)</a>
+<a href="../Observable.Concatenate.cs.html#90"><b>90</b>public static IObservable&lt;T&gt; Merge&lt;T&gt;(this IObservable&lt;T&gt; first, IObservable&lt;T&gt; second, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Concatenate.cs.html#299"><b>299</b>public static IObservable&lt;T&gt; StartWith&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler, T value)</a>
+<a href="../Observable.Concatenate.cs.html#304"><b>304</b>public static IObservable&lt;T&gt; StartWith&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler, IEnumerable&lt;T&gt; values)</a>
+<a href="../Observable.Concatenate.cs.html#315"><b>315</b>public static IObservable&lt;T&gt; StartWith&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler, params T[] values)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Concurrency.cs (4)</div>
+<a href="../Observable.Concurrency.cs.html#20"><b>20</b>public static IObservable&lt;T&gt; ObserveOn&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Concurrency.cs.html#25"><b>25</b>public static IObservable&lt;T&gt; SubscribeOn&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Concurrency.cs.html#35"><b>35</b>public static IObservable&lt;T&gt; DelaySubscription&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Concurrency.cs.html#45"><b>45</b>public static IObservable&lt;T&gt; DelaySubscription&lt;T&gt;(this IObservable&lt;T&gt; source, DateTimeOffset dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Conversions.cs (1)</div>
+<a href="../Observable.Conversions.cs.html#27"><b>27</b>public static IObservable&lt;T&gt; ToObservable&lt;T&gt;(this IEnumerable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Creation.cs (14)</div>
+<a href="../Observable.Creation.cs.html#80"><b>80</b>public static IObservable&lt;T&gt; Empty&lt;T&gt;(<i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#103"><b>103</b>public static IObservable&lt;T&gt; Empty&lt;T&gt;(<i>IScheduler</i> scheduler, T witness)</a>
+<a href="../Observable.Creation.cs.html#135"><b>135</b>public static IObservable&lt;T&gt; Return&lt;T&gt;(T value, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#192"><b>192</b>public static IObservable&lt;T&gt; Throw&lt;T&gt;(Exception error, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#200"><b>200</b>public static IObservable&lt;T&gt; Throw&lt;T&gt;(Exception error, <i>IScheduler</i> scheduler, T witness)</a>
+<a href="../Observable.Creation.cs.html#210"><b>210</b>public static IObservable&lt;int&gt; Range(int start, int count, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#220"><b>220</b>public static IObservable&lt;T&gt; Repeat&lt;T&gt;(T value, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#232"><b>232</b>public static IObservable&lt;T&gt; Repeat&lt;T&gt;(T value, int repeatCount, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#276"><b>276</b>public static IObservable&lt;T&gt; Start&lt;T&gt;(Func&lt;T&gt; function, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#281"><b>281</b>public static IObservable&lt;T&gt; Start&lt;T&gt;(Func&lt;T&gt; function, TimeSpan timeSpan, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#296"><b>296</b>public static IObservable&lt;Unit&gt; Start(Action action, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#301"><b>301</b>public static IObservable&lt;Unit&gt; Start(Action action, TimeSpan timeSpan, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#311"><b>311</b>public static Func&lt;IObservable&lt;T&gt;&gt; ToAsync&lt;T&gt;(Func&lt;T&gt; function, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Creation.cs.html#342"><b>342</b>public static Func&lt;IObservable&lt;Unit&gt;&gt; ToAsync(Action action, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.ErrorHandling.cs (1)</div>
+<a href="../Observable.ErrorHandling.cs.html#109"><b>109</b>this IObservable&lt;TSource&gt; source, Action&lt;TException&gt; onError, int retryCount, TimeSpan delay, <i>IScheduler</i> delayScheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Paging.cs (6)</div>
+<a href="../Observable.Paging.cs.html#33"><b>33</b>public static IObservable&lt;T&gt; Take&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan duration, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Paging.cs.html#82"><b>82</b>public static IObservable&lt;T&gt; TakeLast&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan duration, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Paging.cs.html#109"><b>109</b>public static IObservable&lt;T&gt; Skip&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan duration, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Paging.cs.html#164"><b>164</b>public static IObservable&lt;IList&lt;T&gt;&gt; Buffer&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan timeSpan, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Paging.cs.html#176"><b>176</b>public static IObservable&lt;IList&lt;T&gt;&gt; Buffer&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan timeSpan, int count, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Paging.cs.html#189"><b>189</b>public static IObservable&lt;IList&lt;T&gt;&gt; Buffer&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan timeSpan, TimeSpan timeShift, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Observable.Time.cs (13)</div>
+<a href="../Observable.Time.cs.html#15"><b>15</b>public static IObservable&lt;long&gt; Interval(TimeSpan period, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#40"><b>40</b>public static IObservable&lt;long&gt; Timer(TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#45"><b>45</b>public static IObservable&lt;long&gt; Timer(DateTimeOffset dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#50"><b>50</b>public static IObservable&lt;long&gt; Timer(TimeSpan dueTime, TimeSpan period, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#55"><b>55</b>public static IObservable&lt;long&gt; Timer(DateTimeOffset dueTime, TimeSpan period, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#65"><b>65</b>public static IObservable&lt;Timestamped&lt;TSource&gt;&gt; Timestamp&lt;TSource&gt;(this IObservable&lt;TSource&gt; source, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#75"><b>75</b>public static IObservable&lt;UniRx.TimeInterval&lt;TSource&gt;&gt; TimeInterval&lt;TSource&gt;(this IObservable&lt;TSource&gt; source, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#85"><b>85</b>public static IObservable&lt;TSource&gt; Delay&lt;TSource&gt;(this IObservable&lt;TSource&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#95"><b>95</b>public static IObservable&lt;T&gt; Sample&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan interval, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#105"><b>105</b>public static IObservable&lt;TSource&gt; Throttle&lt;TSource&gt;(this IObservable&lt;TSource&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#115"><b>115</b>public static IObservable&lt;TSource&gt; ThrottleFirst&lt;TSource&gt;(this IObservable&lt;TSource&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#125"><b>125</b>public static IObservable&lt;T&gt; Timeout&lt;T&gt;(this IObservable&lt;T&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Observable.Time.cs.html#135"><b>135</b>public static IObservable&lt;T&gt; Timeout&lt;T&gt;(this IObservable&lt;T&gt; source, DateTimeOffset dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Buffer.cs (3)</div>
+<a href="../Operators/Buffer.cs.html#15"><b>15</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Buffer.cs.html#25"><b>25</b>public BufferObservable(IObservable&lt;T&gt; source, TimeSpan timeSpan, TimeSpan timeShift, <i>IScheduler</i> scheduler)</a>
+<a href="../Operators/Buffer.cs.html#34"><b>34</b>public BufferObservable(IObservable&lt;T&gt; source, TimeSpan timeSpan, int count, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Delay.cs (2)</div>
+<a href="../Operators/Delay.cs.html#12"><b>12</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Delay.cs.html#14"><b>14</b>public DelayObservable(IObservable&lt;T&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\DelaySubscription.cs (3)</div>
+<a href="../Operators/DelaySubscription.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/DelaySubscription.cs.html#13"><b>13</b>public DelaySubscriptionObservable(IObservable&lt;T&gt; source,TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Operators/DelaySubscription.cs.html#21"><b>21</b>public DelaySubscriptionObservable(IObservable&lt;T&gt; source, DateTimeOffset dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Empty.cs (2)</div>
+<a href="../Operators/Empty.cs.html#7"><b>7</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Empty.cs.html#9"><b>9</b>public EmptyObservable(<i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\ObserveOn.cs (2)</div>
+<a href="../Operators/ObserveOn.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/ObserveOn.cs.html#11"><b>11</b>public ObserveOnObservable(IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Range.cs (2)</div>
+<a href="../Operators/Range.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Range.cs.html#11"><b>11</b>public RangeObservable(int start, int count, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Repeat.cs (2)</div>
+<a href="../Operators/Repeat.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Repeat.cs.html#11"><b>11</b>public RepeatObservable(T value, int? repeatCount, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Return.cs (2)</div>
+<a href="../Operators/Return.cs.html#8"><b>8</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Return.cs.html#10"><b>10</b>public ReturnObservable(T value, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Sample.cs (2)</div>
+<a href="../Operators/Sample.cs.html#12"><b>12</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Sample.cs.html#14"><b>14</b>public SampleObservable(IObservable&lt;T&gt; source, TimeSpan interval, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Skip.cs (2)</div>
+<a href="../Operators/Skip.cs.html#11"><b>11</b>internal readonly <i>IScheduler</i> scheduler; // public for optimization check</a>
+<a href="../Operators/Skip.cs.html#20"><b>20</b>public SkipObservable(IObservable&lt;T&gt; source, TimeSpan duration, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Start.cs (3)</div>
+<a href="../Operators/Start.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Start.cs.html#12"><b>12</b>public StartObservable(Func&lt;T&gt; function, TimeSpan? startAfter, <i>IScheduler</i> scheduler)</a>
+<a href="../Operators/Start.cs.html#20"><b>20</b>public StartObservable(Action action, TimeSpan? startAfter, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\SubscribeOn.cs (2)</div>
+<a href="../Operators/SubscribeOn.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/SubscribeOn.cs.html#11"><b>11</b>public SubscribeOnObservable(IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Take.cs (2)</div>
+<a href="../Operators/Take.cs.html#11"><b>11</b>internal readonly <i>IScheduler</i> scheduler; // public for optimization check</a>
+<a href="../Operators/Take.cs.html#20"><b>20</b>public TakeObservable(IObservable&lt;T&gt; source, TimeSpan duration, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\TakeLast.cs (2)</div>
+<a href="../Operators/TakeLast.cs.html#16"><b>16</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/TakeLast.cs.html#25"><b>25</b>public TakeLastObservable(IObservable&lt;T&gt; source, TimeSpan duration, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Throttle.cs (2)</div>
+<a href="../Operators/Throttle.cs.html#12"><b>12</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Throttle.cs.html#14"><b>14</b>public ThrottleObservable(IObservable&lt;T&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\ThrottleFirst.cs (2)</div>
+<a href="../Operators/ThrottleFirst.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/ThrottleFirst.cs.html#11"><b>11</b>public ThrottleFirstObservable(IObservable&lt;T&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Throw.cs (2)</div>
+<a href="../Operators/Throw.cs.html#8"><b>8</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Throw.cs.html#10"><b>10</b>public ThrowObservable(Exception error, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\TimeInterval.cs (2)</div>
+<a href="../Operators/TimeInterval.cs.html#8"><b>8</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/TimeInterval.cs.html#10"><b>10</b>public TimeIntervalObservable(IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Timeout.cs (3)</div>
+<a href="../Operators/Timeout.cs.html#10"><b>10</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Timeout.cs.html#12"><b>12</b>public TimeoutObservable(IObservable&lt;T&gt; source, TimeSpan dueTime, <i>IScheduler</i> scheduler)</a>
+<a href="../Operators/Timeout.cs.html#20"><b>20</b>public TimeoutObservable(IObservable&lt;T&gt; source, DateTimeOffset dueTime, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Timer.cs (3)</div>
+<a href="../Operators/Timer.cs.html#10"><b>10</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Timer.cs.html#12"><b>12</b>public TimerObservable(DateTimeOffset dueTime, TimeSpan? period, <i>IScheduler</i> scheduler)</a>
+<a href="../Operators/Timer.cs.html#20"><b>20</b>public TimerObservable(TimeSpan dueTime, TimeSpan? period, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Timestamp.cs (2)</div>
+<a href="../Operators/Timestamp.cs.html#8"><b>8</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/Timestamp.cs.html#10"><b>10</b>public TimestampObservable(IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Operators\ToObservable.cs (2)</div>
+<a href="../Operators/ToObservable.cs.html#9"><b>9</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Operators/ToObservable.cs.html#11"><b>11</b>public ToObservableObservable(IEnumerable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\CurrentThreadScheduler.cs (1)</div>
+<a href="../Schedulers/CurrentThreadScheduler.cs.html#18"><b>18</b>public static readonly <i>IScheduler</i> CurrentThread = new CurrentThreadScheduler();</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ImmediateScheduler.cs (1)</div>
+<a href="../Schedulers/ImmediateScheduler.cs.html#11"><b>11</b>public static readonly <i>IScheduler</i> Immediate = new ImmediateScheduler();</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\Scheduler.cs (14)</div>
+<a href="../Schedulers/Scheduler.cs.html#15"><b>15</b>static <i>IScheduler</i> constantTime;</a>
+<a href="../Schedulers/Scheduler.cs.html#16"><b>16</b>public static <i>IScheduler</i> ConstantTimeOperations</a>
+<a href="../Schedulers/Scheduler.cs.html#28"><b>28</b>static <i>IScheduler</i> tailRecursion;</a>
+<a href="../Schedulers/Scheduler.cs.html#29"><b>29</b>public static <i>IScheduler</i> TailRecursion</a>
+<a href="../Schedulers/Scheduler.cs.html#41"><b>41</b>static <i>IScheduler</i> iteration;</a>
+<a href="../Schedulers/Scheduler.cs.html#42"><b>42</b>public static <i>IScheduler</i> Iteration</a>
+<a href="../Schedulers/Scheduler.cs.html#54"><b>54</b>static <i>IScheduler</i> timeBasedOperations;</a>
+<a href="../Schedulers/Scheduler.cs.html#55"><b>55</b>public static <i>IScheduler</i> TimeBasedOperations</a>
+<a href="../Schedulers/Scheduler.cs.html#71"><b>71</b>static <i>IScheduler</i> asyncConversions;</a>
+<a href="../Schedulers/Scheduler.cs.html#72"><b>72</b>public static <i>IScheduler</i> AsyncConversions</a>
+<a href="../Schedulers/Scheduler.cs.html#111"><b>111</b>public static IDisposable Schedule(this <i>IScheduler</i> scheduler, DateTimeOffset dueTime, Action action)</a>
+<a href="../Schedulers/Scheduler.cs.html#116"><b>116</b>public static IDisposable Schedule(this <i>IScheduler</i> scheduler, Action&lt;Action&gt; action)</a>
+<a href="../Schedulers/Scheduler.cs.html#155"><b>155</b>public static IDisposable Schedule(this <i>IScheduler</i> scheduler, TimeSpan dueTime, Action&lt;Action&lt;TimeSpan&gt;&gt; action)</a>
+<a href="../Schedulers/Scheduler.cs.html#195"><b>195</b>public static IDisposable Schedule(this <i>IScheduler</i> scheduler, DateTimeOffset dueTime, Action&lt;Action&lt;DateTimeOffset&gt;&gt; action)</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ThreadPoolScheduler.cs (1)</div>
+<a href="../Schedulers/ThreadPoolScheduler.cs.html#13"><b>13</b>public static readonly <i>IScheduler</i> ThreadPool = new ThreadPoolScheduler();</a>
+</div>
+<div class="rF"><div class="rN">Subjects\ReplaySubject.cs (5)</div>
+<a href="../Subjects/ReplaySubject.cs.html#19"><b>19</b>readonly <i>IScheduler</i> scheduler;</a>
+<a href="../Subjects/ReplaySubject.cs.html#28"><b>28</b>public ReplaySubject(<i>IScheduler</i> scheduler)</a>
+<a href="../Subjects/ReplaySubject.cs.html#38"><b>38</b>public ReplaySubject(int bufferSize, <i>IScheduler</i> scheduler)</a>
+<a href="../Subjects/ReplaySubject.cs.html#48"><b>48</b>public ReplaySubject(TimeSpan window, <i>IScheduler</i> scheduler)</a>
+<a href="../Subjects/ReplaySubject.cs.html#54"><b>54</b>public ReplaySubject(int bufferSize, TimeSpan window, <i>IScheduler</i> scheduler)</a>
+</div>
+<div class="rF"><div class="rN">System\IOptimizedObservable.cs (1)</div>
+<a href="../System/IOptimizedObservable.cs.html#20"><b>20</b>public static bool IsRequiredSubscribeOnCurrentThread&lt;T&gt;(this IObservable&lt;T&gt; source, <i>IScheduler</i> scheduler)</a>
+</div>
+</div>
+<div class="rA">UniRx.Tests (3)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">SchedulerTest.cs (3)</div>
+<a href="../../UniRx.Tests/SchedulerTest.cs.html#10"><b>10</b>private static string[] ScheduleTasks(<i>IScheduler</i> scheduler)</a>
+<a href="../../UniRx.Tests/SchedulerTest.cs.html#41"><b>41</b><i>var</i> scheduler = Scheduler.CurrentThread;</a>
+<a href="../../UniRx.Tests/SchedulerTest.cs.html#65"><b>65</b><i>var</i> scheduler = Scheduler.CurrentThread;</a>
+</div>
+</div>
+</body></html>

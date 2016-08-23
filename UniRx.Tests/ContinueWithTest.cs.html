@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html><head><title>ContinueWithTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(50);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/ContinueWithTest.cs" target="_top">ContinueWithTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>.<span class="i n">Operators</span>
+{
+    [<span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>.<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="a5ac87c8c8ef892a" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="02e29c259cb6e0bd">ContinueWithTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="dc90704a433e7e29" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ContinueWith</a>()
+        {
+            <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r0 rd" class="r0 r">subject</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+ 
+            <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r1 rd" class="r1 r">record</span> = <span class="r0 r">subject</span>.<a href="/UniRx/A.html#ffa1917c19e93c1c" class="i method">ContinueWith</a>(<span id="r2 rd" class="r2 r">x</span> =&gt; <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(<span class="r2 r">x</span>)).<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+ 
+            <span class="r0 r">subject</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(10);
+            <span class="r1 r">record</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+            <span class="r0 r">subject</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+            <span class="r1 r">record</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+            <span class="r0 r">subject</span>.<a href="/UniRx/A.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            <span class="r1 r">record</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>[0].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(100);
+            <span class="r1 r">record</span>.<a href="Tools/TestUtil.cs.html#b5092ec6d6343608" class="i property">Notifications</a>.<a href="@0@System.Core/A.html#75722fd194dc2e0e" class="i method">Last</a>().<a href="/UniRx/A.html#30da0e55bb60c517" class="i property">Kind</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="/UniRx/A.html#af824cc690aabef9" class="i field">OnCompleted</a>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="e34bed0cc7195655" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ContinueWith2</a>()
+        {
+            <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r3 rd" class="r3 r">subject</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+ 
+            <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r4 rd" class="r4 r">record</span> = <span class="r3 r">subject</span>.<a href="/UniRx/A.html#ffa1917c19e93c1c" class="i method">ContinueWith</a>(<span id="r5 rd" class="r5 r">x</span> =&gt; <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(<span class="r5 r">x</span>).<a href="/UniRx/A.html#ab50c0034dec7f59" class="i method">Delay</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(100))).<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+ 
+            <span class="r3 r">subject</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(10);
+            <span class="r4 r">record</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+            <span class="r3 r">subject</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+            <span class="r4 r">record</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+            <span class="r3 r">subject</span>.<a href="/UniRx/A.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            <a href="@0@mscorlib/A.html#3980e012bae82e96" class="t t">Thread</a>.<a href="@0@mscorlib/A.html#82aedb56cecde82c" class="i method">Sleep</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(200));
+            <span class="r4 r">record</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>[0].<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(100);
+            <span class="r4 r">record</span>.<a href="Tools/TestUtil.cs.html#b5092ec6d6343608" class="i property">Notifications</a>.<a href="@0@System.Core/A.html#75722fd194dc2e0e" class="i method">Last</a>().<a href="/UniRx/A.html#30da0e55bb60c517" class="i property">Kind</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="/UniRx/A.html#af824cc690aabef9" class="i field">OnCompleted</a>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

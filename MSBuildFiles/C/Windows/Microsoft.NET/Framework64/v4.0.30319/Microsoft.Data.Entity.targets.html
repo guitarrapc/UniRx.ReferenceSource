@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Data.Entity.targets</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(148);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/Windows/Microsoft.NET/Framework64/v4.0.30319/Microsoft.Data.Entity.targets" target="_top">C\Windows\Microsoft.NET\Framework64\v4.0.30319\Microsoft.Data.Entity.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> This .targets file can be used by updating Microsoft.Common.targets to 
+         include the line below (as the last import element just before the end project tag)
+      &lt;Import Project=&quot;$(MSBuildBinPath)\Microsoft.Data.Entity.targets&quot; Condition=&quot;Exists(&#39;$(MSBuildBinPath)\Microsoft.Data.Entity.targets&#39;)&quot;/&gt;
+      </span><span class="xd">--&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> The below ensures that &quot;EntityDeploy&quot; is available in the VS Build Action dropdown </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildItems/R/AvailableItemName.html" target="n" class="msbuildlink">AvailableItemName</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">EntityDeploy</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;!--</span><span class="c"> EntityDeployIntermediateResourcePath is the path used to store resources generated from
+         the EDMX file before they are embedded in the build target </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/IntermediateOutputPath.html" target="n" class="msbuildlink">IntermediateOutputPath</a>)edmxResourcesToEmbed\<span class="xd">&lt;/</span><span class="xn">EntityDeployIntermediateResourcePath</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+ 
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploySplit.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.Data.Entity.Build.Tasks/A.html#7c4462293067f785" class="msbuildlink">EntityDeploySplit</a></span>&quot;<span class="xan">
+             AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.Data.Entity.Build.Tasks.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploy.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.Data.Entity.Build.Tasks/A.html#864b7885eed576e9" class="msbuildlink">EntityDeploy</a></span>&quot;<span class="xan">
+             AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.Data.Entity.Build.Tasks.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploySetLogicalNames.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.Data.Entity.Build.Tasks/A.html#ea46d1a9df38ce1c" class="msbuildlink">EntityDeploySetLogicalNames</a></span>&quot;<span class="xan">
+             AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.Data.Entity.Build.Tasks.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityClean.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.Data.Entity.Build.Tasks/A.html#49279fc6ab1a509b" class="msbuildlink">EntityClean</a></span>&quot;<span class="xan">
+             AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.Data.Entity.Build.Tasks.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;!--</span><span class="c"> EntityDeployDependsOn deliberately left empty so others can override this </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/EntityDeployDependsOn.html" target="n" class="msbuildlink">EntityDeployDependsOn</a></span><span class="xd">&gt;</span><span class="xd">&lt;/</span><span class="xn">EntityDeployDependsOn</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/BuildDependsOn.html" target="n" class="msbuildlink">BuildDependsOn</a></span><span class="xd">&gt;</span>
+      <a href="/MSBuildTargets/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a>;
+      $(<a href="/MSBuildProperties/R/BuildDependsOn.html" target="n" class="msbuildlink">BuildDependsOn</a>)
+    <span class="xd">&lt;/</span><span class="xn">BuildDependsOn</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/CleanDependsOn.html" target="n" class="msbuildlink">CleanDependsOn</a></span><span class="xd">&gt;</span>
+      $(<a href="/MSBuildProperties/R/CleanDependsOn.html" target="n" class="msbuildlink">CleanDependsOn</a>);
+      <a href="/MSBuildTargets/R/EntityClean.html" target="n" class="msbuildlink">EntityClean</a>;
+    <span class="xd">&lt;/</span><span class="xn">CleanDependsOn</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a></span>&quot;<span class="xan">
+          DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/EntityDeployDependsOn.html" target="n" class="msbuildlink">EntityDeployDependsOn</a>)</span>&quot; <span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CallTarget.html" target="n" class="msbuildlink">CallTarget</a> </span><span class="xan">Targets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeployNonEmbeddedResources.html" target="n" class="msbuildlink">EntityDeployNonEmbeddedResources</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CallTarget.html" target="n" class="msbuildlink">CallTarget</a> </span><span class="xan">Targets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeployEmbeddedResources.html" target="n" class="msbuildlink">EntityDeployEmbeddedResources</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/CallTarget.html" target="n" class="msbuildlink">CallTarget</a> </span><span class="xan">Targets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploySetLogicalNames.html" target="n" class="msbuildlink">EntityDeploySetLogicalNames</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> Split the EDMX files into two groups: those whose resources need to be embedded 
+       and those whose resources need to be copied
+       Note: this also assigns the EntityDeployRelativeDir metadata to each
+       item so that the same metadata can be used regardless of whether the 
+       underlying item is a link or a normal file </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploySplit.html" target="n" class="msbuildlink">EntityDeploySplit</a></span>&quot; <span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploySplit.html" target="n" class="msbuildlink">EntityDeploySplit</a></span><span class="xan">
+          Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a>)</span>&quot; <span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">EmbeddingItems</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">NonEmbeddingItems</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/EntityDeployCopyingItems.html" target="n" class="msbuildlink">EntityDeployCopyingItems</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">EntityDeploySplit</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/EntityDeployDebug.html" target="n" class="msbuildlink">EntityDeployDebug</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xan">
+             Text</span><span class="xd">=</span>&quot;<span class="xav">EntityDeploySplit: EntityDeployEmbeddingItems = @(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/EntityDeployDebug.html" target="n" class="msbuildlink">EntityDeployDebug</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xan">
+             Text</span><span class="xd">=</span>&quot;<span class="xav">EntityDeploySplit: EntityDeployCopyingItems   = @(<a href="/MSBuildItems/R/EntityDeployCopyingItems.html" target="n" class="msbuildlink">EntityDeployCopyingItems</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> Generate to $(OutputPath) the CSDL, MSL and SSDL resources from the EDMX 
+       files set to copy their outputs to the output directory (use SSDL as marker
+       file as that is the last one generated) </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeployNonEmbeddedResources.html" target="n" class="msbuildlink">EntityDeployNonEmbeddedResources</a></span>&quot;<span class="xan">
+          DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploySplit.html" target="n" class="msbuildlink">EntityDeploySplit</a></span>&quot;<span class="xan">
+          Inputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployCopyingItems.html" target="n" class="msbuildlink">EntityDeployCopyingItems</a>)</span>&quot;<span class="xan">
+          Outputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployCopyingItems.html" target="n" class="msbuildlink">EntityDeployCopyingItems</a>-&gt;&#39;$(<a href="/MSBuildProperties/R/OutputPath.html" target="n" class="msbuildlink">OutputPath</a>)%(EntityDeployRelativeDir)%(Filename).ssdl&#39;)</span>&quot; <span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a></span><span class="xan">
+          Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployCopyingItems.html" target="n" class="msbuildlink">EntityDeployCopyingItems</a>)</span>&quot;<span class="xan">
+          OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/OutputPath.html" target="n" class="msbuildlink">OutputPath</a>)</span>&quot; <span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">EntityDeploy</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> Generates to $(EntityDeployIntermediateResourcePath) the CSDL, MSL and SSDL
+       resources from the EDMX files set to embed their outputs (use SSDL as marker
+       file as that is the last one generated) </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeployEmbeddedResources.html" target="n" class="msbuildlink">EntityDeployEmbeddedResources</a></span>&quot;<span class="xan">
+          DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploySplit.html" target="n" class="msbuildlink">EntityDeploySplit</a></span>&quot;<span class="xan">
+          Inputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>)</span>&quot;<span class="xan">
+          Outputs</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>-&gt;&#39;$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)%(EntityDeployRelativeDir)%(Filename).ssdl&#39;)</span>&quot; <span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a></span><span class="xan">
+          Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>)</span>&quot;<span class="xan">
+          OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)</span>&quot; <span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">EntityDeploy</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityClean.html" target="n" class="msbuildlink">EntityClean</a></span>&quot;<span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityClean.html" target="n" class="msbuildlink">EntityClean</a></span><span class="xan">
+          Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeploy.html" target="n" class="msbuildlink">EntityDeploy</a>)</span>&quot;<span class="xan">
+          ResourceOutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)</span>&quot;<span class="xan">
+          OutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/OutputPath.html" target="n" class="msbuildlink">OutputPath</a>)</span>&quot;<span class="xd">
+      /&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> Define the CSDL/MSL/SSDL files generated from @(EntityDeployEmbeddingItems)
+       as part of the EmbeddedResource ItemGroup which includes them in the build target 
+       Note: this must happen regardless of whether the EntityDeployEmbeddedResources target is 
+       skipped due to incremental build </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploySetLogicalNames.html" target="n" class="msbuildlink">EntityDeploySetLogicalNames</a></span>&quot;<span class="xan">
+          DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/EntityDeploySplit.html" target="n" class="msbuildlink">EntityDeploySplit</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> First define the resources to be embedded
+         Note: ignore resources which are not in @(EntityDeployEmbeddingItems) - this ignores
+         resources generated by previous runs which have now had their MetadataArtifactProcessing 
+         changed to &quot;CopyToOutput&quot; </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/EntityDeployResourcesToEmbed.html" target="n" class="msbuildlink">EntityDeployResourcesToEmbed</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>-&gt;&#39;$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)%(EntityDeployRelativeDir)%(Filename).csdl&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/EntityDeployResourcesToEmbed.html" target="n" class="msbuildlink">EntityDeployResourcesToEmbed</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>-&gt;&#39;$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)%(EntityDeployRelativeDir)%(Filename).msl&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/EntityDeployResourcesToEmbed.html" target="n" class="msbuildlink">EntityDeployResourcesToEmbed</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployEmbeddingItems.html" target="n" class="msbuildlink">EntityDeployEmbeddingItems</a>-&gt;&#39;$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)%(EntityDeployRelativeDir)%(Filename).ssdl&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/EntityDeployDebug.html" target="n" class="msbuildlink">EntityDeployDebug</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xan">
+             Text</span><span class="xd">=</span>&quot;<span class="xav">EntityDeploySetLogicalNames: EntityDeployResourcesToEmbed = @(<a href="/MSBuildItems/R/EntityDeployResourcesToEmbed.html" target="n" class="msbuildlink">EntityDeployResourcesToEmbed</a>)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Now update their logical names and add them to the list of resources to be embedded </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/EntityDeploySetLogicalNames.html" target="n" class="msbuildlink">EntityDeploySetLogicalNames</a></span><span class="xan">
+          Sources</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/EntityDeployResourcesToEmbed.html" target="n" class="msbuildlink">EntityDeployResourcesToEmbed</a>)</span>&quot;<span class="xan">
+          ResourceOutputPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/EntityDeployIntermediateResourcePath.html" target="n" class="msbuildlink">EntityDeployIntermediateResourcePath</a>)</span>&quot; <span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ResourcesToEmbed</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/EmbeddedResource.html" target="n" class="msbuildlink">EmbeddedResource</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">EntityDeploySetLogicalNames</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+ 
+</pre></td></tr></table></div></body></html>

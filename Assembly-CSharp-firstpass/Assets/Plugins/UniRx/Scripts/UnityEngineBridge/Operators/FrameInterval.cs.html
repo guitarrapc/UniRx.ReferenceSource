@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html><head><title>FrameInterval.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(52);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/FrameInterval.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\FrameInterval.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="59714f2805a636ac" href="../../../../../../R/59714f2805a636ac.html" target="n" data-glyph="2,0" class="t t">FrameIntervalObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="i n">UniRx</span>.<a href="../FrameInterval.cs.html#cec726b93a6fc4f8" class="t t">FrameInterval</a>&lt;<span class="r0 r t">T</span>&gt;&gt;
+    {
+        <b>readonly</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="46f4477464cc777d" href="../../../../../../R/46f4477464cc777d.html" target="n" data-glyph="46,1" class="i field">source</a>;
+ 
+        <b>public</b> <a id="faf7161a8bfd6b9f" href="../../../../../../R/faf7161a8bfd6b9f.html" target="n" data-glyph="72,1" class="i constructor">FrameIntervalObservable</a>(<a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>)
+            : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#59714f2805a636ac" class="k">this</a>.<a href="#46f4477464cc777d" class="i field">source</a> = <span class="r1 r">source</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="187843d76a26f36f" href="../../../../../../R/187843d76a26f36f.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="i n">UniRx</span>.<a href="../FrameInterval.cs.html#cec726b93a6fc4f8" class="t t">FrameInterval</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <span id="r2 rd" class="r2 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r3 rd" class="r3 r">cancel</span>)
+        {
+            <b>return</b> <a href="#46f4477464cc777d" class="i field">source</a>.<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#1b1c26cd96b4ed78" class="t constructor">FrameInterval</a>(<span class="r2 r">observer</span>, <span class="r3 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="a9550ce1cbaac872" href="../../../../../../R/a9550ce1cbaac872.html" target="n" data-glyph="4,1" class="t t">FrameInterval</a> : <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="i n">UniRx</span>.<a href="../FrameInterval.cs.html#cec726b93a6fc4f8" class="t t">FrameInterval</a>&lt;<span class="r0 r t">T</span>&gt;&gt;
+        {
+            <b>int</b> <a id="070855ee3ea5093f" href="../../../../../../R/070855ee3ea5093f.html" target="n" data-glyph="46,2" class="i field">lastFrame</a>;
+ 
+            <b>public</b> <a id="1b1c26cd96b4ed78" href="../../../../../../R/1b1c26cd96b4ed78.html" target="n" data-glyph="72,2" class="i constructor">FrameInterval</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="i n">UniRx</span>.<a href="../FrameInterval.cs.html#cec726b93a6fc4f8" class="t t">FrameInterval</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>)
+                : <a href="../../Operators/OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r4 r">observer</span>, <span class="r5 r">cancel</span>)
+            {
+                <a href="#a9550ce1cbaac872" class="k">this</a>.<a href="#070855ee3ea5093f" class="i field">lastFrame</a> = <span class="i">UnityEngine</span>.<span class="i">Time</span>.<span class="i">frameCount</span>;
+            }
+ 
+            <b>public override void</b> <a id="795889b967e1b481" href="../../../../../../R/795889b967e1b481.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r6 rd" class="r6 r">value</span>)
+            {
+                <b>var</b> <span id="r7 rd" class="r7 r">now</span> = <span class="i">UnityEngine</span>.<span class="i">Time</span>.<span class="i">frameCount</span>;
+                <b>var</b> <span id="r8 rd" class="r8 r">span</span> = <span class="r7 r">now</span> - <a href="#070855ee3ea5093f" class="i field">lastFrame</a>;
+                <a href="#070855ee3ea5093f" class="i field">lastFrame</a> = <span class="r7 r">now</span>;
+ 
+                <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<b>new</b> <span class="i n">UniRx</span>.<span class="t">FrameInterval</span>&lt;<span class="r0 r t">T</span>&gt;(<span class="r6 r">value</span>, <span class="r8 r">span</span>));
+            }
+ 
+            <b>public override void</b> <a id="b8968e723d584e6b" href="../../../../../../R/b8968e723d584e6b.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r9 rd" class="r9 r">error</span>)
+            {
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r9 r">error</span>); }
+                <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="18f6c4037d4f50b8" href="../../../../../../R/18f6c4037d4f50b8.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

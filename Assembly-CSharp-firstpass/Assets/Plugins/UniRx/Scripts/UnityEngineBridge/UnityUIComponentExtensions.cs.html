@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnityUIComponentExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(116);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityUIComponentExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="2a1b2a3be9d21058" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">UnityUIComponentExtensions</a>
+    {
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="63a6245a5077874b" href="../../../../../R/63a6245a5077874b.html" target="n" data-glyph="220,1" class="i method">SubscribeToText</a>(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <span id="r0 rd" class="r0 r">source</span>, <span class="i">Text</span> <span id="r1 rd" class="r1 r">text</span>)
+        {
+            <b>return</b> <span class="r0 r">source</span>.<span class="i">SubscribeWithState</span>(<span class="r1 r">text</span>, (<span id="r2 rd" class="r2 r">x</span>, <span id="r3 rd" class="r3 r">t</span>) =&gt; <span class="r3 r">t</span>.<span class="i">text</span> = <span class="r2 r">x</span>);
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="f6b3f94189afc92e" href="../../../../../R/f6b3f94189afc92e.html" target="n" data-glyph="220,1" class="i method">SubscribeToText</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r5 rd" class="r5 r">source</span>, <span class="i">Text</span> <span id="r6 rd" class="r6 r">text</span>)
+        {
+            <b>return</b> <span class="r5 r">source</span>.<span class="i">SubscribeWithState</span>(<span class="r6 r">text</span>, (<span id="r7 rd" class="r7 r">x</span>, <span id="r8 rd" class="r8 r">t</span>) =&gt; <span class="r8 r">t</span>.<span class="i">text</span> = <span class="r7 r">x</span>.<span class="i">ToString</span>());
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b4d9ea30ac4dc2ca" href="../../../../../R/b4d9ea30ac4dc2ca.html" target="n" data-glyph="220,1" class="i method">SubscribeToText</a>&lt;<span id="r9 rd t" class="r9 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r9 r t">T</span>&gt; <span id="r10 rd" class="r10 r">source</span>, <span class="i">Text</span> <span id="r11 rd" class="r11 r">text</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r9 r t">T</span>, <b>string</b>&gt; <span id="r12 rd" class="r12 r">selector</span>)
+        {
+            <b>return</b> <span class="r10 r">source</span>.<span class="i">SubscribeWithState2</span>(<span class="r11 r">text</span>, <span class="r12 r">selector</span>, (<span id="r13 rd" class="r13 r">x</span>, <span id="r14 rd" class="r14 r">t</span>, <span id="r15 rd" class="r15 r">s</span>) =&gt; <span class="r14 r">t</span>.<span class="i">text</span> = <span class="r15 r">s</span>(<span class="r13 r">x</span>));
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="46b1889fe72b2c60" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">SubscribeToInteractable</a>(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r16 rd" class="r16 r">source</span>, <span class="i">Selectable</span> <span id="r17 rd" class="r17 r">selectable</span>)
+        {
+            <b>return</b> <span class="r16 r">source</span>.<span class="i">SubscribeWithState</span>(<span class="r17 r">selectable</span>, (<span id="r18 rd" class="r18 r">x</span>, <span id="r19 rd" class="r19 r">s</span>) =&gt; <span class="r19 r">s</span>.<span class="i">interactable</span> = <span class="r18 r">x</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onClick event.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="c2f9d043cc07e903" href="../../../../../R/c2f9d043cc07e903.html" target="n" data-glyph="220,1" class="i method">OnClickAsObservable</a>(<b>this</b> <span class="i">Button</span> <span id="r20 rd" class="r20 r">button</span>)
+        {
+            <b>return</b> <span class="r20 r">button</span>.<span class="i">onClick</span>.<span class="i">AsObservable</span>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onValueChanged with current `isOn` value on subscribe.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="19d2e4b5a1f77c8c" href="../../../../../R/19d2e4b5a1f77c8c.html" target="n" data-glyph="220,1" class="i method">OnValueChangedAsObservable</a>(<b>this</b> <span class="i">Toggle</span> <span id="r21 rd" class="r21 r">toggle</span>)
+        {
+            <span class="c">// Optimized Defer + StartWith</span>
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#00bc10304e76b6b6" class="i method">CreateWithState</a>&lt;<b>bool</b>, <span class="i">Toggle</span>&gt;(<span class="r21 r">toggle</span>, (<span id="r22 rd" class="r22 r">t</span>, <span id="r23 rd" class="r23 r">observer</span>) =&gt;
+            {
+                <span class="r23 r">observer</span>.<span class="i">OnNext</span>(<span class="r22 r">t</span>.<span class="i">isOn</span>);
+                <b>return</b> <span class="r22 r">t</span>.<span class="i">onValueChanged</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span class="r23 r">observer</span>);
+            });
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onValueChanged with current `value` on subscribe.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>float</b>&gt; <a id="c76af5d5abc9afac" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnValueChangedAsObservable</a>(<b>this</b> <span class="i">Scrollbar</span> <span id="r24 rd" class="r24 r">scrollbar</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#00bc10304e76b6b6" class="i method">CreateWithState</a>&lt;<b>float</b>, <span class="i">Scrollbar</span>&gt;(<span class="r24 r">scrollbar</span>, (<span id="r25 rd" class="r25 r">s</span>, <span id="r26 rd" class="r26 r">observer</span>) =&gt;
+            {
+                <span class="r26 r">observer</span>.<span class="i">OnNext</span>(<span class="r25 r">s</span>.<span class="i">value</span>);
+                <b>return</b> <span class="r25 r">s</span>.<span class="i">onValueChanged</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span class="r26 r">observer</span>);
+            });
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onValueChanged with current `normalizedPosition` value on subscribe.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Vector2</span>&gt; <a id="f40e4f6eac9fcda8" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnValueChangedAsObservable</a>(<b>this</b> <span class="i">ScrollRect</span> <span id="r27 rd" class="r27 r">scrollRect</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#00bc10304e76b6b6" class="i method">CreateWithState</a>&lt;<span class="i">Vector2</span>, <span class="i">ScrollRect</span>&gt;(<span class="r27 r">scrollRect</span>, (<span id="r28 rd" class="r28 r">s</span>, <span id="r29 rd" class="r29 r">observer</span>) =&gt;
+            {
+                <span class="r29 r">observer</span>.<span class="i">OnNext</span>(<span class="r28 r">s</span>.<span class="i">normalizedPosition</span>);
+                <b>return</b> <span class="r28 r">s</span>.<span class="i">onValueChanged</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span class="r29 r">observer</span>);
+            });
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onValueChanged with current `value` on subscribe.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>float</b>&gt; <a id="e5d528f2b81f0c38" href="../../../../../R/e5d528f2b81f0c38.html" target="n" data-glyph="220,1" class="i method">OnValueChangedAsObservable</a>(<b>this</b> <span class="i">Slider</span> <span id="r30 rd" class="r30 r">slider</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#00bc10304e76b6b6" class="i method">CreateWithState</a>&lt;<b>float</b>, <span class="i">Slider</span>&gt;(<span class="r30 r">slider</span>, (<span id="r31 rd" class="r31 r">s</span>, <span id="r32 rd" class="r32 r">observer</span>) =&gt;
+            {
+                <span class="r32 r">observer</span>.<span class="i">OnNext</span>(<span class="r31 r">s</span>.<span class="i">value</span>);
+                <b>return</b> <span class="r31 r">s</span>.<span class="i">onValueChanged</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span class="r32 r">observer</span>);
+            });
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onEndEdit(Submit) event.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="558f8e09bb2f63ef" href="../../../../../R/558f8e09bb2f63ef.html" target="n" data-glyph="220,1" class="i method">OnEndEditAsObservable</a>(<b>this</b> <span class="i">InputField</span> <span id="r33 rd" class="r33 r">inputField</span>)
+        {
+            <b>return</b> <span class="r33 r">inputField</span>.<span class="i">onEndEdit</span>.<span class="i">AsObservable</span>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onValueChange with current `text` value on subscribe.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+        [<a href="@0@mscorlib/A.html#66ed4e142f4e14e7" class="t constructor">Obsolete</a>(<span class="s">&quot;onValueChange has been renamed to onValueChanged&quot;</span>)]
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="c78e7dd864113cbc" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnValueChangeAsObservable</a>(<b>this</b> <span class="i">InputField</span> <span id="r34 rd" class="r34 r">inputField</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#00bc10304e76b6b6" class="i method">CreateWithState</a>&lt;<b>string</b>, <span class="i">InputField</span>&gt;(<span class="r34 r">inputField</span>, (<span id="r35 rd" class="r35 r">i</span>, <span id="r36 rd" class="r36 r">observer</span>) =&gt;
+            {
+                <span class="r36 r">observer</span>.<span class="i">OnNext</span>(<span class="r35 r">i</span>.<span class="i">text</span>);
+<span class="k preprocess">#</span><span class="k preprocess">if</span> (<span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+<span class="e">                return i.onValueChange.AsObservable().Subscribe(observer);
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+                <b>return</b> <span class="r35 r">i</span>.<span class="i">onValueChanged</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span class="r36 r">observer</span>);
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+            });
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_7</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Observe onValueChanged with current `text` value on subscribe.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="61d7ac6d81bcb81f" href="../../../../../R/61d7ac6d81bcb81f.html" target="n" data-glyph="220,1" class="i method">OnValueChangedAsObservable</a>(<b>this</b> <span class="i">InputField</span> <span id="r37 rd" class="r37 r">inputField</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#00bc10304e76b6b6" class="i method">CreateWithState</a>&lt;<b>string</b>, <span class="i">InputField</span>&gt;(<span class="r37 r">inputField</span>, (<span id="r38 rd" class="r38 r">i</span>, <span id="r39 rd" class="r39 r">observer</span>) =&gt;
+            {
+                <span class="r39 r">observer</span>.<span class="i">OnNext</span>(<span class="r38 r">i</span>.<span class="i">text</span>);
+                <b>return</b> <span class="r38 r">i</span>.<span class="i">onValueChanged</span>.<span class="i">AsObservable</span>().<span class="i">Subscribe</span>(<span class="r39 r">observer</span>);
+            });
+        }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

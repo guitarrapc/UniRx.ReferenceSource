@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html><head><title>Now</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">3 implementations of Now</div><div class="rA">UniRx (3)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Schedulers\CurrentThreadScheduler.cs (1)</div>
+<a href="../Schedulers/CurrentThreadScheduler.cs.html#128"><b>128</b>public DateTimeOffset <i>Now</i></a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ImmediateScheduler.cs (1)</div>
+<a href="../Schedulers/ImmediateScheduler.cs.html#19"><b>19</b>public DateTimeOffset <i>Now</i></a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ThreadPoolScheduler.cs (1)</div>
+<a href="../Schedulers/ThreadPoolScheduler.cs.html#21"><b>21</b>public DateTimeOffset <i>Now</i></a>
+</div>
+</div>
+<div class="rH">24 references to Now</div><div class="rA">UniRx (17)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Operators\Delay.cs (6)</div>
+<a href="../Operators/Delay.cs.html#71"><b>71</b>var next = parent.scheduler.<i>Now</i>.Add(delay);</a>
+<a href="../Operators/Delay.cs.html#114"><b>114</b>var next = parent.scheduler.<i>Now</i>.Add(delay);</a>
+<a href="../Operators/Delay.cs.html#168"><b>168</b>if (nextDue.CompareTo(parent.scheduler.<i>Now</i>) &lt;= 0 &amp;&amp; !shouldYield)</a>
+<a href="../Operators/Delay.cs.html#176"><b>176</b>recurseDueTime = Scheduler.Normalize(nextDue.Subtract(parent.scheduler.<i>Now</i>));</a>
+<a href="../Operators/Delay.cs.html#182"><b>182</b>if (completeAt.CompareTo(parent.scheduler.<i>Now</i>) &lt;= 0 &amp;&amp; !shouldYield)</a>
+<a href="../Operators/Delay.cs.html#189"><b>189</b>recurseDueTime = Scheduler.Normalize(completeAt.Subtract(parent.scheduler.<i>Now</i>));</a>
+</div>
+<div class="rF"><div class="rN">Operators\TakeLast.cs (3)</div>
+<a href="../Operators/TakeLast.cs.html#101"><b>101</b>startTime = parent.scheduler.<i>Now</i>;</a>
+<a href="../Operators/TakeLast.cs.html#107"><b>107</b>var now = parent.scheduler.<i>Now</i>;</a>
+<a href="../Operators/TakeLast.cs.html#120"><b>120</b>var now = parent.scheduler.<i>Now</i>;</a>
+</div>
+<div class="rF"><div class="rN">Operators\TimeInterval.cs (2)</div>
+<a href="../Operators/TimeInterval.cs.html#31"><b>31</b>this.lastTime = parent.scheduler.<i>Now</i>;</a>
+<a href="../Operators/TimeInterval.cs.html#36"><b>36</b>var now = parent.scheduler.<i>Now</i>;</a>
+</div>
+<div class="rF"><div class="rN">Operators\Timer.cs (1)</div>
+<a href="../Operators/Timer.cs.html#33"><b>33</b>? dueTimeA.Value - scheduler.<i>Now</i></a>
+</div>
+<div class="rF"><div class="rN">Operators\Timestamp.cs (1)</div>
+<a href="../Operators/Timestamp.cs.html#34"><b>34</b>base.observer.OnNext(new Timestamped&lt;T&gt;(value, parent.scheduler.<i>Now</i>));</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\Scheduler.cs (1)</div>
+<a href="../Schedulers/Scheduler.cs.html#113"><b>113</b>return scheduler.Schedule(dueTime - scheduler.<i>Now</i>, action);</a>
+</div>
+<div class="rF"><div class="rN">Subjects\ReplaySubject.cs (3)</div>
+<a href="../Subjects/ReplaySubject.cs.html#63"><b>63</b>startTime = scheduler.<i>Now</i>;</a>
+<a href="../Subjects/ReplaySubject.cs.html#68"><b>68</b>var elapsedTime = Scheduler.Normalize(scheduler.<i>Now</i> - startTime);</a>
+<a href="../Subjects/ReplaySubject.cs.html#126"><b>126</b>queue.Enqueue(new TimeInterval&lt;T&gt;(value, scheduler.<i>Now</i> - startTime));</a>
+</div>
+</div>
+<div class="rA">UniRx.Tests (7)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">Observable.TimeTest.cs (7)</div>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#15"><b>15</b>var now = Scheduler.ThreadPool.<i>Now</i>;</a>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#34"><b>34</b>var now = Scheduler.ThreadPool.<i>Now</i>;</a>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#49"><b>49</b>var now = Scheduler.ThreadPool.<i>Now</i>;</a>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#64"><b>64</b>var now = Scheduler.ThreadPool.<i>Now</i>;</a>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#76"><b>76</b>var now = Scheduler.CurrentThread.<i>Now</i>;</a>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#93"><b>93</b>var now = Scheduler.ThreadPool.<i>Now</i>;</a>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#150"><b>150</b>var now = Scheduler.ThreadPool.<i>Now</i>;</a>
+</div>
+</div>
+</body></html>

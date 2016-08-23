@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html><head><title>IObservable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(23);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/System/IObservable.cs" target="_top">System\IObservable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// defined from .NET Framework 4.0 and NETFX_CORE</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">NETFX_CORE</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="eddc496e11ca2570" href="../R/eddc496e11ca2570.html" target="n" data-glyph="48,0" class="t t">IObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;
+    {
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="fb6e6c4c05570441" href="../R/fb6e6c4c05570441.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">observer</span>);
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="be1e4b1a75b0c556" href="../R/be1e4b1a75b0c556.html" target="n" data-glyph="48,0" class="t t">IGroupedObservable</a>&lt;<span id="r2 rd t" class="r2 r t">TKey</span>, <span id="r3 rd t" class="r3 r t">TElement</span>&gt; : <a href="#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">TElement</span>&gt;
+    {
+        <span class="r2 r t">TKey</span> <a id="1d5990a8af27497a" href="../R/1d5990a8af27497a.html" target="n" data-glyph="102,1" class="i property">Key</a> { <b>get</b>; }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html><head><title>TimeoutFrame.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(142);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/TimeoutFrame.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\TimeoutFrame.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UniRxLibrary</span>
+<span class="e">using UnityObservable = UniRx.ObservableUnity;
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+<b>using</b> <span class="t">UnityObservable</span> = <span class="i n">UniRx</span>.<a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="551c8b44636f30e5" href="../../../../../../R/551c8b44636f30e5.html" target="n" data-glyph="2,0" class="t t">TimeoutFrameObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="700e4422ce9fb8d1" href="../../../../../../R/700e4422ce9fb8d1.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly int</b> <a id="03794cbbb4410aef" href="../../../../../../R/03794cbbb4410aef.html" target="n" data-glyph="46,1" class="i field">frameCount</a>;
+        <b>readonly</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <a id="c9c53bf65e30ddab" href="../../../../../../R/c9c53bf65e30ddab.html" target="n" data-glyph="46,1" class="i field">frameCountType</a>;
+ 
+        <b>public</b> <a id="c54265232dfca812" href="../../../../../../R/c54265232dfca812.html" target="n" data-glyph="72,1" class="i constructor">TimeoutFrameObservable</a>(<a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <b>int</b> <span id="r2 rd" class="r2 r">frameCount</span>, <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r3 rd" class="r3 r">frameCountType</span>) : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#551c8b44636f30e5" class="k">this</a>.<a href="#700e4422ce9fb8d1" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#551c8b44636f30e5" class="k">this</a>.<a href="#03794cbbb4410aef" class="i field">frameCount</a> = <span class="r2 r">frameCount</span>;
+            <a href="#551c8b44636f30e5" class="k">this</a>.<a href="#c9c53bf65e30ddab" class="i field">frameCountType</a> = <span class="r3 r">frameCountType</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="146f369e38b1465a" href="../../../../../../R/146f369e38b1465a.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#82f77a87b27507e7" class="t constructor">TimeoutFrame</a>(<a href="#551c8b44636f30e5" class="k">this</a>, <span class="r4 r">observer</span>, <span class="r5 r">cancel</span>).<a href="#ecd250a9bab36d41" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="1f5649895c7db578" href="../../../../../../R/1f5649895c7db578.html" target="n" data-glyph="4,1" class="t t">TimeoutFrame</a> : <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#551c8b44636f30e5" class="t t">TimeoutFrameObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="eca50c2cd05907ca" href="../../../../../../R/eca50c2cd05907ca.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="1311e1a31f188581" href="../../../../../../R/1311e1a31f188581.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>ulong</b> <a id="19d60fab3e354a5e" href="../../../../../../R/19d60fab3e354a5e.html" target="n" data-glyph="46,2" class="i field">objectId</a> = 0ul;
+            <b>bool</b> <a id="3c5c23c24ff88265" href="../../../../../../R/3c5c23c24ff88265.html" target="n" data-glyph="46,2" class="i field">isTimeout</a> = <b>false</b>;
+            <a href="../../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t t">SingleAssignmentDisposable</a> <a id="9326cff1d495e5c0" href="../../../../../../R/9326cff1d495e5c0.html" target="n" data-glyph="46,2" class="i field">sourceSubscription</a>;
+            <a href="../../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t t">SerialDisposable</a> <a id="f85975b8094b0363" href="../../../../../../R/f85975b8094b0363.html" target="n" data-glyph="46,2" class="i field">timerSubscription</a>;
+ 
+            <b>public</b> <a id="82f77a87b27507e7" href="../../../../../../R/82f77a87b27507e7.html" target="n" data-glyph="72,2" class="i constructor">TimeoutFrame</a>(<a href="#551c8b44636f30e5" class="t t">TimeoutFrameObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r6 rd" class="r6 r">parent</span>, <a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r7 rd" class="r7 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r8 rd" class="r8 r">cancel</span>) : <a href="../../Operators/OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r7 r">observer</span>, <span class="r8 r">cancel</span>)
+            {
+                <a href="#1f5649895c7db578" class="k">this</a>.<a href="#eca50c2cd05907ca" class="i field">parent</a> = <span class="r6 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="ecd250a9bab36d41" href="../../../../../../R/ecd250a9bab36d41.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#9326cff1d495e5c0" class="i field">sourceSubscription</a> = <b>new</b> <a href="../../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <a href="#f85975b8094b0363" class="i field">timerSubscription</a> = <b>new</b> <a href="../../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+                <a href="#f85975b8094b0363" class="i field">timerSubscription</a>.<a href="../../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <a href="#347f6064b6047ab4" class="i method">RunTimer</a>(<a href="#19d60fab3e354a5e" class="i field">objectId</a>);
+                <a href="#9326cff1d495e5c0" class="i field">sourceSubscription</a>.<a href="../../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#eca50c2cd05907ca" class="i field">parent</a>.<a href="#700e4422ce9fb8d1" class="i field">source</a>.<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#1f5649895c7db578" class="k">this</a>);
+ 
+                <b>return</b> <a href="../../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<a href="#f85975b8094b0363" class="i field">timerSubscription</a>, <a href="#9326cff1d495e5c0" class="i field">sourceSubscription</a>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="347f6064b6047ab4" href="../../../../../../R/347f6064b6047ab4.html" target="n" data-glyph="76,2" class="i method">RunTimer</a>(<b>ulong</b> <span id="r9 rd" class="r9 r">timerId</span>)
+            {
+                <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">UnityObservable</a>.<a href="../Observable.Unity.cs.html#5d7a9f35007b5bba" class="i method">TimerFrame</a>(<a href="#eca50c2cd05907ca" class="i field">parent</a>.<a href="#03794cbbb4410aef" class="i field">frameCount</a>, <a href="#eca50c2cd05907ca" class="i field">parent</a>.<a href="#c9c53bf65e30ddab" class="i field">frameCountType</a>)
+                    .<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#79bc88decc567fd8" class="t constructor">TimeoutFrameTick</a>(<a href="#1f5649895c7db578" class="k">this</a>, <span class="r9 r">timerId</span>));
+            }
+ 
+            <b>public override void</b> <a id="8f7b571783ba27ee" href="../../../../../../R/8f7b571783ba27ee.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r10 rd" class="r10 r">value</span>)
+            {
+                <b>ulong</b> <span id="r11 rd" class="r11 r">useObjectId</span>;
+                <b>bool</b> <span id="r12 rd" class="r12 r">timeout</span>;
+                <b>lock</b> (<a href="#1311e1a31f188581" class="i field">gate</a>)
+                {
+                    <span class="r12 r">timeout</span> = <a href="#3c5c23c24ff88265" class="i field">isTimeout</a>;
+                    <a href="#19d60fab3e354a5e" class="i field">objectId</a>++;
+                    <span class="r11 r">useObjectId</span> = <a href="#19d60fab3e354a5e" class="i field">objectId</a>;
+                }
+                <b>if</b> (<span class="r12 r">timeout</span>) <b>return</b>;
+ 
+                <a href="#f85975b8094b0363" class="i field">timerSubscription</a>.<a href="../../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <a href="../../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>; <span class="c">// cancel old timer</span>
+                <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r10 r">value</span>);
+                <a href="#f85975b8094b0363" class="i field">timerSubscription</a>.<a href="../../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <a href="#347f6064b6047ab4" class="i method">RunTimer</a>(<span class="r11 r">useObjectId</span>);
+            }
+ 
+            <b>public override void</b> <a id="6c15274615e09d18" href="../../../../../../R/6c15274615e09d18.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r13 rd" class="r13 r">error</span>)
+            {
+                <b>bool</b> <span id="r14 rd" class="r14 r">timeout</span>;
+                <b>lock</b> (<a href="#1311e1a31f188581" class="i field">gate</a>)
+                {
+                    <span class="r14 r">timeout</span> = <a href="#3c5c23c24ff88265" class="i field">isTimeout</a>;
+                    <a href="#19d60fab3e354a5e" class="i field">objectId</a>++;
+                }
+                <b>if</b> (<span class="r14 r">timeout</span>) <b>return</b>;
+ 
+                <a href="#f85975b8094b0363" class="i field">timerSubscription</a>.<a href="../../Disposables/SerialDisposable.cs.html#b66f18345c9aa0ca" class="i method">Dispose</a>();
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r13 r">error</span>); } <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="bbb6810115a6d651" href="../../../../../../R/bbb6810115a6d651.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>bool</b> <span id="r15 rd" class="r15 r">timeout</span>;
+                <b>lock</b> (<a href="#1311e1a31f188581" class="i field">gate</a>)
+                {
+                    <span class="r15 r">timeout</span> = <a href="#3c5c23c24ff88265" class="i field">isTimeout</a>;
+                    <a href="#19d60fab3e354a5e" class="i field">objectId</a>++;
+                }
+                <b>if</b> (<span class="r15 r">timeout</span>) <b>return</b>;
+ 
+                <a href="#f85975b8094b0363" class="i field">timerSubscription</a>.<a href="../../Disposables/SerialDisposable.cs.html#b66f18345c9aa0ca" class="i method">Dispose</a>();
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>class</b> <a id="1bf41382aa307d62" href="../../../../../../R/1bf41382aa307d62.html" target="n" data-glyph="4,2" class="t t">TimeoutFrameTick</a> : <a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>long</b>&gt;
+            {
+                <b>readonly</b> <a href="#1f5649895c7db578" class="t t">TimeoutFrame</a> <a id="262ba237136bc905" href="../../../../../../R/262ba237136bc905.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+                <b>readonly ulong</b> <a id="219ca5f5239dbe7e" href="../../../../../../R/219ca5f5239dbe7e.html" target="n" data-glyph="46,3" class="i field">timerId</a>;
+ 
+                <b>public</b> <a id="79bc88decc567fd8" href="../../../../../../R/79bc88decc567fd8.html" target="n" data-glyph="72,3" class="i constructor">TimeoutFrameTick</a>(<a href="#1f5649895c7db578" class="t t">TimeoutFrame</a> <span id="r16 rd" class="r16 r">parent</span>, <b>ulong</b> <span id="r17 rd" class="r17 r">timerId</span>)
+                {
+                    <a href="#1bf41382aa307d62" class="k">this</a>.<a href="#262ba237136bc905" class="i field">parent</a> = <span class="r16 r">parent</span>;
+                    <a href="#1bf41382aa307d62" class="k">this</a>.<a href="#219ca5f5239dbe7e" class="i field">timerId</a> = <span class="r17 r">timerId</span>;
+                }
+ 
+                <b>public void</b> <a id="d18629013b0f6a27" href="../../../../../../R/d18629013b0f6a27.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                }
+ 
+                <b>public void</b> <a id="c0bda4c944e0871a" href="../../../../../../R/c0bda4c944e0871a.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r18 rd" class="r18 r">error</span>)
+                {
+                }
+ 
+                <b>public void</b> <a id="3cccbfd858ad3be5" href="../../../../../../R/3cccbfd858ad3be5.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<b>long</b> <span id="r19 rd" class="r19 r">_</span>)
+                {
+ 
+ 
+                    <b>lock</b> (<a href="#262ba237136bc905" class="i field">parent</a>.<a href="#1311e1a31f188581" class="i field">gate</a>)
+                    {
+                        <b>if</b> (<a href="#262ba237136bc905" class="i field">parent</a>.<a href="#19d60fab3e354a5e" class="i field">objectId</a> == <a href="#219ca5f5239dbe7e" class="i field">timerId</a>)
+                        {
+                            <a href="#262ba237136bc905" class="i field">parent</a>.<a href="#3c5c23c24ff88265" class="i field">isTimeout</a> = <b>true</b>;
+                        }
+                    }
+                    <b>if</b> (<a href="#262ba237136bc905" class="i field">parent</a>.<a href="#3c5c23c24ff88265" class="i field">isTimeout</a>)
+                    {
+                        <b>try</b> { <a href="#262ba237136bc905" class="i field">parent</a>.<a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<b>new</b> <a href="@0@mscorlib/A.html#59c9457789637923" class="t constructor">TimeoutException</a>()); } <b>finally</b> { <a href="#262ba237136bc905" class="i field">parent</a>.<a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

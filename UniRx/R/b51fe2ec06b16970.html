@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html><head><title>ICancelable</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">8 implementations of ICancelable</div><div class="rA">UniRx (8)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Disposables\BooleanDisposable.cs (1)</div>
+<a href="../Disposables/BooleanDisposable.cs.html#6"><b>6</b>public sealed class BooleanDisposable : IDisposable, <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\CompositeDisposable.cs (1)</div>
+<a href="../Disposables/CompositeDisposable.cs.html#10"><b>10</b>public sealed class CompositeDisposable : ICollection&lt;IDisposable&gt;, IDisposable, <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\MultipleAssignmentDisposable.cs (1)</div>
+<a href="../Disposables/MultipleAssignmentDisposable.cs.html#6"><b>6</b>public sealed class MultipleAssignmentDisposable : IDisposable, <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\RefCountDisposable.cs (1)</div>
+<a href="../Disposables/RefCountDisposable.cs.html#15"><b>15</b>public sealed class RefCountDisposable : <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\ScheduledDisposable.cs (1)</div>
+<a href="../Disposables/ScheduledDisposable.cs.html#6"><b>6</b>public sealed class ScheduledDisposable : <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\SerialDisposable.cs (1)</div>
+<a href="../Disposables/SerialDisposable.cs.html#6"><b>6</b>public sealed class SerialDisposable : IDisposable, <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\SingleAssignmentDisposable.cs (1)</div>
+<a href="../Disposables/SingleAssignmentDisposable.cs.html#11"><b>11</b>public sealed class SingleAssignmentDisposable : IDisposable, <i>ICancelable</i></a>
+</div>
+<div class="rF"><div class="rN">Disposables\StableCompositeDisposable.cs (1)</div>
+<a href="../Disposables/StableCompositeDisposable.cs.html#10"><b>10</b>public abstract class StableCompositeDisposable : <i>ICancelable</i></a>
+</div>
+</div>
+<div class="rH">10 references to ICancelable</div><div class="rA">UniRx (10)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Disposables\StableCompositeDisposable.cs (6)</div>
+<a href="../Disposables/StableCompositeDisposable.cs.html#18"><b>18</b>public static <i>ICancelable</i> Create(IDisposable disposable1, IDisposable disposable2)</a>
+<a href="../Disposables/StableCompositeDisposable.cs.html#33"><b>33</b>public static <i>ICancelable</i> Create(IDisposable disposable1, IDisposable disposable2, IDisposable disposable3)</a>
+<a href="../Disposables/StableCompositeDisposable.cs.html#50"><b>50</b>public static <i>ICancelable</i> Create(IDisposable disposable1, IDisposable disposable2, IDisposable disposable3, IDisposable disposable4)</a>
+<a href="../Disposables/StableCompositeDisposable.cs.html#65"><b>65</b>public static <i>ICancelable</i> Create(params IDisposable[] disposables)</a>
+<a href="../Disposables/StableCompositeDisposable.cs.html#77"><b>77</b>public static <i>ICancelable</i> CreateUnsafe(IDisposable[] disposables)</a>
+<a href="../Disposables/StableCompositeDisposable.cs.html#87"><b>87</b>public static <i>ICancelable</i> Create(IEnumerable&lt;IDisposable&gt; disposables)</a>
+</div>
+<div class="rF"><div class="rN">Operators\Amb.cs (1)</div>
+<a href="../Operators/Amb.cs.html#46"><b>46</b><i>var</i> d = StableCompositeDisposable.Create(leftSubscription, rightSubscription);</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\IScheduler.cs (2)</div>
+<a href="../Schedulers/IScheduler.cs.html#23"><b>23</b>IDisposable ScheduleLongRunning(Action&lt;<i>ICancelable</i>&gt; action);</a>
+<a href="../Schedulers/IScheduler.cs.html#28"><b>28</b>void ScheduleQueueing&lt;T&gt;(<i>ICancelable</i> cancel, T state, Action&lt;T&gt; action);</a>
+</div>
+<div class="rF"><div class="rN">Schedulers\ThreadPoolScheduler.cs (1)</div>
+<a href="../Schedulers/ThreadPoolScheduler.cs.html#56"><b>56</b>public void ScheduleQueueing&lt;T&gt;(<i>ICancelable</i> cancel, T state, Action&lt;T&gt; action)</a>
+</div>
+</div>
+</body></html>

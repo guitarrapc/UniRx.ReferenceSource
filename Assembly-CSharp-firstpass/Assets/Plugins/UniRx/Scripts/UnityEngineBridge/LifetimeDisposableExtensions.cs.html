@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html><head><title>LifetimeDisposableExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(90);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/LifetimeDisposableExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\LifetimeDisposableExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../../P/e426e231478915d0.html" target="s" class="k">partial</a> <b>class</b> <a id="e426e231478915d0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">DisposableExtensions</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Dispose self on target gameObject has been destroyed. Return value is self disposable.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r0 r t">T</span> <a id="47b6e3a77c12fe3a" href="../../../../../R/47b6e3a77c12fe3a.html" target="n" data-glyph="220,1" class="i method">AddTo</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">disposable</span>, <span class="i">GameObject</span> <span id="r2 rd" class="r2 r">gameObject</span>)
+            <b>where</b> <span class="r0 r t">T</span> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>if</b> (<span class="r2 r">gameObject</span> == <b>null</b>)
+            {
+                <span class="r1 r">disposable</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <b>return</b> <span class="r1 r">disposable</span>;
+            }
+ 
+            <b>var</b> <span id="r3 rd" class="r3 r">trigger</span> = <span class="r2 r">gameObject</span>.<span class="i">GetComponent</span>&lt;<a href="Triggers/ObservableDestroyTrigger.cs.html#6c749f109a8ae545" class="t t">ObservableDestroyTrigger</a>&gt;();
+            <b>if</b> (<span class="r3 r">trigger</span> == <b>null</b>)
+            {
+                <span class="r3 r">trigger</span> = <span class="r2 r">gameObject</span>.<span class="i">AddComponent</span>&lt;<a href="Triggers/ObservableDestroyTrigger.cs.html#6c749f109a8ae545" class="t t">ObservableDestroyTrigger</a>&gt;();
+            }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">disable</span> 618
+ 
+            <span class="c">// If gameObject is deactive, does not raise OnDestroy, watch and invoke trigger.</span>
+            <b>if</b> (!<span class="r3 r">trigger</span>.<span class="i">IsActivated</span> &amp;&amp; !<span class="r3 r">trigger</span>.<span class="i">IsMonitoredActivate</span> &amp;&amp; !<span class="r3 r">trigger</span>.<span class="i">gameObject</span>.<span class="i">activeInHierarchy</span>)
+            {
+                <span class="r3 r">trigger</span>.<span class="i">IsMonitoredActivate</span> = <b>true</b>;
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<span class="i">MonitorTriggerHealth</span>(<span class="r3 r">trigger</span>, <span class="r2 r">gameObject</span>));
+            }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">restore</span> 618
+ 
+            <span class="r3 r">trigger</span>.<span class="i">AddDisposableOnDestroy</span>(<span class="r1 r">disposable</span>);
+            <b>return</b> <span class="r1 r">disposable</span>;
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="9f72ba5e87f58dab" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">MonitorTriggerHealth</a>(<a href="Triggers/ObservableDestroyTrigger.cs.html#6c749f109a8ae545" class="t t">ObservableDestroyTrigger</a> <span id="r4 rd" class="r4 r">trigger</span>, <span class="i">GameObject</span> <span id="r5 rd" class="r5 r">targetGameObject</span>)
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return null</b>;
+                <b>if</b> (<span class="r4 r">trigger</span>.<a href="Triggers/ObservableDestroyTrigger.cs.html#c8288b2c78d41d06" class="i property">IsActivated</a>) <b>yield break</b>;
+ 
+                <b>if</b> (<span class="r5 r">targetGameObject</span> == <b>null</b>) <span class="c">// isDestroy</span>
+                {
+                    <span class="r4 r">trigger</span>.<a href="Triggers/ObservableDestroyTrigger.cs.html#882dfe696c72c459" class="i method">ForceRaiseOnDestroy</a>(); <span class="c">// Force publish OnDestroy</span>
+                    <b>yield break</b>;
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Dispose self on target gameObject has been destroyed. Return value is self disposable.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r6 r t">T</span> <a id="673189a517056000" href="../../../../../R/673189a517056000.html" target="n" data-glyph="220,1" class="i method">AddTo</a>&lt;<span id="r6 rd t" class="r6 r t">T</span>&gt;(<b>this</b> <span class="r6 r t">T</span> <span id="r7 rd" class="r7 r">disposable</span>, <span class="i">Component</span> <span id="r8 rd" class="r8 r">gameObjectComponent</span>)
+            <b>where</b> <span class="r6 r t">T</span> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>if</b> (<span class="r8 r">gameObjectComponent</span> == <b>null</b>)
+            {
+                <span class="r7 r">disposable</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <b>return</b> <span class="r7 r">disposable</span>;
+            }
+ 
+            <b>return</b> <span class="i">AddTo</span>(<span class="r7 r">disposable</span>, <span class="r8 r">gameObjectComponent</span>.<span class="i">gameObject</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Add disposable(self) to CompositeDisposable(or other ICollection) and Dispose self on target gameObject has been destroyed.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Return value is self disposable.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r9 r t">T</span> <a id="685a7ec1bd668b56" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AddTo</a>&lt;<span id="r9 rd t" class="r9 r t">T</span>&gt;(<b>this</b> <span class="r9 r t">T</span> <span id="r10 rd" class="r10 r">disposable</span>, <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r11 rd" class="r11 r">container</span>, <span class="i">GameObject</span> <span id="r12 rd" class="r12 r">gameObject</span>)
+            <b>where</b> <span class="r9 r t">T</span> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>return</b> <span class="r10 r">disposable</span>.<a href="../Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<span class="r11 r">container</span>).<a href="#47b6e3a77c12fe3a" class="i method">AddTo</a>(<span class="r12 r">gameObject</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Add disposable(self) to CompositeDisposable(or other ICollection) and Dispose self on target gameObject has been destroyed.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Return value is self disposable.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r13 r t">T</span> <a id="2e1c2a5d396a381f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AddTo</a>&lt;<span id="r13 rd t" class="r13 r t">T</span>&gt;(<b>this</b> <span class="r13 r t">T</span> <span id="r14 rd" class="r14 r">disposable</span>, <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r15 rd" class="r15 r">container</span>, <span class="i">Component</span> <span id="r16 rd" class="r16 r">gameObjectComponent</span>)
+            <b>where</b> <span class="r13 r t">T</span> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>return</b> <span class="r14 r">disposable</span>.<a href="../Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<span class="r15 r">container</span>).<a href="#673189a517056000" class="i method">AddTo</a>(<span class="r16 r">gameObjectComponent</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

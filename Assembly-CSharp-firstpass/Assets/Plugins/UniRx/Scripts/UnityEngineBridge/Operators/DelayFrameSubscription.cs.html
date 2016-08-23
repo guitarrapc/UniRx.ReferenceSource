@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html><head><title>DelayFrameSubscription.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(37);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/DelayFrameSubscription.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\DelayFrameSubscription.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UniRxLibrary</span>
+<span class="e">using UnityObservable = UniRx.ObservableUnity;
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+<b>using</b> <span class="t">UnityObservable</span> = <span class="i n">UniRx</span>.<a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="246c767c92fe88d3" href="../../../../../../R/246c767c92fe88d3.html" target="n" data-glyph="2,0" class="t t">DelayFrameSubscriptionObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="d20d2e1e736a677c" href="../../../../../../R/d20d2e1e736a677c.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly int</b> <a id="7783da55b84d2c65" href="../../../../../../R/7783da55b84d2c65.html" target="n" data-glyph="46,1" class="i field">frameCount</a>;
+        <b>readonly</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <a id="f0e563d16a894fa0" href="../../../../../../R/f0e563d16a894fa0.html" target="n" data-glyph="46,1" class="i field">frameCountType</a>;
+ 
+        <b>public</b> <a id="b6be1e9cf4a32331" href="../../../../../../R/b6be1e9cf4a32331.html" target="n" data-glyph="72,1" class="i constructor">DelayFrameSubscriptionObservable</a>(<a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <b>int</b> <span id="r2 rd" class="r2 r">frameCount</span>, <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r3 rd" class="r3 r">frameCountType</span>)
+            : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#246c767c92fe88d3" class="k">this</a>.<a href="#d20d2e1e736a677c" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#246c767c92fe88d3" class="k">this</a>.<a href="#7783da55b84d2c65" class="i field">frameCount</a> = <span class="r2 r">frameCount</span>;
+            <a href="#246c767c92fe88d3" class="k">this</a>.<a href="#f0e563d16a894fa0" class="i field">frameCountType</a> = <span class="r3 r">frameCountType</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="08eefdb59b920ef2" href="../../../../../../R/08eefdb59b920ef2.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>)
+        {
+            <a href="../../Disposables/MultipleAssignmentDisposable.cs.html#34d257b3f0ebdeee" class="k">var</a> <span id="r6 rd" class="r6 r">d</span> = <b>new</b> <a href="../../Disposables/MultipleAssignmentDisposable.cs.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+            <span class="r6 r">d</span>.<a href="../../Disposables/MultipleAssignmentDisposable.cs.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">UnityObservable</a>.<a href="../Observable.Unity.cs.html#5d7a9f35007b5bba" class="i method">TimerFrame</a>(<a href="#7783da55b84d2c65" class="i field">frameCount</a>, <a href="#f0e563d16a894fa0" class="i field">frameCountType</a>)
+                .<a href="../../Observer.cs.html#83ed0827372b9d8a" class="i method">SubscribeWithState3</a>(<span class="r4 r">observer</span>, <span class="r6 r">d</span>, <a href="#d20d2e1e736a677c" class="i field">source</a>, (<span id="r7 rd" class="r7 r">_</span>, <span id="r8 rd" class="r8 r">o</span>, <span id="r9 rd" class="r9 r">disp</span>, <span id="r10 rd" class="r10 r">s</span>) =&gt;
+                {
+                    <span class="r9 r">disp</span>.<a href="../../Disposables/MultipleAssignmentDisposable.cs.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r10 r">s</span>.<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r8 r">o</span>);
+                });
+ 
+            <b>return</b> <span class="r6 r">d</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

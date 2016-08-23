@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html><head><title>ThreadSafeQueueWorker.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(112);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/InternalUtil/ThreadSafeQueueWorker.cs" target="_top">InternalUtil\ThreadSafeQueueWorker.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>
+{
+    <b>public class</b> <a id="5ccbc181fcffc992" href="../R/5ccbc181fcffc992.html" target="n" data-glyph="0,0" class="t t"><span id="cc9e5ab6e7a1c168">ThreadSafeQueueWorker</span></a>
+    {
+        <b>const int</b> <a id="24a59d0601910d3c" href="../R/24a59d0601910d3c.html" target="n" data-glyph="10,1" class="i field">MaxArrayLength</a> = 0X7FEFFFFF;
+        <b>const int</b> <a id="e13573255eb44c3a" href="../R/e13573255eb44c3a.html" target="n" data-glyph="10,1" class="i field">InitialSize</a> = 16;
+ 
+        <b>object</b> <a id="ebe805ee17ded33b" href="../R/ebe805ee17ded33b.html" target="n" data-glyph="46,1" class="i field">gate</a> = <b>new</b> <b>object</b>();
+        <b>bool</b> <a id="6c5db5ba5d1592f8" href="../R/6c5db5ba5d1592f8.html" target="n" data-glyph="46,1" class="i field">dequing</a> = <b>false</b>;
+ 
+        <b>int</b> <a id="e09ef6103e352b8d" href="../R/e09ef6103e352b8d.html" target="n" data-glyph="46,1" class="i field">actionListCount</a> = 0;
+        <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt;[] <a id="8fb109b16fa4bb6a" href="../R/8fb109b16fa4bb6a.html" target="n" data-glyph="46,1" class="i field">actionList</a> = <b>new</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt;[<a href="#e13573255eb44c3a" class="i field">InitialSize</a>];
+        <b>object</b>[] <a id="dde6d074e44cb6e8" href="../R/dde6d074e44cb6e8.html" target="n" data-glyph="46,1" class="i field">actionStates</a> = <b>new</b> <b>object</b>[<a href="#e13573255eb44c3a" class="i field">InitialSize</a>];
+ 
+        <b>int</b> <a id="3b96a34a77f256fd" href="../R/3b96a34a77f256fd.html" target="n" data-glyph="46,1" class="i field">waitingListCount</a> = 0;
+        <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt;[] <a id="ee387588a66508c4" href="../R/ee387588a66508c4.html" target="n" data-glyph="46,1" class="i field">waitingList</a> = <b>new</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt;[<a href="#e13573255eb44c3a" class="i field">InitialSize</a>];
+        <b>object</b>[] <a id="19e38550a7937ae4" href="../R/19e38550a7937ae4.html" target="n" data-glyph="46,1" class="i field">waitingStates</a> = <b>new</b> <b>object</b>[<a href="#e13573255eb44c3a" class="i field">InitialSize</a>];
+ 
+        <b>public void</b> <a id="4eed7a4f6a9125d2" href="../R/4eed7a4f6a9125d2.html" target="n" data-glyph="72,1" class="i method">Enqueue</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <span id="r0 rd" class="r0 r">action</span>, <b>object</b> <span id="r1 rd" class="r1 r">state</span>)
+        {
+            <b>lock</b> (<a href="#ebe805ee17ded33b" class="i field">gate</a>)
+            {
+                <b>if</b> (<a href="#6c5db5ba5d1592f8" class="i field">dequing</a>)
+                {
+                    <span class="c">// Ensure Capacity</span>
+                    <b>if</b> (<a href="#ee387588a66508c4" class="i field">waitingList</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>)
+                    {
+                        <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r2 rd" class="r2 r">newLength</span> = <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a> * 2;
+                        <b>if</b> ((<b>uint</b>)<span class="r2 r">newLength</span> &gt; <a href="#24a59d0601910d3c" class="i field">MaxArrayLength</a>) <span class="r2 r">newLength</span> = <a href="#24a59d0601910d3c" class="i field">MaxArrayLength</a>;
+ 
+                        <b>var</b> <span id="r3 rd" class="r3 r">newArray</span> = <b>new</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt;[<span class="r2 r">newLength</span>];
+                        <b>var</b> <span id="r4 rd" class="r4 r">newArrayState</span> = <b>new</b> <b>object</b>[<span class="r2 r">newLength</span>];
+                        <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#1a86a6b8b02d0948" class="i method">Copy</a>(<a href="#ee387588a66508c4" class="i field">waitingList</a>, <span class="r3 r">newArray</span>, <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>);
+                        <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#1a86a6b8b02d0948" class="i method">Copy</a>(<a href="#19e38550a7937ae4" class="i field">waitingStates</a>, <span class="r4 r">newArrayState</span>, <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>);
+                        <a href="#ee387588a66508c4" class="i field">waitingList</a> = <span class="r3 r">newArray</span>;
+                        <a href="#19e38550a7937ae4" class="i field">waitingStates</a> = <span class="r4 r">newArrayState</span>;
+                    }
+                    <a href="#ee387588a66508c4" class="i field">waitingList</a>[<a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>] = <span class="r0 r">action</span>;
+                    <a href="#19e38550a7937ae4" class="i field">waitingStates</a>[<a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>] = <span class="r1 r">state</span>;
+                    <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>++;
+                }
+                <b>else</b>
+                {
+                    <span class="c">// Ensure Capacity</span>
+                    <b>if</b> (<a href="#8fb109b16fa4bb6a" class="i field">actionList</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == <a href="#e09ef6103e352b8d" class="i field">actionListCount</a>)
+                    {
+                        <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r5 rd" class="r5 r">newLength</span> = <a href="#e09ef6103e352b8d" class="i field">actionListCount</a> * 2;
+                        <b>if</b> ((<b>uint</b>)<span class="r5 r">newLength</span> &gt; <a href="#24a59d0601910d3c" class="i field">MaxArrayLength</a>) <span class="r5 r">newLength</span> = <a href="#24a59d0601910d3c" class="i field">MaxArrayLength</a>;
+ 
+                        <b>var</b> <span id="r6 rd" class="r6 r">newArray</span> = <b>new</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt;[<span class="r5 r">newLength</span>];
+                        <b>var</b> <span id="r7 rd" class="r7 r">newArrayState</span> = <b>new</b> <b>object</b>[<span class="r5 r">newLength</span>];
+                        <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#1a86a6b8b02d0948" class="i method">Copy</a>(<a href="#8fb109b16fa4bb6a" class="i field">actionList</a>, <span class="r6 r">newArray</span>, <a href="#e09ef6103e352b8d" class="i field">actionListCount</a>);
+                        <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#1a86a6b8b02d0948" class="i method">Copy</a>(<a href="#dde6d074e44cb6e8" class="i field">actionStates</a>, <span class="r7 r">newArrayState</span>, <a href="#e09ef6103e352b8d" class="i field">actionListCount</a>);
+                        <a href="#8fb109b16fa4bb6a" class="i field">actionList</a> = <span class="r6 r">newArray</span>;
+                        <a href="#dde6d074e44cb6e8" class="i field">actionStates</a> = <span class="r7 r">newArrayState</span>;
+                    }
+                    <a href="#8fb109b16fa4bb6a" class="i field">actionList</a>[<a href="#e09ef6103e352b8d" class="i field">actionListCount</a>] = <span class="r0 r">action</span>;
+                    <a href="#dde6d074e44cb6e8" class="i field">actionStates</a>[<a href="#e09ef6103e352b8d" class="i field">actionListCount</a>] = <span class="r1 r">state</span>;
+                    <a href="#e09ef6103e352b8d" class="i field">actionListCount</a>++;
+                }
+            }
+        }
+ 
+        <b>public void</b> <a id="9aa546401878d5fb" href="../R/9aa546401878d5fb.html" target="n" data-glyph="72,1" class="i method">ExecuteAll</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r8 rd" class="r8 r">unhandledExceptionCallback</span>)
+        {
+            <b>lock</b> (<a href="#ebe805ee17ded33b" class="i field">gate</a>)
+            {
+                <b>if</b> (<a href="#e09ef6103e352b8d" class="i field">actionListCount</a> == 0) <b>return</b>;
+ 
+                <a href="#6c5db5ba5d1592f8" class="i field">dequing</a> = <b>true</b>;
+            }
+ 
+            <b>for</b> (<b>int</b> <span id="r9 rd" class="r9 r">i</span> = 0; <span class="r9 r">i</span> &lt; <a href="#e09ef6103e352b8d" class="i field">actionListCount</a>; <span class="r9 r">i</span>++)
+            {
+                <a href="@0@mscorlib/A.html#486d58da4553e12d" class="k">var</a> <span id="r10 rd" class="r10 r">action</span> = <a href="#8fb109b16fa4bb6a" class="i field">actionList</a>[<span class="r9 r">i</span>];
+                <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r11 rd" class="r11 r">state</span> = <a href="#dde6d074e44cb6e8" class="i field">actionStates</a>[<span class="r9 r">i</span>];
+                <b>try</b>
+                {
+                    <span class="r10 r">action</span>(<span class="r11 r">state</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r12 rd" class="r12 r">ex</span>)
+                {
+                    <span class="r8 r">unhandledExceptionCallback</span>(<span class="r12 r">ex</span>);
+                }
+                <b>finally</b>
+                {
+                    <span class="c">// Clear</span>
+                    <a href="#8fb109b16fa4bb6a" class="i field">actionList</a>[<span class="r9 r">i</span>] = <b>null</b>;
+                    <a href="#dde6d074e44cb6e8" class="i field">actionStates</a>[<span class="r9 r">i</span>] = <b>null</b>;
+                }
+            }
+ 
+            <b>lock</b> (<a href="#ebe805ee17ded33b" class="i field">gate</a>)
+            {
+                <a href="#6c5db5ba5d1592f8" class="i field">dequing</a> = <b>false</b>;
+ 
+                <b>var</b> <span id="r13 rd" class="r13 r">swapTempActionList</span> = <a href="#8fb109b16fa4bb6a" class="i field">actionList</a>;
+                <b>var</b> <span id="r14 rd" class="r14 r">swapTempActionStates</span> = <a href="#dde6d074e44cb6e8" class="i field">actionStates</a>;
+ 
+                <a href="#e09ef6103e352b8d" class="i field">actionListCount</a> = <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a>;
+                <a href="#8fb109b16fa4bb6a" class="i field">actionList</a> = <a href="#ee387588a66508c4" class="i field">waitingList</a>;
+                <a href="#dde6d074e44cb6e8" class="i field">actionStates</a> = <a href="#19e38550a7937ae4" class="i field">waitingStates</a>;
+ 
+                <a href="#3b96a34a77f256fd" class="i field">waitingListCount</a> = 0;
+                <a href="#ee387588a66508c4" class="i field">waitingList</a> = <span class="r13 r">swapTempActionList</span>;
+                <a href="#19e38550a7937ae4" class="i field">waitingStates</a> = <span class="r14 r">swapTempActionStates</span>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

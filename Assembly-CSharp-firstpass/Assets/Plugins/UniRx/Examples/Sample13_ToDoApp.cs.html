@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample13_ToDoApp.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(68);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample13_ToDoApp.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample13_ToDoApp.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">EventSystems</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="79be591a741b6ae7" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="5ddfb5d3d35d3d92">Sample13_ToDoApp</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <span class="c">// Open Sample13Scene. Set from canvas</span>
+        <b>public</b> <span class="i">Text</span> <a id="821f0a95196a41f8" href="../../../../R/821f0a95196a41f8.html" target="n" data-glyph="42,1" class="i field">Title</a>;
+        <b>public</b> <span class="i">InputField</span> <a id="632c46ad31eafa82" href="../../../../R/632c46ad31eafa82.html" target="n" data-glyph="42,1" class="i field">ToDoInput</a>;
+        <b>public</b> <span class="i">Button</span> <a id="e237437c3ab0ad6a" href="../../../../R/e237437c3ab0ad6a.html" target="n" data-glyph="42,1" class="i field">AddButton</a>;
+        <b>public</b> <span class="i">Button</span> <a id="6c9e98ac7916737a" href="../../../../R/6c9e98ac7916737a.html" target="n" data-glyph="42,1" class="i field">ClearButton</a>;
+        <b>public</b> <span class="i">GameObject</span> <a id="a8d99ca41327d42f" href="../../../../R/a8d99ca41327d42f.html" target="n" data-glyph="42,1" class="i field">TodoList</a>;
+ 
+        <span class="c">// prefab:)</span>
+        <b>public</b> <span class="i">GameObject</span> <a id="f3be76abc6b49580" href="../../../../R/f3be76abc6b49580.html" target="n" data-glyph="42,1" class="i field">SampleItemPrefab</a>;
+ 
+        <a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#22992f386bb7d26e" class="t t">ReactiveCollection</a>&lt;<span class="i">GameObject</span>&gt; <a id="228c447360ac1d97" href="../../../../R/228c447360ac1d97.html" target="n" data-glyph="46,1" class="i field">toDos</a> = <b>new</b> <a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#86f207d83fc408bf" class="t constructor">ReactiveCollection</a>&lt;<span class="i">GameObject</span>&gt;();
+ 
+        <b>void</b> <a id="6d8a54cef3628645" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// merge Button click and push enter key on input field.</span>
+            <b>var</b> <span id="r0 rd" class="r0 r">submit</span> = <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">Merge</span>(
+                <a href="#e237437c3ab0ad6a" class="i field">AddButton</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#c2f9d043cc07e903" class="i method">OnClickAsObservable</a>().<a href="../Scripts/Observable.cs.html#79105120ffc929e6" class="i method">Select</a>(<span id="r1 rd" class="r1 r">_</span> =&gt; <a href="#632c46ad31eafa82" class="i field">ToDoInput</a>.<span class="i">text</span>),
+                <a href="#632c46ad31eafa82" class="i field">ToDoInput</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#558f8e09bb2f63ef" class="i method">OnEndEditAsObservable</a>().<span class="i">Where</span>(<span id="r2 rd" class="r2 r">_</span> =&gt; <span class="i">Input</span>.<span class="i">GetKeyDown</span>(<span class="i">KeyCode</span>.<span class="i">Return</span>)));
+ 
+            <span class="c">// add to reactive collection</span>
+            <span class="r0 r">submit</span>.<span class="i">Where</span>(<span id="r3 rd" class="r3 r">x</span> =&gt; <span class="r3 r">x</span> != <span class="s">&quot;&quot;</span>)
+                  .<span class="i">Subscribe</span>(<span id="r4 rd" class="r4 r">x</span> =&gt;
+                  {
+                      <a href="#632c46ad31eafa82" class="i field">ToDoInput</a>.<span class="i">text</span> = <span class="s">&quot;&quot;</span>; <span class="c">// clear input field</span>
+                      <b>var</b> <span id="r5 rd" class="r5 r">item</span> = <span class="i">Instantiate</span>(<a href="#f3be76abc6b49580" class="i field">SampleItemPrefab</a>) <b>as</b> <span class="i">GameObject</span>;
+                      (<span class="r5 r">item</span>.<span class="i">GetComponentInChildren</span>(<b>typeof</b>(<span class="i">Text</span>)) <b>as</b> <span class="i">Text</span>).<span class="i">text</span> = <span class="r4 r">x</span>;
+                      <a href="#228c447360ac1d97" class="i field">toDos</a>.<a href="@0@mscorlib/A.html#5c61cc24de82f7e7" class="i method">Add</a>(<span class="r5 r">item</span>);
+                  });
+ 
+            <span class="c">// Collection Change Handling</span>
+            <a href="#228c447360ac1d97" class="i field">toDos</a>.<a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#0f04383ec9f48760" class="i method">ObserveCountChanged</a>().<a href="../Scripts/Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r6 rd" class="r6 r">x</span> =&gt; <a href="#821f0a95196a41f8" class="i field">Title</a>.<span class="i">text</span> = <span class="s">&quot;TODO App, ItemCount:&quot;</span> + <span class="r6 r">x</span>);
+            <a href="#228c447360ac1d97" class="i field">toDos</a>.<a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#277890097a9dbfd4" class="i method">ObserveAdd</a>().<a href="../Scripts/Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r7 rd" class="r7 r">x</span> =&gt;
+            {
+                <span class="r7 r">x</span>.<a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#3b7fb365f07a08c8" class="i property">Value</a>.<span class="i">transform</span>.<span class="i">SetParent</span>(<a href="#a8d99ca41327d42f" class="i field">TodoList</a>.<span class="i">transform</span>, <b>false</b>);
+            });
+            <a href="#228c447360ac1d97" class="i field">toDos</a>.<a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#3a48091f9de1ba1d" class="i method">ObserveRemove</a>().<span class="i">Subscribe</span>(<span id="r8 rd" class="r8 r">x</span> =&gt;
+            {
+                <span class="i">GameObject</span>.<span class="i">Destroy</span>(<span class="r8 r">x</span>.<a href="../Scripts/UnityEngineBridge/ReactiveCollection.cs.html#69c6a40ba6184dd9" class="i property">Value</a>);
+            });
+ 
+            <span class="c">// Clear</span>
+            <a href="#6c9e98ac7916737a" class="i field">ClearButton</a>.<a href="../Scripts/UnityEngineBridge/UnityUIComponentExtensions.cs.html#c2f9d043cc07e903" class="i method">OnClickAsObservable</a>()
+                .<span class="i">Subscribe</span>(<span id="r9 rd" class="r9 r">_</span> =&gt;
+                {
+                    <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r10 rd" class="r10 r">removeTargets</span> = <a href="#228c447360ac1d97" class="i field">toDos</a>.<span class="i">Where</span>(<span id="r11 rd" class="r11 r">x</span> =&gt; <span class="r11 r">x</span>.<span class="i">GetComponent</span>&lt;<span class="i">Toggle</span>&gt;().<span class="i">isOn</span>).<span class="i">ToArray</span>();
+                    <b>foreach</b> (<b>var</b> <span id="r12 rd" class="r12 r">item</span> <b>in</b> <span class="r10 r">removeTargets</span>)
+                    {
+                        <a href="#228c447360ac1d97" class="i field">toDos</a>.<span class="i">Remove</span>(<span class="r12 r">item</span>);
+                    }
+                });
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

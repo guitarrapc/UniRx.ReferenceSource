@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html><head><title>Scheduler.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(235);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Schedulers/Scheduler.cs" target="_top">Assets\Plugins\UniRx\Scripts\Schedulers\Scheduler.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">// Scheduler Extension</span>
+    <b>public static</b> <a href="../../../../../P/48627f587bfa2dac.html" target="s" class="k">partial</a> <b>class</b> <a id="48627f587bfa2dac" href="../../../../../R/48627f587bfa2dac.html" target="n" data-glyph="0,0" class="t t">Scheduler</a>
+    {
+        <span class="c">// configurable defaults</span>
+        <b>public static class</b> <a id="9e8a9c8c24cebd7c" href="../../../../../R/9e8a9c8c24cebd7c.html" target="n" data-glyph="0,1" class="t t">DefaultSchedulers</a>
+        {
+            <b>static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="a754cb71c70409a3" href="../../../../../R/a754cb71c70409a3.html" target="n" data-glyph="46,2" class="i field">constantTime</a>;
+            <b>public static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="522b1e3e9dc51d84" href="../../../../../R/522b1e3e9dc51d84.html" target="n" data-glyph="102,2" class="i property">ConstantTimeOperations</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#a754cb71c70409a3" class="i field">constantTime</a> ?? (<a href="#a754cb71c70409a3" class="i field">constantTime</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>);
+                }
+                <b>set</b>
+                {
+                    <a href="#a754cb71c70409a3" class="i field">constantTime</a> = <b>value</b>;
+                }
+            }
+ 
+            <b>static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="9a9def08a4ee5eb2" href="../../../../../R/9a9def08a4ee5eb2.html" target="n" data-glyph="46,2" class="i field">tailRecursion</a>;
+            <b>public static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="602b63e6223fbed8" href="../../../../../R/602b63e6223fbed8.html" target="n" data-glyph="102,2" class="i property">TailRecursion</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#9a9def08a4ee5eb2" class="i field">tailRecursion</a> ?? (<a href="#9a9def08a4ee5eb2" class="i field">tailRecursion</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>);
+                }
+                <b>set</b>
+                {
+                    <a href="#9a9def08a4ee5eb2" class="i field">tailRecursion</a> = <b>value</b>;
+                }
+            }
+ 
+            <b>static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="3b16cfef96f2ac0f" href="../../../../../R/3b16cfef96f2ac0f.html" target="n" data-glyph="46,2" class="i field">iteration</a>;
+            <b>public static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="cf51429aa7326cee" href="../../../../../R/cf51429aa7326cee.html" target="n" data-glyph="102,2" class="i property">Iteration</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#3b16cfef96f2ac0f" class="i field">iteration</a> ?? (<a href="#3b16cfef96f2ac0f" class="i field">iteration</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>);
+                }
+                <b>set</b>
+                {
+                    <a href="#3b16cfef96f2ac0f" class="i field">iteration</a> = <b>value</b>;
+                }
+            }
+ 
+            <b>static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="7187883c818fa89c" href="../../../../../R/7187883c818fa89c.html" target="n" data-glyph="46,2" class="i field">timeBasedOperations</a>;
+            <b>public static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="5286974e9ab35679" href="../../../../../R/5286974e9ab35679.html" target="n" data-glyph="102,2" class="i property">TimeBasedOperations</a>
+            {
+                <b>get</b>
+                {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UniRxLibrary</span>
+<span class="e">                    return timeBasedOperations ?? (timeBasedOperations = Scheduler.ThreadPool);
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+                    <b>return</b> <a href="#7187883c818fa89c" class="i field">timeBasedOperations</a> ?? (<a href="#7187883c818fa89c" class="i field">timeBasedOperations</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../UnityEngineBridge/MainThreadScheduler.cs.html#40c34fa13f14d53e" class="i property">MainThread</a>); <span class="c">// MainThread as default for TimeBased Operation</span>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                }
+                <b>set</b>
+                {
+                    <a href="#7187883c818fa89c" class="i field">timeBasedOperations</a> = <b>value</b>;
+                }
+            }
+ 
+            <b>static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="df4bd95c4e258539" href="../../../../../R/df4bd95c4e258539.html" target="n" data-glyph="46,2" class="i field">asyncConversions</a>;
+            <b>public static</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="b7e585547b0e1c95" href="../../../../../R/b7e585547b0e1c95.html" target="n" data-glyph="102,2" class="i property">AsyncConversions</a>
+            {
+                <b>get</b>
+                {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">WEB_GL</span>
+<span class="e">                    // WebGL does not support threadpool
+                    return asyncConversions ?? (asyncConversions = Scheduler.MainThread);
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+                    <b>return</b> <a href="#df4bd95c4e258539" class="i field">asyncConversions</a> ?? (<a href="#df4bd95c4e258539" class="i field">asyncConversions</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ThreadPoolScheduler.cs.html#ef176e05cfd62133" class="i field">ThreadPool</a>);
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                }
+                <b>set</b>
+                {
+                    <a href="#df4bd95c4e258539" class="i field">asyncConversions</a> = <b>value</b>;
+                }
+            }
+ 
+            <b>public static void</b> <a id="d5ee0a17c2dab65c" href="../../../../../R/d5ee0a17c2dab65c.html" target="n" data-glyph="72,2" class="i method">SetDotNetCompatible</a>()
+            {
+                <a href="#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>;
+                <a href="#602b63e6223fbed8" class="i property">TailRecursion</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>;
+                <a href="#cf51429aa7326cee" class="i property">Iteration</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>;
+                <a href="#5286974e9ab35679" class="i property">TimeBasedOperations</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ThreadPoolScheduler.cs.html#ef176e05cfd62133" class="i field">ThreadPool</a>;
+                <a href="#b7e585547b0e1c95" class="i property">AsyncConversions</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="ThreadPoolScheduler.cs.html#ef176e05cfd62133" class="i field">ThreadPool</a>;
+            }
+        }
+ 
+        <span class="c">// utils</span>
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="1deb8bb158a1d92b" href="../../../../../R/1deb8bb158a1d92b.html" target="n" data-glyph="102,1" class="i property">Now</a>
+        {
+            <b>get</b> { <b>return</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a>.<a href="@0@mscorlib/A.html#04abe0cac293ebd0" class="i property">UtcNow</a>; }
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="f0c23e4562d46bd4" href="../../../../../R/f0c23e4562d46bd4.html" target="n" data-glyph="72,1" class="i method">Normalize</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r0 rd" class="r0 r">timeSpan</span>)
+        {
+            <b>return</b> <span class="r0 r">timeSpan</span> &gt;= <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a> ? <span class="r0 r">timeSpan</span> : <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>;
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="cbd0d2ce69bc62cb" href="../../../../../R/cbd0d2ce69bc62cb.html" target="n" data-glyph="220,1" class="i method">Schedule</a>(<b>this</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r1 rd" class="r1 r">scheduler</span>, <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r2 rd" class="r2 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r3 rd" class="r3 r">action</span>)
+        {
+            <b>return</b> <span class="r1 r">scheduler</span>.<a href="IScheduler.cs.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<span class="r2 r">dueTime</span> - <span class="r1 r">scheduler</span>.<a href="IScheduler.cs.html#26e5447b3b301f2d" class="i property">Now</a>, <span class="r3 r">action</span>);
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="be7c256ff6e2e24d" href="../../../../../R/be7c256ff6e2e24d.html" target="n" data-glyph="220,1" class="i method">Schedule</a>(<b>this</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r4 rd" class="r4 r">scheduler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <span id="r5 rd" class="r5 r">action</span>)
+        {
+            <span class="c">// InvokeRec1</span>
+            <a href="../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="k">var</a> <span id="r6 rd" class="r6 r">group</span> = <b>new</b> <a href="../Disposables/CompositeDisposable.cs.html#b52631833391dfdc" class="t constructor">CompositeDisposable</a>(1);
+            <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r7 rd" class="r7 r">gate</span> = <b>new</b> <b>object</b>();
+ 
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r8 rd" class="r8 r">recursiveAction</span> = <b>null</b>;
+            <span class="r8 r">recursiveAction</span> = () =&gt; <span class="r5 r">action</span>(() =&gt;
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r9 rd" class="r9 r">isAdded</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r10 rd" class="r10 r">isDone</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r11 rd" class="r11 r">d</span> = <b>default</b>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>);
+                <span class="r11 r">d</span> = <span class="r4 r">scheduler</span>.<a href="IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt;
+                {
+                    <b>lock</b> (<span class="r7 r">gate</span>)
+                    {
+                        <b>if</b> (<span class="r9 r">isAdded</span>)
+                            <span class="r6 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#25c90ab90dccf547" class="i method">Remove</a>(<span class="r11 r">d</span>);
+                        <b>else</b>
+                            <span class="r10 r">isDone</span> = <b>true</b>;
+                    }
+                    <span class="r8 r">recursiveAction</span>();
+                });
+ 
+                <b>lock</b> (<span class="r7 r">gate</span>)
+                {
+                    <b>if</b> (!<span class="r10 r">isDone</span>)
+                    {
+                        <span class="r6 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r11 r">d</span>);
+                        <span class="r9 r">isAdded</span> = <b>true</b>;
+                    }
+                }
+            });
+ 
+            <span class="r6 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r4 r">scheduler</span>.<a href="IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r8 r">recursiveAction</span>));
+ 
+            <b>return</b> <span class="r6 r">group</span>;
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a8c5e3c1fceed2d7" href="../../../../../R/a8c5e3c1fceed2d7.html" target="n" data-glyph="220,1" class="i method">Schedule</a>(<b>this</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r12 rd" class="r12 r">scheduler</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r13 rd" class="r13 r">dueTime</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>&gt;&gt; <span id="r14 rd" class="r14 r">action</span>)
+        {
+            <span class="c">// InvokeRec2</span>
+ 
+            <a href="../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="k">var</a> <span id="r15 rd" class="r15 r">group</span> = <b>new</b> <a href="../Disposables/CompositeDisposable.cs.html#b52631833391dfdc" class="t constructor">CompositeDisposable</a>(1);
+            <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r16 rd" class="r16 r">gate</span> = <b>new</b> <b>object</b>();
+ 
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r17 rd" class="r17 r">recursiveAction</span> = <b>null</b>;
+            <span class="r17 r">recursiveAction</span> = () =&gt; <span class="r14 r">action</span>(<span id="r18 rd" class="r18 r">dt</span> =&gt;
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r19 rd" class="r19 r">isAdded</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r20 rd" class="r20 r">isDone</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r21 rd" class="r21 r">d</span> = <b>default</b>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>);
+                <span class="r21 r">d</span> = <span class="r12 r">scheduler</span>.<a href="IScheduler.cs.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<span class="r18 r">dt</span>, () =&gt;
+                {
+                    <b>lock</b> (<span class="r16 r">gate</span>)
+                    {
+                        <b>if</b> (<span class="r19 r">isAdded</span>)
+                            <span class="r15 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#25c90ab90dccf547" class="i method">Remove</a>(<span class="r21 r">d</span>);
+                        <b>else</b>
+                            <span class="r20 r">isDone</span> = <b>true</b>;
+                    }
+                    <span class="r17 r">recursiveAction</span>();
+                });
+ 
+                <b>lock</b> (<span class="r16 r">gate</span>)
+                {
+                    <b>if</b> (!<span class="r20 r">isDone</span>)
+                    {
+                        <span class="r15 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r21 r">d</span>);
+                        <span class="r19 r">isAdded</span> = <b>true</b>;
+                    }
+                }
+            });
+ 
+            <span class="r15 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r12 r">scheduler</span>.<a href="IScheduler.cs.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<span class="r13 r">dueTime</span>, <span class="r17 r">recursiveAction</span>));
+ 
+            <b>return</b> <span class="r15 r">group</span>;
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="6402c165572d0b75" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Schedule</a>(<b>this</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r22 rd" class="r22 r">scheduler</span>, <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r23 rd" class="r23 r">dueTime</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a>&gt;&gt; <span id="r24 rd" class="r24 r">action</span>)
+        {
+            <span class="c">// InvokeRec3</span>
+ 
+            <a href="../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="k">var</a> <span id="r25 rd" class="r25 r">group</span> = <b>new</b> <a href="../Disposables/CompositeDisposable.cs.html#b52631833391dfdc" class="t constructor">CompositeDisposable</a>(1);
+            <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r26 rd" class="r26 r">gate</span> = <b>new</b> <b>object</b>();
+ 
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r27 rd" class="r27 r">recursiveAction</span> = <b>null</b>;
+            <span class="r27 r">recursiveAction</span> = () =&gt; <span class="r24 r">action</span>(<span id="r28 rd" class="r28 r">dt</span> =&gt;
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r29 rd" class="r29 r">isAdded</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r30 rd" class="r30 r">isDone</span> = <b>false</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r31 rd" class="r31 r">d</span> = <b>default</b>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>);
+                <span class="r31 r">d</span> = <span class="r22 r">scheduler</span>.<a href="#cbd0d2ce69bc62cb" class="i method">Schedule</a>(<span class="r28 r">dt</span>, () =&gt;
+                {
+                    <b>lock</b> (<span class="r26 r">gate</span>)
+                    {
+                        <b>if</b> (<span class="r29 r">isAdded</span>)
+                            <span class="r25 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#25c90ab90dccf547" class="i method">Remove</a>(<span class="r31 r">d</span>);
+                        <b>else</b>
+                            <span class="r30 r">isDone</span> = <b>true</b>;
+                    }
+                    <span class="r27 r">recursiveAction</span>();
+                });
+ 
+                <b>lock</b> (<span class="r26 r">gate</span>)
+                {
+                    <b>if</b> (!<span class="r30 r">isDone</span>)
+                    {
+                        <span class="r25 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r31 r">d</span>);
+                        <span class="r29 r">isAdded</span> = <b>true</b>;
+                    }
+                }
+            });
+ 
+            <span class="r25 r">group</span>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r22 r">scheduler</span>.<a href="#cbd0d2ce69bc62cb" class="i method">Schedule</a>(<span class="r23 r">dueTime</span>, <span class="r27 r">recursiveAction</span>));
+ 
+            <b>return</b> <span class="r25 r">group</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

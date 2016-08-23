@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample14_PresenterBase.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(107);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample14_PresenterBase.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample14_PresenterBase.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">Assets</span>.<span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <span class="c">// PresenterBase can control multiple ReactivePresenter dependency.</span>
+    <span class="c">// This sample visualize PresenterBase&#39;s three phase initialization.</span>
+ 
+    <span class="c">// InEditor : Construct Children Dependency</span>
+    <span class="c">// Awake : Construct Parent Dependency</span>
+    <span class="c">// Start(Capture phase)  : Parent to Child, pass argument</span>
+    <span class="c">// Start(Bubbling phase) : Child to Parent, initialize(like constructor)</span>
+ 
+    <span class="c">// When play this sample scene, You can monitor cube color changes.</span>
+    <span class="c">// onplay, gray cube -&gt; dark cube is can monitor initial value has been propageted.</span>
+    <span class="c">// yellow -&gt; Awake, green -&gt; Capture phase, red -&gt; bubbling phase</span>
+    <b>public class</b> <a id="7433c8c4dfe48c81" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="5fab31c65e2155a6">Sample14_PresenterBase</span></a> : <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#e78f50387c6ecbbd" class="t t">PresenterBase</a>
+    {
+        <b>public</b> <a href="Sample14_CubeLevel1.cs.html#0f32897f8addfd08" class="t t">Sample14_CubeLevel1</a> <a id="a432cb1b21484203" href="../../../../R/a432cb1b21484203.html" target="n" data-glyph="42,1" class="i field">child1</a>;
+        <b>public</b> <a href="Sample14_CubeLevel1.cs.html#0f32897f8addfd08" class="t t">Sample14_CubeLevel1</a> <a id="b7c6ae6d759539b4" href="../../../../R/b7c6ae6d759539b4.html" target="n" data-glyph="42,1" class="i field">child2</a>;
+ 
+        <b>protected override</b> <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="dccdfe8ea22c98ba" href="../../../../R/dccdfe8ea22c98ba.html" target="n" data-glyph="105,1" class="i property">Children</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <b>new</b> <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#37414ce34e07779c" class="t t">IPresenter</a>[] { <a href="#a432cb1b21484203" class="i field">child1</a>, <a href="#b7c6ae6d759539b4" class="i field">child2</a> };
+            }
+        }
+ 
+        <span class="c">// nomarly you don&#39;t need override OnAwake(Awake phase)</span>
+        <b>protected override void</b> <a id="77ca63caa9dbb8fb" href="../../../../R/77ca63caa9dbb8fb.html" target="n" data-glyph="75,1" class="i method">OnAwake</a>()
+        {
+            <a href="#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkAwakePhase</span>(<a href="#7433c8c4dfe48c81" class="k">this</a>);
+        }
+ 
+        <span class="c">// BeforeInitialize, you can propagate initial argument to child Presenter.</span>
+        <span class="c">// This phase, called parent -&gt; child.</span>
+        <span class="c">// Therefore child isn&#39;t initialized yet, touch property is maybe dangerous(it&#39;s null!).</span>
+        <span class="c">// You should only do make initial value and propagate argument.</span>
+        <b>protected override void</b> <a id="ff075f58260b7533" href="../../../../R/ff075f58260b7533.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>()
+        {
+            <a href="#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkCapturePhase</span>(<a href="#7433c8c4dfe48c81" class="k">this</a>);
+ 
+            <span class="c">// pass the argument by PresenterBase.PropagetArgument method.</span>
+            <a href="#a432cb1b21484203" class="i field">child1</a>.<a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#280a6c0bc93226a0" class="i method">PropagateArgument</a>(0.4f);
+            <a href="#b7c6ae6d759539b4" class="i field">child2</a>.<a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#280a6c0bc93226a0" class="i method">PropagateArgument</a>(0.4f);
+        }
+ 
+        <b>protected override void</b> <a id="d97753ee93ceef34" href="../../../../R/d97753ee93ceef34.html" target="n" data-glyph="75,1" class="i method">Initialize</a>()
+        {
+            <span class="c">// Initialize is like constructor!</span>
+            <span class="c">// see:Sample14_CubeLevel1.cs, Sample14_CubeLevel2.cs</span>
+            <a href="#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkBubblingPhase</span>(<a href="#7433c8c4dfe48c81" class="k">this</a>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+        <b>public void</b> <a id="a4f644206aa7d773" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMouseDown</a>()
+        {
+            <span class="c">// value is reactive!</span>
+            <b>var</b> <span id="r0 rd" class="r0 r">f</span> = <span class="i">UnityEngine</span>.<span class="i">Random</span>.<span class="i">Range</span>(0f, 1f);
+            <a href="#7433c8c4dfe48c81" class="k">this</a>.<span class="i">GetComponent</span>&lt;<span class="i">Renderer</span>&gt;().<span class="i">material</span>.<span class="i">color</span> = <b>new</b> <span class="i">Color</span>(<span class="r0 r">f</span>, <span class="r0 r">f</span>, <span class="r0 r">f</span>, 0);
+            <a href="#a432cb1b21484203" class="i field">child1</a>.<a href="Sample14_CubeLevel1.cs.html#e68a37e99ce4e0c8" class="i property">Number</a>.<a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <span class="r0 r">f</span>;
+            <a href="#b7c6ae6d759539b4" class="i field">child2</a>.<a href="Sample14_CubeLevel1.cs.html#e68a37e99ce4e0c8" class="i property">Number</a>.<a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <span class="r0 r">f</span>;
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+ 
+    <b>public static class</b> <a id="a5858c3c5c4e5f99" href="../../../../R/a5858c3c5c4e5f99.html" target="n" data-glyph="0,0" class="t t">AnimationMarker</a>
+    {
+        <b>const int</b> <a id="733e4686c1cb2711" href="../../../../R/733e4686c1cb2711.html" target="n" data-glyph="10,1" class="i field">AnimationSpeed</a> = 10;
+ 
+        <b>static int</b> <a id="6f30ce4396e320b0" href="../../../../R/6f30ce4396e320b0.html" target="n" data-glyph="46,1" class="i field">Count</a> = 0;
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="43dbecb71ec5c0b9" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">MarkAwakePhase</a>(<span class="i">MonoBehaviour</span> <span id="r1 rd" class="r1 r">target</span>)
+        {
+            <a href="#6f30ce4396e320b0" class="i field">Count</a>++;
+            <b>return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#5d7a9f35007b5bba" class="i method">TimerFrame</a>(<a href="#733e4686c1cb2711" class="i field">AnimationSpeed</a> * <a href="#6f30ce4396e320b0" class="i field">Count</a>)
+                .<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">_</span> =&gt; <span class="r1 r">target</span>.<span class="i">GetComponent</span>&lt;<span class="i">Renderer</span>&gt;().<span class="i">material</span>.<span class="i">color</span> = <span class="i">Color</span>.<span class="i">yellow</span>);
+ 
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="602f1a994edbdfee" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">MarkCapturePhase</a>(<span class="i">MonoBehaviour</span> <span id="r3 rd" class="r3 r">target</span>)
+        {
+            <a href="#6f30ce4396e320b0" class="i field">Count</a>++;
+            <b>return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#5d7a9f35007b5bba" class="i method">TimerFrame</a>(<a href="#733e4686c1cb2711" class="i field">AnimationSpeed</a> * <a href="#6f30ce4396e320b0" class="i field">Count</a>)
+                .<span class="i">Subscribe</span>(<span id="r4 rd" class="r4 r">_</span> =&gt; <span class="r3 r">target</span>.<span class="i">GetComponent</span>&lt;<span class="i">Renderer</span>&gt;().<span class="i">material</span>.<span class="i">color</span> = <span class="i">Color</span>.<span class="i">green</span>);
+ 
+        }
+ 
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="4256bc0c4ef5ec93" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">MarkBubblingPhase</a>(<span class="i">MonoBehaviour</span> <span id="r5 rd" class="r5 r">target</span>)
+        {
+            <a href="#6f30ce4396e320b0" class="i field">Count</a>++;
+            <b>return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#5d7a9f35007b5bba" class="i method">TimerFrame</a>(<a href="#733e4686c1cb2711" class="i field">AnimationSpeed</a> * <a href="#6f30ce4396e320b0" class="i field">Count</a>)
+                .<span class="i">Subscribe</span>(<span id="r6 rd" class="r6 r">_</span> =&gt; <span class="r5 r">target</span>.<span class="i">GetComponent</span>&lt;<span class="i">Renderer</span>&gt;().<span class="i">material</span>.<span class="i">color</span> = <span class="i">Color</span>.<span class="i">red</span>);
+        }
+ 
+        <b>public static void</b> <a id="1a9de45ca70761d9" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Reset</a>()
+        {
+            <a href="#6f30ce4396e320b0" class="i field">Count</a> = 0;
+        }
+    }
+}
+ 
+</pre></td></tr></table></div></body></html>

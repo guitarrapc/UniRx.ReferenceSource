@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Events.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(34);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Observable.Events.cs" target="_top">Observable.Events.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="EventPattern.cs.html#01ea9a8bae91f6ef" class="t t">EventPattern</a>&lt;<span class="r0 r t">TEventArgs</span>&gt;&gt; <a id="686fa5d634964d8e" href="R/686fa5d634964d8e.html" target="n" data-glyph="72,1" class="i method">FromEventPattern</a>&lt;<span id="r1 rd t" class="r1 r t">TDelegate</span>, <span id="r0 rd t" class="r0 r t">TEventArgs</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<span class="r0 r t">TEventArgs</span>&gt;, <span class="r1 r t">TDelegate</span>&gt; <span id="r2 rd" class="r2 r">conversion</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r1 r t">TDelegate</span>&gt; <span id="r3 rd" class="r3 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r1 r t">TDelegate</span>&gt; <span id="r4 rd" class="r4 r">removeHandler</span>)
+            <b>where</b> <span class="r0 r t">TEventArgs</span> : <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>
+        {
+            <b>return</b> <b>new</b> <a href="Operators/FromEvent.cs.html#79ddc8844865fabc" class="t constructor">FromEventPatternObservable</a>&lt;<span class="r1 r t">TDelegate</span>, <span class="r0 r t">TEventArgs</span>&gt;(<span class="r2 r">conversion</span>, <span class="r3 r">addHandler</span>, <span class="r4 r">removeHandler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="1d3f3c8b87bc249c" href="R/1d3f3c8b87bc249c.html" target="n" data-glyph="72,1" class="i method">FromEvent</a>&lt;<span id="r5 rd t" class="r5 r t">TDelegate</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>, <span class="r5 r t">TDelegate</span>&gt; <span id="r6 rd" class="r6 r">conversion</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r5 r t">TDelegate</span>&gt; <span id="r7 rd" class="r7 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r5 r t">TDelegate</span>&gt; <span id="r8 rd" class="r8 r">removeHandler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/FromEvent.cs.html#e376cfe33f450093" class="t constructor">FromEventObservable</a>&lt;<span class="r5 r t">TDelegate</span>&gt;(<span class="r6 r">conversion</span>, <span class="r7 r">addHandler</span>, <span class="r8 r">removeHandler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r9 r t">TEventArgs</span>&gt; <a id="be55a8e5ff44c4ad" href="R/be55a8e5ff44c4ad.html" target="n" data-glyph="72,1" class="i method">FromEvent</a>&lt;<span id="r10 rd t" class="r10 r t">TDelegate</span>, <span id="r9 rd t" class="r9 r t">TEventArgs</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r9 r t">TEventArgs</span>&gt;, <span class="r10 r t">TDelegate</span>&gt; <span id="r11 rd" class="r11 r">conversion</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r10 r t">TDelegate</span>&gt; <span id="r12 rd" class="r12 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r10 r t">TDelegate</span>&gt; <span id="r13 rd" class="r13 r">removeHandler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/FromEvent.cs.html#75ebb3106668477f" class="t constructor">FromEventObservable</a>&lt;<span class="r10 r t">TDelegate</span>, <span class="r9 r t">TEventArgs</span>&gt;(<span class="r11 r">conversion</span>, <span class="r12 r">addHandler</span>, <span class="r13 r">removeHandler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="e6eb6a54762eb8cb" href="R/e6eb6a54762eb8cb.html" target="n" data-glyph="72,1" class="i method">FromEvent</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <span id="r14 rd" class="r14 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt; <span id="r15 rd" class="r15 r">removeHandler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/FromEvent.cs.html#e11d11c4282bae9c" class="t constructor">FromEventObservable</a>(<span class="r14 r">addHandler</span>, <span class="r15 r">removeHandler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r16 r t">T</span>&gt; <a id="80ac43fafe1e905c" href="R/80ac43fafe1e905c.html" target="n" data-glyph="72,1" class="i method">FromEvent</a>&lt;<span id="r16 rd t" class="r16 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r16 r t">T</span>&gt;&gt; <span id="r17 rd" class="r17 r">addHandler</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r16 r t">T</span>&gt;&gt; <span id="r18 rd" class="r18 r">removeHandler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/FromEvent.cs.html#b233e49e6a9b3df8" class="t constructor">FromEventObservable_</a>&lt;<span class="r16 r t">T</span>&gt;(<span class="r17 r">addHandler</span>, <span class="r18 r">removeHandler</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

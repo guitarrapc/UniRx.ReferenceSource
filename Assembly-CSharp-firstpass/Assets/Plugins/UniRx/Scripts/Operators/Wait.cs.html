@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html><head><title>Wait.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(62);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/Wait.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\Wait.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="ffb0beb4d3ba753f" href="../../../../../R/ffb0beb4d3ba753f.html" target="n" data-glyph="2,0" class="t t">Wait</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="383b4d90b2d3d7a6" href="../../../../../R/383b4d90b2d3d7a6.html" target="n" data-glyph="46,1" class="i field">InfiniteTimeSpan</a> = <b>new</b> <a href="@0@mscorlib/A.html#8f3d58581b52d6db" class="t constructor">TimeSpan</a>(0, 0, 0, 0, -1); <span class="c">// from .NET 4.5</span>
+ 
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="e1f6e2a285e01144" href="../../../../../R/e1f6e2a285e01144.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="88c518883683aa89" href="../../../../../R/88c518883683aa89.html" target="n" data-glyph="46,1" class="i field">timeout</a>;
+ 
+        <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#797f9a2c1f6fe76f" class="t t">ManualResetEvent</a> <a id="c135f91bc63bea6e" href="../../../../../R/c135f91bc63bea6e.html" target="n" data-glyph="46,1" class="i field">semaphore</a>;
+ 
+        <b>bool</b> <a id="1a2c3c3a9f2e4a70" href="../../../../../R/1a2c3c3a9f2e4a70.html" target="n" data-glyph="46,1" class="i field">seenValue</a> = <b>false</b>;
+        <span class="r0 r t">T</span> <a id="deb7d16207a0b9ed" href="../../../../../R/deb7d16207a0b9ed.html" target="n" data-glyph="46,1" class="i field">value</a> = <b>default</b>(<span class="r0 r t">T</span>);
+        <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="3398af8a8542c318" href="../../../../../R/3398af8a8542c318.html" target="n" data-glyph="46,1" class="i field">ex</a> = <b>default</b>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>);
+ 
+        <b>public</b> <a id="532f4828406db7eb" href="../../../../../R/532f4828406db7eb.html" target="n" data-glyph="72,1" class="i constructor">Wait</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r2 rd" class="r2 r">timeout</span>)
+        {
+            <a href="#ffb0beb4d3ba753f" class="k">this</a>.<a href="#e1f6e2a285e01144" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#ffb0beb4d3ba753f" class="k">this</a>.<a href="#88c518883683aa89" class="i field">timeout</a> = <span class="r2 r">timeout</span>;
+        }
+ 
+        <b>public</b> <span class="r0 r t">T</span> <a id="9522ce57f9124f29" href="../../../../../R/9522ce57f9124f29.html" target="n" data-glyph="72,1" class="i method">Run</a>()
+        {
+            <a href="#c135f91bc63bea6e" class="i field">semaphore</a> = <b>new</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#3f1e8fec681dd775" class="t constructor">ManualResetEvent</a>(<b>false</b>);
+            <b>using</b> (<a href="#e1f6e2a285e01144" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#ffb0beb4d3ba753f" class="k">this</a>))
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r3 rd" class="r3 r">waitComplete</span> = (<a href="#88c518883683aa89" class="i field">timeout</a> == <a href="#383b4d90b2d3d7a6" class="i field">InfiniteTimeSpan</a>)
+                    ? <a href="#c135f91bc63bea6e" class="i field">semaphore</a>.<a href="@0@mscorlib/A.html#8f366147dd3f5f63" class="i method">WaitOne</a>()
+                    : <a href="#c135f91bc63bea6e" class="i field">semaphore</a>.<a href="@0@mscorlib/A.html#338dcea05d182d3c" class="i method">WaitOne</a>(<a href="#88c518883683aa89" class="i field">timeout</a>);
+ 
+                <b>if</b> (!<span class="r3 r">waitComplete</span>)
+                {
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eedbd59d0faf42ed" class="t constructor">TimeoutException</a>(<span class="s">&quot;OnCompleted not fired.&quot;</span>);
+                }
+            }
+ 
+            <b>if</b> (<a href="#3398af8a8542c318" class="i field">ex</a> != <b>null</b>) <b>throw</b> <a href="#3398af8a8542c318" class="i field">ex</a>;
+            <b>if</b> (!<a href="#1a2c3c3a9f2e4a70" class="i field">seenValue</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;No Elements.&quot;</span>);
+ 
+            <b>return</b> <a href="#deb7d16207a0b9ed" class="i field">value</a>;
+        }
+ 
+        <b>public void</b> <a id="6f999157a2fee44f" href="../../../../../R/6f999157a2fee44f.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r4 rd" class="r4 r">value</span>)
+        {
+            <a href="#1a2c3c3a9f2e4a70" class="i field">seenValue</a> = <b>true</b>;
+            <a href="#ffb0beb4d3ba753f" class="k">this</a>.<a href="#deb7d16207a0b9ed" class="i field">value</a> = <span class="r4 r">value</span>;
+        }
+ 
+        <b>public void</b> <a id="80a420d452630e4e" href="../../../../../R/80a420d452630e4e.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r5 rd" class="r5 r">error</span>)
+        {
+            <a href="#ffb0beb4d3ba753f" class="k">this</a>.<a href="#3398af8a8542c318" class="i field">ex</a> = <span class="r5 r">error</span>;
+            <a href="#c135f91bc63bea6e" class="i field">semaphore</a>.<a href="@0@mscorlib/A.html#63f3d76fa45ccc3d" class="i method">Set</a>();
+        }
+ 
+        <b>public void</b> <a id="f709777aec758c7a" href="../../../../../R/f709777aec758c7a.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <a href="#c135f91bc63bea6e" class="i field">semaphore</a>.<a href="@0@mscorlib/A.html#63f3d76fa45ccc3d" class="i method">Set</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

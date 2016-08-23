@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html><head><title>SubscribeOnMainThread.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(31);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/SubscribeOnMainThread.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\SubscribeOnMainThread.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="55894d9b723c6917" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="2,0" class="t t">SubscribeOnMainThreadObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="1a3c00d9ababa0e9" href="../../../../../../R/1a3c00d9ababa0e9.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="4f9de29f8e0df1cd" href="../../../../../../R/4f9de29f8e0df1cd.html" target="n" data-glyph="46,1" class="i field">subscribeTrigger</a>;
+ 
+        <b>public</b> <a id="7d24d07c49b748a6" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">SubscribeOnMainThreadObservable</a>(<a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <span id="r2 rd" class="r2 r">subscribeTrigger</span>)
+            : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#55894d9b723c6917" class="k">this</a>.<a href="#1a3c00d9ababa0e9" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#55894d9b723c6917" class="k">this</a>.<a href="#4f9de29f8e0df1cd" class="i field">subscribeTrigger</a> = <span class="r2 r">subscribeTrigger</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="52e9f5b3a45c8c6e" href="../../../../../../R/52e9f5b3a45c8c6e.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r3 rd" class="r3 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r4 rd" class="r4 r">cancel</span>)
+        {
+            <a href="../../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r5 rd" class="r5 r">m</span> = <b>new</b> <a href="../../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+            <a href="../../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="k">var</a> <span id="r6 rd" class="r6 r">d</span> = <b>new</b> <a href="../../Disposables/SerialDisposable.cs.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+            <span class="r6 r">d</span>.<a href="../../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r5 r">m</span>;
+ 
+            <span class="r5 r">m</span>.<a href="../../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#4f9de29f8e0df1cd" class="i field">subscribeTrigger</a>.<a href="../../Observer.cs.html#83ed0827372b9d8a" class="i method">SubscribeWithState3</a>(<span class="r3 r">observer</span>, <span class="r6 r">d</span>, <a href="#1a3c00d9ababa0e9" class="i field">source</a>, (<span id="r7 rd" class="r7 r">_</span>, <span id="r8 rd" class="r8 r">o</span>, <span id="r9 rd" class="r9 r">disp</span>, <span id="r10 rd" class="r10 r">s</span>) =&gt;
+            {
+                <span class="r9 r">disp</span>.<a href="../../Disposables/SerialDisposable.cs.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r10 r">s</span>.<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r8 r">o</span>);
+            });
+ 
+            <b>return</b> <span class="r6 r">d</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

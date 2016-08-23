@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html><head><title>RefCountDisposable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(152);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Disposables/RefCountDisposable.cs" target="_top">Disposables\RefCountDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// This code is borrwed from Rx Official and some modified.</span>
+ 
+<span class="c">// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Represents a disposable resource that only disposes its underlying disposable resource when all </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="#567eb8b84bd0eed6" class="i method">GetDisposable</a><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">dependent disposable objects</span><span class="c">&lt;/</span><span class="c">see</span><span class="c">&gt;</span><span class="c"> have been disposed.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public sealed class</b> <a id="8ea21a4752152c3d" href="../R/8ea21a4752152c3d.html" target="n" data-glyph="0,0" class="t t">RefCountDisposable</a> : <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>
+    {
+        <b>private readonly object</b> <a id="94b73e9c28ac69b1" href="../R/94b73e9c28ac69b1.html" target="n" data-glyph="46,1" class="i field">_gate</a> = <b>new</b> <b>object</b>();
+        <b>private</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="fe43eb9e5adc0481" href="../R/fe43eb9e5adc0481.html" target="n" data-glyph="46,1" class="i field">_disposable</a>;
+        <b>private bool</b> <a id="1a5eb285364484b9" href="../R/1a5eb285364484b9.html" target="n" data-glyph="46,1" class="i field">_isPrimaryDisposed</a>;
+        <b>private int</b> <a id="7ab8930de45f2e45" href="../R/7ab8930de45f2e45.html" target="n" data-glyph="46,1" class="i field">_count</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Initializes a new instance of the </span><span class="c">&lt;</span><span class="c">see</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><span class="c">T:System.Reactive.Disposables.RefCountDisposable</span><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> class with the specified disposable.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">disposable</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Underlying disposable.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">exception</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="@0@mscorlib/A.html#c742289497493bb8" class="t t">ArgumentNullException</a><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">&lt;</span><span class="c">paramref</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">disposable</span><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> is null.</span><span class="c">&lt;/</span><span class="c">exception</span><span class="c">&gt;</span>
+        <b>public</b> <a id="a13ec056932ad596" href="../R/a13ec056932ad596.html" target="n" data-glyph="72,1" class="i constructor">RefCountDisposable</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r0 rd" class="r0 r">disposable</span>)
+        {
+            <b>if</b> (<span class="r0 r">disposable</span> == <b>null</b>)
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable&quot;</span>);
+ 
+            <a href="#fe43eb9e5adc0481" class="i field">_disposable</a> = <span class="r0 r">disposable</span>;
+            <a href="#1a5eb285364484b9" class="i field">_isPrimaryDisposed</a> = <b>false</b>;
+            <a href="#7ab8930de45f2e45" class="i field">_count</a> = 0;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Gets a value that indicates whether the object is disposed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="6f79fe3ac1907fe3" href="../R/6f79fe3ac1907fe3.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#fe43eb9e5adc0481" class="i field">_disposable</a> == <b>null</b>; }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns a dependent disposable that when disposed decreases the refcount on the underlying disposable.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A dependent disposable contributing to the reference count that manages the underlying disposable&#39;s lifetime.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        [<span class="i n">System</span>.<span class="i n">Diagnostics</span>.<span class="i n">CodeAnalysis</span>.<a href="@0@mscorlib/A.html#5e00de6576fb9ce7" class="t constructor">SuppressMessage</a>(<span class="s">&quot;Microsoft.Design&quot;</span>, <span class="s">&quot;CA1024:UsePropertiesWhereAppropriate&quot;</span>, <a href="@0@mscorlib/A.html#ce02a652a479502a" class="i property">Justification</a> = <span class="s">&quot;Backward compat + non-trivial work for a property getter.&quot;</span>)]
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="567eb8b84bd0eed6" href="../R/567eb8b84bd0eed6.html" target="n" data-glyph="72,1" class="i method">GetDisposable</a>()
+        {
+            <b>lock</b> (<a href="#94b73e9c28ac69b1" class="i field">_gate</a>)
+            {
+                <b>if</b> (<a href="#fe43eb9e5adc0481" class="i field">_disposable</a> == <b>null</b>)
+                {
+                    <b>return</b> <a href="Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+                }
+                <b>else</b>
+                {
+                    <a href="#7ab8930de45f2e45" class="i field">_count</a>++;
+                    <b>return</b> <b>new</b> <a href="#e8623bd51d030c23" class="t constructor">InnerDisposable</a>(<a href="#8ea21a4752152c3d" class="k">this</a>);
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Disposes the underlying disposable only when all dependent disposables have been disposed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="53adf4683ae3e89c" href="../R/53adf4683ae3e89c.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r1 rd" class="r1 r">disposable</span> = <b>default</b>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>);
+            <b>lock</b> (<a href="#94b73e9c28ac69b1" class="i field">_gate</a>)
+            {
+                <b>if</b> (<a href="#fe43eb9e5adc0481" class="i field">_disposable</a> != <b>null</b>)
+                {
+                    <b>if</b> (!<a href="#1a5eb285364484b9" class="i field">_isPrimaryDisposed</a>)
+                    {
+                        <a href="#1a5eb285364484b9" class="i field">_isPrimaryDisposed</a> = <b>true</b>;
+ 
+                        <b>if</b> (<a href="#7ab8930de45f2e45" class="i field">_count</a> == 0)
+                        {
+                            <span class="r1 r">disposable</span> = <a href="#fe43eb9e5adc0481" class="i field">_disposable</a>;
+                            <a href="#fe43eb9e5adc0481" class="i field">_disposable</a> = <b>null</b>;
+                        }
+                    }
+                }
+            }
+ 
+            <b>if</b> (<span class="r1 r">disposable</span> != <b>null</b>)
+                <span class="r1 r">disposable</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+ 
+        <b>private void</b> <a id="40e4b51af5397966" href="../R/40e4b51af5397966.html" target="n" data-glyph="76,1" class="i method">Release</a>()
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r2 rd" class="r2 r">disposable</span> = <b>default</b>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>);
+            <b>lock</b> (<a href="#94b73e9c28ac69b1" class="i field">_gate</a>)
+            {
+                <b>if</b> (<a href="#fe43eb9e5adc0481" class="i field">_disposable</a> != <b>null</b>)
+                {
+                    <a href="#7ab8930de45f2e45" class="i field">_count</a>--;
+ 
+                    <b>if</b> (<a href="#1a5eb285364484b9" class="i field">_isPrimaryDisposed</a>)
+                    {
+                        <b>if</b> (<a href="#7ab8930de45f2e45" class="i field">_count</a> == 0)
+                        {
+                            <span class="r2 r">disposable</span> = <a href="#fe43eb9e5adc0481" class="i field">_disposable</a>;
+                            <a href="#fe43eb9e5adc0481" class="i field">_disposable</a> = <b>null</b>;
+                        }
+                    }
+                }
+            }
+ 
+            <b>if</b> (<span class="r2 r">disposable</span> != <b>null</b>)
+                <span class="r2 r">disposable</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+ 
+        <b>sealed class</b> <a id="a50fd3859203b92e" href="../R/a50fd3859203b92e.html" target="n" data-glyph="4,1" class="t t">InnerDisposable</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>private</b> <a href="#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <a id="5ed5cac510696f29" href="../R/5ed5cac510696f29.html" target="n" data-glyph="46,2" class="i field">_parent</a>;
+            <b>object</b> <a id="3a5e09c6b9ee42ab" href="../R/3a5e09c6b9ee42ab.html" target="n" data-glyph="46,2" class="i field">parentLock</a> = <b>new</b> <b>object</b>();
+ 
+            <b>public</b> <a id="e8623bd51d030c23" href="../R/e8623bd51d030c23.html" target="n" data-glyph="72,2" class="i constructor">InnerDisposable</a>(<a href="#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <span id="r3 rd" class="r3 r">parent</span>)
+            {
+                <a href="#5ed5cac510696f29" class="i field">_parent</a> = <span class="r3 r">parent</span>;
+            }
+ 
+            <b>public void</b> <a id="6bcc51d484cd14de" href="../R/6bcc51d484cd14de.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <a href="#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <span id="r4 rd" class="r4 r">parent</span>;
+                <b>lock</b> (<a href="#3a5e09c6b9ee42ab" class="i field">parentLock</a>)
+                {
+                    <span class="r4 r">parent</span> = <a href="#5ed5cac510696f29" class="i field">_parent</a>;
+                    <a href="#5ed5cac510696f29" class="i field">_parent</a> = <b>null</b>;
+                }
+                <b>if</b> (<span class="r4 r">parent</span> != <b>null</b>)
+                    <span class="r4 r">parent</span>.<a href="#40e4b51af5397966" class="i method">Release</a>();
+            }
+        }
+    }
+ 
+    <b>public</b> <a href="../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">T</span>&gt; <a id="fcccb62ae55dbda0" href="../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">AddRef</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt;(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">T</span>&gt; <span id="r6 rd" class="r6 r">xs</span>, <a href="#8ea21a4752152c3d" class="t t">RefCountDisposable</a> <span id="r7 rd" class="r7 r">r</span>)
+        {
+            <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#0351c4239e8e6646" class="i method">Create</a>&lt;<span class="r5 r t">T</span>&gt;((<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r5 r t">T</span>&gt; <span id="r8 rd" class="r8 r">observer</span>) =&gt; <b>new</b> <a href="CompositeDisposable.cs.html#0be27072d1491127" class="t constructor">CompositeDisposable</a>(<b>new</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>[]
+	        {
+		        <span class="r7 r">r</span>.<a href="#567eb8b84bd0eed6" class="i method">GetDisposable</a>(),
+		        <span class="r6 r">xs</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r8 r">observer</span>)
+	        }));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

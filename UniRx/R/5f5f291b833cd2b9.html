@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html><head><title>Empty</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">38 references to Empty</div><div class="rA">UniRx (15)</div><div class="rG" id="UniRx"><div class="rF"><div class="rN">Observable.ErrorHandling.cs (1)</div>
+<a href="../Observable.ErrorHandling.cs.html#39"><b>39</b>return Observable.<i>Empty</i>&lt;TSource&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Observable.Paging.cs (1)</div>
+<a href="../Observable.Paging.cs.html#16"><b>16</b>if (count == 0) return <i>Empty</i>&lt;T&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Observer.cs (1)</div>
+<a href="../Observer.cs.html#500"><b>500</b>return Observable.<i>Empty</i>&lt;TSource&gt;();</a>
+</div>
+<div class="rF"><div class="rN">Operators\Catch.cs (1)</div>
+<a href="../Operators/Catch.cs.html#58"><b>58</b>next = Observable.<i>Empty</i>&lt;T&gt;(); // for avoid iOS AOT</a>
+</div>
+<div class="rF"><div class="rN">UnityEngineBridge\ReactiveCollection.cs (6)</div>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#227"><b>227</b>if (isDisposed) return Observable.<i>Empty</i>&lt;int&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#244"><b>244</b>if (isDisposed) return Observable.<i>Empty</i>&lt;Unit&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#252"><b>252</b>if (isDisposed) return Observable.<i>Empty</i>&lt;CollectionAddEvent&lt;T&gt;&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#260"><b>260</b>if (isDisposed) return Observable.<i>Empty</i>&lt;CollectionMoveEvent&lt;T&gt;&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#268"><b>268</b>if (isDisposed) return Observable.<i>Empty</i>&lt;CollectionRemoveEvent&lt;T&gt;&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveCollection.cs.html#276"><b>276</b>if (isDisposed) return Observable.<i>Empty</i>&lt;CollectionReplaceEvent&lt;T&gt;&gt;();</a>
+</div>
+<div class="rF"><div class="rN">UnityEngineBridge\ReactiveDictionary.cs (5)</div>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#295"><b>295</b>if (isDisposed) return Observable.<i>Empty</i>&lt;int&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#303"><b>303</b>if (isDisposed) return Observable.<i>Empty</i>&lt;Unit&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#311"><b>311</b>if (isDisposed) return Observable.<i>Empty</i>&lt;DictionaryAddEvent&lt;TKey, TValue&gt;&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#319"><b>319</b>if (isDisposed) return Observable.<i>Empty</i>&lt;DictionaryRemoveEvent&lt;TKey, TValue&gt;&gt;();</a>
+<a href="../UnityEngineBridge/ReactiveDictionary.cs.html#327"><b>327</b>if (isDisposed) return Observable.<i>Empty</i>&lt;DictionaryReplaceEvent&lt;TKey, TValue&gt;&gt;();</a>
+</div>
+</div>
+<div class="rA">UniRx.Console (1)</div><div class="rG" id="UniRx.Console"><div class="rF"><div class="rN">Program.cs (1)</div>
+<a href="../../UniRx.Console/Program.cs.html#86"><b>86</b>Test(&quot;DefaultIfEmpty&quot;, () =&gt; Observable.<i>Empty</i>&lt;int&gt;().DefaultIfEmpty(100).Subscribe(x =&gt; Console.WriteLine(x)));</a>
+</div>
+</div>
+<div class="rA">UniRx.Tests (22)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">AggregateTest.cs (5)</div>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#17"><b>17</b>Observable.<i>Empty</i>&lt;int&gt;().Scan((x, y) =&gt; x + y).ToArrayWait().IsCollection();</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#18"><b>18</b>Observable.<i>Empty</i>&lt;int&gt;().Scan(100, (x, y) =&gt; x + y).ToArrayWait().IsCollection();</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#24"><b>24</b>AssertEx.Throws&lt;InvalidOperationException&gt;(() =&gt; Observable.<i>Empty</i>&lt;int&gt;().Aggregate((x, y) =&gt; x + y).Wait());</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#27"><b>27</b>Observable.<i>Empty</i>&lt;int&gt;().Aggregate(100, (x, y) =&gt; x + y).Wait().Is(100);</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#30"><b>30</b>Observable.<i>Empty</i>&lt;int&gt;().Aggregate(100, (x, y) =&gt; x + y, x =&gt; x + x).Wait().Is(200);</a>
+</div>
+<div class="rF"><div class="rN">DoTest.cs (7)</div>
+<a href="../../UniRx.Tests/DoTest.cs.html#36"><b>36</b>Observable.<i>Empty</i>&lt;int&gt;().Do(x =&gt; list.Add(x), ex =&gt; list.Add(100), () =&gt; list.Add(1000)).DefaultIfEmpty().Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#52"><b>52</b>Observable.<i>Empty</i>&lt;int&gt;().Do(observer).DefaultIfEmpty().Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#68"><b>68</b>Observable.<i>Empty</i>&lt;int&gt;().DoOnError(_ =&gt; list.Add(100)).DefaultIfEmpty().Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#84"><b>84</b>Observable.<i>Empty</i>&lt;int&gt;().DoOnCompleted(() =&gt; list.Add(1000)).DefaultIfEmpty().Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#100"><b>100</b>Observable.<i>Empty</i>&lt;int&gt;().DoOnTerminate(() =&gt; list.Add(1000)).DefaultIfEmpty().Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#116"><b>116</b>Observable.<i>Empty</i>&lt;int&gt;()</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#138"><b>138</b>Observable.<i>Empty</i>&lt;int&gt;()</a>
+</div>
+<div class="rF"><div class="rN">Observable.GeneratorTest.cs (1)</div>
+<a href="../../UniRx.Tests/Observable.GeneratorTest.cs.html#13"><b>13</b>var material = Observable.<i>Empty</i>&lt;Unit&gt;().Materialize().ToArray().Wait();</a>
+</div>
+<div class="rF"><div class="rN">Observable.PagingTest.cs (4)</div>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#73"><b>73</b>var xs = Observable.<i>Empty</i>&lt;int&gt;()</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#84"><b>84</b>var xs = Observable.<i>Empty</i>&lt;int&gt;()</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#108"><b>108</b>var xs = Observable.<i>Empty</i>&lt;int&gt;()</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#975"><b>975</b>record = Observable.<i>Empty</i>&lt;int&gt;().TakeLast(3).Record();</a>
+</div>
+<div class="rF"><div class="rN">ObservableTest.cs (3)</div>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#278"><b>278</b>var m = Observable.<i>Empty</i>&lt;int&gt;().Materialize().ToArrayWait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#297"><b>297</b>var m = Observable.<i>Empty</i>&lt;int&gt;().Materialize().Dematerialize().ToArrayWait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#314"><b>314</b>Observable.<i>Empty</i>&lt;int&gt;().DefaultIfEmpty(-1).ToArrayWait().IsCollection(-1);</a>
+</div>
+<div class="rF"><div class="rN">ToTest.cs (2)</div>
+<a href="../../UniRx.Tests/ToTest.cs.html#16"><b>16</b>Observable.<i>Empty</i>&lt;int&gt;().ToArray().Wait().IsCollection();</a>
+<a href="../../UniRx.Tests/ToTest.cs.html#24"><b>24</b>Observable.<i>Empty</i>&lt;int&gt;().ToList().Wait().IsCollection();</a>
+</div>
+</div>
+</body></html>

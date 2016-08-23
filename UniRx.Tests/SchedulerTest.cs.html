@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html><head><title>SchedulerTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(95);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/SchedulerTest.cs" target="_top">SchedulerTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="1b83ab0555d9ea6e" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="e443983fef3e3c80">SchedulerTest</span></a>
+    {
+        <b>private static string</b>[] <a id="ccb208bc7330730c" href="R/ccb208bc7330730c.html" target="n" data-glyph="76,1" class="i method">ScheduleTasks</a>(<a href="/UniRx/A.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r0 rd" class="r0 r">scheduler</span>)
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r1 rd" class="r1 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>string</b>&gt;();
+ 
+            <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r2 rd" class="r2 r">leafAction</span> = () =&gt; <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;----leafAction.&quot;</span>);
+            <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r3 rd" class="r3 r">innerAction</span> = () =&gt;
+            {
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;--innerAction start.&quot;</span>);
+                <span class="r0 r">scheduler</span>.<a href="/UniRx/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r2 r">leafAction</span>);
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;--innerAction end.&quot;</span>);
+            };
+            <a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r4 rd" class="r4 r">outerAction</span> = () =&gt;
+            {
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;outer start.&quot;</span>);
+                <span class="r0 r">scheduler</span>.<a href="/UniRx/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r3 r">innerAction</span>);
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;outer end.&quot;</span>);
+            };
+            <span class="r0 r">scheduler</span>.<a href="/UniRx/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r4 r">outerAction</span>);
+ 
+            <b>return</b> <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#d4409b7542728cec" class="i method">ToArray</a>();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="e688ecac32575165" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CurrentThread</a>()
+        {
+            <b>var</b> <span id="r5 rd" class="r5 r">hoge</span> = <a href="#ccb208bc7330730c" class="i method">ScheduleTasks</a>(<a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#1a7109e09365a544" class="i field">CurrentThread</a>);
+            <span class="r5 r">hoge</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;outer start.&quot;</span>, <span class="s">&quot;outer end.&quot;</span>, <span class="s">&quot;--innerAction start.&quot;</span>, <span class="s">&quot;--innerAction end.&quot;</span>, <span class="s">&quot;----leafAction.&quot;</span>);
+        }
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="bad8629246db42fb" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CurrentThread2</a>()
+        {
+            <a href="/UniRx/A.html#23ddc6164c5c4a05" class="k">var</a> <span id="r6 rd" class="r6 r">scheduler</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#1a7109e09365a544" class="i field">CurrentThread</a>;
+ 
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r7 rd" class="r7 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>string</b>&gt;();
+            <span class="r6 r">scheduler</span>.<a href="/UniRx/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt;
+            {
+                <span class="r7 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;one&quot;</span>);
+ 
+                <span class="r6 r">scheduler</span>.<a href="/UniRx/A.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(3), () =&gt;
+                {
+                    <span class="r7 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;after 3&quot;</span>);
+                });
+ 
+                <span class="r6 r">scheduler</span>.<a href="/UniRx/A.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1), () =&gt;
+                {
+                    <span class="r7 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;after 1&quot;</span>);
+                });
+            });
+ 
+            <span class="r7 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;one&quot;</span>, <span class="s">&quot;after 1&quot;</span>, <span class="s">&quot;after 3&quot;</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="4aa6f67df0d3ea7c" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CurrentThread3</a>()
+        {
+            <a href="/UniRx/A.html#23ddc6164c5c4a05" class="k">var</a> <span id="r8 rd" class="r8 r">scheduler</span> = <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#1a7109e09365a544" class="i field">CurrentThread</a>;
+ 
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r9 rd" class="r9 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>string</b>&gt;();
+            <span class="r8 r">scheduler</span>.<a href="/UniRx/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt;
+            {
+                <span class="r9 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;one&quot;</span>);
+ 
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r10 rd" class="r10 r">cancel</span> = <span class="r8 r">scheduler</span>.<a href="/UniRx/A.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(3), () =&gt;
+                {
+                    <span class="r9 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;after 3&quot;</span>);
+                });
+ 
+                <span class="r8 r">scheduler</span>.<a href="/UniRx/A.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1), () =&gt;
+                {
+                    <span class="r9 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;after 1&quot;</span>);
+                    <span class="r10 r">cancel</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                });
+            });
+ 
+            <span class="r9 r">list</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;one&quot;</span>, <span class="s">&quot;after 1&quot;</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="1952178fb20e51dd" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Immediate</a>()
+        {
+            <b>var</b> <span id="r11 rd" class="r11 r">hoge</span> = <a href="#ccb208bc7330730c" class="i method">ScheduleTasks</a>(<a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#313dd3b562665646" class="i field">Immediate</a>);
+            <span class="r11 r">hoge</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;outer start.&quot;</span>, <span class="s">&quot;--innerAction start.&quot;</span>, <span class="s">&quot;----leafAction.&quot;</span>, <span class="s">&quot;--innerAction end.&quot;</span>, <span class="s">&quot;outer end.&quot;</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html><head><title>Select.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(146);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/Select.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\Select.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal interface</b> <a id="5804b927851abb98" href="../../../../../R/5804b927851abb98.html" target="n" data-glyph="50,0" class="t t">ISelect</a>&lt;<span id="r0 rd t" class="r0 r t">TR</span>&gt;
+    {
+        <span class="c">// IObservable&lt;TR2&gt; CombineSelector&lt;TR2&gt;(Func&lt;TR, TR2&gt; selector);</span>
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TR</span>&gt; <a id="1a8f59cc7bc5a42e" href="../../../../../R/1a8f59cc7bc5a42e.html" target="n" data-glyph="72,1" class="i method">CombinePredicate</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r0 r t">TR</span>, <b>bool</b>&gt; <span id="r1 rd" class="r1 r">predicate</span>);
+    }
+ 
+    <b>internal class</b> <a id="0cdcef54dae98042" href="../../../../../R/0cdcef54dae98042.html" target="n" data-glyph="2,0" class="t t">SelectObservable</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>, <span id="r3 rd t" class="r3 r t">TR</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r3 r t">TR</span>&gt;, <a href="#5804b927851abb98" class="t t">ISelect</a>&lt;<span class="r3 r t">TR</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <a id="4cf8c8f9b451b711" href="../../../../../R/4cf8c8f9b451b711.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt; <a id="0d0d3b940bbfb58c" href="../../../../../R/0d0d3b940bbfb58c.html" target="n" data-glyph="46,1" class="i field">selector</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r2 r t">T</span>, <b>int</b>, <span class="r3 r t">TR</span>&gt; <a id="634d66a1b68d25e7" href="../../../../../R/634d66a1b68d25e7.html" target="n" data-glyph="46,1" class="i field">selectorWithIndex</a>;
+ 
+        <b>public</b> <a id="0f157a348579b7f1" href="../../../../../R/0f157a348579b7f1.html" target="n" data-glyph="72,1" class="i constructor">SelectObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r4 rd" class="r4 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt; <span id="r5 rd" class="r5 r">selector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r4 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#0cdcef54dae98042" class="k">this</a>.<a href="#4cf8c8f9b451b711" class="i field">source</a> = <span class="r4 r">source</span>;
+            <a href="#0cdcef54dae98042" class="k">this</a>.<a href="#0d0d3b940bbfb58c" class="i field">selector</a> = <span class="r5 r">selector</span>;
+        }
+ 
+        <b>public</b> <a id="cd95a3459d16b226" href="../../../../../R/cd95a3459d16b226.html" target="n" data-glyph="72,1" class="i constructor">SelectObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r6 rd" class="r6 r">source</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r2 r t">T</span>, <b>int</b>, <span class="r3 r t">TR</span>&gt; <span id="r7 rd" class="r7 r">selector</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r6 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#0cdcef54dae98042" class="k">this</a>.<a href="#4cf8c8f9b451b711" class="i field">source</a> = <span class="r6 r">source</span>;
+            <a href="#0cdcef54dae98042" class="k">this</a>.<a href="#634d66a1b68d25e7" class="i field">selectorWithIndex</a> = <span class="r7 r">selector</span>;
+        }
+ 
+        <span class="c">// sometimes cause &quot;which no ahead of time (AOT) code was generated.&quot; on IL2CPP...</span>
+ 
+        <span class="c">//public IObservable&lt;TR2&gt; CombineSelector&lt;TR2&gt;(Func&lt;TR, TR2&gt; combineSelector)</span>
+        <span class="c">//{</span>
+        <span class="c">//    if (this.selector != null)</span>
+        <span class="c">//    {</span>
+        <span class="c">//        return new Select&lt;T, TR2&gt;(source, x =&gt; combineSelector(this.selector(x)));</span>
+        <span class="c">//    }</span>
+        <span class="c">//    else</span>
+        <span class="c">//    {</span>
+        <span class="c">//        return new Select&lt;TR, TR2&gt;(this, combineSelector);</span>
+        <span class="c">//    }</span>
+        <span class="c">//}</span>
+ 
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">TR</span>&gt; <a id="7fd3d7e37325b7ab" href="../../../../../R/7fd3d7e37325b7ab.html" target="n" data-glyph="72,1" class="i method">CombinePredicate</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r3 r t">TR</span>, <b>bool</b>&gt; <span id="r8 rd" class="r8 r">predicate</span>)
+        {
+            <b>if</b> (<a href="#0cdcef54dae98042" class="k">this</a>.<a href="#0d0d3b940bbfb58c" class="i field">selector</a> != <b>null</b>)
+            {
+                <b>return</b> <b>new</b> <a href="SelectWhere.cs.html#4d2f6de63fbd0a60" class="t constructor">SelectWhereObservable</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt;(<a href="#0cdcef54dae98042" class="k">this</a>.<a href="#4cf8c8f9b451b711" class="i field">source</a>, <a href="#0cdcef54dae98042" class="k">this</a>.<a href="#0d0d3b940bbfb58c" class="i field">selector</a>, <span class="r8 r">predicate</span>);
+            }
+            <b>else</b>
+            {
+                <b>return</b> <b>new</b> <a href="Where.cs.html#8a17b1bd4dc6b53a" class="t constructor">WhereObservable</a>&lt;<span class="r3 r t">TR</span>&gt;(<a href="#0cdcef54dae98042" class="k">this</a>, <span class="r8 r">predicate</span>); <span class="c">// can&#39;t combine</span>
+            }
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b8b3eba461045b4d" href="../../../../../R/b8b3eba461045b4d.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r3 r t">TR</span>&gt; <span id="r9 rd" class="r9 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r10 rd" class="r10 r">cancel</span>)
+        {
+            <b>if</b> (<a href="#0d0d3b940bbfb58c" class="i field">selector</a> != <b>null</b>)
+            {
+                <b>return</b> <a href="#4cf8c8f9b451b711" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#df6cf5ab079ca14a" class="t constructor">Select</a>(<a href="#0cdcef54dae98042" class="k">this</a>, <span class="r9 r">observer</span>, <span class="r10 r">cancel</span>));
+            }
+            <b>else</b>
+            {
+                <b>return</b> <a href="#4cf8c8f9b451b711" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#7d5a5766ca47f1aa" class="t constructor">Select_</a>(<a href="#0cdcef54dae98042" class="k">this</a>, <span class="r9 r">observer</span>, <span class="r10 r">cancel</span>));
+            }
+        }
+ 
+        <b>class</b> <a id="1d6a43466d4c3a92" href="../../../../../R/1d6a43466d4c3a92.html" target="n" data-glyph="4,1" class="t t">Select</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#0cdcef54dae98042" class="t t">SelectObservable</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt; <a id="a486eb752772cbb0" href="../../../../../R/a486eb752772cbb0.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+ 
+            <b>public</b> <a id="df6cf5ab079ca14a" href="../../../../../R/df6cf5ab079ca14a.html" target="n" data-glyph="72,2" class="i constructor">Select</a>(<a href="#0cdcef54dae98042" class="t t">SelectObservable</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt; <span id="r11 rd" class="r11 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r3 r t">TR</span>&gt; <span id="r12 rd" class="r12 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r13 rd" class="r13 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r12 r">observer</span>, <span class="r13 r">cancel</span>)
+            {
+                <a href="#1d6a43466d4c3a92" class="k">this</a>.<a href="#a486eb752772cbb0" class="i field">parent</a> = <span class="r11 r">parent</span>;
+            }
+ 
+            <b>public override void</b> <a id="e2e41ab0a1e983de" href="../../../../../R/e2e41ab0a1e983de.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r2 r t">T</span> <span id="r14 rd" class="r14 r">value</span>)
+            {
+                <span class="r3 r t">var</span> <span id="r15 rd" class="r15 r">v</span> = <b>default</b>(<span class="r3 r t">TR</span>);
+                <b>try</b>
+                {
+                    <span class="r15 r">v</span> = <a href="#a486eb752772cbb0" class="i field">parent</a>.<a href="#0d0d3b940bbfb58c" class="i field">selector</a>(<span class="r14 r">value</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r16 rd" class="r16 r">ex</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r16 r">ex</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+ 
+                <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r15 r">v</span>);
+            }
+ 
+            <b>public override void</b> <a id="993cf989a8a26700" href="../../../../../R/993cf989a8a26700.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r17 rd" class="r17 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r17 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="094e3b05adc8b83c" href="../../../../../R/094e3b05adc8b83c.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+ 
+        <span class="c">// with Index</span>
+        <b>class</b> <a id="f61c9821ef61e6d9" href="../../../../../R/f61c9821ef61e6d9.html" target="n" data-glyph="4,1" class="t t">Select_</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt;
+        {
+            <b>readonly</b> <a href="#0cdcef54dae98042" class="t t">SelectObservable</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt; <a id="d690eea43f2ab249" href="../../../../../R/d690eea43f2ab249.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>int</b> <a id="31956d3db7f8ed89" href="../../../../../R/31956d3db7f8ed89.html" target="n" data-glyph="46,2" class="i field">index</a>;
+ 
+            <b>public</b> <a id="7d5a5766ca47f1aa" href="../../../../../R/7d5a5766ca47f1aa.html" target="n" data-glyph="72,2" class="i constructor">Select_</a>(<a href="#0cdcef54dae98042" class="t t">SelectObservable</a>&lt;<span class="r2 r t">T</span>, <span class="r3 r t">TR</span>&gt; <span id="r18 rd" class="r18 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r3 r t">TR</span>&gt; <span id="r19 rd" class="r19 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r20 rd" class="r20 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r19 r">observer</span>, <span class="r20 r">cancel</span>)
+            {
+                <a href="#f61c9821ef61e6d9" class="k">this</a>.<a href="#d690eea43f2ab249" class="i field">parent</a> = <span class="r18 r">parent</span>;
+                <a href="#f61c9821ef61e6d9" class="k">this</a>.<a href="#31956d3db7f8ed89" class="i field">index</a> = 0;
+            }
+ 
+            <b>public override void</b> <a id="c3bd51f8d6d8e70e" href="../../../../../R/c3bd51f8d6d8e70e.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r2 r t">T</span> <span id="r21 rd" class="r21 r">value</span>)
+            {
+                <span class="r3 r t">var</span> <span id="r22 rd" class="r22 r">v</span> = <b>default</b>(<span class="r3 r t">TR</span>);
+                <b>try</b>
+                {
+                    <span class="r22 r">v</span> = <a href="#d690eea43f2ab249" class="i field">parent</a>.<a href="#634d66a1b68d25e7" class="i field">selectorWithIndex</a>(<span class="r21 r">value</span>, <a href="#31956d3db7f8ed89" class="i field">index</a>++);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r23 rd" class="r23 r">ex</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r23 r">ex</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+ 
+                <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r22 r">v</span>);
+            }
+ 
+            <b>public override void</b> <a id="7dd2799b52bfd813" href="../../../../../R/7dd2799b52bfd813.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r24 rd" class="r24 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r24 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="d1c9ee6567a7ea65" href="../../../../../R/d1c9ee6567a7ea65.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

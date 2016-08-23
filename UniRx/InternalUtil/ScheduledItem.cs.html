@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html><head><title>ScheduledItem.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(257);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/InternalUtil/ScheduledItem.cs" target="_top">InternalUtil\ScheduledItem.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// this code is borrowed from RxOfficial(rx.codeplex.com) and modified</span>
+ 
+<span class="c">// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Abstract base class for scheduled work items.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>internal class</b> <a id="bf12c0aed76edf31" href="../R/bf12c0aed76edf31.html" target="n" data-glyph="2,0" class="t t">ScheduledItem</a> : <a href="@0@mscorlib/A.html#3911354c40e0c30e" class="t t">IComparable</a>&lt;<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a>&gt;
+    {
+        <b>private readonly</b> <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="t t">BooleanDisposable</a> <a id="c8707efc83fcb45b" href="../R/c8707efc83fcb45b.html" target="n" data-glyph="46,1" class="i field">_disposable</a> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+        <b>private readonly</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="77e9197e16dca8f8" href="../R/77e9197e16dca8f8.html" target="n" data-glyph="46,1" class="i field">_dueTime</a>;
+        <b>private readonly</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="376ef97d8dd26a64" href="../R/376ef97d8dd26a64.html" target="n" data-glyph="46,1" class="i field">_action</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new scheduled work item to run at the specified time.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">dueTime</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Absolute time at which the work item has to be executed.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public</b> <a id="b862531abb1e8fc7" href="../R/b862531abb1e8fc7.html" target="n" data-glyph="72,1" class="i constructor">ScheduledItem</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r1 rd" class="r1 r">action</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r0 rd" class="r0 r">dueTime</span>)
+        {
+            <a href="#77e9197e16dca8f8" class="i field">_dueTime</a> = <span class="r0 r">dueTime</span>;
+            <a href="#376ef97d8dd26a64" class="i field">_action</a> = <span class="r1 r">action</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Gets the absolute time at which the item is due for invocation.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="9ff9df8d563a41b5" href="../R/9ff9df8d563a41b5.html" target="n" data-glyph="102,1" class="i property">DueTime</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#77e9197e16dca8f8" class="i field">_dueTime</a>; }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Invokes the work item.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="7c6d37f01901bb55" href="../R/7c6d37f01901bb55.html" target="n" data-glyph="72,1" class="i method">Invoke</a>()
+        {
+            <b>if</b> (!<a href="#c8707efc83fcb45b" class="i field">_disposable</a>.<a href="../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>)
+            {
+                <a href="#376ef97d8dd26a64" class="i field">_action</a>();
+            }
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Inequality
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Compares the work item with another work item based on absolute time values.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r2 r">other</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Work item to compare the current work item to.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Relative ordering between this and the specified work item.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">The inequality operators are overloaded to provide results consistent with the IComparable implementation. Equality operators implement traditional reference equality semantics.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public int</b> <a id="e1c7818f1a9969ce" href="../R/e1c7818f1a9969ce.html" target="n" data-glyph="72,1" class="i method">CompareTo</a>(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r2 rd" class="r2 r">other</span>)
+        {
+            <span class="c">// MSDN: By definition, any object compares greater than null, and two null references compare equal to each other. </span>
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r2 r">other</span>, <b>null</b>))
+                <b>return</b> 1;
+ 
+            <b>return</b> <a href="#9ff9df8d563a41b5" class="i property">DueTime</a>.<a href="@0@mscorlib/A.html#6cb8793c29bacac5" class="i method">CompareTo</a>(<span class="r2 r">other</span>.<a href="#9ff9df8d563a41b5" class="i property">DueTime</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether one specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object is due before a second specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r3 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the DueTime value of left is earlier than the DueTime value of right; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This operator provides results consistent with the IComparable implementation.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> &lt;(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r3 rd" class="r3 r">left</span>, <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r4 rd" class="r4 r">right</span>)
+        {
+            <b>return</b> <span class="r3 r">left</span>.<a href="#e1c7818f1a9969ce" class="i method">CompareTo</a>(<span class="r4 r">right</span>) &lt; 0;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether one specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object is due before or at the same of a second specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r5 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r6 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the DueTime value of left is earlier than or simultaneous with the DueTime value of right; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This operator provides results consistent with the IComparable implementation.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> &lt;=(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r5 rd" class="r5 r">left</span>, <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r6 rd" class="r6 r">right</span>)
+        {
+            <b>return</b> <span class="r5 r">left</span>.<a href="#e1c7818f1a9969ce" class="i method">CompareTo</a>(<span class="r6 r">right</span>) &lt;= 0;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether one specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object is due after a second specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r7 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r8 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the DueTime value of left is later than the DueTime value of right; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This operator provides results consistent with the IComparable implementation.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> &gt;(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r7 rd" class="r7 r">left</span>, <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r8 rd" class="r8 r">right</span>)
+        {
+            <b>return</b> <span class="r7 r">left</span>.<a href="#e1c7818f1a9969ce" class="i method">CompareTo</a>(<span class="r8 r">right</span>) &gt; 0;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether one specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object is due after or at the same time of a second specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r9 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r10 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the DueTime value of left is later than or simultaneous with the DueTime value of right; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This operator provides results consistent with the IComparable implementation.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> &gt;=(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r9 rd" class="r9 r">left</span>, <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r10 rd" class="r10 r">right</span>)
+        {
+            <b>return</b> <span class="r9 r">left</span>.<a href="#e1c7818f1a9969ce" class="i method">CompareTo</a>(<span class="r10 r">right</span>) &gt;= 0;
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Equality
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether two specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute, TValue</span><span class="c">&amp;gt;</span><span class="c"> objects are equal.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r11 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r12 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if both ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute, TValue</span><span class="c">&amp;gt;</span><span class="c"> are equal; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This operator does not provide results consistent with the IComparable implementation. Instead, it implements reference equality.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> ==(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r11 rd" class="r11 r">left</span>, <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r12 rd" class="r12 r">right</span>)
+        {
+            <b>return object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r11 r">left</span>, <span class="r12 r">right</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether two specified ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute, TValue</span><span class="c">&amp;gt;</span><span class="c"> objects are inequal.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r13 r">left</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The first object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r14 r">right</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The second object to compare.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if both ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute, TValue</span><span class="c">&amp;gt;</span><span class="c"> are inequal; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This operator does not provide results consistent with the IComparable implementation. Instead, it implements reference equality.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+        <b>public static bool operator</b> !=(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r13 rd" class="r13 r">left</span>, <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r14 rd" class="r14 r">right</span>)
+        {
+            <b>return</b> !(<span class="r13 r">left</span> == <span class="r14 r">right</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Determines whether a ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object is equal to the specified object.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r15 r">obj</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The object to compare to the current ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the obj parameter is a ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object and is equal to the current ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object; otherwise, false.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public override bool</b> <a id="bc68ab50b765186e" href="../R/bc68ab50b765186e.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r15 rd" class="r15 r">obj</span>)
+        {
+            <b>return object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<a href="#bf12c0aed76edf31" class="k">this</a>, <span class="r15 r">obj</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns the hash code for the current ScheduledItem</span><span class="c">&amp;lt;</span><span class="c">TAbsolute</span><span class="c">&amp;gt;</span><span class="c"> object.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A 32-bit signed integer hash code.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public override int</b> <a id="dcb9ece6cd0a513e" href="../R/dcb9ece6cd0a513e.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">base</a>.<a href="@0@mscorlib/A.html#4de9cf234d0d8b16" class="i method">GetHashCode</a>();
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a1193d5c7038f83a" href="../R/a1193d5c7038f83a.html" target="n" data-glyph="102,1" class="i property">Cancellation</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#c8707efc83fcb45b" class="i field">_disposable</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Gets whether the work item has received a cancellation request.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="58456e6fb8582658" href="../R/58456e6fb8582658.html" target="n" data-glyph="102,1" class="i property">IsCanceled</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#c8707efc83fcb45b" class="i field">_disposable</a>.<a href="../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>; }
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Efficient scheduler queue that maintains scheduled items sorted by absolute time.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">remarks</span><span class="c">&gt;</span><span class="c">This type is not thread safe; users should ensure proper synchronization.</span><span class="c">&lt;/</span><span class="c">remarks</span><span class="c">&gt;</span>
+    [<span class="i n">System</span>.<span class="i n">Diagnostics</span>.<span class="i n">CodeAnalysis</span>.<a href="@0@mscorlib/A.html#5e00de6576fb9ce7" class="t constructor">SuppressMessage</a>(<span class="s">&quot;Microsoft.Naming&quot;</span>, <span class="s">&quot;CA1711:IdentifiersShouldNotHaveIncorrectSuffix&quot;</span>, <a href="@0@mscorlib/A.html#ce02a652a479502a" class="i property">Justification</a> = <span class="s">&quot;But it *is* a queue!&quot;</span>)]
+    <b>internal class</b> <a id="5f9de32c50a55162" href="../R/5f9de32c50a55162.html" target="n" data-glyph="2,0" class="t t">SchedulerQueue</a>
+    {
+        <b>private readonly</b> <a href="PriorityQueue.cs.html#54f1868d59e9a888" class="t t">PriorityQueue</a>&lt;<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a>&gt; <a id="6aadaabc2da4eebc" href="../R/6aadaabc2da4eebc.html" target="n" data-glyph="46,1" class="i field">_queue</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creates a new scheduler queue with a default initial capacity.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="b46312df8fe82b1c" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">SchedulerQueue</a>()
+            : <a href="#29b132b1eab04adc" class="k">this</a>(1024)
+        {
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Creats a new scheduler queue with the specified initial capacity.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r16 r">capacity</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Initial capacity of the scheduler queue.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">exception</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="@0@mscorlib/A.html#2975f0aa875d4a32" class="t t">ArgumentOutOfRangeException</a><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">&lt;</span><span class="c">paramref</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r16 r">capacity</span><span class="c">&quot;</span><span class="c">/&gt;</span><span class="c"> is less than zero.</span><span class="c">&lt;/</span><span class="c">exception</span><span class="c">&gt;</span>
+        <b>public</b> <a id="29b132b1eab04adc" href="../R/29b132b1eab04adc.html" target="n" data-glyph="72,1" class="i constructor">SchedulerQueue</a>(<b>int</b> <span id="r16 rd" class="r16 r">capacity</span>)
+        {
+            <b>if</b> (<span class="r16 r">capacity</span> &lt; 0)
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;capacity&quot;</span>);
+ 
+            <a href="#6aadaabc2da4eebc" class="i field">_queue</a> = <b>new</b> <a href="PriorityQueue.cs.html#d51c284ea7dd5e19" class="t constructor">PriorityQueue</a>&lt;<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a>&gt;(<span class="r16 r">capacity</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Gets the number of scheduled items in the scheduler queue.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public int</b> <a id="8e0987aa4f3d6685" href="../R/8e0987aa4f3d6685.html" target="n" data-glyph="102,1" class="i property">Count</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#6aadaabc2da4eebc" class="i field">_queue</a>.<a href="PriorityQueue.cs.html#b879b56fbb37d35c" class="i property">Count</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Enqueues the specified work item to be scheduled.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r17 r">scheduledItem</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Work item to be scheduled.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="e1c16f0bd9648d0f" href="../R/e1c16f0bd9648d0f.html" target="n" data-glyph="72,1" class="i method">Enqueue</a>(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r17 rd" class="r17 r">scheduledItem</span>)
+        {
+            <a href="#6aadaabc2da4eebc" class="i field">_queue</a>.<a href="PriorityQueue.cs.html#d2735b69f20d5c59" class="i method">Enqueue</a>(<span class="r17 r">scheduledItem</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Removes the specified work item from the scheduler queue.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r18 r">scheduledItem</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Work item to be removed from the scheduler queue.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">true if the item was found; false otherwise.</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="d7097117e81836b3" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Remove</a>(<a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <span id="r18 rd" class="r18 r">scheduledItem</span>)
+        {
+            <b>return</b> <a href="#6aadaabc2da4eebc" class="i field">_queue</a>.<a href="PriorityQueue.cs.html#7f0790f8e38db04f" class="i method">Remove</a>(<span class="r18 r">scheduledItem</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Dequeues the next work item from the scheduler queue.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Next work item in the scheduler queue (removed).</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public</b> <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <a id="eef34282455930e3" href="../R/eef34282455930e3.html" target="n" data-glyph="72,1" class="i method">Dequeue</a>()
+        {
+            <b>return</b> <a href="#6aadaabc2da4eebc" class="i field">_queue</a>.<a href="PriorityQueue.cs.html#99410009155ba111" class="i method">Dequeue</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Peeks the next work item in the scheduler queue.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">Next work item in the scheduler queue (not removed).</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>public</b> <a href="#bf12c0aed76edf31" class="t t">ScheduledItem</a> <a id="a0bf7eeee05bdf50" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Peek</a>()
+        {
+            <b>return</b> <a href="#6aadaabc2da4eebc" class="i field">_queue</a>.<a href="PriorityQueue.cs.html#5a110c449f40336b" class="i method">Peek</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableTriggerBase.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(65);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableTriggerBase.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableTriggerBase.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    <b>public abstract class</b> <a id="8b268817a4a0e1e1" href="../../../../../../R/8b268817a4a0e1e1.html" target="n" data-glyph="0,0" class="t t"><span id="cd5cb7375cc6c674">ObservableTriggerBase</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>bool</b> <a id="b184987ef453db35" href="../../../../../../R/b184987ef453db35.html" target="n" data-glyph="46,1" class="i field">calledAwake</a> = <b>false</b>;
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b232492d06163163" href="../../../../../../R/b232492d06163163.html" target="n" data-glyph="46,1" class="i field">awake</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Awake is called when the script instance is being loaded.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="7e0207c69f888e92" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <a href="#b184987ef453db35" class="i field">calledAwake</a> = <b>true</b>;
+            <b>if</b> (<a href="#b232492d06163163" class="i field">awake</a> != <b>null</b>) { <a href="#b232492d06163163" class="i field">awake</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#b232492d06163163" class="i field">awake</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Awake is called when the script instance is being loaded.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4474298a515b3103" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">AwakeAsObservable</a>()
+        {
+            <b>if</b> (<a href="#b184987ef453db35" class="i field">calledAwake</a>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#b232492d06163163" class="i field">awake</a> ?? (<a href="#b232492d06163163" class="i field">awake</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <b>bool</b> <a id="e8092fe3f629b8a8" href="../../../../../../R/e8092fe3f629b8a8.html" target="n" data-glyph="46,1" class="i field">calledStart</a> = <b>false</b>;
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="d62956cde1f961d9" href="../../../../../../R/d62956cde1f961d9.html" target="n" data-glyph="46,1" class="i field">start</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="d9010af230272d40" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <a href="#e8092fe3f629b8a8" class="i field">calledStart</a> = <b>true</b>;
+            <b>if</b> (<a href="#d62956cde1f961d9" class="i field">start</a> != <b>null</b>) { <a href="#d62956cde1f961d9" class="i field">start</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#d62956cde1f961d9" class="i field">start</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="9e2a15e5963b3248" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">StartAsObservable</a>()
+        {
+            <b>if</b> (<a href="#e8092fe3f629b8a8" class="i field">calledStart</a>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#d62956cde1f961d9" class="i field">start</a> ?? (<a href="#d62956cde1f961d9" class="i field">start</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+ 
+        <b>bool</b> <a id="aee22ee9e64801dc" href="../../../../../../R/aee22ee9e64801dc.html" target="n" data-glyph="46,1" class="i field">calledDestroy</a> = <b>false</b>;
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="867ddd1e7b5e1f16" href="../../../../../../R/867ddd1e7b5e1f16.html" target="n" data-glyph="46,1" class="i field">onDestroy</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="985e178ffc2b1200" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnDestroy</a>()
+        {
+            <a href="#aee22ee9e64801dc" class="i field">calledDestroy</a> = <b>true</b>;
+            <b>if</b> (<a href="#867ddd1e7b5e1f16" class="i field">onDestroy</a> != <b>null</b>) { <a href="#867ddd1e7b5e1f16" class="i field">onDestroy</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#867ddd1e7b5e1f16" class="i field">onDestroy</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+ 
+            <a href="#b10e3163369ec9d1" class="i method">RaiseOnCompletedOnDestroy</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="7febff2869305f6a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDestroyAsObservable</a>()
+        {
+            <b>if</b> (<a href="#8b268817a4a0e1e1" class="k">this</a> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>if</b> (<a href="#aee22ee9e64801dc" class="i field">calledDestroy</a>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#867ddd1e7b5e1f16" class="i field">onDestroy</a> ?? (<a href="#867ddd1e7b5e1f16" class="i field">onDestroy</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <b>protected abstract void</b> <a id="b10e3163369ec9d1" href="../../../../../../R/b10e3163369ec9d1.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>();
+    }
+}</pre></td></tr></table></div></body></html>

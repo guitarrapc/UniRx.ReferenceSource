@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Conversions.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(74);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Observable.Conversions.cs" target="_top">Assets\Plugins\UniRx\Scripts\Observable.Conversions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../../../../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="13fe208f7fd2ab90" href="../../../../R/13fe208f7fd2ab90.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>)
+        {
+            <b>if</b> (<span class="r1 r">source</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;source&quot;</span>);
+ 
+            <span class="c">// optimize, don&#39;t double wrap</span>
+            <b>if</b> (<span class="r1 r">source</span> <b>is</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/AsObservable.cs.html#e532df78cd582d80" class="t t">AsObservableObservable</a>&lt;<span class="r0 r t">T</span>&gt;)
+            {
+                <b>return</b> <span class="r1 r">source</span>;
+            }
+ 
+            <b>return</b> <b>new</b> <a href="Operators/AsObservable.cs.html#dc07afb03ff19a20" class="t constructor">AsObservableObservable</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r1 r">source</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <a id="a71fd687c1105d15" href="../../../../R/a71fd687c1105d15.html" target="n" data-glyph="220,1" class="i method">ToObservable</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r3 rd" class="r3 r">source</span>)
+        {
+            <b>return</b> <a href="#510ed9d00c50fe0b" class="i method">ToObservable</a>(<span class="r3 r">source</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <a id="510ed9d00c50fe0b" href="../../../../R/510ed9d00c50fe0b.html" target="n" data-glyph="220,1" class="i method">ToObservable</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r5 rd" class="r5 r">source</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r6 rd" class="r6 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/ToObservable.cs.html#0c3ef9bf86fa4ef1" class="t constructor">ToObservableObservable</a>&lt;<span class="r4 r t">T</span>&gt;(<span class="r5 r">source</span>, <span class="r6 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r7 r t">TResult</span>&gt; <a id="208e1989e9cc09ad" href="../../../../R/208e1989e9cc09ad.html" target="n" data-glyph="220,1" class="i method">Cast</a>&lt;<span id="r8 rd t" class="r8 r t">TSource</span>, <span id="r7 rd t" class="r7 r t">TResult</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">TSource</span>&gt; <span id="r9 rd" class="r9 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Cast.cs.html#a8697f24a51f6599" class="t constructor">CastObservable</a>&lt;<span class="r8 r t">TSource</span>, <span class="r7 r t">TResult</span>&gt;(<span class="r9 r">source</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> witness is for type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r10 r t">TResult</span>&gt; <a id="20881dcad928d04d" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Cast</a>&lt;<span id="r11 rd t" class="r11 r t">TSource</span>, <span id="r10 rd t" class="r10 r t">TResult</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r11 r t">TSource</span>&gt; <span id="r12 rd" class="r12 r">source</span>, <span class="r10 r t">TResult</span> <span id="r13 rd" class="r13 r">witness</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Cast.cs.html#a8697f24a51f6599" class="t constructor">CastObservable</a>&lt;<span class="r11 r t">TSource</span>, <span class="r10 r t">TResult</span>&gt;(<span class="r12 r">source</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r14 r t">TResult</span>&gt; <a id="6a039c17d9d4aa98" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OfType</a>&lt;<span id="r15 rd t" class="r15 r t">TSource</span>, <span id="r14 rd t" class="r14 r t">TResult</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r15 r t">TSource</span>&gt; <span id="r16 rd" class="r16 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/OfType.cs.html#e7af3db3e613f808" class="t constructor">OfTypeObservable</a>&lt;<span class="r15 r t">TSource</span>, <span class="r14 r t">TResult</span>&gt;(<span class="r16 r">source</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> witness is for type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r17 r t">TResult</span>&gt; <a id="4d876fd5bee1cd8f" href="../../../../R/4d876fd5bee1cd8f.html" target="n" data-glyph="220,1" class="i method">OfType</a>&lt;<span id="r18 rd t" class="r18 r t">TSource</span>, <span id="r17 rd t" class="r17 r t">TResult</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r18 r t">TSource</span>&gt; <span id="r19 rd" class="r19 r">source</span>, <span class="r17 r t">TResult</span> <span id="r20 rd" class="r20 r">witness</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/OfType.cs.html#e7af3db3e613f808" class="t constructor">OfTypeObservable</a>&lt;<span class="r18 r t">TSource</span>, <span class="r17 r t">TResult</span>&gt;(<span class="r19 r">source</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Converting .Select(_ =&gt; Unit.Default) sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="cc7086dac1a298ca" href="../../../../R/cc7086dac1a298ca.html" target="n" data-glyph="220,1" class="i method">AsUnitObservable</a>&lt;<span id="r21 rd t" class="r21 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r22 rd" class="r22 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/AsUnitObservable.cs.html#632651b830427f00" class="t constructor">AsUnitObservableObservable</a>&lt;<span class="r21 r t">T</span>&gt;(<span class="r22 r">source</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as LastOrDefault().AsUnitObservable().</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="6c2b07187b618361" href="../../../../R/6c2b07187b618361.html" target="n" data-glyph="220,1" class="i method">AsSingleUnitObservable</a>&lt;<span id="r23 rd t" class="r23 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r23 r t">T</span>&gt; <span id="r24 rd" class="r24 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/AsSingleUnitObservable.cs.html#004445e4549e73e1" class="t constructor">AsSingleUnitObservableObservable</a>&lt;<span class="r23 r t">T</span>&gt;(<span class="r24 r">source</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

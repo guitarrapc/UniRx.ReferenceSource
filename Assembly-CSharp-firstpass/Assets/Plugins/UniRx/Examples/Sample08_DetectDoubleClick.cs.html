@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample08_DetectDoubleClick.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(32);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample08_DetectDoubleClick.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample08_DetectDoubleClick.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="6ddf264e2347efbf" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="76bccd17f8767340">Sample08_DetectDoubleClick</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>void</b> <a id="c8218a8c2c1aecda" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// Global event handling is very useful.</span>
+            <span class="c">// UniRx can handle there events.</span>
+            <span class="c">// Observable.EveryUpdate/EveryFixedUpdate/EveryEndOfFrame</span>
+            <span class="c">// Observable.EveryApplicationFocus/EveryApplicationPause</span>
+            <span class="c">// Observable.OnceApplicationQuit</span>
+ 
+            <span class="c">// This DoubleCLick Sample is from</span>
+            <span class="c">// The introduction to Reactive Programming you&#39;ve been missing</span>
+            <span class="c">// https://gist.github.com/staltz/868e7e9bc2a7b8c1f754</span>
+ 
+            <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r0 rd" class="r0 r">clickStream</span> = <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#b63e651bf81ccb39" class="i method">EveryUpdate</a>()
+                .<span class="i">Where</span>(<span id="r1 rd" class="r1 r">_</span> =&gt; <span class="i">Input</span>.<span class="i">GetMouseButtonDown</span>(0));
+ 
+            <span class="r0 r">clickStream</span>.<a href="../Scripts/Observable.Paging.cs.html#a4beee6ac147176b" class="i method">Buffer</a>(<span class="r0 r">clickStream</span>.<a href="../Scripts/Observable.Time.cs.html#b11b67c121f34201" class="i method">Throttle</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(250)))
+                .<a href="../Scripts/Observable.cs.html#b20580f5ad7a1bc9" class="i method">Where</a>(<span id="r2 rd" class="r2 r">xs</span> =&gt; <span class="r2 r">xs</span>.<a href="@0@mscorlib/A.html#3d6c21c4e9bd5f63" class="i property">Count</a> &gt;= 2)
+                .<span class="i">Subscribe</span>(<span id="r3 rd" class="r3 r">xs</span> =&gt; <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;DoubleClick Detected! Count:&quot;</span> + <span class="r3 r">xs</span>.<a href="@0@mscorlib/A.html#3d6c21c4e9bd5f63" class="i property">Count</a>));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

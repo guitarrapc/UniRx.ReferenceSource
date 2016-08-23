@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html><head><title>OperatorObservableBase.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(42);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/OperatorObservableBase.cs" target="_top">Operators\OperatorObservableBase.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <span class="c">// implements note : all field must be readonly.</span>
+    <b>public abstract class</b> <a id="d79873c11f01da26" href="../R/d79873c11f01da26.html" target="n" data-glyph="0,0" class="t t">OperatorObservableBase</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="../System/IOptimizedObservable.cs.html#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly bool</b> <a id="3c8de7329fc0b9ef" href="../R/3c8de7329fc0b9ef.html" target="n" data-glyph="46,1" class="i field">isRequiredSubscribeOnCurrentThread</a>;
+ 
+        <b>public</b> <a id="03d2e1fa88cb9bcf" href="../R/03d2e1fa88cb9bcf.html" target="n" data-glyph="72,1" class="i constructor">OperatorObservableBase</a>(<b>bool</b> <span id="r1 rd" class="r1 r">isRequiredSubscribeOnCurrentThread</span>)
+        {
+            <a href="#d79873c11f01da26" class="k">this</a>.<a href="#3c8de7329fc0b9ef" class="i field">isRequiredSubscribeOnCurrentThread</a> = <span class="r1 r">isRequiredSubscribeOnCurrentThread</span>;
+        }
+ 
+        <b>public bool</b> <a id="e73fc89faac29a25" href="../R/e73fc89faac29a25.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>()
+        {
+            <b>return</b> <a href="#3c8de7329fc0b9ef" class="i field">isRequiredSubscribeOnCurrentThread</a>;
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="afaffe0ca9bc9eeb" href="../R/afaffe0ca9bc9eeb.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r2 rd" class="r2 r">observer</span>)
+        {
+            <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r3 rd" class="r3 r">subscription</span> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+ 
+            <span class="c">// note:</span>
+            <span class="c">// does not make the safe observer, it breaks exception durability.</span>
+            <span class="c">// var safeObserver = Observer.CreateAutoDetachObserver&lt;T&gt;(observer, subscription);</span>
+ 
+            <b>if</b> (<a href="#3c8de7329fc0b9ef" class="i field">isRequiredSubscribeOnCurrentThread</a> &amp;&amp; <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/CurrentThreadScheduler.cs.html#390ac689c3b13477" class="i property">IsCurrentThreadSchedulerScheduleRequired</a>)
+            {
+                <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>.<a href="../Schedulers/IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt; <span class="r3 r">subscription</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#72166f5f5f8aa1da" class="i method">SubscribeCore</a>(<span class="r2 r">observer</span>, <span class="r3 r">subscription</span>));
+            }
+            <b>else</b>
+            {
+                <span class="r3 r">subscription</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#72166f5f5f8aa1da" class="i method">SubscribeCore</a>(<span class="r2 r">observer</span>, <span class="r3 r">subscription</span>);
+            }
+ 
+            <b>return</b> <span class="r3 r">subscription</span>;
+        }
+ 
+        <b>protected abstract</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="72166f5f5f8aa1da" href="../R/72166f5f5f8aa1da.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>);
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html><head><title>LogEntryExtensions.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(14);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Diagnostics/LogEntryExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Diagnostics\LogEntryExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="d3eebe9bf923efe5" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">LogEntryExtensions</a>
+    {
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="d0bb151e7fa1ef5f" href="../../../../../../R/d0bb151e7fa1ef5f.html" target="n" data-glyph="220,1" class="i method">LogToUnityDebug</a>(<b>this</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="LogEntry.cs.html#31ba9896acb11547" class="t t">LogEntry</a>&gt; <span id="r0 rd" class="r0 r">source</span>)
+        {
+            <b>return</b> <span class="r0 r">source</span>.<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="UnityDebugSink.cs.html#cc2c7dfa750cd223" class="t constructor">UnityDebugSink</a>());
+        }
+    }
+}</pre></td></tr></table></div></body></html>

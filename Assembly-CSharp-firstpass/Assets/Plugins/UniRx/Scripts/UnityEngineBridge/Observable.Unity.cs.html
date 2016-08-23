@@ -1,0 +1,1168 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Unity.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(1159);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Observable.Unity.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Observable.Unity.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_5_0</span> || <span class="i">UNITY_5_1</span> || <span class="i">UNITY_5_2</span>)
+<span class="k preprocess">#</span><span class="k preprocess">define</span> <span class="i">SupportCustomYieldInstruction</span>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+<b>using</b> <span class="t">SchedulerUnity</span> = <span class="i n">UniRx</span>.<a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public enum</b> <a id="c67cb29c27a41895" href="../../../../../R/c67cb29c27a41895.html" target="n" data-glyph="18,0" class="t t"><span id="e5bbcfff07cf7ee0">FrameCountType</span></a>
+    {
+        <a id="52219005ab7cec81" href="../../../../../R/52219005ab7cec81.html" target="n" data-glyph="24,1" class="i field">Update</a>,
+        <a id="08d4b64f87a05014" href="../../../../../R/08d4b64f87a05014.html" target="n" data-glyph="24,1" class="i field">FixedUpdate</a>,
+        <a id="e49bfb0686659c35" href="../../../../../R/e49bfb0686659c35.html" target="n" data-glyph="24,1" class="i field">EndOfFrame</a>,
+    }
+ 
+    <b>public enum</b> <a id="e5ce8fa08a8ee12d" href="../../../../../R/e5ce8fa08a8ee12d.html" target="n" data-glyph="18,0" class="t t"><span id="c9b65eec9c7076b1">MainThreadDispatchType</span></a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">yield return null</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a id="e7dd0055a68b2499" href="../../../../../R/e7dd0055a68b2499.html" target="n" data-glyph="24,1" class="i field">Update</a>,
+        <a id="ab2ce18765300d5b" href="../../../../../R/ab2ce18765300d5b.html" target="n" data-glyph="24,1" class="i field">FixedUpdate</a>,
+        <a id="91287e2397dd744a" href="../../../../../R/91287e2397dd744a.html" target="n" data-glyph="24,1" class="i field">EndOfFrame</a>,
+        <a id="5c213265fad3275c" href="../../../../../R/5c213265fad3275c.html" target="n" data-glyph="24,1" class="i field">GameObjectUpdate</a>,
+        <a id="fbabb2d47a906c0f" href="../../../../../R/fbabb2d47a906c0f.html" target="n" data-glyph="24,1" class="i field">LateUpdate</a>,
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">[Obsolete]Same as Update</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        [<a href="@0@mscorlib/A.html#8eeaa59a3d0743c0" class="t constructor">Obsolete</a>]
+        <a id="e5425947682b5019" href="../../../../../R/e5425947682b5019.html" target="n" data-glyph="24,1" class="i field">AfterUpdate</a>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+ 
+    <b>public static class</b> <a id="81150436549db192" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">FrameCountTypeExtensions</a>
+    {
+        <b>public static</b> <span class="i">YieldInstruction</span> <a id="59faafdc7567a5c5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">GetYieldInstruction</a>(<b>this</b> <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r0 rd" class="r0 r">frameCountType</span>)
+        {
+            <b>switch</b> (<span class="r0 r">frameCountType</span>)
+            {
+                <b>case</b> <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#08d4b64f87a05014" class="i field">FixedUpdate</a>:
+                    <b>return</b> <a href="YieldInstructionCache.cs.html#3865d34220438442" class="t t">YieldInstructionCache</a>.<a href="YieldInstructionCache.cs.html#bb206827e46853da" class="i field">WaitForFixedUpdate</a>;
+                <b>case</b> <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#e49bfb0686659c35" class="i field">EndOfFrame</a>:
+                    <b>return</b> <a href="YieldInstructionCache.cs.html#3865d34220438442" class="t t">YieldInstructionCache</a>.<a href="YieldInstructionCache.cs.html#2132b2692f79ba9e" class="i field">WaitForEndOfFrame</a>;
+                <b>case</b> <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>:
+                <b>default</b>:
+                    <b>return null</b>;
+            }
+        }
+    }
+ 
+    <b>internal interface</b> <a id="2d878fe977f85870" href="../../../../../R/2d878fe977f85870.html" target="n" data-glyph="50,0" class="t t">ICustomYieldInstructionErrorHandler</a>
+    {
+        <b>bool</b> <a id="36970472e766caf7" href="../../../../../R/36970472e766caf7.html" target="n" data-glyph="102,1" class="i property">HasError</a> { <b>get</b>; }
+        <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="368c9a8fdc6c7d04" href="../../../../../R/368c9a8fdc6c7d04.html" target="n" data-glyph="102,1" class="i property">Error</a> { <b>get</b>; }
+        <b>bool</b> <a id="a3c7c986f7151b7e" href="../../../../../R/a3c7c986f7151b7e.html" target="n" data-glyph="102,1" class="i property">IsReThrowOnError</a> { <b>get</b>; }
+        <b>void</b> <a id="fc497fb6df0ab3f8" href="../../../../../R/fc497fb6df0ab3f8.html" target="n" data-glyph="72,1" class="i method">ForceDisableRethrowOnError</a>();
+        <b>void</b> <a id="98316ac61787532a" href="../../../../../R/98316ac61787532a.html" target="n" data-glyph="72,1" class="i method">ForceEnableRethrowOnError</a>();
+    }
+ 
+    <b>public class</b> <a id="f022e54f47b94101" href="../../../../../R/f022e54f47b94101.html" target="n" data-glyph="0,0" class="t t">ObservableYieldInstruction</a>&lt;<span id="r1 rd t" class="r1 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#893e8cdebffde2da" class="t t">IEnumerator</a>&lt;<span class="r1 r t">T</span>&gt;, <a href="#2d878fe977f85870" class="t t">ICustomYieldInstructionErrorHandler</a>
+    {
+        <b>readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="d9b3f77dc50e2c96" href="../../../../../R/d9b3f77dc50e2c96.html" target="n" data-glyph="46,1" class="i field">subscription</a>;
+        <b>readonly</b> <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <a id="3893e0d3f172c8ec" href="../../../../../R/3893e0d3f172c8ec.html" target="n" data-glyph="46,1" class="i field">cancel</a>;
+        <b>bool</b> <a id="54bc0a9d57bd4c0d" href="../../../../../R/54bc0a9d57bd4c0d.html" target="n" data-glyph="46,1" class="i field">reThrowOnError</a>;
+        <span class="r1 r t">T</span> <a id="e03415288a49065a" href="../../../../../R/e03415288a49065a.html" target="n" data-glyph="46,1" class="i field">current</a>;
+        <span class="r1 r t">T</span> <a id="89d499a0639aec62" href="../../../../../R/89d499a0639aec62.html" target="n" data-glyph="46,1" class="i field">result</a>;
+        <b>bool</b> <a id="d4da5349f0f9f25e" href="../../../../../R/d4da5349f0f9f25e.html" target="n" data-glyph="46,1" class="i field">moveNext</a>;
+        <b>bool</b> <a id="c1d37ead3a6a132e" href="../../../../../R/c1d37ead3a6a132e.html" target="n" data-glyph="46,1" class="i field">hasResult</a>;
+        <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="2e5b7738dc29ffb6" href="../../../../../R/2e5b7738dc29ffb6.html" target="n" data-glyph="46,1" class="i field">error</a>;
+ 
+        <b>public</b> <a id="29a3cd57d023b1b6" href="../../../../../R/29a3cd57d023b1b6.html" target="n" data-glyph="72,1" class="i constructor">ObservableYieldInstruction</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r2 rd" class="r2 r">source</span>, <b>bool</b> <span id="r3 rd" class="r3 r">reThrowOnError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r4 rd" class="r4 r">cancel</span>)
+        {
+            <a href="#f022e54f47b94101" class="k">this</a>.<a href="#d4da5349f0f9f25e" class="i field">moveNext</a> = <b>true</b>;
+            <a href="#f022e54f47b94101" class="k">this</a>.<a href="#54bc0a9d57bd4c0d" class="i field">reThrowOnError</a> = <span class="r3 r">reThrowOnError</span>;
+            <a href="#f022e54f47b94101" class="k">this</a>.<a href="#3893e0d3f172c8ec" class="i field">cancel</a> = <span class="r4 r">cancel</span>;
+            <b>try</b>
+            {
+                <a href="#f022e54f47b94101" class="k">this</a>.<a href="#d9b3f77dc50e2c96" class="i field">subscription</a> = <span class="r2 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#fb48e46e40c31b0b" class="t constructor">ToYieldInstruction</a>(<a href="#f022e54f47b94101" class="k">this</a>));
+            }
+            <b>catch</b>
+            {
+                <a href="#d4da5349f0f9f25e" class="i field">moveNext</a> = <b>false</b>;
+                <b>throw</b>;
+            }
+        }
+ 
+        <b>public bool</b> <a id="b187a8b914995945" href="../../../../../R/b187a8b914995945.html" target="n" data-glyph="102,1" class="i property">HasError</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#2e5b7738dc29ffb6" class="i field">error</a> != <b>null</b>; }
+        }
+ 
+        <b>public bool</b> <a id="1c0099e9931a7f61" href="../../../../../R/1c0099e9931a7f61.html" target="n" data-glyph="102,1" class="i property">HasResult</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#c1d37ead3a6a132e" class="i field">hasResult</a>; }
+        }
+ 
+        <b>public bool</b> <a id="e653d4d7d6cc3aa1" href="../../../../../R/e653d4d7d6cc3aa1.html" target="n" data-glyph="102,1" class="i property">IsCanceled</a>
+        {
+            <b>get</b>
+            {
+                <b>if</b> (<a href="#c1d37ead3a6a132e" class="i field">hasResult</a>) <b>return false</b>;
+                <b>if</b> (<a href="#2e5b7738dc29ffb6" class="i field">error</a> != <b>null</b>) <b>return false</b>;
+                <b>return</b> <a href="#3893e0d3f172c8ec" class="i field">cancel</a>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> HasResult || IsCanceled || HasError</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="c50edc549183808a" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">IsDone</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#1c0099e9931a7f61" class="i property">HasResult</a> || <a href="#b187a8b914995945" class="i property">HasError</a> || (<a href="#3893e0d3f172c8ec" class="i field">cancel</a>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>);
+            }
+        }
+ 
+        <b>public</b> <span class="r1 r t">T</span> <a id="404ce87cc82f24ec" href="../../../../../R/404ce87cc82f24ec.html" target="n" data-glyph="102,1" class="i property">Result</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#89d499a0639aec62" class="i field">result</a>; }
+        }
+ 
+        <span class="r1 r t">T</span> <a href="@0@mscorlib/A.html#893e8cdebffde2da" class="t t">IEnumerator</a>&lt;<span class="r1 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#d231e5618becae91" class="i property">Current</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#e03415288a49065a" class="i field">current</a>;
+            }
+        }
+ 
+        <b>object</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#e03415288a49065a" class="i field">current</a>;
+            }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="28a94baf7e5d5e9e" href="../../../../../R/28a94baf7e5d5e9e.html" target="n" data-glyph="102,1" class="i property">Error</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#2e5b7738dc29ffb6" class="i field">error</a>;
+            }
+        }
+ 
+        <b>bool</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>()
+        {
+            <b>if</b> (!<a href="#d4da5349f0f9f25e" class="i field">moveNext</a>)
+            {
+                <b>if</b> (<a href="#54bc0a9d57bd4c0d" class="i field">reThrowOnError</a> &amp;&amp; <a href="#b187a8b914995945" class="i property">HasError</a>)
+                {
+                    <b>throw</b> <a href="#28a94baf7e5d5e9e" class="i property">Error</a>;
+                }
+ 
+                <b>return false</b>;
+            }
+ 
+            <b>if</b> (<a href="#3893e0d3f172c8ec" class="i field">cancel</a>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <a href="#d9b3f77dc50e2c96" class="i field">subscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <b>return false</b>;
+            }
+ 
+            <b>return true</b>;
+        }
+ 
+        <b>bool</b> <a href="#2d878fe977f85870" class="t t">ICustomYieldInstructionErrorHandler</a>.<a href="#a3c7c986f7151b7e" class="i property">IsReThrowOnError</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#54bc0a9d57bd4c0d" class="i field">reThrowOnError</a>; }
+        }
+ 
+        <b>void</b> <a href="#2d878fe977f85870" class="t t">ICustomYieldInstructionErrorHandler</a>.<a href="#fc497fb6df0ab3f8" class="i method">ForceDisableRethrowOnError</a>()
+        {
+            <a href="#f022e54f47b94101" class="k">this</a>.<a href="#54bc0a9d57bd4c0d" class="i field">reThrowOnError</a> = <b>false</b>;
+        }
+ 
+        <b>void</b> <a href="#2d878fe977f85870" class="t t">ICustomYieldInstructionErrorHandler</a>.<a href="#98316ac61787532a" class="i method">ForceEnableRethrowOnError</a>()
+        {
+            <a href="#f022e54f47b94101" class="k">this</a>.<a href="#54bc0a9d57bd4c0d" class="i field">reThrowOnError</a> = <b>true</b>;
+        }
+ 
+        <b>public void</b> <a id="aa2943555d0b4fab" href="../../../../../R/aa2943555d0b4fab.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#d9b3f77dc50e2c96" class="i field">subscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+ 
+        <b>void</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>.<a href="@0@mscorlib/A.html#1689ec6b454da8bc" class="i method">Reset</a>()
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#ab0acd5f99886747" class="t constructor">NotSupportedException</a>();
+        }
+ 
+        <b>class</b> <a id="dd0afc1214b5b65e" href="../../../../../R/dd0afc1214b5b65e.html" target="n" data-glyph="4,1" class="t t">ToYieldInstruction</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r1 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<span class="r1 r t">T</span>&gt; <a id="adf29a2cda2780bc" href="../../../../../R/adf29a2cda2780bc.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+ 
+            <b>public</b> <a id="fb48e46e40c31b0b" href="../../../../../R/fb48e46e40c31b0b.html" target="n" data-glyph="72,2" class="i constructor">ToYieldInstruction</a>(<a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r5 rd" class="r5 r">parent</span>)
+            {
+                <a href="#dd0afc1214b5b65e" class="k">this</a>.<a href="#adf29a2cda2780bc" class="i field">parent</a> = <span class="r5 r">parent</span>;
+            }
+ 
+            <b>public void</b> <a id="f4b975ac441a40e2" href="../../../../../R/f4b975ac441a40e2.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r1 r t">T</span> <span id="r6 rd" class="r6 r">value</span>)
+            {
+                <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#e03415288a49065a" class="i field">current</a> = <span class="r6 r">value</span>;
+            }
+ 
+            <b>public void</b> <a id="d034364b5a3a333a" href="../../../../../R/d034364b5a3a333a.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r7 rd" class="r7 r">error</span>)
+            {
+                <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#d4da5349f0f9f25e" class="i field">moveNext</a> = <b>false</b>;
+                <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#2e5b7738dc29ffb6" class="i field">error</a> = <span class="r7 r">error</span>;
+            }
+ 
+            <b>public void</b> <a id="32cf8c9904390d49" href="../../../../../R/32cf8c9904390d49.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#d4da5349f0f9f25e" class="i field">moveNext</a> = <b>false</b>;
+                <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#c1d37ead3a6a132e" class="i field">hasResult</a> = <b>true</b>;
+                <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#89d499a0639aec62" class="i field">result</a> = <a href="#adf29a2cda2780bc" class="i field">parent</a>.<a href="#e03415288a49065a" class="i field">current</a>;
+            }
+        }
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UniRxLibrary</span>
+<span class="e">    public static partial class ObservableUnity
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+    <b>public static</b> <a href="../../../../../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../../../../../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    {
+        <b>readonly static</b> <a href="@0@System.Core/A.html#2d265edc718b158b" class="t t">HashSet</a>&lt;<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>&gt; <a id="b6b16d5061286f41" href="../../../../../R/b6b16d5061286f41.html" target="n" data-glyph="46,1" class="i field">YieldInstructionTypes</a> = <b>new</b> <a href="@0@System.Core/A.html#eca9ea30fa3b2c28" class="t constructor">HashSet</a>&lt;<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>&gt;
+        {
+            <b>typeof</b>(<span class="i">WWW</span>),
+            <b>typeof</b>(<span class="i">WaitForEndOfFrame</span>),
+            <b>typeof</b>(<span class="i">WaitForFixedUpdate</span>),
+            <b>typeof</b>(<span class="i">WaitForSeconds</span>),
+            <b>typeof</b>(<span class="i">AsyncOperation</span>),
+            <b>typeof</b>(<span class="i">Coroutine</span>)
+        };
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+ 
+        <b>class</b> <a id="0bf6efd9877ac963" href="../../../../../R/0bf6efd9877ac963.html" target="n" data-glyph="4,1" class="t t">EveryAfterUpdateInvoker</a> : <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>
+        {
+            <b>long</b> <a id="224d26c064a87f75" href="../../../../../R/224d26c064a87f75.html" target="n" data-glyph="46,2" class="i field">count</a> = -1;
+            <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>long</b>&gt; <a id="79869605499c732c" href="../../../../../R/79869605499c732c.html" target="n" data-glyph="46,2" class="i field">observer</a>;
+            <b>readonly</b> <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <a id="b6aff4c277df0ea9" href="../../../../../R/b6aff4c277df0ea9.html" target="n" data-glyph="46,2" class="i field">cancellationToken</a>;
+ 
+            <b>public</b> <a id="e0f008ac4aa78277" href="../../../../../R/e0f008ac4aa78277.html" target="n" data-glyph="72,2" class="i constructor">EveryAfterUpdateInvoker</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>long</b>&gt; <span id="r8 rd" class="r8 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r9 rd" class="r9 r">cancellationToken</span>)
+            {
+                <a href="#0bf6efd9877ac963" class="k">this</a>.<a href="#79869605499c732c" class="i field">observer</a> = <span class="r8 r">observer</span>;
+                <a href="#0bf6efd9877ac963" class="k">this</a>.<a href="#b6aff4c277df0ea9" class="i field">cancellationToken</a> = <span class="r9 r">cancellationToken</span>;
+            }
+ 
+            <b>public bool</b> <a id="56e7b0e0597ee6cc" href="../../../../../R/56e7b0e0597ee6cc.html" target="n" data-glyph="72,2" class="i method">MoveNext</a>()
+            {
+                <b>if</b> (!<a href="#b6aff4c277df0ea9" class="i field">cancellationToken</a>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <b>if</b> (<a href="#224d26c064a87f75" class="i field">count</a> != -1) <span class="c">// ignore first/immediate invoke</span>
+                    {
+                        <a href="#79869605499c732c" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="#224d26c064a87f75" class="i field">count</a>++);
+                    }
+                    <b>else</b>
+                    {
+                        <a href="#224d26c064a87f75" class="i field">count</a>++;
+                    }
+                    <b>return true</b>;
+                }
+                <b>else</b>
+                {
+                    <b>return false</b>;
+                }
+            }
+ 
+            <b>public object</b> <a id="a17fc0e0d6f94726" href="../../../../../R/a17fc0e0d6f94726.html" target="n" data-glyph="102,2" class="i property">Current</a>
+            {
+                <b>get</b>
+                {
+                    <b>return null</b>;
+                }
+            }
+ 
+            <b>public void</b> <a id="94694314a08c46d3" href="../../../../../R/94694314a08c46d3.html" target="n" data-glyph="72,2" class="i method">Reset</a>()
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#ab0acd5f99886747" class="t constructor">NotSupportedException</a>();
+            }
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">From has no callback coroutine to IObservable. If publishEveryYield = true then publish OnNext every yield return else return once on enumeration completed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4bb26026605c3a49" href="../../../../../R/4bb26026605c3a49.html" target="n" data-glyph="72,1" class="i method">FromCoroutine</a>(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r10 rd" class="r10 r">coroutine</span>, <b>bool</b> <span id="r11 rd" class="r11 r">publishEveryYield</span> = <b>false</b>)
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r12 rd" class="r12 r">observer</span>, <span id="r13 rd" class="r13 r">cancellationToken</span>) =&gt; <a href="#112b075a92d03c88" class="i method">WrapEnumerator</a>(<span class="r10 r">coroutine</span>(), <span class="r12 r">observer</span>, <span class="r13 r">cancellationToken</span>, <span class="r11 r">publishEveryYield</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">From has no callback coroutine to IObservable. If publishEveryYield = true then publish OnNext every yield return else return once on enumeration completed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="2be294cf56d76bfe" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromCoroutine</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r14 rd" class="r14 r">coroutine</span>, <b>bool</b> <span id="r15 rd" class="r15 r">publishEveryYield</span> = <b>false</b>)
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r16 rd" class="r16 r">observer</span>, <span id="r17 rd" class="r17 r">cancellationToken</span>) =&gt; <a href="#112b075a92d03c88" class="i method">WrapEnumerator</a>(<span class="r14 r">coroutine</span>(<span class="r17 r">cancellationToken</span>), <span class="r16 r">observer</span>, <span class="r17 r">cancellationToken</span>, <span class="r15 r">publishEveryYield</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> MicroCoroutine is lightweight, fast coroutine dispatcher.</span>
+        <span class="c">///</span><span class="c"> IEnumerator supports only yield return null.</span>
+        <span class="c">///</span><span class="c"> If publishEveryYield = true then publish OnNext every yield return else return once on enumeration completed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="df4e1532c85a744f" href="../../../../../R/df4e1532c85a744f.html" target="n" data-glyph="72,1" class="i method">FromMicroCoroutine</a>(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r18 rd" class="r18 r">coroutine</span>, <b>bool</b> <span id="r19 rd" class="r19 r">publishEveryYield</span> = <b>false</b>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r20 rd" class="r20 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r21 rd" class="r21 r">observer</span>, <span id="r22 rd" class="r22 r">cancellationToken</span>) =&gt; <a href="#112b075a92d03c88" class="i method">WrapEnumerator</a>(<span class="r18 r">coroutine</span>(), <span class="r21 r">observer</span>, <span class="r22 r">cancellationToken</span>, <span class="r19 r">publishEveryYield</span>), <span class="r20 r">frameCountType</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> MicroCoroutine is lightweight, fast coroutine dispatcher.</span>
+        <span class="c">///</span><span class="c"> IEnumerator supports only yield return null.</span>
+        <span class="c">///</span><span class="c"> If publishEveryYield = true then publish OnNext every yield return else return once on enumeration completed.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="66dad4f1a6980124" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromMicroCoroutine</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r23 rd" class="r23 r">coroutine</span>, <b>bool</b> <span id="r24 rd" class="r24 r">publishEveryYield</span> = <b>false</b>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r25 rd" class="r25 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r26 rd" class="r26 r">observer</span>, <span id="r27 rd" class="r27 r">cancellationToken</span>) =&gt; <a href="#112b075a92d03c88" class="i method">WrapEnumerator</a>(<span class="r23 r">coroutine</span>(<span class="r27 r">cancellationToken</span>), <span class="r26 r">observer</span>, <span class="r27 r">cancellationToken</span>, <span class="r24 r">publishEveryYield</span>), <span class="r25 r">frameCountType</span>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="112b075a92d03c88" href="../../../../../R/112b075a92d03c88.html" target="n" data-glyph="76,1" class="i method">WrapEnumerator</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r28 rd" class="r28 r">enumerator</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r29 rd" class="r29 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r30 rd" class="r30 r">cancellationToken</span>, <b>bool</b> <span id="r31 rd" class="r31 r">publishEveryYield</span>)
+        {
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r32 rd" class="r32 r">hasNext</span> = <b>default</b>(<b>bool</b>);
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r33 rd" class="r33 r">raisedError</span> = <b>false</b>;
+            <b>do</b>
+            {
+                <b>try</b>
+                {
+                    <span class="r32 r">hasNext</span> = <span class="r28 r">enumerator</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r34 rd" class="r34 r">ex</span>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r33 r">raisedError</span> = <b>true</b>;
+                        <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r34 r">ex</span>);
+                    }
+                    <b>finally</b>
+                    {
+                        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r35 rd" class="r35 r">d</span> = <span class="r28 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                        <b>if</b> (<span class="r35 r">d</span> != <b>null</b>)
+                        {
+                            <span class="r35 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                        }
+                    }
+                    <b>yield break</b>;
+                }
+                <b>if</b> (<span class="r32 r">hasNext</span> &amp;&amp; <span class="r31 r">publishEveryYield</span>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                    }
+                    <b>catch</b>
+                    {
+                        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r36 rd" class="r36 r">d</span> = <span class="r28 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                        <b>if</b> (<span class="r36 r">d</span> != <b>null</b>)
+                        {
+                            <span class="r36 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                        }
+                        <b>throw</b>;
+                    }
+                }
+                <b>if</b> (<span class="r32 r">hasNext</span>)
+                {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+                    <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r37 rd" class="r37 r">current</span> = <span class="r28 r">enumerator</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                    <a href="#2d878fe977f85870" class="k">var</a> <span id="r38 rd" class="r38 r">customHandler</span> = <span class="r37 r">current</span> <b>as</b> <a href="#2d878fe977f85870" class="t t">ICustomYieldInstructionErrorHandler</a>;
+                    <b>if</b> (<span class="r38 r">customHandler</span> != <b>null</b> &amp;&amp; <span class="r38 r">customHandler</span>.<a href="#a3c7c986f7151b7e" class="i property">IsReThrowOnError</a>)
+                    {
+                        <span class="c">// If throws exception in Custom YieldInsrtuction, can&#39;t handle parent coroutine.</span>
+                        <span class="c">// It is C# limitation.</span>
+                        <span class="c">// so store error info and retrieve from parent.</span>
+                        <span class="r38 r">customHandler</span>.<a href="#fc497fb6df0ab3f8" class="i method">ForceDisableRethrowOnError</a>();
+                        <b>yield return</b> <span class="r37 r">current</span>;
+                        <span class="r38 r">customHandler</span>.<a href="#98316ac61787532a" class="i method">ForceEnableRethrowOnError</a>();
+ 
+                        <b>if</b> (<span class="r38 r">customHandler</span>.<a href="#36970472e766caf7" class="i property">HasError</a>)
+                        {
+                            <b>try</b>
+                            {
+                                <span class="r33 r">raisedError</span> = <b>true</b>;
+                                <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r38 r">customHandler</span>.<a href="#368c9a8fdc6c7d04" class="i property">Error</a>);
+                            }
+                            <b>finally</b>
+                            {
+                                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r39 rd" class="r39 r">d</span> = <span class="r28 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                                <b>if</b> (<span class="r39 r">d</span> != <b>null</b>)
+                                {
+                                    <span class="r39 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                                }
+                            }
+                            <b>yield break</b>;
+                        }
+                    }
+                    <b>else</b>
+                    {
+                        <b>yield return</b> <span class="r28 r">enumerator</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>; <span class="c">// yield inner YieldInstruction</span>
+                    }
+<span class="k preprocess">#</span><span class="k preprocess">else</span>
+<span class="e">                    yield return enumerator.Current; // yield inner YieldInstruction
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                }
+            } <b>while</b> (<span class="r32 r">hasNext</span> &amp;&amp; !<span class="r30 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>);
+ 
+            <b>try</b>
+            {
+                <b>if</b> (!<span class="r33 r">raisedError</span> &amp;&amp; !<span class="r30 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <span class="c">// last one</span>
+                    <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+            }
+            <b>finally</b>
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r40 rd" class="r40 r">d</span> = <span class="r28 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                <b>if</b> (<span class="r40 r">d</span> != <b>null</b>)
+                {
+                    <span class="r40 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Convert coroutine to typed IObservable. If nullAsNextUpdate = true then yield return null when Enumerator.Current and no null publish observer.OnNext.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r41 r t">T</span>&gt; <a id="2eb66aedb35ba2ac" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromCoroutineValue</a>&lt;<span id="r41 rd t" class="r41 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r42 rd" class="r42 r">coroutine</span>, <b>bool</b> <span id="r43 rd" class="r43 r">nullAsNextUpdate</span> = <b>true</b>)
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<span class="r41 r t">T</span>&gt;((<span id="r44 rd" class="r44 r">observer</span>, <span id="r45 rd" class="r45 r">cancellationToken</span>) =&gt; <a href="#128dc9e82edc80db" class="i method">WrapEnumeratorYieldValue</a>&lt;<span class="r41 r t">T</span>&gt;(<span class="r42 r">coroutine</span>(), <span class="r44 r">observer</span>, <span class="r45 r">cancellationToken</span>, <span class="r43 r">nullAsNextUpdate</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Convert coroutine to typed IObservable. If nullAsNextUpdate = true then yield return null when Enumerator.Current and no null publish observer.OnNext.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r46 r t">T</span>&gt; <a id="fb95a7d29820ba2b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromCoroutineValue</a>&lt;<span id="r46 rd t" class="r46 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r47 rd" class="r47 r">coroutine</span>, <b>bool</b> <span id="r48 rd" class="r48 r">nullAsNextUpdate</span> = <b>true</b>)
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<span class="r46 r t">T</span>&gt;((<span id="r49 rd" class="r49 r">observer</span>, <span id="r50 rd" class="r50 r">cancellationToken</span>) =&gt; <a href="#128dc9e82edc80db" class="i method">WrapEnumeratorYieldValue</a>&lt;<span class="r46 r t">T</span>&gt;(<span class="r47 r">coroutine</span>(<span class="r50 r">cancellationToken</span>), <span class="r49 r">observer</span>, <span class="r50 r">cancellationToken</span>, <span class="r48 r">nullAsNextUpdate</span>));
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="128dc9e82edc80db" href="../../../../../R/128dc9e82edc80db.html" target="n" data-glyph="76,1" class="i method">WrapEnumeratorYieldValue</a>&lt;<span id="r51 rd t" class="r51 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r52 rd" class="r52 r">enumerator</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r51 r t">T</span>&gt; <span id="r53 rd" class="r53 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r54 rd" class="r54 r">cancellationToken</span>, <b>bool</b> <span id="r55 rd" class="r55 r">nullAsNextUpdate</span>)
+        {
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r56 rd" class="r56 r">hasNext</span> = <b>default</b>(<b>bool</b>);
+            <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r57 rd" class="r57 r">current</span> = <b>default</b>(<b>object</b>);
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r58 rd" class="r58 r">raisedError</span> = <b>false</b>;
+            <b>do</b>
+            {
+                <b>try</b>
+                {
+                    <span class="r56 r">hasNext</span> = <span class="r52 r">enumerator</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                    <b>if</b> (<span class="r56 r">hasNext</span>) <span class="r57 r">current</span> = <span class="r52 r">enumerator</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r59 rd" class="r59 r">ex</span>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r58 r">raisedError</span> = <b>true</b>;
+                        <span class="r53 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r59 r">ex</span>);
+                    }
+                    <b>finally</b>
+                    {
+                        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r60 rd" class="r60 r">d</span> = <span class="r52 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                        <b>if</b> (<span class="r60 r">d</span> != <b>null</b>)
+                        {
+                            <span class="r60 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                        }
+                    }
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (<span class="r56 r">hasNext</span>)
+                {
+                    <b>if</b> (<span class="r57 r">current</span> != <b>null</b> &amp;&amp; <a href="#b6b16d5061286f41" class="i field">YieldInstructionTypes</a>.<a href="@0@System.Core/A.html#06d905a0ac76e4f5" class="i method">Contains</a>(<span class="r57 r">current</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>()))
+                    {
+                        <b>yield return</b> <span class="r57 r">current</span>;
+                    }
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+                    <b>else if</b> (<span class="r57 r">current</span> <b>is</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>)
+                    {
+                        <a href="#2d878fe977f85870" class="k">var</a> <span id="r61 rd" class="r61 r">customHandler</span> = <span class="r57 r">current</span> <b>as</b> <a href="#2d878fe977f85870" class="t t">ICustomYieldInstructionErrorHandler</a>;
+                        <b>if</b> (<span class="r61 r">customHandler</span> != <b>null</b> &amp;&amp; <span class="r61 r">customHandler</span>.<a href="#a3c7c986f7151b7e" class="i property">IsReThrowOnError</a>)
+                        {
+                            <span class="c">// If throws exception in Custom YieldInsrtuction, can&#39;t handle parent coroutine.</span>
+                            <span class="c">// It is C# limitation.</span>
+                            <span class="c">// so store error info and retrieve from parent.</span>
+                            <span class="r61 r">customHandler</span>.<a href="#fc497fb6df0ab3f8" class="i method">ForceDisableRethrowOnError</a>();
+                            <b>yield return</b> <span class="r57 r">current</span>;
+                            <span class="r61 r">customHandler</span>.<a href="#98316ac61787532a" class="i method">ForceEnableRethrowOnError</a>();
+ 
+                            <b>if</b> (<span class="r61 r">customHandler</span>.<a href="#36970472e766caf7" class="i property">HasError</a>)
+                            {
+                                <b>try</b>
+                                {
+                                    <span class="r58 r">raisedError</span> = <b>true</b>;
+                                    <span class="r53 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r61 r">customHandler</span>.<a href="#368c9a8fdc6c7d04" class="i property">Error</a>);
+                                }
+                                <b>finally</b>
+                                {
+                                    <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r62 rd" class="r62 r">d</span> = <span class="r52 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                                    <b>if</b> (<span class="r62 r">d</span> != <b>null</b>)
+                                    {
+                                        <span class="r62 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                                    }
+                                }
+                                <b>yield break</b>;
+                            }
+                        }
+                        <b>else</b>
+                        {
+                            <b>yield return</b> <span class="r57 r">current</span>;
+                        }
+                    }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                    <b>else if</b> (<span class="r57 r">current</span> == <b>null</b> &amp;&amp; <span class="r55 r">nullAsNextUpdate</span>)
+                    {
+                        <b>yield return null</b>;
+                    }
+                    <b>else</b>
+                    {
+                        <b>try</b>
+                        {
+                            <span class="r53 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>((<span class="r51 r t">T</span>)<span class="r57 r">current</span>);
+                        }
+                        <b>catch</b>
+                        {
+                            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r63 rd" class="r63 r">d</span> = <span class="r52 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                            <b>if</b> (<span class="r63 r">d</span> != <b>null</b>)
+                            {
+                                <span class="r63 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                            }
+                            <b>throw</b>;
+                        }
+                    }
+                }
+            } <b>while</b> (<span class="r56 r">hasNext</span> &amp;&amp; !<span class="r54 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>);
+ 
+            <b>try</b>
+            {
+                <b>if</b> (!<span class="r58 r">raisedError</span> &amp;&amp; !<span class="r54 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <span class="r53 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                }
+            }
+            <b>finally</b>
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r64 rd" class="r64 r">d</span> = <span class="r52 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                <b>if</b> (<span class="r64 r">d</span> != <b>null</b>)
+                {
+                    <span class="r64 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r65 r t">T</span>&gt; <a id="6a538af15d258332" href="../../../../../R/6a538af15d258332.html" target="n" data-glyph="72,1" class="i method">FromCoroutine</a>&lt;<span id="r65 rd t" class="r65 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r65 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r66 rd" class="r66 r">coroutine</span>)
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<span class="r65 r t">T</span>&gt;((<span id="r67 rd" class="r67 r">observer</span>, <span id="r68 rd" class="r68 r">cancellationToken</span>) =&gt; <a href="#1c06966bdf8c6602" class="i method">WrapToCancellableEnumerator</a>(<span class="r66 r">coroutine</span>(<span class="r67 r">observer</span>), <span class="r68 r">cancellationToken</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> MicroCoroutine is lightweight, fast coroutine dispatcher.</span>
+        <span class="c">///</span><span class="c"> IEnumerator supports only yield return null.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r69 r t">T</span>&gt; <a id="3046f65c3a55e54e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromMicroCoroutine</a>&lt;<span id="r69 rd t" class="r69 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r69 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r70 rd" class="r70 r">coroutine</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r71 rd" class="r71 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<span class="r69 r t">T</span>&gt;((<span id="r72 rd" class="r72 r">observer</span>, <span id="r73 rd" class="r73 r">cancellationToken</span>) =&gt; <a href="#1c06966bdf8c6602" class="i method">WrapToCancellableEnumerator</a>(<span class="r70 r">coroutine</span>(<span class="r72 r">observer</span>), <span class="r73 r">cancellationToken</span>), <span class="r71 r">frameCountType</span>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="1c06966bdf8c6602" href="../../../../../R/1c06966bdf8c6602.html" target="n" data-glyph="76,1" class="i method">WrapToCancellableEnumerator</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r74 rd" class="r74 r">enumerator</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r75 rd" class="r75 r">cancellationToken</span>)
+        {
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r76 rd" class="r76 r">hasNext</span> = <b>default</b>(<b>bool</b>);
+            <b>do</b>
+            {
+                <b>try</b>
+                {
+                    <span class="r76 r">hasNext</span> = <span class="r74 r">enumerator</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                }
+                <b>catch</b>
+                {
+                    <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r77 rd" class="r77 r">d</span> = <span class="r74 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                    <b>if</b> (<span class="r77 r">d</span> != <b>null</b>)
+                    {
+                        <span class="r77 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    }
+                    <b>yield break</b>;
+                }
+ 
+                <b>yield return</b> <span class="r74 r">enumerator</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>; <span class="c">// yield inner YieldInstruction</span>
+            } <b>while</b> (<span class="r76 r">hasNext</span> &amp;&amp; !<span class="r75 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>);
+ 
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r78 rd" class="r78 r">d</span> = <span class="r74 r">enumerator</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>;
+                <b>if</b> (<span class="r78 r">d</span> != <b>null</b>)
+                {
+                    <span class="r78 r">d</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                }
+            }
+        }
+   
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r79 r t">T</span>&gt; <a id="b2bf6a9083d2cda1" href="../../../../../R/b2bf6a9083d2cda1.html" target="n" data-glyph="72,1" class="i method">FromCoroutine</a>&lt;<span id="r79 rd t" class="r79 r t">T</span>&gt;(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r79 r t">T</span>&gt;, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r80 rd" class="r80 r">coroutine</span>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/FromCoroutine.cs.html#fe332e665cab93ef" class="t constructor">FromCoroutineObservable</a>&lt;<span class="r79 r t">T</span>&gt;(<span class="r80 r">coroutine</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> MicroCoroutine is lightweight, fast coroutine dispatcher.</span>
+        <span class="c">///</span><span class="c"> IEnumerator supports only yield return null.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r81 r t">T</span>&gt; <a id="9277a146bd1df828" href="../../../../../R/9277a146bd1df828.html" target="n" data-glyph="72,1" class="i method">FromMicroCoroutine</a>&lt;<span id="r81 rd t" class="r81 r t">T</span>&gt;(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r81 r t">T</span>&gt;, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r82 rd" class="r82 r">coroutine</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r83 rd" class="r83 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/FromCoroutine.cs.html#2e2160e29bc55d7b" class="t constructor">FromMicroCoroutineObservable</a>&lt;<span class="r81 r t">T</span>&gt;(<span class="r82 r">coroutine</span>, <span class="r83 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="83aa9efb5897a704" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">SelectMany</a>&lt;<span id="r84 rd t" class="r84 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r84 r t">T</span>&gt; <span id="r85 rd" class="r85 r">source</span>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r86 rd" class="r86 r">coroutine</span>, <b>bool</b> <span id="r87 rd" class="r87 r">publishEveryYield</span> = <b>false</b>)
+        {
+            <b>return</b> <span class="r85 r">source</span>.<a href="../Observable.cs.html#a7190bf81bc5abe2" class="i method">SelectMany</a>(<a href="#4bb26026605c3a49" class="i method">FromCoroutine</a>(() =&gt; <span class="r86 r">coroutine</span>, <span class="r87 r">publishEveryYield</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="9f2aa9300919ab62" href="../../../../../R/9f2aa9300919ab62.html" target="n" data-glyph="220,1" class="i method">SelectMany</a>&lt;<span id="r88 rd t" class="r88 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r88 r t">T</span>&gt; <span id="r89 rd" class="r89 r">source</span>, <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r90 rd" class="r90 r">selector</span>, <b>bool</b> <span id="r91 rd" class="r91 r">publishEveryYield</span> = <b>false</b>)
+        {
+            <b>return</b> <span class="r89 r">source</span>.<a href="../Observable.cs.html#a7190bf81bc5abe2" class="i method">SelectMany</a>(<a href="#4bb26026605c3a49" class="i method">FromCoroutine</a>(() =&gt; <span class="r90 r">selector</span>(), <span class="r91 r">publishEveryYield</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Note: publishEveryYield is always false. If you want to set true, use Observable.FromCoroutine(() =&gt; selector(x), true). This is workaround of Unity compiler&#39;s bug.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="344fd569b3611779" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">SelectMany</a>&lt;<span id="r92 rd t" class="r92 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r92 r t">T</span>&gt; <span id="r93 rd" class="r93 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r92 r t">T</span>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r94 rd" class="r94 r">selector</span>)
+        {
+            <b>return</b> <span class="r93 r">source</span>.<a href="../Observable.cs.html#e1d178df07545c79" class="i method">SelectMany</a>(<span id="r95 rd" class="r95 r">x</span> =&gt; <a href="#4bb26026605c3a49" class="i method">FromCoroutine</a>(() =&gt; <span class="r94 r">selector</span>(<span class="r95 r">x</span>), <b>false</b>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="31e4b9f201c4d9cb" href="../../../../../R/31e4b9f201c4d9cb.html" target="n" data-glyph="220,1" class="i method">ToObservable</a>(<b>this</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r96 rd" class="r96 r">coroutine</span>, <b>bool</b> <span id="r97 rd" class="r97 r">publishEveryYield</span> = <b>false</b>)
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r98 rd" class="r98 r">observer</span>, <span id="r99 rd" class="r99 r">cancellationToken</span>) =&gt; <a href="#112b075a92d03c88" class="i method">WrapEnumerator</a>(<span class="r96 r">coroutine</span>, <span class="r98 r">observer</span>, <span class="r99 r">cancellationToken</span>, <span class="r97 r">publishEveryYield</span>));
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+ 
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a6969e67e7b5294d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>(<b>this</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r100 rd" class="r100 r">coroutine</span>)
+        {
+            <b>return</b> <a href="#31e4b9f201c4d9cb" class="i method">ToObservable</a>(<span class="r100 r">coroutine</span>, <b>false</b>).<a href="#34e860c379f74e5d" class="i method">ToYieldInstruction</a>();
+        }
+ 
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="0fe99c47fb8f3d39" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>(<b>this</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r101 rd" class="r101 r">coroutine</span>, <b>bool</b> <span id="r102 rd" class="r102 r">throwOnError</span>)
+        {
+            <b>return</b> <a href="#31e4b9f201c4d9cb" class="i method">ToObservable</a>(<span class="r101 r">coroutine</span>, <b>false</b>).<a href="#844fa5055b7c6485" class="i method">ToYieldInstruction</a>(<span class="r102 r">throwOnError</span>);
+        }
+ 
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a29840dadf8f20f1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>(<b>this</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r103 rd" class="r103 r">coroutine</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r104 rd" class="r104 r">cancellationToken</span>)
+        {
+            <b>return</b> <a href="#31e4b9f201c4d9cb" class="i method">ToObservable</a>(<span class="r103 r">coroutine</span>, <b>false</b>).<a href="#edf0993012ab9c9e" class="i method">ToYieldInstruction</a>(<span class="r104 r">cancellationToken</span>);
+        }
+ 
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="8aeca73e22cb97f7" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>(<b>this</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r105 rd" class="r105 r">coroutine</span>, <b>bool</b> <span id="r106 rd" class="r106 r">throwOnError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r107 rd" class="r107 r">cancellationToken</span>)
+        {
+            <b>return</b> <a href="#31e4b9f201c4d9cb" class="i method">ToObservable</a>(<span class="r105 r">coroutine</span>, <b>false</b>).<a href="#f26b81979ebd57da" class="i method">ToYieldInstruction</a>(<span class="r106 r">throwOnError</span>, <span class="r107 r">cancellationToken</span>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="c">// variation of FromCoroutine</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> EveryUpdate calls coroutine&#39;s yield return null timing. It is after all Update and before LateUpdate.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="b63e651bf81ccb39" href="../../../../../R/b63e651bf81ccb39.html" target="n" data-glyph="72,1" class="i method">EveryUpdate</a>()
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<b>long</b>&gt;((<span id="r108 rd" class="r108 r">observer</span>, <span id="r109 rd" class="r109 r">cancellationToken</span>) =&gt; <a href="#43ff51091a7c5872" class="i method">EveryCycleCore</a>(<span class="r108 r">observer</span>, <span class="r109 r">cancellationToken</span>), <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="dedacff35d7d8a75" href="../../../../../R/dedacff35d7d8a75.html" target="n" data-glyph="72,1" class="i method">EveryFixedUpdate</a>()
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<b>long</b>&gt;((<span id="r110 rd" class="r110 r">observer</span>, <span id="r111 rd" class="r111 r">cancellationToken</span>) =&gt; <a href="#43ff51091a7c5872" class="i method">EveryCycleCore</a>(<span class="r110 r">observer</span>, <span class="r111 r">cancellationToken</span>), <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#08d4b64f87a05014" class="i field">FixedUpdate</a>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="015ca30a80479e53" href="../../../../../R/015ca30a80479e53.html" target="n" data-glyph="72,1" class="i method">EveryEndOfFrame</a>()
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<b>long</b>&gt;((<span id="r112 rd" class="r112 r">observer</span>, <span id="r113 rd" class="r113 r">cancellationToken</span>) =&gt; <a href="#43ff51091a7c5872" class="i method">EveryCycleCore</a>(<span class="r112 r">observer</span>, <span class="r113 r">cancellationToken</span>), <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#e49bfb0686659c35" class="i field">EndOfFrame</a>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="43ff51091a7c5872" href="../../../../../R/43ff51091a7c5872.html" target="n" data-glyph="76,1" class="i method">EveryCycleCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>long</b>&gt; <span id="r114 rd" class="r114 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r115 rd" class="r115 r">cancellationToken</span>)
+        {
+            <b>if</b> (<span class="r115 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>) <b>yield break</b>;
+            <a href="@0@mscorlib/A.html#e566178cce890c36" class="k">var</a> <span id="r116 rd" class="r116 r">count</span> = 0L;
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return null</b>;
+                <b>if</b> (<span class="r115 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>) <b>yield break</b>;
+ 
+                <span class="r114 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r116 r">count</span>++);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> EveryGameObjectUpdate calls from MainThreadDispatcher&#39;s Update.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="0b598eb30ad13dee" href="../../../../../R/0b598eb30ad13dee.html" target="n" data-glyph="72,1" class="i method">EveryGameObjectUpdate</a>()
+        {
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#c4376aea05b491eb" class="i method">UpdateAsObservable</a>().<a href="../Observable.Aggregate.cs.html#fab4f269f6171d74" class="i method">Scan</a>(-1L, (<span id="r117 rd" class="r117 r">x</span>, <span id="r118 rd" class="r118 r">y</span>) =&gt; <span class="r117 r">x</span> + 1);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> EveryLateUpdate calls from MainThreadDispatcher&#39;s OnLateUpdate.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="e44ae3d6f87b8b7e" href="../../../../../R/e44ae3d6f87b8b7e.html" target="n" data-glyph="72,1" class="i method">EveryLateUpdate</a>()
+        {
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#99756af4e4001c07" class="i method">LateUpdateAsObservable</a>().<a href="../Observable.Aggregate.cs.html#fab4f269f6171d74" class="i method">Scan</a>(-1L, (<span id="r119 rd" class="r119 r">x</span>, <span id="r120 rd" class="r120 r">y</span>) =&gt; <span class="r119 r">x</span> + 1);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> [Obsolete]Same as EveryUpdate.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        [<a href="@0@mscorlib/A.html#8eeaa59a3d0743c0" class="t constructor">Obsolete</a>]
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="e8becc0fcacf0f52" href="../../../../../R/e8becc0fcacf0f52.html" target="n" data-glyph="72,1" class="i method">EveryAfterUpdate</a>()
+        {
+            <b>return</b> <a href="#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<b>long</b>&gt;((<span id="r121 rd" class="r121 r">observer</span>, <span id="r122 rd" class="r122 r">cancellationToken</span>) =&gt; <b>new</b> <a href="#e0f008ac4aa78277" class="t constructor">EveryAfterUpdateInvoker</a>(<span class="r121 r">observer</span>, <span class="r122 r">cancellationToken</span>));
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Observable.Time Frame Extensions
+ 
+        <span class="c">// Interval, Timer, Delay, Sample, Throttle, Timeout</span>
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="bf075018dc88dcbd" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">NextFrame</a>(<a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r123 rd" class="r123 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;((<span id="r124 rd" class="r124 r">observer</span>, <span id="r125 rd" class="r125 r">cancellation</span>) =&gt; <a href="#6dfcffa2ca4952e2" class="i method">NextFrameCore</a>(<span class="r124 r">observer</span>, <span class="r125 r">cancellation</span>), <span class="r123 r">frameCountType</span>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="6dfcffa2ca4952e2" href="../../../../../R/6dfcffa2ca4952e2.html" target="n" data-glyph="76,1" class="i method">NextFrameCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r126 rd" class="r126 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r127 rd" class="r127 r">cancellation</span>)
+        {
+            <b>yield return null</b>;
+ 
+            <b>if</b> (!<span class="r127 r">cancellation</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <span class="r126 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                <span class="r126 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="cd8b88d870988507" href="../../../../../R/cd8b88d870988507.html" target="n" data-glyph="72,1" class="i method">IntervalFrame</a>(<b>int</b> <span id="r128 rd" class="r128 r">intervalFrameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r129 rd" class="r129 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#bb4f76ba677f1273" class="i method">TimerFrame</a>(<span class="r128 r">intervalFrameCount</span>, <span class="r128 r">intervalFrameCount</span>, <span class="r129 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="5d7a9f35007b5bba" href="../../../../../R/5d7a9f35007b5bba.html" target="n" data-glyph="72,1" class="i method">TimerFrame</a>(<b>int</b> <span id="r130 rd" class="r130 r">dueTimeFrameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r131 rd" class="r131 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<b>long</b>&gt;((<span id="r132 rd" class="r132 r">observer</span>, <span id="r133 rd" class="r133 r">cancellation</span>) =&gt; <a href="#30a642969aa26fdb" class="i method">TimerFrameCore</a>(<span class="r132 r">observer</span>, <span class="r130 r">dueTimeFrameCount</span>, <span class="r133 r">cancellation</span>), <span class="r131 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>long</b>&gt; <a id="bb4f76ba677f1273" href="../../../../../R/bb4f76ba677f1273.html" target="n" data-glyph="72,1" class="i method">TimerFrame</a>(<b>int</b> <span id="r134 rd" class="r134 r">dueTimeFrameCount</span>, <b>int</b> <span id="r135 rd" class="r135 r">periodFrameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r136 rd" class="r136 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>return</b> <a href="#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<b>long</b>&gt;((<span id="r137 rd" class="r137 r">observer</span>, <span id="r138 rd" class="r138 r">cancellation</span>) =&gt; <a href="#fbae4b93adbeab90" class="i method">TimerFrameCore</a>(<span class="r137 r">observer</span>, <span class="r134 r">dueTimeFrameCount</span>, <span class="r135 r">periodFrameCount</span>, <span class="r138 r">cancellation</span>), <span class="r136 r">frameCountType</span>);
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="30a642969aa26fdb" href="../../../../../R/30a642969aa26fdb.html" target="n" data-glyph="76,1" class="i method">TimerFrameCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>long</b>&gt; <span id="r139 rd" class="r139 r">observer</span>, <b>int</b> <span id="r140 rd" class="r140 r">dueTimeFrameCount</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r141 rd" class="r141 r">cancel</span>)
+        {
+            <span class="c">// normalize</span>
+            <b>if</b> (<span class="r140 r">dueTimeFrameCount</span> &lt;= 0) <span class="r140 r">dueTimeFrameCount</span> = 0;
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r142 rd" class="r142 r">currentFrame</span> = 0;
+ 
+            <span class="c">// initial phase</span>
+            <b>while</b> (!<span class="r141 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>if</b> (<span class="r142 r">currentFrame</span>++ == <span class="r140 r">dueTimeFrameCount</span>)
+                {
+                    <span class="r139 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(0);
+                    <span class="r139 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                    <b>break</b>;
+                }
+                <b>yield return null</b>;
+            }
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="fbae4b93adbeab90" href="../../../../../R/fbae4b93adbeab90.html" target="n" data-glyph="76,1" class="i method">TimerFrameCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>long</b>&gt; <span id="r143 rd" class="r143 r">observer</span>, <b>int</b> <span id="r144 rd" class="r144 r">dueTimeFrameCount</span>, <b>int</b> <span id="r145 rd" class="r145 r">periodFrameCount</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r146 rd" class="r146 r">cancel</span>)
+        {
+            <span class="c">// normalize</span>
+            <b>if</b> (<span class="r144 r">dueTimeFrameCount</span> &lt;= 0) <span class="r144 r">dueTimeFrameCount</span> = 0;
+            <b>if</b> (<span class="r145 r">periodFrameCount</span> &lt;= 0) <span class="r145 r">periodFrameCount</span> = 1;
+ 
+            <a href="@0@mscorlib/A.html#e566178cce890c36" class="k">var</a> <span id="r147 rd" class="r147 r">sendCount</span> = 0L;
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r148 rd" class="r148 r">currentFrame</span> = 0;
+ 
+            <span class="c">// initial phase</span>
+            <b>while</b> (!<span class="r146 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>if</b> (<span class="r148 r">currentFrame</span>++ == <span class="r144 r">dueTimeFrameCount</span>)
+                {
+                    <span class="r143 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r147 r">sendCount</span>++);
+                    <span class="r148 r">currentFrame</span> = -1;
+                    <b>break</b>;
+                }
+                <b>yield return null</b>;
+            }
+ 
+            <span class="c">// period phase</span>
+            <b>while</b> (!<span class="r146 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>if</b> (++<span class="r148 r">currentFrame</span> == <span class="r145 r">periodFrameCount</span>)
+                {
+                    <span class="r143 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r147 r">sendCount</span>++);
+                    <span class="r148 r">currentFrame</span> = 0;
+                }
+                <b>yield return null</b>;
+            }
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r149 r t">T</span>&gt; <a id="cb35014c0a6ada65" href="../../../../../R/cb35014c0a6ada65.html" target="n" data-glyph="220,1" class="i method">DelayFrame</a>&lt;<span id="r149 rd t" class="r149 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r149 r t">T</span>&gt; <span id="r150 rd" class="r150 r">source</span>, <b>int</b> <span id="r151 rd" class="r151 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r152 rd" class="r152 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>if</b> (<span class="r151 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;frameCount&quot;</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/DelayFrame.cs.html#34ff3932827f2017" class="t constructor">DelayFrameObservable</a>&lt;<span class="r149 r t">T</span>&gt;(<span class="r150 r">source</span>, <span class="r151 r">frameCount</span>, <span class="r152 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r153 r t">T</span>&gt; <a id="0157fe26ce241ae9" href="../../../../../R/0157fe26ce241ae9.html" target="n" data-glyph="220,1" class="i method">SampleFrame</a>&lt;<span id="r153 rd t" class="r153 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r153 r t">T</span>&gt; <span id="r154 rd" class="r154 r">source</span>, <b>int</b> <span id="r155 rd" class="r155 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r156 rd" class="r156 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>if</b> (<span class="r155 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;frameCount&quot;</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/SampleFrame.cs.html#57fbf2920c6a4e6a" class="t constructor">SampleFrameObservable</a>&lt;<span class="r153 r t">T</span>&gt;(<span class="r154 r">source</span>, <span class="r155 r">frameCount</span>, <span class="r156 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r157 r t">TSource</span>&gt; <a id="332cbba37803b717" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ThrottleFrame</a>&lt;<span id="r157 rd t" class="r157 r t">TSource</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r157 r t">TSource</span>&gt; <span id="r158 rd" class="r158 r">source</span>, <b>int</b> <span id="r159 rd" class="r159 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r160 rd" class="r160 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>if</b> (<span class="r159 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;frameCount&quot;</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/ThrottleFrame.cs.html#72d9a1849e63d717" class="t constructor">ThrottleFrameObservable</a>&lt;<span class="r157 r t">TSource</span>&gt;(<span class="r158 r">source</span>, <span class="r159 r">frameCount</span>, <span class="r160 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r161 r t">TSource</span>&gt; <a id="064c6ded6c8972c5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ThrottleFirstFrame</a>&lt;<span id="r161 rd t" class="r161 r t">TSource</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r161 r t">TSource</span>&gt; <span id="r162 rd" class="r162 r">source</span>, <b>int</b> <span id="r163 rd" class="r163 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r164 rd" class="r164 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>if</b> (<span class="r163 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;frameCount&quot;</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/ThrottleFirstFrame.cs.html#3ef8e7a0a54157a5" class="t constructor">ThrottleFirstFrameObservable</a>&lt;<span class="r161 r t">TSource</span>&gt;(<span class="r162 r">source</span>, <span class="r163 r">frameCount</span>, <span class="r164 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r165 r t">T</span>&gt; <a id="19d7d316705e3edc" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">TimeoutFrame</a>&lt;<span id="r165 rd t" class="r165 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r165 r t">T</span>&gt; <span id="r166 rd" class="r166 r">source</span>, <b>int</b> <span id="r167 rd" class="r167 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r168 rd" class="r168 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>if</b> (<span class="r167 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;frameCount&quot;</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/TimeoutFrame.cs.html#c54265232dfca812" class="t constructor">TimeoutFrameObservable</a>&lt;<span class="r165 r t">T</span>&gt;(<span class="r166 r">source</span>, <span class="r167 r">frameCount</span>, <span class="r168 r">frameCountType</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r169 r t">T</span>&gt; <a id="202dc010332b1277" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">DelayFrameSubscription</a>&lt;<span id="r169 rd t" class="r169 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r169 r t">T</span>&gt; <span id="r170 rd" class="r170 r">source</span>, <b>int</b> <span id="r171 rd" class="r171 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r172 rd" class="r172 r">frameCountType</span> = <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#52219005ab7cec81" class="i field">Update</a>)
+        {
+            <b>if</b> (<span class="r171 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;frameCount&quot;</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/DelayFrameSubscription.cs.html#b6be1e9cf4a32331" class="t constructor">DelayFrameSubscriptionObservable</a>&lt;<span class="r169 r t">T</span>&gt;(<span class="r170 r">source</span>, <span class="r171 r">frameCount</span>, <span class="r172 r">frameCountType</span>);
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Convert to yieldable IEnumerator. e.g. yield return source.ToYieldInstruction();.</span>
+        <span class="c">///</span><span class="c"> If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.</span>
+        <span class="c">///</span><span class="c"> This overload throws exception if received OnError events(same as coroutine).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<span class="r173 r t">T</span>&gt; <a id="34e860c379f74e5d" href="../../../../../R/34e860c379f74e5d.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>&lt;<span id="r173 rd t" class="r173 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r173 r t">T</span>&gt; <span id="r174 rd" class="r174 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#29a3cd57d023b1b6" class="t constructor">ObservableYieldInstruction</a>&lt;<span class="r173 r t">T</span>&gt;(<span class="r174 r">source</span>, <b>true</b>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>.<a href="CancellationToken.cs.html#f626daeb6e2dfb37" class="i field">Empty</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Convert to yieldable IEnumerator. e.g. yield return source.ToYieldInstruction();.</span>
+        <span class="c">///</span><span class="c"> If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.</span>
+        <span class="c">///</span><span class="c"> This overload throws exception if received OnError events(same as coroutine).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<span class="r175 r t">T</span>&gt; <a id="edf0993012ab9c9e" href="../../../../../R/edf0993012ab9c9e.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>&lt;<span id="r175 rd t" class="r175 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r175 r t">T</span>&gt; <span id="r176 rd" class="r176 r">source</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r177 rd" class="r177 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#29a3cd57d023b1b6" class="t constructor">ObservableYieldInstruction</a>&lt;<span class="r175 r t">T</span>&gt;(<span class="r176 r">source</span>, <b>true</b>, <span class="r177 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Convert to yieldable IEnumerator. e.g. yield return source.ToYieldInstruction();.</span>
+        <span class="c">///</span><span class="c"> If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.</span>
+        <span class="c">///</span><span class="c"> If throwOnError = false, you can take ObservableYieldInstruction.HasError/Error property.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<span class="r178 r t">T</span>&gt; <a id="844fa5055b7c6485" href="../../../../../R/844fa5055b7c6485.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>&lt;<span id="r178 rd t" class="r178 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r178 r t">T</span>&gt; <span id="r179 rd" class="r179 r">source</span>, <b>bool</b> <span id="r180 rd" class="r180 r">throwOnError</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#29a3cd57d023b1b6" class="t constructor">ObservableYieldInstruction</a>&lt;<span class="r178 r t">T</span>&gt;(<span class="r179 r">source</span>, <span class="r180 r">throwOnError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>.<a href="CancellationToken.cs.html#f626daeb6e2dfb37" class="i field">Empty</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Convert to yieldable IEnumerator. e.g. yield return source.ToYieldInstruction();.</span>
+        <span class="c">///</span><span class="c"> If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.</span>
+        <span class="c">///</span><span class="c"> If throwOnError = false, you can take ObservableYieldInstruction.HasError/Error property.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#f022e54f47b94101" class="t t">ObservableYieldInstruction</a>&lt;<span class="r181 r t">T</span>&gt; <a id="f26b81979ebd57da" href="../../../../../R/f26b81979ebd57da.html" target="n" data-glyph="220,1" class="i method">ToYieldInstruction</a>&lt;<span id="r181 rd t" class="r181 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r181 r t">T</span>&gt; <span id="r182 rd" class="r182 r">source</span>, <b>bool</b> <span id="r183 rd" class="r183 r">throwOnError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r184 rd" class="r184 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#29a3cd57d023b1b6" class="t constructor">ObservableYieldInstruction</a>&lt;<span class="r181 r t">T</span>&gt;(<span class="r182 r">source</span>, <span class="r183 r">throwOnError</span>, <span class="r184 r">cancel</span>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Convert to awaitable IEnumerator.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="44c14171e7fa160a" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToAwaitableEnumerator</a>&lt;<span id="r185 rd t" class="r185 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r185 r t">T</span>&gt; <span id="r186 rd" class="r186 r">source</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r187 rd" class="r187 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="#f044b37e06c509b6" class="i method">ToAwaitableEnumerator</a>&lt;<span class="r185 r t">T</span>&gt;(<span class="r186 r">source</span>, <a href="../Observer.cs.html#10d1a1078e46e0ad" class="t t">Stubs</a>&lt;<span class="r185 r t">T</span>&gt;.<a href="../Observer.cs.html#684108159c25604a" class="i field">Ignore</a>, <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#18b9ff7796390e70" class="i field">Throw</a>, <span class="r187 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Convert to awaitable IEnumerator.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="e197331fc662577b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToAwaitableEnumerator</a>&lt;<span id="r188 rd t" class="r188 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r188 r t">T</span>&gt; <span id="r189 rd" class="r189 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r188 r t">T</span>&gt; <span id="r190 rd" class="r190 r">onResult</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r191 rd" class="r191 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="#f044b37e06c509b6" class="i method">ToAwaitableEnumerator</a>&lt;<span class="r188 r t">T</span>&gt;(<span class="r189 r">source</span>, <span class="r190 r">onResult</span>, <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#18b9ff7796390e70" class="i field">Throw</a>, <span class="r191 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Convert to awaitable IEnumerator.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="016b4b53ef6540ed" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToAwaitableEnumerator</a>&lt;<span id="r192 rd t" class="r192 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r192 r t">T</span>&gt; <span id="r193 rd" class="r193 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r194 rd" class="r194 r">onError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r195 rd" class="r195 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="#f044b37e06c509b6" class="i method">ToAwaitableEnumerator</a>&lt;<span class="r192 r t">T</span>&gt;(<span class="r193 r">source</span>, <a href="../Observer.cs.html#10d1a1078e46e0ad" class="t t">Stubs</a>&lt;<span class="r192 r t">T</span>&gt;.<a href="../Observer.cs.html#684108159c25604a" class="i field">Ignore</a>, <span class="r194 r">onError</span>, <span class="r195 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Convert to awaitable IEnumerator.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="f044b37e06c509b6" href="../../../../../R/f044b37e06c509b6.html" target="n" data-glyph="220,1" class="i method">ToAwaitableEnumerator</a>&lt;<span id="r196 rd t" class="r196 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r196 r t">T</span>&gt; <span id="r197 rd" class="r197 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r196 r t">T</span>&gt; <span id="r198 rd" class="r198 r">onResult</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r199 rd" class="r199 r">onError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r200 rd" class="r200 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <a href="#f022e54f47b94101" class="k">var</a> <span id="r201 rd" class="r201 r">enumerator</span> = <b>new</b> <a href="#29a3cd57d023b1b6" class="t constructor">ObservableYieldInstruction</a>&lt;<span class="r196 r t">T</span>&gt;(<span class="r197 r">source</span>, <b>false</b>, <span class="r200 r">cancel</span>);
+            <a href="@0@mscorlib/A.html#893e8cdebffde2da" class="k">var</a> <span id="r202 rd" class="r202 r">e</span> = (<a href="@0@mscorlib/A.html#893e8cdebffde2da" class="t t">IEnumerator</a>&lt;<span class="r196 r t">T</span>&gt;)<span class="r201 r">enumerator</span>;
+            <b>while</b> (<span class="r202 r">e</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>() &amp;&amp; !<span class="r200 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>yield return null</b>;
+            }
+ 
+            <b>if</b> (<span class="r200 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <span class="r201 r">enumerator</span>.<a href="#aa2943555d0b4fab" class="i method">Dispose</a>();
+                <b>yield break</b>;
+            }
+ 
+            <b>if</b> (<span class="r201 r">enumerator</span>.<a href="#1c0099e9931a7f61" class="i property">HasResult</a>)
+            {
+                <span class="r198 r">onResult</span>(<span class="r201 r">enumerator</span>.<a href="#404ce87cc82f24ec" class="i property">Result</a>);
+            }
+            <b>else if</b> (<span class="r201 r">enumerator</span>.<a href="#b187a8b914995945" class="i property">HasError</a>)
+            {
+                <span class="r199 r">onError</span>(<span class="r201 r">enumerator</span>.<a href="#28a94baf7e5d5e9e" class="i property">Error</a>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">AutoStart observable as coroutine.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="i">Coroutine</span> <a id="4d086d3d434aea81" href="../../../../../R/4d086d3d434aea81.html" target="n" data-glyph="220,1" class="i method">StartAsCoroutine</a>&lt;<span id="r203 rd t" class="r203 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r203 r t">T</span>&gt; <span id="r204 rd" class="r204 r">source</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r205 rd" class="r205 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="#edbc4f9f3bde5f80" class="i method">StartAsCoroutine</a>&lt;<span class="r203 r t">T</span>&gt;(<span class="r204 r">source</span>, <a href="../Observer.cs.html#10d1a1078e46e0ad" class="t t">Stubs</a>&lt;<span class="r203 r t">T</span>&gt;.<a href="../Observer.cs.html#684108159c25604a" class="i field">Ignore</a>, <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#18b9ff7796390e70" class="i field">Throw</a>, <span class="r205 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">AutoStart observable as coroutine.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="i">Coroutine</span> <a id="c8325cf4290eb880" href="../../../../../R/c8325cf4290eb880.html" target="n" data-glyph="220,1" class="i method">StartAsCoroutine</a>&lt;<span id="r206 rd t" class="r206 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r206 r t">T</span>&gt; <span id="r207 rd" class="r207 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r206 r t">T</span>&gt; <span id="r208 rd" class="r208 r">onResult</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r209 rd" class="r209 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="#edbc4f9f3bde5f80" class="i method">StartAsCoroutine</a>&lt;<span class="r206 r t">T</span>&gt;(<span class="r207 r">source</span>, <span class="r208 r">onResult</span>, <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#18b9ff7796390e70" class="i field">Throw</a>, <span class="r209 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">AutoStart observable as coroutine.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="i">Coroutine</span> <a id="9f57d81972e6550d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">StartAsCoroutine</a>&lt;<span id="r210 rd t" class="r210 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r210 r t">T</span>&gt; <span id="r211 rd" class="r211 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r212 rd" class="r212 r">onError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r213 rd" class="r213 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="#edbc4f9f3bde5f80" class="i method">StartAsCoroutine</a>&lt;<span class="r210 r t">T</span>&gt;(<span class="r211 r">source</span>, <a href="../Observer.cs.html#10d1a1078e46e0ad" class="t t">Stubs</a>&lt;<span class="r210 r t">T</span>&gt;.<a href="../Observer.cs.html#684108159c25604a" class="i field">Ignore</a>, <span class="r212 r">onError</span>, <span class="r213 r">cancel</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">AutoStart observable as coroutine.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="i">Coroutine</span> <a id="edbc4f9f3bde5f80" href="../../../../../R/edbc4f9f3bde5f80.html" target="n" data-glyph="220,1" class="i method">StartAsCoroutine</a>&lt;<span id="r214 rd t" class="r214 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r214 r t">T</span>&gt; <span id="r215 rd" class="r215 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r214 r t">T</span>&gt; <span id="r216 rd" class="r216 r">onResult</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r217 rd" class="r217 r">onError</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r218 rd" class="r218 r">cancel</span> = <b>default</b>(<a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>))
+        {
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#9ec383d3102b14f7" class="i method">StartCoroutine</a>(<span class="r215 r">source</span>.<a href="#f044b37e06c509b6" class="i method">ToAwaitableEnumerator</a>(<span class="r216 r">onResult</span>, <span class="r217 r">onError</span>, <span class="r218 r">cancel</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r219 r t">T</span>&gt; <a id="b2a8bd8002c609a9" href="../../../../../R/b2a8bd8002c609a9.html" target="n" data-glyph="220,1" class="i method">ObserveOnMainThread</a>&lt;<span id="r219 rd t" class="r219 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r219 r t">T</span>&gt; <span id="r220 rd" class="r220 r">source</span>)
+        {
+            <b>return</b> <span class="r220 r">source</span>.<a href="../Observable.Concurrency.cs.html#387a8a19802d3b07" class="i method">ObserveOn</a>(<a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">SchedulerUnity</a>.<a href="MainThreadScheduler.cs.html#40c34fa13f14d53e" class="i property">MainThread</a>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r221 r t">T</span>&gt; <a id="b05d5a32906c9aaa" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ObserveOnMainThread</a>&lt;<span id="r221 rd t" class="r221 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r221 r t">T</span>&gt; <span id="r222 rd" class="r222 r">source</span>, <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a> <span id="r223 rd" class="r223 r">dispatchType</span>)
+        {
+            <b>switch</b> (<span class="r223 r">dispatchType</span>)
+            {
+                <b>case</b> <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a>.<a href="#e7dd0055a68b2499" class="i field">Update</a>:
+                    <b>return</b> <span class="r222 r">source</span>.<a href="#b2a8bd8002c609a9" class="i method">ObserveOnMainThread</a>(); <span class="c">// faster path</span>
+ 
+                <span class="c">// others, bit slower</span>
+ 
+                <b>case</b> <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a>.<a href="#ab2ce18765300d5b" class="i field">FixedUpdate</a>:
+                    <b>return</b> <span class="r222 r">source</span>.<a href="../Observable.cs.html#f5c7440d9edfa00e" class="i method">SelectMany</a>(<span id="r224 rd" class="r224 r">_</span> =&gt; <a href="#dedacff35d7d8a75" class="i method">EveryFixedUpdate</a>().<a href="../Observable.Paging.cs.html#93d2aee26c1bff5b" class="i method">Take</a>(1), (<span id="r225 rd" class="r225 r">x</span>, <span id="r226 rd" class="r226 r">_</span>) =&gt; <span class="r225 r">x</span>);
+                <b>case</b> <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a>.<a href="#91287e2397dd744a" class="i field">EndOfFrame</a>:
+                    <b>return</b> <span class="r222 r">source</span>.<a href="../Observable.cs.html#f5c7440d9edfa00e" class="i method">SelectMany</a>(<span id="r227 rd" class="r227 r">_</span> =&gt; <a href="#015ca30a80479e53" class="i method">EveryEndOfFrame</a>().<a href="../Observable.Paging.cs.html#93d2aee26c1bff5b" class="i method">Take</a>(1), (<span id="r228 rd" class="r228 r">x</span>, <span id="r229 rd" class="r229 r">_</span>) =&gt; <span class="r228 r">x</span>);
+                <b>case</b> <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a>.<a href="#5c213265fad3275c" class="i field">GameObjectUpdate</a>:
+                    <b>return</b> <span class="r222 r">source</span>.<a href="../Observable.cs.html#f5c7440d9edfa00e" class="i method">SelectMany</a>(<span id="r230 rd" class="r230 r">_</span> =&gt; <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#c4376aea05b491eb" class="i method">UpdateAsObservable</a>().<a href="../Observable.Paging.cs.html#93d2aee26c1bff5b" class="i method">Take</a>(1), (<span id="r231 rd" class="r231 r">x</span>, <span id="r232 rd" class="r232 r">_</span>) =&gt; <span class="r231 r">x</span>);
+                <b>case</b> <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a>.<a href="#fbabb2d47a906c0f" class="i field">LateUpdate</a>:
+                    <b>return</b> <span class="r222 r">source</span>.<a href="../Observable.cs.html#f5c7440d9edfa00e" class="i method">SelectMany</a>(<span id="r233 rd" class="r233 r">_</span> =&gt; <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#99756af4e4001c07" class="i method">LateUpdateAsObservable</a>().<a href="../Observable.Paging.cs.html#93d2aee26c1bff5b" class="i method">Take</a>(1), (<span id="r234 rd" class="r234 r">x</span>, <span id="r235 rd" class="r235 r">_</span>) =&gt; <span class="r234 r">x</span>);
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">SupportCustomYieldInstruction</span>
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">disable</span> 612 <span class="c">// Type or member is obsolete</span>
+                <b>case</b> <a href="#e5ce8fa08a8ee12d" class="t t">MainThreadDispatchType</a>.<a href="#e5425947682b5019" class="i field">AfterUpdate</a>:
+                    <b>return</b> <span class="r222 r">source</span>.<a href="../Observable.cs.html#f5c7440d9edfa00e" class="i method">SelectMany</a>(<span id="r236 rd" class="r236 r">_</span> =&gt; <a href="#e8becc0fcacf0f52" class="i method">EveryAfterUpdate</a>().<a href="../Observable.Paging.cs.html#93d2aee26c1bff5b" class="i method">Take</a>(1), (<span id="r237 rd" class="r237 r">x</span>, <span id="r238 rd" class="r238 r">_</span>) =&gt; <span class="r237 r">x</span>);
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">restore</span> 612 <span class="c">// Type or member is obsolete</span>
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+                <b>default</b>:
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;type is invalid&quot;</span>);
+            }
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r239 r t">T</span>&gt; <a id="2597d1b2e196628b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">SubscribeOnMainThread</a>&lt;<span id="r239 rd t" class="r239 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r239 r t">T</span>&gt; <span id="r240 rd" class="r240 r">source</span>)
+        {
+            <b>return</b> <span class="r240 r">source</span>.<a href="../Observable.Concurrency.cs.html#200890947d22dc1d" class="i method">SubscribeOn</a>(<a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">SchedulerUnity</a>.<a href="MainThreadScheduler.cs.html#40c34fa13f14d53e" class="i property">MainThread</a>);
+        }
+ 
+        <span class="c">// I can&#39;t avoid Unity 5.3&#39;s uNET weaver bug, pending...</span>
+ 
+        <span class="c">//public static IObservable&lt;T&gt; SubscribeOnMainThread&lt;T&gt;(this IObservable&lt;T&gt; source, MainThreadDispatchType dispatchType)</span>
+        <span class="c">//{</span>
+        <span class="c">//    switch (dispatchType)</span>
+        <span class="c">//    {</span>
+        <span class="c">//        case MainThreadDispatchType.Update:</span>
+        <span class="c">//            return source.SubscribeOnMainThread(); // faster path</span>
+ 
+        <span class="c">//        // others, bit slower</span>
+ 
+        <span class="c">//        case MainThreadDispatchType.FixedUpdate:</span>
+        <span class="c">//            return new UniRx.Operators.SubscribeOnMainThreadObservable&lt;T&gt;(source, EveryFixedUpdate().Take(1));</span>
+        <span class="c">//        case MainThreadDispatchType.EndOfFrame:</span>
+        <span class="c">//            return new UniRx.Operators.SubscribeOnMainThreadObservable&lt;T&gt;(source, EveryEndOfFrame().Take(1));</span>
+        <span class="c">//        case MainThreadDispatchType.GameObjectUpdate:</span>
+        <span class="c">//            return new UniRx.Operators.SubscribeOnMainThreadObservable&lt;T&gt;(source, MainThreadDispatcher.UpdateAsObservable().Select(_ =&gt; 0L).Take(1));</span>
+        <span class="c">//        case MainThreadDispatchType.LateUpdate:</span>
+        <span class="c">//            return new UniRx.Operators.SubscribeOnMainThreadObservable&lt;T&gt;(source, MainThreadDispatcher.LateUpdateAsObservable().Select(_ =&gt; 0L).Take(1));</span>
+        <span class="c">//        case MainThreadDispatchType.AfterUpdate:</span>
+        <span class="c">//            return new UniRx.Operators.SubscribeOnMainThreadObservable&lt;T&gt;(source, EveryAfterUpdate().Take(1));</span>
+        <span class="c">//        default:</span>
+        <span class="c">//            throw new ArgumentException(&quot;type is invalid&quot;);</span>
+        <span class="c">//    }</span>
+        <span class="c">//}</span>
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="60f24c5fa17cbdec" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">EveryApplicationPause</a>()
+        {
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#fc086ef78983a242" class="i method">OnApplicationPauseAsObservable</a>().<a href="../Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="39837b710b168383" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">EveryApplicationFocus</a>()
+        {
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#c4a7b1a8105cde4a" class="i method">OnApplicationFocusAsObservable</a>().<a href="../Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">publish OnNext(Unit) and OnCompleted() on application quit.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="f0e898aea4e172e4" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnceApplicationQuit</a>()
+        {
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#9a6813ff918a4d25" class="i method">OnApplicationQuitAsObservable</a>().<a href="../Observable.Paging.cs.html#93d2aee26c1bff5b" class="i method">Take</a>(1);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r241 r t">T</span>&gt; <a id="892bb89b520b4dd8" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">TakeUntilDestroy</a>&lt;<span id="r241 rd t" class="r241 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r241 r t">T</span>&gt; <span id="r242 rd" class="r242 r">source</span>, <span class="i">Component</span> <span id="r243 rd" class="r243 r">target</span>)
+        {
+            <b>return</b> <span class="r242 r">source</span>.<a href="../Observable.Paging.cs.html#2fe42751c254fcf4" class="i method">TakeUntil</a>(<span class="r243 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.Component.cs.html#85d3e8c26d0566a1" class="i method">OnDestroyAsObservable</a>());
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r244 r t">T</span>&gt; <a id="98bf292cf4c9debc" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">TakeUntilDestroy</a>&lt;<span id="r244 rd t" class="r244 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r244 r t">T</span>&gt; <span id="r245 rd" class="r245 r">source</span>, <span class="i">GameObject</span> <span id="r246 rd" class="r246 r">target</span>)
+        {
+            <b>return</b> <span class="r245 r">source</span>.<a href="../Observable.Paging.cs.html#2fe42751c254fcf4" class="i method">TakeUntil</a>(<span class="r246 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.cs.html#2cc26e21827ed2c8" class="i method">OnDestroyAsObservable</a>());
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r247 r t">T</span>&gt; <a id="c0338e6845aa4e0a" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">TakeUntilDisable</a>&lt;<span id="r247 rd t" class="r247 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r247 r t">T</span>&gt; <span id="r248 rd" class="r248 r">source</span>, <span class="i">Component</span> <span id="r249 rd" class="r249 r">target</span>)
+        {
+            <b>return</b> <span class="r248 r">source</span>.<a href="../Observable.Paging.cs.html#2fe42751c254fcf4" class="i method">TakeUntil</a>(<span class="r249 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.Component.cs.html#d308ff2b89368fd7" class="i method">OnDisableAsObservable</a>());
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r250 r t">T</span>&gt; <a id="7527124e874d11e4" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">TakeUntilDisable</a>&lt;<span id="r250 rd t" class="r250 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r250 r t">T</span>&gt; <span id="r251 rd" class="r251 r">source</span>, <span class="i">GameObject</span> <span id="r252 rd" class="r252 r">target</span>)
+        {
+            <b>return</b> <span class="r251 r">source</span>.<a href="../Observable.Paging.cs.html#2fe42751c254fcf4" class="i method">TakeUntil</a>(<span class="r252 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.cs.html#dca5da840f213a62" class="i method">OnDisableAsObservable</a>());
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r253 r t">T</span>&gt; <a id="32fe815437c9d17c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">RepeatUntilDestroy</a>&lt;<span id="r253 rd t" class="r253 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r253 r t">T</span>&gt; <span id="r254 rd" class="r254 r">source</span>, <span class="i">GameObject</span> <span id="r255 rd" class="r255 r">target</span>)
+        {
+            <b>return</b> <a href="#002a636d5a54a691" class="i method">RepeatUntilCore</a>(<a href="../Observable.Creation.cs.html#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r254 r">source</span>), <span class="r255 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.cs.html#2cc26e21827ed2c8" class="i method">OnDestroyAsObservable</a>(), <span class="r255 r">target</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r256 r t">T</span>&gt; <a id="a0e07b750bb4dadd" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">RepeatUntilDestroy</a>&lt;<span id="r256 rd t" class="r256 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r256 r t">T</span>&gt; <span id="r257 rd" class="r257 r">source</span>, <span class="i">Component</span> <span id="r258 rd" class="r258 r">target</span>)
+        {
+            <b>return</b> <span class="i">RepeatUntilCore</span>(<a href="../Observable.Creation.cs.html#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r257 r">source</span>), <span class="r258 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.Component.cs.html#85d3e8c26d0566a1" class="i method">OnDestroyAsObservable</a>(), (<span class="r258 r">target</span> != <b>null</b>) ? <span class="r258 r">target</span>.<span class="i">gameObject</span> : <b>null</b>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r259 r t">T</span>&gt; <a id="8077ce7f5ad9b58c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">RepeatUntilDisable</a>&lt;<span id="r259 rd t" class="r259 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r259 r t">T</span>&gt; <span id="r260 rd" class="r260 r">source</span>, <span class="i">GameObject</span> <span id="r261 rd" class="r261 r">target</span>)
+        {
+            <b>return</b> <a href="#002a636d5a54a691" class="i method">RepeatUntilCore</a>(<a href="../Observable.Creation.cs.html#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r260 r">source</span>), <span class="r261 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.cs.html#dca5da840f213a62" class="i method">OnDisableAsObservable</a>(), <span class="r261 r">target</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r262 r t">T</span>&gt; <a id="711de511370d75e4" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">RepeatUntilDisable</a>&lt;<span id="r262 rd t" class="r262 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r262 r t">T</span>&gt; <span id="r263 rd" class="r263 r">source</span>, <span class="i">Component</span> <span id="r264 rd" class="r264 r">target</span>)
+        {
+            <b>return</b> <span class="i">RepeatUntilCore</span>(<a href="../Observable.Creation.cs.html#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r263 r">source</span>), <span class="r264 r">target</span>.<a href="Triggers/ObservableTriggerExtensions.Component.cs.html#d308ff2b89368fd7" class="i method">OnDisableAsObservable</a>(), (<span class="r264 r">target</span> != <b>null</b>) ? <span class="r264 r">target</span>.<span class="i">gameObject</span> : <b>null</b>);
+        }
+ 
+        <b>static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r265 r t">T</span>&gt; <a id="002a636d5a54a691" href="../../../../../R/002a636d5a54a691.html" target="n" data-glyph="224,1" class="i method">RepeatUntilCore</a>&lt;<span id="r265 rd t" class="r265 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r265 r t">T</span>&gt;&gt; <span id="r266 rd" class="r266 r">sources</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r267 rd" class="r267 r">trigger</span>, <span class="i">GameObject</span> <span id="r268 rd" class="r268 r">lifeTimeChecker</span>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/RepeatUntil.cs.html#f998d8d082714aae" class="t constructor">RepeatUntilObservable</a>&lt;<span class="r265 r t">T</span>&gt;(<span class="r266 r">sources</span>, <span class="r267 r">trigger</span>, <span class="r268 r">lifeTimeChecker</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i n">UniRx</span>.<a href="FrameInterval.cs.html#cec726b93a6fc4f8" class="t t">FrameInterval</a>&lt;<span class="r269 r t">T</span>&gt;&gt; <a id="0abf6aab755cc249" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">FrameInterval</a>&lt;<span id="r269 rd t" class="r269 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r269 r t">T</span>&gt; <span id="r270 rd" class="r270 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/FrameInterval.cs.html#faf7161a8bfd6b9f" class="t constructor">FrameIntervalObservable</a>&lt;<span class="r269 r t">T</span>&gt;(<span class="r270 r">source</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i n">UniRx</span>.<a href="../TimeInterval.cs.html#92d2b7cdb34901ec" class="t t">TimeInterval</a>&lt;<span class="r271 r t">T</span>&gt;&gt; <a id="febb15036581e274" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">FrameTimeInterval</a>&lt;<span id="r271 rd t" class="r271 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r271 r t">T</span>&gt; <span id="r272 rd" class="r272 r">source</span>, <b>bool</b> <span id="r273 rd" class="r273 r">ignoreTimeScale</span> = <b>false</b>)
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/FrameTimeInterval.cs.html#083946fe37270c3b" class="t constructor">FrameTimeIntervalObservable</a>&lt;<span class="r271 r t">T</span>&gt;(<span class="r272 r">source</span>, <span class="r273 r">ignoreTimeScale</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Buffer elements in during target frame counts. Default raise same frame of end(frameCount = 0, frameCountType = EndOfFrame).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r274 r t">T</span>&gt;&gt; <a id="d0527cbd62f710cd" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BatchFrame</a>&lt;<span id="r274 rd t" class="r274 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r274 r t">T</span>&gt; <span id="r275 rd" class="r275 r">source</span>)
+        {
+            <span class="c">// if use default argument, comiler errors ambiguous(Unity&#39;s limitation)</span>
+            <b>return</b> <a href="#60652a3e9eed3b56" class="i method">BatchFrame</a>&lt;<span class="r274 r t">T</span>&gt;(<span class="r275 r">source</span>, 0, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#e49bfb0686659c35" class="i field">EndOfFrame</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Buffer elements in during target frame counts.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r276 r t">T</span>&gt;&gt; <a id="60652a3e9eed3b56" href="../../../../../R/60652a3e9eed3b56.html" target="n" data-glyph="220,1" class="i method">BatchFrame</a>&lt;<span id="r276 rd t" class="r276 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r276 r t">T</span>&gt; <span id="r277 rd" class="r277 r">source</span>, <b>int</b> <span id="r278 rd" class="r278 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r279 rd" class="r279 r">frameCountType</span>)
+        {
+            <b>if</b> (<span class="r278 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;frameCount must be &gt;= 0, frameCount:&quot;</span> + <span class="r278 r">frameCount</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/BatchFrame.cs.html#0322998674ae1ce8" class="t constructor">BatchFrameObservable</a>&lt;<span class="r276 r t">T</span>&gt;(<span class="r277 r">source</span>, <span class="r278 r">frameCount</span>, <span class="r279 r">frameCountType</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Wait command in during target frame counts. Default raise same frame of end(frameCount = 0, frameCountType = EndOfFrame).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="bbd3175c152e4423" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BatchFrame</a>(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r280 rd" class="r280 r">source</span>)
+        {
+            <b>return</b> <a href="#472f9d9448abb8a1" class="i method">BatchFrame</a>(<span class="r280 r">source</span>, 0, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="#e49bfb0686659c35" class="i field">EndOfFrame</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Wait command in during target frame counts.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="472f9d9448abb8a1" href="../../../../../R/472f9d9448abb8a1.html" target="n" data-glyph="220,1" class="i method">BatchFrame</a>(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r281 rd" class="r281 r">source</span>, <b>int</b> <span id="r282 rd" class="r282 r">frameCount</span>, <a href="#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r283 rd" class="r283 r">frameCountType</span>)
+        {
+            <b>if</b> (<span class="r282 r">frameCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;frameCount must be &gt;= 0, frameCount:&quot;</span> + <span class="r282 r">frameCount</span>);
+            <b>return</b> <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>.<a href="Operators/BatchFrame.cs.html#f5ac6e54f986595e" class="t constructor">BatchFrameObservable</a>(<span class="r281 r">source</span>, <span class="r282 r">frameCount</span>, <span class="r283 r">frameCountType</span>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UniRxLibrary</span>
+<span class="e">
+        static IEnumerable&lt;IObservable&lt;T&gt;&gt; RepeatInfinite&lt;T&gt;(IObservable&lt;T&gt; source)
+        {
+            while (true)
+            {
+                yield return source;
+            }
+        }
+ 
+        internal static class Stubs
+        {
+            public static readonly Action Nop = () =&gt; { };
+            public static readonly Action&lt;Exception&gt; Throw = ex =&gt; { throw ex; };
+ 
+            // Stubs&lt;T&gt;.Ignore can&#39;t avoid iOS AOT problem.
+            public static void Ignore&lt;T&gt;(T t)
+            {
+            }
+ 
+            // marker for CatchIgnore and Catch avoid iOS AOT problem.
+            public static IObservable&lt;TSource&gt; CatchIgnore&lt;TSource&gt;(Exception ex)
+            {
+                return Observable.Empty&lt;TSource&gt;();
+            }
+        }
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+}</pre></td></tr></table></div></body></html>

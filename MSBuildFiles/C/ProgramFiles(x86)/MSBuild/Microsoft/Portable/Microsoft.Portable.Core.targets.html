@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Portable.Core.targets</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(88);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/Microsoft.Portable.Core.targets" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\Microsoft.Portable.Core.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.Portable.Core.targets
+ 
+Contains common targets that are shared by all portable library projects regardless of version.
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+ 
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/VisualStudio/v14.0/Microsoft.Portable.CurrentVersion.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">VisualStudio\v$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)\Microsoft.Portable.CurrentVersion.targets</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">Exists(&#39;VisualStudio\v$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)\Microsoft.Portable.CurrentVersion.targets&#39;)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/_CheckForInvalidTargetFrameworkProfile.html" target="n" class="msbuildlink">_CheckForInvalidTargetFrameworkProfile</a></span>&quot;<span class="xan">
+            AfterTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/_CheckForInvalidConfigurationAndPlatform.html" target="n" class="msbuildlink">_CheckForInvalidConfigurationAndPlatform</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Error.html" target="n" class="msbuildlink">Error</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetFrameworkProfile.html" target="n" class="msbuildlink">TargetFrameworkProfile</a>)&#39; == &#39;&#39; AND &#39;$(<a href="/MSBuildProperties/R/PortableNuGetMode.html" target="n" class="msbuildlink">PortableNuGetMode</a>)&#39; != &#39;true&#39;</span>&quot; <span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">The TargetFrameworkProfile property is not set for project &#39;$(<a href="/MSBuildProperties/R/MSBuildProjectFile.html" target="n" class="msbuildlink">MSBuildProjectFile</a>)&#39;. Portable projects must specify a profile.</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> 
+        To prevent framework assembly references from being unified to the ones in the full 
+        framework (for example, System.Net.Primitives, v3.9.0.0 -&gt; System.Net.Primitives, v4.0.0.0), 
+        we set the full framework folder to the profile folder so that RAR thinks that the 
+        profile itself is the full framework. Given that we don&#39;t actually use our full framework,
+        we do not need any of the warnings from RAR that are turned off because of this.
+    </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/_SetFullFrameworkFolderToProfile.html" target="n" class="msbuildlink">_SetFullFrameworkFolderToProfile</a></span>&quot;<span class="xan">
+            AfterTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GetReferenceAssemblyPaths.html" target="n" class="msbuildlink">GetReferenceAssemblyPaths</a></span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/_FullFrameworkReferenceAssemblyPaths.html" target="n" class="msbuildlink">_FullFrameworkReferenceAssemblyPaths</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/TargetFrameworkDirectory.html" target="n" class="msbuildlink">TargetFrameworkDirectory</a>)<span class="xd">&lt;/</span><span class="xn">_FullFrameworkReferenceAssemblyPaths</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ResolveReferencesDependsOn.html" target="n" class="msbuildlink">ResolveReferencesDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/ResolveReferencesDependsOn.html" target="n" class="msbuildlink">ResolveReferencesDependsOn</a>);
+            <a href="/MSBuildTargets/R/ImplicitlyExpandTargetFramework.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFramework</a>;
+        <span class="xd">&lt;/</span><span class="xn">ResolveReferencesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImplicitlyExpandTargetFrameworkDependsOn.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFrameworkDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetFrameworkDependsOn.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFrameworkDependsOn</a>);
+            <a href="/MSBuildTargets/R/GetReferenceAssemblyPaths.html" target="n" class="msbuildlink">GetReferenceAssemblyPaths</a>
+        <span class="xd">&lt;/</span><span class="xn">ImplicitlyExpandTargetFrameworkDependsOn</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c">
+        The ImplicitlyExpandTargetFramework target will expand all 
+        of the dll reference assemblies in the TargetFrameworkDirectory 
+        for the project and place the items into the ReferencePath itemgroup 
+        which contains resolved items.
+    </span><span class="xd">--&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/ImplicitlyExpandTargetFramework.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFramework</a></span>&quot;<span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetFramework.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFramework</a>)&#39; == &#39;true&#39;</span>&quot;<span class="xan">
+        DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetFrameworkDependsOn.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFrameworkDependsOn</a>)</span>&quot;<span class="xd">
+    &gt;</span><span class="xd">
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/ReferenceAssemblyPaths.html" target="n" class="msbuildlink">ReferenceAssemblyPaths</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/_TargetFrameworkDirectories.html" target="n" class="msbuildlink">_TargetFrameworkDirectories</a>)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">%(ReferenceAssemblyPaths.Identity)*.dll</span>&quot;<span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">WinMDFile</span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">WinMDFile</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">CopyLocal</span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">CopyLocal</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">ReferenceGroupingDisplayName</span><span class="xd">&gt;</span>.NET<span class="xd">&lt;/</span><span class="xn">ReferenceGroupingDisplayName</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">ReferenceGrouping</span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/TargetFrameworkIdentifier.html" target="n" class="msbuildlink">TargetFrameworkIdentifier</a>),$(<a href="/MSBuildProperties/R/TargetFrameworkVersion.html" target="n" class="msbuildlink">TargetFrameworkVersion</a>)<span class="xd">&lt;/</span><span class="xn">ReferenceGrouping</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">ResolvedFrom</span><span class="xd">&gt;</span>ImplicitlyExpandTargetFramework<span class="xd">&lt;/</span><span class="xn">ResolvedFrom</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">IsSystemReference</span><span class="xd">&gt;</span>True<span class="xd">&lt;/</span><span class="xn">IsSystemReference</span><span class="xd">&gt;</span><span class="xd">
+            &lt;/</span><span class="xn">ReferencePath</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Importance</span><span class="xd">=</span>&quot;<span class="xav">Low</span>&quot; <span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">TargetMonikerDisplayName: $(<a href="/MSBuildProperties/R/TargetFrameworkMonikerDisplayName.html" target="n" class="msbuildlink">TargetFrameworkMonikerDisplayName</a>) ReferenceAssemblyPaths: @(<a href="/MSBuildItems/R/ReferenceAssemblyPaths.html" target="n" class="msbuildlink">ReferenceAssemblyPaths</a>)</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Importance</span><span class="xd">=</span>&quot;<span class="xav">Low</span>&quot; <span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">Including @(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(ReferencePath.ResolvedFrom)&#39; == &#39;ImplicitlyExpandTargetFramework&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/_ResolveAssemblyReferenceResolvedFiles.html" target="n" class="msbuildlink">_ResolveAssemblyReferenceResolvedFiles</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+              Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(ReferencePath.ResolvedFrom)&#39; == &#39;ImplicitlyExpandTargetFramework&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

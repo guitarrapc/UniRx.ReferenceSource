@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html><head><title>PostBuildProcessor.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(69);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/PostBuildProcessor.cs" target="_top">Assets\ObjectTest\PostBuildProcessor.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">//#if UNITY_EDITOR</span>
+ 
+<span class="c">//using System.IO;</span>
+<span class="c">//using UnityEditor;</span>
+<span class="c">//using UnityEditor.Callbacks;</span>
+<span class="c">//using UnityEngine;</span>
+ 
+<span class="c">//public static class PostBuildProcessor</span>
+<span class="c">//{</span>
+ 
+<span class="c">//#if UNITY_CLOUD_BUILD</span>
+<span class="c">//    /*</span>
+<span class="c">//    This methods are per platform post export methods. They can be added additionally to the post process attributes in the Advanced Features Settings on UCB using</span>
+<span class="c">//    - PostBuildProcessor.OnPostprocessBuildiOS</span>
+<span class="c">//    - PostBuildProcessor.OnPostprocessBuildAndroid</span>
+<span class="c">//    depending on the platform they should be executed.</span>
+ 
+<span class="c">//    Here is the basic order of operations (e.g. with iOS operation)</span>
+<span class="c">//    - Unity Cloud Build Pre-export methods run</span>
+<span class="c">//    - Export process happens</span>
+<span class="c">//    - Methods marked the built-in PostProcessBuildAttribute are called</span>
+<span class="c">//    - Unity Cloud Build Post-export methods run</span>
+<span class="c">//    - [unity ends]</span>
+<span class="c">//    - (iOS) Xcode processes project</span>
+<span class="c">//    - Done!</span>
+<span class="c">//    More information can be found on http://forum.unity3d.com/threads/solved-ios-build-failed-pushwoosh-dependency.293192/</span>
+<span class="c">//    */</span>
+<span class="c">//    public static void OnPostprocessBuildiOS (string exportPath)</span>
+<span class="c">//    {</span>
+<span class="c">//        Debug.Log(&quot;[UCB] OnPostprocessBuildiOS&quot;);</span>
+<span class="c">//        ProcessPostBuild(BuildTarget.iOS,exportPath);</span>
+<span class="c">//    }</span>
+<span class="c">//    public static void OnPostprocessBuildAndroid (string exportPath)</span>
+<span class="c">//    {</span>
+<span class="c">//        Debug.Log(&quot;[UCB] OnPostprocessBuildAndroid&quot;);</span>
+<span class="c">//        ProcessPostBuild(BuildTarget.Android,exportPath);</span>
+<span class="c">//    }</span>
+<span class="c">//#endif</span>
+ 
+<span class="c">//    // a normal post process method which is executed by Unity</span>
+<span class="c">//    [PostProcessBuild]</span>
+<span class="c">//    public static void OnPostprocessBuild(BuildTarget buildTarget, string path)</span>
+<span class="c">//    {</span>
+<span class="c">//#if !UNITY_CLOUD_BUILD</span>
+<span class="c">//        Debug.Log(&quot;[UCB] OnPostprocessBuild&quot;);</span>
+<span class="c">//        ProcessPostBuild(buildTarget, path);</span>
+<span class="c">//#endif</span>
+<span class="c">//    }</span>
+ 
+<span class="c">//    private static void ProcessPostBuild(BuildTarget buildTarget, string path)</span>
+<span class="c">//    {</span>
+<span class="c">//        if (buildTarget == BuildTarget.iOS)</span>
+<span class="c">//        {</span>
+<span class="c">//#if UNITY_IOS</span>
+<span class="c">//            string projPath = path + &quot;/Unity-iPhone.xcodeproj/project.pbxproj&quot;;</span>
+<span class="c">//            PBXProject proj = new PBXProject();</span>
+<span class="c">//            string nativeTarget = proj.TargetGuidByName(UnityEditor.iOS.Xcode.PBXProject.GetUnityTargetName());</span>
+<span class="c">//            string testTarget = proj.TargetGuidByName(UnityEditor.iOS.Xcode.PBXProject.GetUnityTestTargetName());</span>
+<span class="c">//            string[] buildTargets = new string[] { nativeTarget, testTarget };</span>
+<span class="c">//            proj.ReadFromString(File.ReadAllText(projPath));</span>
+<span class="c">//            proj.SetBuildProperty(buildTargets, &quot;ENABLE_BITCODE&quot;, &quot;NO&quot;);</span>
+<span class="c">//            File.WriteAllText(projPath, proj.WriteToString());</span>
+<span class="c">//#endif</span>
+<span class="c">//        }</span>
+<span class="c">//    }</span>
+ 
+<span class="c">//}</span>
+ 
+<span class="c">//#endif</span></pre></td></tr></table></div></body></html>

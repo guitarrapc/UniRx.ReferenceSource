@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html><head><title>TypedMonoBehaviour.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(201);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/TypedMonoBehaviour.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\TypedMonoBehaviour.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Note: TypedMonoBehaviour and ObservableMonoBehaviour cause some performance issues.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">This is legacy interface.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">I recommend use ObservableTriggers(UniRx.Triggers) instead.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">More information, see github page.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    [<span class="i n">System</span>.<a href="@0@mscorlib/A.html#66ed4e142f4e14e7" class="t constructor">Obsolete</a>(<span class="s">&quot;TypedMonoBehaviour is legacy component. use triggers instead&quot;</span>)]
+    <b>public class</b> <a id="15e089a0cc1bdea9" href="../../../../../R/15e089a0cc1bdea9.html" target="n" data-glyph="0,0" class="t t"><span id="de4dd40462bc3062">TypedMonoBehaviour</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Awake is called when the script instance is being loaded.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="377e281e3d435b0a" href="../../../../../R/377e281e3d435b0a.html" target="n" data-glyph="72,1" class="i method">Awake</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called every fixed framerate frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="b008b114c989839f" href="../../../../../R/b008b114c989839f.html" target="n" data-glyph="72,1" class="i method">FixedUpdate</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">LateUpdate is called every frame, if the Behaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="8b782b6796695a9f" href="../../../../../R/8b782b6796695a9f.html" target="n" data-glyph="72,1" class="i method">LateUpdate</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for setting up animation IK (inverse kinematics).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="5f75bef488a3bc9e" href="../../../../../R/5f75bef488a3bc9e.html" target="n" data-glyph="72,1" class="i method">OnAnimatorIK</a>(<b>int</b> <span id="r0 rd" class="r0 r">layerIndex</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Callback for processing animation movements for modifying root motion.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="95b36cecd53a0d80" href="../../../../../R/95b36cecd53a0d80.html" target="n" data-glyph="72,1" class="i method">OnAnimatorMove</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects when the player gets or loses focus.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="5d84c328cbbb5f82" href="../../../../../R/5d84c328cbbb5f82.html" target="n" data-glyph="72,1" class="i method">OnApplicationFocus</a>(<b>bool</b> <span id="r1 rd" class="r1 r">focus</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects when the player pauses.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="23cefd89b600e4c6" href="../../../../../R/23cefd89b600e4c6.html" target="n" data-glyph="72,1" class="i method">OnApplicationPause</a>(<b>bool</b> <span id="r2 rd" class="r2 r">pause</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent to all game objects before the application is quit.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="56da8b29aa984606" href="../../../../../R/56da8b29aa984606.html" target="n" data-glyph="72,1" class="i method">OnApplicationQuit</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">If OnAudioFilterRead is implemented, Unity will insert a custom filter into the audio DSP chain.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="5946eba49aceb1c5" href="../../../../../R/5946eba49aceb1c5.html" target="n" data-glyph="72,1" class="i method">OnAudioFilterRead</a>(<b>float</b>[] <span id="r3 rd" class="r3 r">data</span>, <b>int</b> <span id="r4 rd" class="r4 r">channels</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameInvisible is called when the renderer is no longer visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="c0402ab425a17517" href="../../../../../R/c0402ab425a17517.html" target="n" data-glyph="72,1" class="i method">OnBecameInvisible</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameVisible is called when the renderer became visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="f535d62cefeb2d29" href="../../../../../R/f535d62cefeb2d29.html" target="n" data-glyph="72,1" class="i method">OnBecameVisible</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="bf3714ce6155be18" href="../../../../../R/bf3714ce6155be18.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnter</a>(<span class="i">Collision</span> <span id="r5 rd" class="r5 r">collision</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when an incoming collider makes contact with this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="0221fe3d46faf839" href="../../../../../R/0221fe3d46faf839.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnter2D</a>(<span class="i">Collision2D</span> <span id="r6 rd" class="r6 r">coll</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionExit is called when this collider/rigidbody has stopped touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="03991f994c26b0f0" href="../../../../../R/03991f994c26b0f0.html" target="n" data-glyph="72,1" class="i method">OnCollisionExit</a>(<span class="i">Collision</span> <span id="r7 rd" class="r7 r">collisionInfo</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when a collider on another object stops touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="149a4117cdf774b8" href="../../../../../R/149a4117cdf774b8.html" target="n" data-glyph="72,1" class="i method">OnCollisionExit2D</a>(<span class="i">Collision2D</span> <span id="r8 rd" class="r8 r">coll</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionStay is called once per frame for every collider/rigidbody that is touching rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="cb9a5ff0f123f577" href="../../../../../R/cb9a5ff0f123f577.html" target="n" data-glyph="72,1" class="i method">OnCollisionStay</a>(<span class="i">Collision</span> <span id="r9 rd" class="r9 r">collisionInfo</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where a collider on another object is touching this object&#39;s collider (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="d536a4d6a1b28439" href="../../../../../R/d536a4d6a1b28439.html" target="n" data-glyph="72,1" class="i method">OnCollisionStay2D</a>(<span class="i">Collision2D</span> <span id="r10 rd" class="r10 r">coll</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when you have successfully connected to a server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="aa63f652bf49268d" href="../../../../../R/aa63f652bf49268d.html" target="n" data-glyph="72,1" class="i method">OnConnectedToServer</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnControllerColliderHit is called when the controller hits a collider while performing a Move.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="f6989572dd0823a0" href="../../../../../R/f6989572dd0823a0.html" target="n" data-glyph="72,1" class="i method">OnControllerColliderHit</a>(<span class="i">ControllerColliderHit</span> <span id="r11 rd" class="r11 r">hit</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="dc572cc87392e1d2" href="../../../../../R/dc572cc87392e1d2.html" target="n" data-glyph="72,1" class="i method">OnDestroy</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the behaviour becomes disabled () or inactive.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="0682cc255673dbe0" href="../../../../../R/0682cc255673dbe0.html" target="n" data-glyph="72,1" class="i method">OnDisable</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Implement OnDrawGizmos if you want to draw gizmos that are also pickable and always drawn.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="a17187aaeaca20c8" href="../../../../../R/a17187aaeaca20c8.html" target="n" data-glyph="72,1" class="i method">OnDrawGizmos</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Implement this OnDrawGizmosSelected if you want to draw gizmos only if the object is selected.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="166831f67dc2ba36" href="../../../../../R/166831f67dc2ba36.html" target="n" data-glyph="72,1" class="i method">OnDrawGizmosSelected</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the object becomes enabled and active.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="c77f4c44f9957030" href="../../../../../R/c77f4c44f9957030.html" target="n" data-glyph="72,1" class="i method">OnEnable</a>() { }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">FALSE</span> <span class="c">// OnGUI called multiple time per frame update and it cause performance issue, If you want to need OnGUI, copy &amp; paste this code on your MonoBehaviour</span>
+<span class="e">
+        /// &lt;summary&gt;OnGUI is called for rendering and handling GUI events.&lt;/summary&gt;
+        public virtual void OnGUI() { }
+ 
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called when a joint attached to the same game object broke.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="defc6c1d6e3a15f8" href="../../../../../R/defc6c1d6e3a15f8.html" target="n" data-glyph="72,1" class="i method">OnJointBreak</a>(<b>float</b> <span id="r12 rd" class="r12 r">breakForce</span>) { }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_IPHONE</span> || <span class="i">UNITY_ANDROID</span> || <span class="i">UNITY_METRO</span>)
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDown is called when the user has pressed the mouse button while over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="7ef9c651a7e09dd9" href="../../../../../R/7ef9c651a7e09dd9.html" target="n" data-glyph="72,1" class="i method">OnMouseDown</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseDrag is called when the user has clicked on a GUIElement or Collider and is still holding down the mouse.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="68423d90c87d60b9" href="../../../../../R/68423d90c87d60b9.html" target="n" data-glyph="72,1" class="i method">OnMouseDrag</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseEnter is called when the mouse entered the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="5f656001d14c593d" href="../../../../../R/5f656001d14c593d.html" target="n" data-glyph="72,1" class="i method">OnMouseEnter</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseExit is called when the mouse is not any longer over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="d9310200970ec709" href="../../../../../R/d9310200970ec709.html" target="n" data-glyph="72,1" class="i method">OnMouseExit</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseOver is called every frame while the mouse is over the GUIElement or Collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="6d77a16b2712191f" href="../../../../../R/6d77a16b2712191f.html" target="n" data-glyph="72,1" class="i method">OnMouseOver</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUp is called when the user has released the mouse button.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="cb2a3e8fe5820d70" href="../../../../../R/cb2a3e8fe5820d70.html" target="n" data-glyph="72,1" class="i method">OnMouseUp</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnMouseUpAsButton is only called when the mouse is released over the same GUIElement or Collider as it was pressed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="f7191f3986673920" href="../../../../../R/f7191f3986673920.html" target="n" data-glyph="72,1" class="i method">OnMouseUpAsButton</a>() { }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnParticleCollision is called when a particle hits a collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="4d45c127c7b8539c" href="../../../../../R/4d45c127c7b8539c.html" target="n" data-glyph="72,1" class="i method">OnParticleCollision</a>(<span class="i">GameObject</span> <span id="r13 rd" class="r13 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPostRender is called after a camera finished rendering the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="df271fab081a41e7" href="../../../../../R/df271fab081a41e7.html" target="n" data-glyph="72,1" class="i method">OnPostRender</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPreCull is called before a camera culls the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="7a7ecb8b1a3fffae" href="../../../../../R/7a7ecb8b1a3fffae.html" target="n" data-glyph="72,1" class="i method">OnPreCull</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnPreRender is called before a camera starts rendering the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="96a2144c29a5ee5e" href="../../../../../R/96a2144c29a5ee5e.html" target="n" data-glyph="72,1" class="i method">OnPreRender</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnRenderImage is called after all rendering is complete to render image.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="1330e9427068aa68" href="../../../../../R/1330e9427068aa68.html" target="n" data-glyph="72,1" class="i method">OnRenderImage</a>(<span class="i">RenderTexture</span> <span id="r14 rd" class="r14 r">src</span>, <span class="i">RenderTexture</span> <span id="r15 rd" class="r15 r">dest</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnRenderObject is called after camera has rendered the scene.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="20a1f4532ee496fe" href="../../../../../R/20a1f4532ee496fe.html" target="n" data-glyph="72,1" class="i method">OnRenderObject</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a Network. InitializeServer was invoked and has completed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="f7aafe73b4da6d75" href="../../../../../R/f7aafe73b4da6d75.html" target="n" data-glyph="72,1" class="i method">OnServerInitialized</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerEnter is called when the Collider other enters the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="ab230084d76ba4e4" href="../../../../../R/ab230084d76ba4e4.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnter</a>(<span class="i">Collider</span> <span id="r16 rd" class="r16 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object enters a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="0f0021ad21c35578" href="../../../../../R/0f0021ad21c35578.html" target="n" data-glyph="72,1" class="i method">OnTriggerEnter2D</a>(<span class="i">Collider2D</span> <span id="r17 rd" class="r17 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerExit is called when the Collider other has stopped touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="f18e2d416d746f39" href="../../../../../R/f18e2d416d746f39.html" target="n" data-glyph="72,1" class="i method">OnTriggerExit</a>(<span class="i">Collider</span> <span id="r18 rd" class="r18 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent when another object leaves a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="3268dc7028c978e2" href="../../../../../R/3268dc7028c978e2.html" target="n" data-glyph="72,1" class="i method">OnTriggerExit2D</a>(<span class="i">Collider2D</span> <span id="r19 rd" class="r19 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnTriggerStay is called once per frame for every Collider other that is touching the trigger.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="93d976558deb8c38" href="../../../../../R/93d976558deb8c38.html" target="n" data-glyph="72,1" class="i method">OnTriggerStay</a>(<span class="i">Collider</span> <span id="r20 rd" class="r20 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Sent each frame where another object is within a trigger collider attached to this object (2D physics only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="4b218c514856b7e2" href="../../../../../R/4b218c514856b7e2.html" target="n" data-glyph="72,1" class="i method">OnTriggerStay2D</a>(<span class="i">Collider2D</span> <span id="r21 rd" class="r21 r">other</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="225af3fae9acde96" href="../../../../../R/225af3fae9acde96.html" target="n" data-glyph="72,1" class="i method">OnValidate</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnWillRenderObject is called once for each camera if the object is visible.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="328e1e0bb44b04b8" href="../../../../../R/328e1e0bb44b04b8.html" target="n" data-glyph="72,1" class="i method">OnWillRenderObject</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Reset to default values.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="a5a5105e5b47ffce" href="../../../../../R/a5a5105e5b47ffce.html" target="n" data-glyph="72,1" class="i method">Reset</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="23f99842dc204dc7" href="../../../../../R/23f99842dc204dc7.html" target="n" data-glyph="72,1" class="i method">Start</a>() { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Update is called every frame, if the MonoBehaviour is enabled.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="3dca4aa6e679f1c6" href="../../../../../R/3dca4aa6e679f1c6.html" target="n" data-glyph="72,1" class="i method">Update</a>() { }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_METRO</span> || <span class="i">UNITY_WP8</span> || <span class="i">UNITY_NACL_CHROME</span> || <span class="i">UNITY_WEBGL</span>)
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when the connection was lost or you disconnected from the server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="2c44f5d49d70c31a" href="../../../../../R/2c44f5d49d70c31a.html" target="n" data-glyph="72,1" class="i method">OnDisconnectedFromServer</a>(<span class="i">NetworkDisconnection</span> <span id="r22 rd" class="r22 r">info</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the client when a connection attempt fails for some reason.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="d848da6e4e163f05" href="../../../../../R/d848da6e4e163f05.html" target="n" data-glyph="72,1" class="i method">OnFailedToConnect</a>(<span class="i">NetworkConnectionError</span> <span id="r23 rd" class="r23 r">error</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on clients or servers when there is a problem connecting to the MasterServer.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="b5cfcf695feef602" href="../../../../../R/b5cfcf695feef602.html" target="n" data-glyph="72,1" class="i method">OnFailedToConnectToMasterServer</a>(<span class="i">NetworkConnectionError</span> <span id="r24 rd" class="r24 r">info</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on clients or servers when reporting events from the MasterServer.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="52da88cd50cec88a" href="../../../../../R/52da88cd50cec88a.html" target="n" data-glyph="72,1" class="i method">OnMasterServerEvent</a>(<span class="i">MasterServerEvent</span> <span id="r25 rd" class="r25 r">msEvent</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on objects which have been network instantiated with Network Instantiate.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="e966a919c42bf53a" href="../../../../../R/e966a919c42bf53a.html" target="n" data-glyph="72,1" class="i method">OnNetworkInstantiate</a>(<span class="i">NetworkMessageInfo</span> <span id="r26 rd" class="r26 r">info</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a new player has successfully connected.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="25ba27c4bc8605d4" href="../../../../../R/25ba27c4bc8605d4.html" target="n" data-glyph="72,1" class="i method">OnPlayerConnected</a>(<span class="i">NetworkPlayer</span> <span id="r27 rd" class="r27 r">player</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Called on the server whenever a player disconnected from the server.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="0241eea46670cd0f" href="../../../../../R/0241eea46670cd0f.html" target="n" data-glyph="72,1" class="i method">OnPlayerDisconnected</a>(<span class="i">NetworkPlayer</span> <span id="r28 rd" class="r28 r">player</span>) { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Used to customize synchronization of variables in a script watched by a network view.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public virtual void</b> <a id="4658ef6dc493400d" href="../../../../../R/4658ef6dc493400d.html" target="n" data-glyph="72,1" class="i method">OnSerializeNetworkView</a>(<span class="i">BitStream</span> <span id="r29 rd" class="r29 r">stream</span>, <span class="i">NetworkMessageInfo</span> <span id="r30 rd" class="r30 r">info</span>) { }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+}</pre></td></tr></table></div></body></html>

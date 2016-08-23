@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html><head><title>ImmediateScheduler.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(43);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Schedulers/ImmediateScheduler.cs" target="_top">Assets\Plugins\UniRx\Scripts\Schedulers\ImmediateScheduler.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../../P/48627f587bfa2dac.html" target="s" class="k">partial</a> <b>class</b> <a id="48627f587bfa2dac" href="../../../../../R/48627f587bfa2dac.html" target="n" data-glyph="0,0" class="t t">Scheduler</a>
+    {
+        <b>public static readonly</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="313dd3b562665646" href="../../../../../R/313dd3b562665646.html" target="n" data-glyph="42,1" class="i field">Immediate</a> = <b>new</b> <a href="#e7d5612585bd3cba" class="t constructor">ImmediateScheduler</a>();
+ 
+        <b>class</b> <a id="cd4506e797b8b4c2" href="../../../../../R/cd4506e797b8b4c2.html" target="n" data-glyph="4,1" class="t t">ImmediateScheduler</a> : <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>
+        {
+            <b>public</b> <a id="e7d5612585bd3cba" href="../../../../../R/e7d5612585bd3cba.html" target="n" data-glyph="72,2" class="i constructor">ImmediateScheduler</a>()
+            {
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="747d03202c1b3b45" href="../../../../../R/747d03202c1b3b45.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="699132886de5fa94" href="../../../../../R/699132886de5fa94.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r0 rd" class="r0 r">action</span>)
+            {
+                <span class="r0 r">action</span>();
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a7f6cd941fa0eec5" href="../../../../../R/a7f6cd941fa0eec5.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r1 rd" class="r1 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r2 rd" class="r2 r">action</span>)
+            {
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r3 rd" class="r3 r">wait</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r1 r">dueTime</span>);
+                <b>if</b> (<span class="r3 r">wait</span>.<a href="@0@mscorlib/A.html#45b3882f7cfdd300" class="i property">Ticks</a> &gt; 0)
+                {
+                    <a href="@0@mscorlib/A.html#3980e012bae82e96" class="t t">Thread</a>.<a href="@0@mscorlib/A.html#82aedb56cecde82c" class="i method">Sleep</a>(<span class="r3 r">wait</span>);
+                }
+ 
+                <span class="r2 r">action</span>();
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

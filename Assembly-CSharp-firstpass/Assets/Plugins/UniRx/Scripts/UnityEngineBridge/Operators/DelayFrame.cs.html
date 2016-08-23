@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html><head><title>DelayFrame.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(260);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/DelayFrame.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\DelayFrame.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="4142a22c0cd028fa" href="../../../../../../R/4142a22c0cd028fa.html" target="n" data-glyph="2,0" class="t t">DelayFrameObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="a2eed25c71c53c7a" href="../../../../../../R/a2eed25c71c53c7a.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly int</b> <a id="42bad5ac359ea3f4" href="../../../../../../R/42bad5ac359ea3f4.html" target="n" data-glyph="46,1" class="i field">frameCount</a>;
+        <b>readonly</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <a id="a3a394af70ea8257" href="../../../../../../R/a3a394af70ea8257.html" target="n" data-glyph="46,1" class="i field">frameCountType</a>;
+ 
+        <b>public</b> <a id="34ff3932827f2017" href="../../../../../../R/34ff3932827f2017.html" target="n" data-glyph="72,1" class="i constructor">DelayFrameObservable</a>(<a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <b>int</b> <span id="r2 rd" class="r2 r">frameCount</span>, <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r3 rd" class="r3 r">frameCountType</span>)
+            : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#4142a22c0cd028fa" class="k">this</a>.<a href="#a2eed25c71c53c7a" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#4142a22c0cd028fa" class="k">this</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a> = <span class="r2 r">frameCount</span>;
+            <a href="#4142a22c0cd028fa" class="k">this</a>.<a href="#a3a394af70ea8257" class="i field">frameCountType</a> = <span class="r3 r">frameCountType</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="f1ff50d86c832675" href="../../../../../../R/f1ff50d86c832675.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r5 rd" class="r5 r">cancel</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#a9df1c35e73a9d78" class="t constructor">DelayFrame</a>(<a href="#4142a22c0cd028fa" class="k">this</a>, <span class="r4 r">observer</span>, <span class="r5 r">cancel</span>).<a href="#e5075b6e85782a33" class="i method">Run</a>();
+        }
+ 
+        <b>class</b> <a id="979e4b0b7c2d237f" href="../../../../../../R/979e4b0b7c2d237f.html" target="n" data-glyph="4,1" class="t t">DelayFrame</a> : <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#4142a22c0cd028fa" class="t t">DelayFrameObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="f056dde31251609d" href="../../../../../../R/f056dde31251609d.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly object</b> <a id="04d1931f20402c10" href="../../../../../../R/04d1931f20402c10.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>readonly</b> <a href="#bd353447bab3f386" class="t t">QueuePool</a> <a id="032d25806805bdfd" href="../../../../../../R/032d25806805bdfd.html" target="n" data-glyph="46,2" class="i field">pool</a> = <b>new</b> <a href="#bd353447bab3f386" class="t constructor">QueuePool</a>();
+            <b>int</b> <a id="e4c9606f896065e9" href="../../../../../../R/e4c9606f896065e9.html" target="n" data-glyph="46,2" class="i field">runningEnumeratorCount</a>;
+            <b>bool</b> <a id="97498b7afbaa9f47" href="../../../../../../R/97498b7afbaa9f47.html" target="n" data-glyph="46,2" class="i field">readyDrainEnumerator</a>;
+            <b>bool</b> <a id="e8ea9122e24c2afc" href="../../../../../../R/e8ea9122e24c2afc.html" target="n" data-glyph="46,2" class="i field">running</a>;
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="29a54d3438f651b1" href="../../../../../../R/29a54d3438f651b1.html" target="n" data-glyph="46,2" class="i field">sourceSubscription</a>;
+            <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt; <a id="faddc14496eededc" href="../../../../../../R/faddc14496eededc.html" target="n" data-glyph="46,2" class="i field">currentQueueReference</a>;
+            <b>bool</b> <a id="57ea01892be40ad1" href="../../../../../../R/57ea01892be40ad1.html" target="n" data-glyph="46,2" class="i field">calledCompleted</a>;
+            <b>bool</b> <a id="d251ba431f89ee7e" href="../../../../../../R/d251ba431f89ee7e.html" target="n" data-glyph="46,2" class="i field">hasError</a>;
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="75f958c032e77c80" href="../../../../../../R/75f958c032e77c80.html" target="n" data-glyph="46,2" class="i field">error</a>;
+            <a href="../../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="t t">BooleanDisposable</a> <a id="1668787d339019c3" href="../../../../../../R/1668787d339019c3.html" target="n" data-glyph="46,2" class="i field">cancelationToken</a>;
+ 
+            <b>public</b> <a id="a9df1c35e73a9d78" href="../../../../../../R/a9df1c35e73a9d78.html" target="n" data-glyph="72,2" class="i constructor">DelayFrame</a>(<a href="#4142a22c0cd028fa" class="t t">DelayFrameObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r6 rd" class="r6 r">parent</span>, <a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r7 rd" class="r7 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r8 rd" class="r8 r">cancel</span>) : <a href="../../Operators/OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r7 r">observer</span>, <span class="r8 r">cancel</span>)
+            {
+                <a href="#979e4b0b7c2d237f" class="k">this</a>.<a href="#f056dde31251609d" class="i field">parent</a> = <span class="r6 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="e5075b6e85782a33" href="../../../../../../R/e5075b6e85782a33.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#1668787d339019c3" class="i field">cancelationToken</a> = <b>new</b> <a href="../../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+ 
+                <a href="../../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r9 rd" class="r9 r">_sourceSubscription</span> = <b>new</b> <a href="../../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <a href="#29a54d3438f651b1" class="i field">sourceSubscription</a> = <span class="r9 r">_sourceSubscription</span>;
+                <span class="r9 r">_sourceSubscription</span>.<a href="../../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#a2eed25c71c53c7a" class="i field">source</a>.<a href="../../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#979e4b0b7c2d237f" class="k">this</a>);
+ 
+                <b>return</b> <a href="../../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<a href="#1668787d339019c3" class="i field">cancelationToken</a>, <a href="#29a54d3438f651b1" class="i field">sourceSubscription</a>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="a1fcc713ea6d55d8" href="../../../../../../R/a1fcc713ea6d55d8.html" target="n" data-glyph="76,2" class="i method">DrainQueue</a>(<a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r10 rd" class="r10 r">q</span>, <b>int</b> <span id="r11 rd" class="r11 r">frameCount</span>)
+            {
+                <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                {
+                    <a href="#97498b7afbaa9f47" class="i field">readyDrainEnumerator</a> = <b>false</b>; <span class="c">// use next queue.</span>
+                    <a href="#e8ea9122e24c2afc" class="i field">running</a> = <b>false</b>;
+                }
+ 
+                <b>while</b> (!<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a> &amp;&amp; <span class="r11 r">frameCount</span>-- != 0)
+                {
+                    <b>yield return null</b>;
+                }
+ 
+                <b>try</b>
+                {
+                    <b>if</b> (<span class="r10 r">q</span> != <b>null</b>)
+                    {
+                        <b>while</b> (<span class="r10 r">q</span>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; 0 &amp;&amp; !<a href="#d251ba431f89ee7e" class="i field">hasError</a>)
+                        {
+                            <b>if</b> (<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>) <b>break</b>;
+ 
+                            <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                            {
+                                <a href="#e8ea9122e24c2afc" class="i field">running</a> = <b>true</b>;
+                            }
+ 
+                            <span class="r0 r t">var</span> <span id="r12 rd" class="r12 r">value</span> = <span class="r10 r">q</span>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                            <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r12 r">value</span>);
+ 
+                            <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                            {
+                                <a href="#e8ea9122e24c2afc" class="i field">running</a> = <b>false</b>;
+                            }
+                        }
+ 
+                        <b>if</b> (<span class="r10 r">q</span>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> == 0)
+                        {
+                            <a href="#032d25806805bdfd" class="i field">pool</a>.<a href="#80abcef19b57ee4e" class="i method">Return</a>(<span class="r10 r">q</span>);
+                        }
+                    }
+ 
+                    <b>if</b> (<a href="#d251ba431f89ee7e" class="i field">hasError</a>)
+                    {
+                        <b>if</b> (!<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>)
+                        {
+                            <a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#424d82cc13c375f8" class="i method">Dispose</a>();
+ 
+                            <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<a href="#75f958c032e77c80" class="i field">error</a>); } <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        }
+                    }
+                    <b>else if</b> (<a href="#57ea01892be40ad1" class="i field">calledCompleted</a>)
+                    {
+                        <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                        {
+                            <span class="c">// not self only</span>
+                            <b>if</b> (<a href="#e4c9606f896065e9" class="i field">runningEnumeratorCount</a> != 1) <b>yield break</b>;
+                        }
+ 
+                        <b>if</b> (!<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>)
+                        {
+                            <a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#424d82cc13c375f8" class="i method">Dispose</a>();
+ 
+                            <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                            <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                        }
+                    }
+                }
+                <b>finally</b>
+                {
+                    <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                    {
+                        <a href="#e4c9606f896065e9" class="i field">runningEnumeratorCount</a>--;
+                    }
+                }
+            }
+ 
+            <b>public override void</b> <a id="8029d441dd152bad" href="../../../../../../R/8029d441dd152bad.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r13 rd" class="r13 r">value</span>)
+            {
+                <b>if</b> (<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>) <b>return</b>;
+ 
+                <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r14 rd" class="r14 r">targetQueue</span> = <b>null</b>;
+                <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                {
+                    <b>if</b> (!<a href="#97498b7afbaa9f47" class="i field">readyDrainEnumerator</a>)
+                    {
+                        <a href="#97498b7afbaa9f47" class="i field">readyDrainEnumerator</a> = <b>true</b>;
+                        <a href="#e4c9606f896065e9" class="i field">runningEnumeratorCount</a>++;
+                        <span class="r14 r">targetQueue</span> = <a href="#faddc14496eededc" class="i field">currentQueueReference</a> = <a href="#032d25806805bdfd" class="i field">pool</a>.<a href="#4a3c12f9f4550ace" class="i method">Get</a>();
+                        <span class="r14 r">targetQueue</span>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r13 r">value</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <b>if</b> (<a href="#faddc14496eededc" class="i field">currentQueueReference</a> != <b>null</b>) <span class="c">// null - if doesn&#39;t start OnNext and start OnCompleted</span>
+                        {
+                            <a href="#faddc14496eededc" class="i field">currentQueueReference</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r13 r">value</span>);
+                        }
+                        <b>return</b>;
+                    }
+                }
+ 
+                <b>switch</b> (<a href="#f056dde31251609d" class="i field">parent</a>.<a href="#a3a394af70ea8257" class="i field">frameCountType</a>)
+                {
+                    <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#52219005ab7cec81" class="i field">Update</a>:
+                        <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#3d266550a8e4457b" class="i method">StartUpdateMicroCoroutine</a>(<a href="#a1fcc713ea6d55d8" class="i method">DrainQueue</a>(<span class="r14 r">targetQueue</span>, <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a>));
+                        <b>break</b>;
+                    <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#08d4b64f87a05014" class="i field">FixedUpdate</a>:
+                        <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#ab8482527980dc38" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="#a1fcc713ea6d55d8" class="i method">DrainQueue</a>(<span class="r14 r">targetQueue</span>, <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a>));
+                        <b>break</b>;
+                    <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#e49bfb0686659c35" class="i field">EndOfFrame</a>:
+                        <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="#a1fcc713ea6d55d8" class="i method">DrainQueue</a>(<span class="r14 r">targetQueue</span>, <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a>));
+                        <b>break</b>;
+                    <b>default</b>:
+                        <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;Invalid FrameCountType:&quot;</span> + <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#a3a394af70ea8257" class="i field">frameCountType</a>);
+                }
+            }
+ 
+            <b>public override void</b> <a id="bdd14fbb0f76a89d" href="../../../../../../R/bdd14fbb0f76a89d.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r15 rd" class="r15 r">error</span>)
+            {
+                <a href="#29a54d3438f651b1" class="i field">sourceSubscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>(); <span class="c">// stop subscription</span>
+ 
+                <b>if</b> (<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>) <b>return</b>;
+ 
+                <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                {
+                    <b>if</b> (<a href="#e8ea9122e24c2afc" class="i field">running</a>)
+                    {
+                        <a href="#d251ba431f89ee7e" class="i field">hasError</a> = <b>true</b>;
+                        <a href="#979e4b0b7c2d237f" class="k">this</a>.<a href="#75f958c032e77c80" class="i field">error</a> = <span class="r15 r">error</span>;
+                        <b>return</b>;
+                    }
+                }
+ 
+                <a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#424d82cc13c375f8" class="i method">Dispose</a>();
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r15 r">error</span>); } <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="97b29a7ad23df0cf" href="../../../../../../R/97b29a7ad23df0cf.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="#29a54d3438f651b1" class="i field">sourceSubscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>(); <span class="c">// stop subscription</span>
+ 
+                <b>if</b> (<a href="#1668787d339019c3" class="i field">cancelationToken</a>.<a href="../../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>) <b>return</b>;
+ 
+                <b>lock</b> (<a href="#04d1931f20402c10" class="i field">gate</a>)
+                {
+                    <a href="#57ea01892be40ad1" class="i field">calledCompleted</a> = <b>true</b>;
+ 
+                    <b>if</b> (!<a href="#97498b7afbaa9f47" class="i field">readyDrainEnumerator</a>)
+                    {
+                        <a href="#97498b7afbaa9f47" class="i field">readyDrainEnumerator</a> = <b>true</b>;
+                        <a href="#e4c9606f896065e9" class="i field">runningEnumeratorCount</a>++;
+                    }
+                    <b>else</b>
+                    {
+                        <b>return</b>;
+                    }
+                }
+ 
+                <b>switch</b> (<a href="#f056dde31251609d" class="i field">parent</a>.<a href="#a3a394af70ea8257" class="i field">frameCountType</a>)
+                {
+                    <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#52219005ab7cec81" class="i field">Update</a>:
+                        <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#3d266550a8e4457b" class="i method">StartUpdateMicroCoroutine</a>(<a href="#a1fcc713ea6d55d8" class="i method">DrainQueue</a>(<b>null</b>, <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a>));
+                        <b>break</b>;
+                    <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#08d4b64f87a05014" class="i field">FixedUpdate</a>:
+                        <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#ab8482527980dc38" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="#a1fcc713ea6d55d8" class="i method">DrainQueue</a>(<b>null</b>, <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a>));
+                        <b>break</b>;
+                    <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#e49bfb0686659c35" class="i field">EndOfFrame</a>:
+                        <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="#a1fcc713ea6d55d8" class="i method">DrainQueue</a>(<b>null</b>, <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#42bad5ac359ea3f4" class="i field">frameCount</a>));
+                        <b>break</b>;
+                    <b>default</b>:
+                        <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;Invalid FrameCountType:&quot;</span> + <a href="#f056dde31251609d" class="i field">parent</a>.<a href="#a3a394af70ea8257" class="i field">frameCountType</a>);
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="bd353447bab3f386" href="../../../../../../R/bd353447bab3f386.html" target="n" data-glyph="4,1" class="t t"><span id="b94886697a63cb28">QueuePool</span></a>
+        {
+            <b>readonly object</b> <a id="7e8a834c5325453c" href="../../../../../../R/7e8a834c5325453c.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>readonly</b> <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <a id="5b0d0d6465e415ac" href="../../../../../../R/5b0d0d6465e415ac.html" target="n" data-glyph="46,2" class="i field">pool</a> = <b>new</b> <a href="@0@System/A.html#58bbd750f3390054" class="t constructor">Queue</a>&lt;<a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt;&gt;(2);
+ 
+            <b>public</b> <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt; <a id="4a3c12f9f4550ace" href="../../../../../../R/4a3c12f9f4550ace.html" target="n" data-glyph="72,2" class="i method">Get</a>()
+            {
+                <b>lock</b> (<a href="#7e8a834c5325453c" class="i field">gate</a>)
+                {
+                    <b>if</b> (<a href="#5b0d0d6465e415ac" class="i field">pool</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> == 0)
+                    {
+                        <b>return</b> <b>new</b> <a href="@0@System/A.html#58bbd750f3390054" class="t constructor">Queue</a>&lt;<span class="r0 r t">T</span>&gt;(2);
+                    }
+                    <b>else</b>
+                    {
+                        <b>return</b> <a href="#5b0d0d6465e415ac" class="i field">pool</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                    }
+                }
+            }
+ 
+            <b>public void</b> <a id="80abcef19b57ee4e" href="../../../../../../R/80abcef19b57ee4e.html" target="n" data-glyph="72,2" class="i method">Return</a>(<a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r16 rd" class="r16 r">q</span>)
+            {
+                <b>lock</b> (<a href="#7e8a834c5325453c" class="i field">gate</a>)
+                {
+                    <a href="#5b0d0d6465e415ac" class="i field">pool</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r16 r">q</span>);
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

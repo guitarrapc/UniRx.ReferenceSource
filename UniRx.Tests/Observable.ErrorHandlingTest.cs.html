@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.ErrorHandlingTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(82);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/Observable.ErrorHandlingTest.cs" target="_top">Observable.ErrorHandlingTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="cab09341628b8bd8" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="def1c54c933009bf">ErrorHandlingTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="df5ebc81de5ed4f1" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Finally</a>()
+        {
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r0 rd" class="r0 r">called</span> = <b>false</b>;
+            <b>try</b>
+            {
+                <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#d1261c08daba850d" class="i method">Range</a>(1, 10, <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#313dd3b562665646" class="i field">Immediate</a>)
+                    .<a href="/UniRx/A.html#5cfa3f7295a92210" class="i method">Do</a>(<span id="r1 rd" class="r1 r">x</span> =&gt; { <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>(); })
+                    .<a href="/UniRx/A.html#89ea3b45237d80a5" class="i method">Finally</a>(() =&gt; <span class="r0 r">called</span> = <b>true</b>)
+                    .<a href="/UniRx/A.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+            }
+            <b>catch</b>
+            {
+            }
+            <b>finally</b>
+            {
+                <span class="r0 r">called</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            }
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="46bd85860858aac0" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Catch</a>()
+        {
+            <b>var</b> <span id="r2 rd" class="r2 r">xs</span> = <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#d861eb6db69cb114" class="i method">Return</a>(2, <a href="/UniRx/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/UniRx/A.html#ef176e05cfd62133" class="i field">ThreadPool</a>).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#8d6a52a5496ce078" class="t constructor">InvalidOperationException</a>()))
+                .<a href="/UniRx/A.html#0d6d0908bd43d7c3" class="i method">Catch</a>((<a href="@0@mscorlib/A.html#beac22dfca574cd4" class="t t">InvalidOperationException</a> <span id="r3 rd" class="r3 r">ex</span>) =&gt;
+                {
+                    <b>return</b> <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(1, 3);
+                })
+                .<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>();
+ 
+            <span class="r2 r">xs</span>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(2, 1, 2, 3);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="65d38b3bc12df0b5" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CatchEnumerable</a>()
+        {
+            {
+                <b>var</b> <span id="r4 rd" class="r4 r">xs</span> = <b>new</b>[]
+                {
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(2).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(99).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#72da3db51047e6df" class="i method">Range</a>(10,2)
+                }
+                .<a href="/UniRx/A.html#fe43a3eb98952aac" class="i method">Catch</a>()
+                .<a href="/UniRx/A.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>();
+ 
+                <span class="r4 r">xs</span>[0].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+                <span class="r4 r">xs</span>[1].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(99);
+                <span class="r4 r">xs</span>[2].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(10);
+                <span class="r4 r">xs</span>[3].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(11);
+                <span class="r4 r">xs</span>[4].<a href="/UniRx/A.html#30da0e55bb60c517" class="i property">Kind</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="/UniRx/A.html#af824cc690aabef9" class="i field">OnCompleted</a>);
+            }
+            {
+                <b>var</b> <span id="r5 rd" class="r5 r">xs</span> = <b>new</b>[]
+                {
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(2).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>())),
+                    <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#2843d6a6f424ac6b" class="i method">Return</a>(99).<a href="/UniRx/A.html#5f70ac56733ed4e4" class="i method">Concat</a>(<a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<b>int</b>&gt;(<b>new</b> <a href="@0@mscorlib/A.html#5ee7f173f9e53170" class="t constructor">Exception</a>()))
+                }
+                .<a href="/UniRx/A.html#fe43a3eb98952aac" class="i method">Catch</a>()
+                .<a href="/UniRx/A.html#2803abf4b68dad96" class="i method">Materialize</a>()
+                .<a href="Tools/TestUtil.cs.html#d61d7a8951726998" class="i method">ToArrayWait</a>();
+ 
+                <span class="r5 r">xs</span>[0].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+                <span class="r5 r">xs</span>[1].<a href="/UniRx/A.html#627feef6f006e18a" class="i property">Value</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(99);
+                <span class="r5 r">xs</span>[2].<a href="/UniRx/A.html#30da0e55bb60c517" class="i property">Kind</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<a href="/UniRx/A.html#be022d92a7194ada" class="t t">NotificationKind</a>.<a href="/UniRx/A.html#625f6dd05d0656c3" class="i field">OnError</a>);
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

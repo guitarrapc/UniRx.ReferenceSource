@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html><head><title>Playground.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(71);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Console/Playground.cs" target="_top">Playground.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Console" target="_top">Tests\UniRx.Console\UniRx.Console.csproj</a> (UniRx.Console)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Diagnostics</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public class</b> <a id="2921499f85ae0a98" href="R/2921499f85ae0a98.html" target="n" data-glyph="0,0" class="t t"><span id="8da13af18eb86484">Playground</span></a>
+    {
+        <b>public void</b> <a id="7c6cb476cc3c8a9c" href="R/7c6cb476cc3c8a9c.html" target="n" data-glyph="72,1" class="i method">Run</a>()
+        {
+            <a href="#a1a9b37e1def7835" class="i method">GCCheck</a>();
+ 
+        }
+ 
+        <b>void</b> <a id="a1a9b37e1def7835" href="R/a1a9b37e1def7835.html" target="n" data-glyph="76,1" class="i method">GCCheck</a>()
+        {
+            <a href="/UniRx/A.html#d6f2a77320b4d449" class="k">var</a> <span id="r0 rd" class="r0 r">t</span> = <a href="/UniRx/A.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="/UniRx/A.html#f9644928b1f50449" class="i method">Create</a>(1, 1);
+            <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="k">var</a> <span id="r1 rd" class="r1 r">dict</span> = <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Dictionary</a>&lt;<a href="/UniRx/A.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<b>int</b>, <b>int</b>&gt;, <b>int</b>&gt;();
+            <span class="c">//var d = EqualityComparer&lt;Tuple&lt;int, int&gt;&gt;.Default;</span>
+            <span class="c">//Console.WriteLine(d.GetType().Name);</span>
+            <span class="r1 r">dict</span><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><a href="/UniRx/A.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="/UniRx/A.html#f9644928b1f50449" class="i method">Create</a>(1, 1)] = 1;
+            <b>for</b> (<b>int</b> <span id="r2 rd" class="r2 r">i</span> = 0; <span class="r2 r">i</span> &lt; 100000000; <span class="r2 r">i</span>++)
+            {
+                <span class="c">//dict.ContainsKey(Tuple.Create(1, 1));</span>
+                <b>new</b> <b>object</b>();
+                <span class="c">//d.Equals(t, Tuple.Create(1, 1));</span>
+            }
+ 
+            <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#5ac7c4fda643413b" class="i method">WriteLine</a>(<span class="s">&quot;0:&quot;</span> + <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#e4c26eb94fe6de0f" class="i method">CollectionCount</a>(0));
+            <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#5ac7c4fda643413b" class="i method">WriteLine</a>(<span class="s">&quot;1:&quot;</span> + <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#e4c26eb94fe6de0f" class="i method">CollectionCount</a>(1));
+            <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#5ac7c4fda643413b" class="i method">WriteLine</a>(<span class="s">&quot;2:&quot;</span> + <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#e4c26eb94fe6de0f" class="i method">CollectionCount</a>(2));
+        }
+ 
+        <b>static</b> <a href="/UniRx/A.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="515f2c6d1fe9eee9" href="R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Hoge</a>(<a href="/UniRx/A.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>int</b>&gt; <span id="r3 rd" class="r3 r">subject</span>)
+        {
+            <b>return</b> <a href="/UniRx/A.html#d25079c101caf010" class="t t">Observable</a>.<a href="/UniRx/A.html#0351c4239e8e6646" class="i method">Create</a>&lt;<b>int</b>&gt;(<span id="r4 rd" class="r4 r">observer</span> =&gt;
+            {
+                <span class="r4 r">observer</span>.<a href="/UniRx/A.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(1000);
+                <b>return</b> <span class="r3 r">subject</span>.<a href="/UniRx/A.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r4 r">observer</span>);
+            });
+        }
+ 
+        <b>static void</b> <a id="8cafa13dd97715da" href="R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">ShowStackTrace</a>()
+        {
+            <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#5ac7c4fda643413b" class="i method">WriteLine</a>(<span class="s">&quot;----------------&quot;</span>);
+            <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#5ac7c4fda643413b" class="i method">WriteLine</a>(<b>new</b> <a href="@0@mscorlib/A.html#29c39ce8d11a5f1e" class="t constructor">StackTrace</a>().<a href="@0@mscorlib/A.html#bfa21fee4a99ba27" class="i method">ToString</a>());
+        }
+    }
+ 
+    <b>public static class</b> <a id="d660c9508162f5e6" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">OEx</a>
+    {
+        <b>public static void</b> <a id="9a466b62d8edf9b1" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Is</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt;(<b>this</b> <span class="r5 r t">T</span> <span id="r6 rd" class="r6 r">t</span>, <span class="r5 r t">T</span> <span id="r7 rd" class="r7 r">t2</span>)
+        {
+            <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#5ac7c4fda643413b" class="i method">WriteLine</a>(<span class="s">&quot;T:&quot;</span> + <span class="r6 r">t</span> + <span class="s">&quot; T2:&quot;</span> + <span class="r7 r">t2</span>);
+        }
+    }
+ 
+    <b>class</b> <a id="5b3bb4e6c7274cdf" href="R/../../0000000000.html" target="n" data-glyph="2,0" class="t t"><span id="f4361d55160d448e">MyEvent</span></a>
+    {
+        <b>public</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt; <a id="48dcbca5ee848207" href="R/48dcbca5ee848207.html" target="n" data-glyph="42,1" class="i field">action</a> = <b>null</b>;
+ 
+        <b>public void</b> <a id="73e16487aba7851e" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Fire</a>(<b>int</b> <span id="r8 rd" class="r8 r">x</span>)
+        {
+            <a href="#48dcbca5ee848207" class="i field">action</a>.<a href="@0@mscorlib/A.html#2d4ce5e8c3a9aa80" class="i method">Invoke</a>(<span class="r8 r">x</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html><head><title>Result.cs</title><link rel="stylesheet" href="../../../../styles.css"><script src="../../../../scripts.js"></script></head>
+<body class="cB" onload="i(43);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/UnitTests/SceneItems/Result.cs" target="_top">Assets\UnitTests\SceneItems\Result.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UNITY_METRO</span> &amp;&amp; !<span class="i">UNITY_4_5</span>
+ 
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    <b>public class</b> <a id="e6abea31549eadc7" href="../../../R/e6abea31549eadc7.html" target="n" data-glyph="0,0" class="t t"><span id="fe935377fac47658">Result</span></a> : <a href="/Assembly-CSharp-firstpass/A.html#e78f50387c6ecbbd" class="t t">PresenterBase</a>
+    {
+        <b>public</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Text</span> <a id="fa41b707928c1318" href="../../../R/fa41b707928c1318.html" target="n" data-glyph="42,1" class="i field">text</a>;
+ 
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<b>string</b>&gt; <a id="211b32d77caf7235" href="../../../R/211b32d77caf7235.html" target="n" data-glyph="102,1" class="i property">Message</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<span class="i">Color</span>&gt; <a id="4ce68b7db1f673e7" href="../../../R/4ce68b7db1f673e7.html" target="n" data-glyph="102,1" class="i property">Color</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>protected override</b> <a href="/Assembly-CSharp-firstpass/A.html#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="7a5a99a613b9defb" href="../../../R/7a5a99a613b9defb.html" target="n" data-glyph="105,1" class="i property">Children</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="/Assembly-CSharp-firstpass/A.html#527c962370ffd5e4" class="i field">EmptyChildren</a>;
+            }
+        }
+ 
+        <b>protected override void</b> <a id="15fab6c1a8285b02" href="../../../R/15fab6c1a8285b02.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>()
+        {
+        }
+ 
+        <b>protected override void</b> <a id="a6fd7eaf093adeff" href="../../../R/a6fd7eaf093adeff.html" target="n" data-glyph="75,1" class="i method">Initialize</a>()
+        {
+            <b>var</b> <span id="r0 rd" class="r0 r">image</span> = <a href="#e6abea31549eadc7" class="k">this</a>.<span class="i">GetComponent</span>&lt;<span class="i">Image</span>&gt;();
+ 
+            <a href="#211b32d77caf7235" class="i property">Message</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>string</b>&gt;(<span class="s">&quot;&quot;</span>);
+            <a href="#211b32d77caf7235" class="i property">Message</a>.<span class="i">SubscribeToText</span>(<a href="#fa41b707928c1318" class="i field">text</a>);
+ 
+            <a href="#4ce68b7db1f673e7" class="i property">Color</a> = <b>new</b> <a href="/Assembly-CSharp-firstpass/A.html#47e210ef7a1be0f6" class="t constructor">ReactiveProperty</a>&lt;<span class="i">UnityEngine</span>.<span class="i">Color</span>&gt;();
+            <a href="#4ce68b7db1f673e7" class="i property">Color</a>.<a href="/Assembly-CSharp-firstpass/A.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r1 rd" class="r1 r">x</span> =&gt; <span class="r0 r">image</span>.<span class="i">color</span> = <span class="r1 r">x</span>);
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

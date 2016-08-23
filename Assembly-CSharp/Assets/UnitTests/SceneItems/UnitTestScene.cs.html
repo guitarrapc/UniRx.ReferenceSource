@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnitTestScene.cs</title><link rel="stylesheet" href="../../../../styles.css"><script src="../../../../scripts.js"></script></head>
+<body class="cB" onload="i(31);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/UnitTests/SceneItems/UnitTestScene.cs" target="_top">Assets\UnitTests\SceneItems\UnitTestScene.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UNITY_METRO</span> &amp;&amp; !<span class="i">UNITY_4_5</span>
+ 
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>;
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    <b>public class</b> <a id="896f43143f172afb" href="../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="9c68bb83de5d2f0b">UnitTestScene</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public</b> <span class="i">Button</span> <a id="c957ef049c9ccbb8" href="../../../R/c957ef049c9ccbb8.html" target="n" data-glyph="42,1" class="i field">buttonPrefab</a>;
+        <b>public</b> <span class="i">GameObject</span> <a id="b8a67ef9cd01f49d" href="../../../R/b8a67ef9cd01f49d.html" target="n" data-glyph="42,1" class="i field">buttonVertical</a>;
+ 
+        <b>public</b> <a href="Result.cs.html#e6abea31549eadc7" class="t t">Result</a> <a id="2f475c386a1c6c01" href="../../../R/2f475c386a1c6c01.html" target="n" data-glyph="42,1" class="i field">resultPrefab</a>;
+        <b>public</b> <span class="i">GameObject</span> <a id="79847a7ce86293b1" href="../../../R/79847a7ce86293b1.html" target="n" data-glyph="42,1" class="i field">resultVertical</a>;
+ 
+ 
+        <b>void</b> <a id="f2d7697765e09737" href="../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// UnitTest uses Wait, it can&#39;t run on MainThreadScheduler.</span>
+            <a href="/Assembly-CSharp-firstpass/A.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="/Assembly-CSharp-firstpass/A.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="/Assembly-CSharp-firstpass/A.html#d5ee0a17c2dab65c" class="i method">SetDotNetCompatible</a>();
+            <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+ 
+            <a href="../UnitTests.cs.html#26cd7de83b3e1c47" class="t t">UnitTests</a>.<a href="../UnitTests.cs.html#91351ce9d4bc2de9" class="i method">SetButtons</a>(<a href="#c957ef049c9ccbb8" class="i field">buttonPrefab</a>, <a href="#b8a67ef9cd01f49d" class="i field">buttonVertical</a>, <a href="#2f475c386a1c6c01" class="i field">resultPrefab</a>, <a href="#79847a7ce86293b1" class="i field">resultVertical</a>);
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

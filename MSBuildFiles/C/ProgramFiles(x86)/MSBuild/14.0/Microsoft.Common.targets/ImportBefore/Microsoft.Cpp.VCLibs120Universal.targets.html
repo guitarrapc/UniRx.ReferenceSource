@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Cpp.VCLibs120Universal.targets</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(131);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/14.0/Microsoft.Common.targets/ImportBefore/Microsoft.Cpp.VCLibs120Universal.targets" target="_top">C\ProgramFiles(x86)\MSBuild\14.0\Microsoft.Common.targets\ImportBefore\Microsoft.Cpp.VCLibs120Universal.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.cpp.VCLibs120Universal.targets
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+      created a backup copy.  Incorrect changes to this file will make it
+      impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+ 
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildProperties/R/_GenerateAppxManifestDependsOn.html" target="n" class="msbuildlink">_GenerateAppxManifestDependsOn</a></span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/_GenerateAppxManifestDependsOn.html" target="n" class="msbuildlink">_GenerateAppxManifestDependsOn</a>);<a href="/MSBuildTargets/R/_FixVCLibs120References.html" target="n" class="msbuildlink">_FixVCLibs120References</a><span class="xd">&lt;/</span><span class="xn">_GenerateAppxManifestDependsOn</span><span class="xd">&gt;</span><span class="xd">
+  &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+  
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/_FixVCLibs120References.html" target="n" class="msbuildlink">_FixVCLibs120References</a></span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/AppxPackage.html" target="n" class="msbuildlink">AppxPackage</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a>)&#39; == &#39;UAP&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+     
+    &lt;!--</span><span class="c"> Check if VC libs 120 reference is found,  If found remove it</span><span class="xd">--&gt;</span><span class="xd">
+      &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/VCLibs120Ref.html" target="n" class="msbuildlink">VCLibs120Ref</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(PackagingOutputs.SDKName)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(PackagingOutputs.SDKName)&#39; == &#39;Microsoft.VCLibs, Version=12.0&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+      &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/VCLibs120Ref.html" target="n" class="msbuildlink">VCLibs120Ref</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/PackagingOutputs.html" target="n" class="msbuildlink">PackagingOutputs</a> </span><span class="xan">Remove</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/PackagingOutputs.html" target="n" class="msbuildlink">PackagingOutputs</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(PackagingOutputs.SDKName)&#39; == &#39;Microsoft.VCLibs, Version=12.0&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+      &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+ 
+    &lt;!--</span><span class="c"> Get the resolved SDK reference item for Microsoft.VCLibs.120, Version=14.0 and add that to the packaging output </span><span class="xd">--&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GetInstalledSDKLocations.html" target="n" class="msbuildlink">GetInstalledSDKLocations</a> </span><span class="xan">
+        SDKDirectoryRoots</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKReferenceDirectoryRoot.html" target="n" class="msbuildlink">SDKReferenceDirectoryRoot</a>)</span>&quot; <span class="xan">
+        SDKExtensionDirectoryRoots</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKExtensionDirectoryRoot.html" target="n" class="msbuildlink">SDKExtensionDirectoryRoot</a>)</span>&quot; <span class="xan">
+        SDKRegistryRoot</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKReferenceRegistryRoot.html" target="n" class="msbuildlink">SDKReferenceRegistryRoot</a>)</span>&quot; <span class="xan">
+        TargetPlatformVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformVersion.html" target="n" class="msbuildlink">TargetPlatformVersion</a>)</span>&quot; <span class="xan">
+        TargetPlatformIdentifier</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a>)</span>&quot; <span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/InstalledSDKLocations.html" target="n" class="msbuildlink">InstalledSDKLocations</a>)&#39; == &#39;&#39; and &#39;@(<a href="/MSBuildItems/R/VCLibs120Ref.html" target="n" class="msbuildlink">VCLibs120Ref</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">InstalledSDKs</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/InstalledSDKLocations.html" target="n" class="msbuildlink">InstalledSDKLocations</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;/</span><span class="xn">GetInstalledSDKLocations</span><span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn"><a href="/MSBuildTasks/R/ResolveSDKReference.html" target="n" class="msbuildlink">ResolveSDKReference</a></span><span class="xan">
+        SDKReferences</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.VCLibs.120, Version=14.0</span>&quot;<span class="xan">
+        RuntimeReferenceOnlySDKDependencies</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/RuntimeReferenceOnlySDKDependencies.html" target="n" class="msbuildlink">RuntimeReferenceOnlySDKDependencies</a>)</span>&quot;<span class="xan">
+        References</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Reference.html" target="n" class="msbuildlink">Reference</a>)</span>&quot;<span class="xan">
+        TargetPlatformVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformVersion.html" target="n" class="msbuildlink">TargetPlatformVersion</a>)</span>&quot;<span class="xan">
+        TargetPlatformIdentifier</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a>)</span>&quot;<span class="xan">
+        WarnOnMissingPlatformVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKReferenceWarnOnMissingMaxPlatformVersion.html" target="n" class="msbuildlink">SDKReferenceWarnOnMissingMaxPlatformVersion</a>)</span>&quot;<span class="xan">
+        ProjectName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectName.html" target="n" class="msbuildlink">MSBuildProjectName</a>)</span>&quot;<span class="xan">
+        TargetedSDKConfiguration</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetedSDKConfiguration.html" target="n" class="msbuildlink">TargetedSDKConfiguration</a>)</span>&quot;<span class="xan">
+        TargetedSDKArchitecture</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetedSDKArchitecture.html" target="n" class="msbuildlink">TargetedSDKArchitecture</a>)</span>&quot;<span class="xan">
+        InstalledSDKs </span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/InstalledSDKLocations.html" target="n" class="msbuildlink">InstalledSDKLocations</a>)</span>&quot;<span class="xan">
+        LogResolutionErrorsAsWarnings </span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/LogSDKReferenceResolutionErrorsAsWarnings.html" target="n" class="msbuildlink">LogSDKReferenceResolutionErrorsAsWarnings</a>)</span>&quot;<span class="xan">
+        Prefer32Bit </span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Prefer32Bit.html" target="n" class="msbuildlink">Prefer32Bit</a>)</span>&quot;<span class="xan">
+        ContinueOnError</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ContinueOnError.html" target="n" class="msbuildlink">ContinueOnError</a>)</span>&quot;<span class="xan">
+        Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/VCLibs120Ref.html" target="n" class="msbuildlink">VCLibs120Ref</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+       &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ResolvedSDKReferences</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/VCLibs12UniversalReference.html" target="n" class="msbuildlink">VCLibs12UniversalReference</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+      &lt;/</span><span class="xn">ResolveSDKReference</span><span class="xd">&gt;</span><span class="xd">
+ 
+      &lt;</span><span class="xn">ItemGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/VCLibs120Ref.html" target="n" class="msbuildlink">VCLibs120Ref</a>)&#39; != &#39;&#39; and &#39;@(<a href="/MSBuildItems/R/VCLibs12UniversalReference.html" target="n" class="msbuildlink">VCLibs12UniversalReference</a>)&#39; != &#39;&#39; </span>&quot;<span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildItems/R/PackagingOutputs.html" target="n" class="msbuildlink">PackagingOutputs</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/VCLibs12UniversalReference.html" target="n" class="msbuildlink">VCLibs12UniversalReference</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+          &lt;</span><span class="xn">OutputGroup</span><span class="xd">&gt;</span>GetResolvedSDKReferences<span class="xd">&lt;/</span><span class="xn">OutputGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PackagingOutputs</span><span class="xd">&gt;</span><span class="xd">
+      &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+  &lt;!--</span><span class="c"> This target adds reference to the Microsoft.UniversalCRT.Debug Extension SDK for UWP apps that :
+  reference the Microsoft.VCLibs.14.00.Debug framework package
+  Needs to run after the GetPackagingOutputs so that it is not added if a UCRT Debug reference is already present in the parent or referenced projects. </span><span class="xd">--&gt;</span><span class="xd">
+  &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/_AddVCLibs140UniversalCrtDebugReference.html" target="n" class="msbuildlink">_AddVCLibs140UniversalCrtDebugReference</a></span>&quot;<span class="xan">
+          AfterTargets</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GetPackagingOutputs.html" target="n" class="msbuildlink">GetPackagingOutputs</a></span>&quot;<span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/DisableImplicitUCRTReference.html" target="n" class="msbuildlink">DisableImplicitUCRTReference</a>)&#39; == &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/AppxPackage.html" target="n" class="msbuildlink">AppxPackage</a>)&#39; == &#39;true&#39; and &#39;$(<a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a>)&#39; == &#39;UAP&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> ******************************************************************************
+           This item group queries the application project for the following traits:
+           a. Microsoft.VCLibs, Version=14.0, Configuration=Debug is referenced by the project or its referenced projects
+           b. This project or its referenced projects already reference Microsoft.UniversalCRT.Debug, Version=&lt;Any&gt;
+           ******************************************************************************* </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/VCLibs140UCRTRef.html" target="n" class="msbuildlink">VCLibs140UCRTRef</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(PackagingOutputs.SDKName)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(PackagingOutputs.SDKName)&#39; == &#39;Microsoft.VCLibs, Version=14.0&#39; and (&#39;%(PackagingOutputs.TargetedSDKConfiguration)&#39; == &#39;Debug&#39; or &#39;$(<a href="/MSBuildProperties/R/Configuration.html" target="n" class="msbuildlink">Configuration</a>)&#39;==&#39;Debug&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/HasUCRTRef.html" target="n" class="msbuildlink">HasUCRTRef</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(PackagingOutputs.SDKName)&#39;</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">$([System.String]::new(&#39;%(PackagingOutputs.SDKName)&#39;).StartsWith(&#39;Microsoft.UniversalCRT.Debug, Version=&#39;))</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Add UCRT Debug reference if one is not already specified and the project (or referenced projects) have a reference to VCLibs140 framework package </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AddUCRTRef.html" target="n" class="msbuildlink">AddUCRTRef</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/HasUCRTRef.html" target="n" class="msbuildlink">HasUCRTRef</a>)&#39;==&#39;&#39; and &#39;@(<a href="/MSBuildItems/R/VCLibs140UCRTRef.html" target="n" class="msbuildlink">VCLibs140UCRTRef</a>)&#39;!=&#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">AddUCRTRef</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Get the resolved SDK reference item for Microsoft.UniversalCRT.Debug, Version=&lt;TPV&gt; and add that to the packaging output </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GetInstalledSDKLocations.html" target="n" class="msbuildlink">GetInstalledSDKLocations</a></span><span class="xan">
+      SDKDirectoryRoots</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKReferenceDirectoryRoot.html" target="n" class="msbuildlink">SDKReferenceDirectoryRoot</a>)</span>&quot;<span class="xan">
+      SDKExtensionDirectoryRoots</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKExtensionDirectoryRoot.html" target="n" class="msbuildlink">SDKExtensionDirectoryRoot</a>)</span>&quot;<span class="xan">
+      SDKRegistryRoot</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKReferenceRegistryRoot.html" target="n" class="msbuildlink">SDKReferenceRegistryRoot</a>)</span>&quot;<span class="xan">
+      TargetPlatformVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformVersion.html" target="n" class="msbuildlink">TargetPlatformVersion</a>)</span>&quot;<span class="xan">
+      TargetPlatformIdentifier</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a>)</span>&quot;<span class="xan">
+      Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/InstalledSDKLocations.html" target="n" class="msbuildlink">InstalledSDKLocations</a>)&#39; == &#39;&#39; and &#39;$(<a href="/MSBuildProperties/R/AddUCRTRef.html" target="n" class="msbuildlink">AddUCRTRef</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">InstalledSDKs</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/InstalledSDKLocations.html" target="n" class="msbuildlink">InstalledSDKLocations</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">GetInstalledSDKLocations</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Find the Microsoft.Ucrt.Debug ESDK, based upon TPV.  This package is installed by the Windows 10 SDK, so there should always be a matching
+           ESDK for given TPV value </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/ResolveSDKReference.html" target="n" class="msbuildlink">ResolveSDKReference</a></span><span class="xan">
+      Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/AddUCRTRef.html" target="n" class="msbuildlink">AddUCRTRef</a>)&#39;==&#39;true&#39;</span>&quot;<span class="xan">
+      SDKReferences</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.UniversalCRT.Debug, Version=$(<a href="/MSBuildProperties/R/TargetPlatformVersion.html" target="n" class="msbuildlink">TargetPlatformVersion</a>)</span>&quot;<span class="xan">
+      RuntimeReferenceOnlySDKDependencies</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/RuntimeReferenceOnlySDKDependencies.html" target="n" class="msbuildlink">RuntimeReferenceOnlySDKDependencies</a>)</span>&quot;<span class="xan">
+      References</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/Reference.html" target="n" class="msbuildlink">Reference</a>)</span>&quot;<span class="xan">
+      TargetPlatformVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformVersion.html" target="n" class="msbuildlink">TargetPlatformVersion</a>)</span>&quot;<span class="xan">
+      TargetPlatformIdentifier</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformIdentifier.html" target="n" class="msbuildlink">TargetPlatformIdentifier</a>)</span>&quot;<span class="xan">
+      WarnOnMissingPlatformVersion</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/SDKReferenceWarnOnMissingMaxPlatformVersion.html" target="n" class="msbuildlink">SDKReferenceWarnOnMissingMaxPlatformVersion</a>)</span>&quot;<span class="xan">
+      ProjectName</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/MSBuildProjectName.html" target="n" class="msbuildlink">MSBuildProjectName</a>)</span>&quot;<span class="xan">
+      TargetedSDKConfiguration</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetedSDKConfiguration.html" target="n" class="msbuildlink">TargetedSDKConfiguration</a>)</span>&quot;<span class="xan">
+      TargetedSDKArchitecture</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetedSDKArchitecture.html" target="n" class="msbuildlink">TargetedSDKArchitecture</a>)</span>&quot;<span class="xan">
+      InstalledSDKs </span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/InstalledSDKLocations.html" target="n" class="msbuildlink">InstalledSDKLocations</a>)</span>&quot;<span class="xan">
+      LogResolutionErrorsAsWarnings </span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/LogSDKReferenceResolutionErrorsAsWarnings.html" target="n" class="msbuildlink">LogSDKReferenceResolutionErrorsAsWarnings</a>)</span>&quot;<span class="xan">
+      Prefer32Bit </span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/Prefer32Bit.html" target="n" class="msbuildlink">Prefer32Bit</a>)</span>&quot;<span class="xan">
+      ContinueOnError</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ContinueOnError.html" target="n" class="msbuildlink">ContinueOnError</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">ResolvedSDKReferences</span>&quot; <span class="xan">ItemName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildItems/R/UniversalCrtDebugReference.html" target="n" class="msbuildlink">UniversalCrtDebugReference</a></span>&quot;<span class="xd">/&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ResolveSDKReference</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> Add the resolved ucrtbased.dll to the packaging output </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+      &lt;</span><span class="xn"><a href="/MSBuildItems/R/PackagingOutputs.html" target="n" class="msbuildlink">PackagingOutputs</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/AddUCRTRef.html" target="n" class="msbuildlink">AddUCRTRef</a>)&#39; == &#39;true&#39;</span>&quot; <span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/UniversalCrtDebugReference.html" target="n" class="msbuildlink">UniversalCrtDebugReference</a>-&gt;&#39;%(Identity)\redist\Debug\%(TargetedSDKArchitecture)\ucrtbased.dll&#39;)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn">OutputGroup</span><span class="xd">&gt;</span>SDKRedistOutputGroup<span class="xd">&lt;/</span><span class="xn">OutputGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn">ProjectName</span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildProjectName.html" target="n" class="msbuildlink">MSBuildProjectName</a>)<span class="xd">&lt;/</span><span class="xn">ProjectName</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn">TargetPath</span><span class="xd">&gt;</span>ucrtbased.dll<span class="xd">&lt;/</span><span class="xn">TargetPath</span><span class="xd">&gt;</span><span class="xd">
+      &lt;/</span><span class="xn">PackagingOutputs</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+               
+  &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html><head><title>SingleAssignmentDisposable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(68);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Disposables/SingleAssignmentDisposable.cs" target="_top">Disposables\SingleAssignmentDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">// should be use Interlocked.CompareExchange for Threadsafe?</span>
+    <span class="c">// but CompareExchange cause ExecutionEngineException on iOS.</span>
+    <span class="c">// AOT...</span>
+    <span class="c">// use lock instead</span>
+ 
+    <b>public sealed class</b> <a id="adcb61162c529f98" href="../R/adcb61162c529f98.html" target="n" data-glyph="0,0" class="t t"><span id="8be9d8f8a816901e">SingleAssignmentDisposable</span></a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>
+    {
+        <b>readonly object</b> <a id="87cccf79604efa5b" href="../R/87cccf79604efa5b.html" target="n" data-glyph="46,1" class="i field">gate</a> = <b>new</b> <b>object</b>();
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="e93164aed2cab2e3" href="../R/e93164aed2cab2e3.html" target="n" data-glyph="46,1" class="i field">current</a>;
+        <b>bool</b> <a id="2785806b2eeb53e3" href="../R/2785806b2eeb53e3.html" target="n" data-glyph="46,1" class="i field">disposed</a>;
+ 
+        <b>public bool</b> <a id="c9e92cc7adb8879e" href="../R/c9e92cc7adb8879e.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a> { <b>get</b> { <b>lock</b> (<a href="#87cccf79604efa5b" class="i field">gate</a>) { <b>return</b> <a href="#2785806b2eeb53e3" class="i field">disposed</a>; } } }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="305b3f94a3d60af4" href="../R/305b3f94a3d60af4.html" target="n" data-glyph="102,1" class="i property">Disposable</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#e93164aed2cab2e3" class="i field">current</a>;
+            }
+            <b>set</b>
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r0 rd" class="r0 r">old</span> = <b>default</b>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>);
+                <b>bool</b> <span id="r1 rd" class="r1 r">alreadyDisposed</span>;
+                <b>lock</b> (<a href="#87cccf79604efa5b" class="i field">gate</a>)
+                {
+                    <span class="r1 r">alreadyDisposed</span> = <a href="#2785806b2eeb53e3" class="i field">disposed</a>;
+                    <span class="r0 r">old</span> = <a href="#e93164aed2cab2e3" class="i field">current</a>;
+                    <b>if</b> (!<span class="r1 r">alreadyDisposed</span>)
+                    {
+                        <b>if</b> (<b>value</b> == <b>null</b>) <b>return</b>;
+                        <a href="#e93164aed2cab2e3" class="i field">current</a> = <b>value</b>;
+                    }
+                }
+ 
+                <b>if</b> (<span class="r1 r">alreadyDisposed</span> &amp;&amp; <b>value</b> != <b>null</b>)
+                {
+                    <b>value</b>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <b>return</b>;
+                }
+ 
+                <b>if</b> (<span class="r0 r">old</span> != <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;Disposable is already set&quot;</span>);
+            }
+        }
+ 
+ 
+        <b>public void</b> <a id="72979fa63d569e27" href="../R/72979fa63d569e27.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r2 rd" class="r2 r">old</span> = <b>null</b>;
+ 
+            <b>lock</b> (<a href="#87cccf79604efa5b" class="i field">gate</a>)
+            {
+                <b>if</b> (!<a href="#2785806b2eeb53e3" class="i field">disposed</a>)
+                {
+                    <a href="#2785806b2eeb53e3" class="i field">disposed</a> = <b>true</b>;
+                    <span class="r2 r">old</span> = <a href="#e93164aed2cab2e3" class="i field">current</a>;
+                    <a href="#e93164aed2cab2e3" class="i field">current</a> = <b>null</b>;
+                }
+            }
+ 
+            <b>if</b> (<span class="r2 r">old</span> != <b>null</b>) <span class="r2 r">old</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

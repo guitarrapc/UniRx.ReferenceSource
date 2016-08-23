@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html><head><title>IntervalTest.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(69);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/IntervalTest.cs" target="_top">Assets\ObjectTest\IntervalTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public class</b> <a id="e6ea735b3e9741fa" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="6e151cb7bd9d10ca">IntervalTest</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>void</b> <a id="286319b3b0bf7b49" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <span class="i">Debug</span>.<span class="i">Log</span>(<b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;Awake(). Current MainThreadDispatcher: {0}&quot;</span>, <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#614a7b9ab6088cd8" class="i property">InstanceName</a>));
+ 
+            <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>
+                .<a href="/Assembly-CSharp-firstpass/A.html#5a83b602fef2c922" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#c24437e069f958f9" class="i method">FromSeconds</a>(1))
+                .<span class="i">Subscribe</span>((<span id="r0 rd" class="r0 r">s</span>) =&gt;
+                    {
+                        <span class="i">Debug</span>.<span class="i">Log</span>(<b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;[Outer interval] {0} running on: {1}&quot;</span>, <span class="r0 r">s</span>, <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#614a7b9ab6088cd8" class="i property">InstanceName</a>));
+ 
+                        <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>
+                            .<a href="/Assembly-CSharp-firstpass/A.html#5a83b602fef2c922" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(40))
+                            .<a href="/Assembly-CSharp-firstpass/A.html#93d2aee26c1bff5b" class="i method">Take</a>(5)
+                            .<span class="i">Subscribe</span>(
+                                <span id="r1 rd" class="r1 r">ms</span> =&gt;
+                                {
+                                    <span class="i">Debug</span>.<span class="i">Log</span>(<b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;    Inner interval {0} running on: {1}&quot;</span>, <span class="r1 r">ms</span>, <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#614a7b9ab6088cd8" class="i property">InstanceName</a>));
+                                },
+                                <span id="r2 rd" class="r2 r">innerEx</span> =&gt; <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r2 r">innerEx</span>)
+                            );
+                    },
+                    <span id="r3 rd" class="r3 r">outerEx</span> =&gt; <span class="i">Debug</span>.<span class="i">LogException</span>(<span class="r3 r">outerEx</span>)
+                );
+        }
+ 
+        <b>void</b> <a id="9731d30706dac11b" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <b>var</b> <span id="r4 rd" class="r4 r">buttonGo</span> = <span class="i">GameObject</span>.<span class="i">Find</span>(<span class="s">&quot;ButtonSphere&quot;</span>);
+            <b>var</b> <span id="r5 rd" class="r5 r">clicker</span> = <span class="r4 r">buttonGo</span>.<span class="i">AddComponent</span>&lt;<a href="Clicker.cs.html#4a958315299c0e99" class="t t">Clicker</a>&gt;();
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r6 rd" class="r6 r">max</span> = 30;
+ 
+            <span class="r5 r">clicker</span>.<span class="i">OnClicked</span> += () =&gt;
+            {
+                <span class="i">Debug</span>.<span class="i">Log</span>(<b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;Is MainThreadDispatcher initialized? {0}{1}&quot;</span>, <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#417ff0ea05b310d8" class="i property">IsInitialized</a>,
+                    <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#417ff0ea05b310d8" class="i property">IsInitialized</a> ? <span class="s">&quot;, running on &quot;</span> + <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#614a7b9ab6088cd8" class="i property">InstanceName</a> : <b>string</b>.<a href="@0@mscorlib/A.html#c9f70a27facb27cf" class="i field">Empty</a>));
+ 
+                <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>
+                    .<a href="/Assembly-CSharp-firstpass/A.html#5a83b602fef2c922" class="i method">Interval</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(1))
+                    .<a href="/Assembly-CSharp-firstpass/A.html#93d2aee26c1bff5b" class="i method">Take</a>(<span class="r6 r">max</span>)
+                    .<span class="i">Subscribe</span>((<span id="r7 rd" class="r7 r">ms</span>) =&gt;
+                    {
+                        <b>if</b> (<span class="r7 r">ms</span> &gt;= <span class="r6 r">max</span> / 2)
+                        {
+                            <span class="r4 r">buttonGo</span>.<span class="i">transform</span>.<span class="i">localScale</span> /= 1.1f;
+                        }
+                        <b>else</b>
+                        {
+                            <span class="r4 r">buttonGo</span>.<span class="i">transform</span>.<span class="i">localScale</span> *= 1.1f;
+                        }
+                        <b>if</b> (<span class="r7 r">ms</span> == <span class="r6 r">max</span> - 1)
+                        {
+                            <span class="r4 r">buttonGo</span>.<span class="i">transform</span>.<span class="i">localScale</span> = <span class="i">Vector3</span>.<span class="i">one</span>;
+                        }
+                    });
+ 
+                <span class="i">Debug</span>.<span class="i">Log</span>(<b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;Sphere running on: {0}&quot;</span>, <a href="/Assembly-CSharp-firstpass/A.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="/Assembly-CSharp-firstpass/A.html#614a7b9ab6088cd8" class="i property">InstanceName</a>));
+            };
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

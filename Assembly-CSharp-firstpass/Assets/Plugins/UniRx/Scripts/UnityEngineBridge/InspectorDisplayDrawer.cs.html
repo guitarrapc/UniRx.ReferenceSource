@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html><head><title>InspectorDisplayDrawer.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(292);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/InspectorDisplayDrawer.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\InspectorDisplayDrawer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Reflection</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>.<span class="i n">RegularExpressions</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+<b>using</b> <span class="i">UnityEditor</span>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    [<span class="i n">System</span>.<a href="@0@mscorlib/A.html#2b75b4729f275854" class="t constructor">AttributeUsage</a>(<span class="i n">System</span>.<a href="@0@mscorlib/A.html#bbeab60ef22e6977" class="t t">AttributeTargets</a>.<a href="@0@mscorlib/A.html#ec95a76a5b6dfd85" class="i field">Field</a>, <a href="@0@mscorlib/A.html#d903bd9308253ef8" class="i property">AllowMultiple</a> = <b>false</b>, <a href="@0@mscorlib/A.html#390271738e01f721" class="i property">Inherited</a> = <b>false</b>)]
+    <b>public class</b> <a id="4c76d73c49605901" href="../../../../../R/4c76d73c49605901.html" target="n" data-glyph="0,0" class="t t">InspectorDisplayAttribute</a> : <span class="i">PropertyAttribute</span>
+    {
+        <b>public string</b> <a id="2e9e7dd5a139bbb8" href="../../../../../R/2e9e7dd5a139bbb8.html" target="n" data-glyph="102,1" class="i property">FieldName</a> { <b>get</b>; <b>private set</b>; }
+        <b>public bool</b> <a id="571e2cde6bec1f5e" href="../../../../../R/571e2cde6bec1f5e.html" target="n" data-glyph="102,1" class="i property">NotifyPropertyChanged</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="768a02d003aac3e5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">InspectorDisplayAttribute</a>(<b>string</b> <span id="r0 rd" class="r0 r">fieldName</span> = <span class="s">&quot;value&quot;</span>, <b>bool</b> <span id="r1 rd" class="r1 r">notifyPropertyChanged</span> = <b>true</b>)
+        {
+            <a href="#2e9e7dd5a139bbb8" class="i property">FieldName</a> = <span class="r0 r">fieldName</span>;
+            <a href="#571e2cde6bec1f5e" class="i property">NotifyPropertyChanged</a> = <span class="r1 r">notifyPropertyChanged</span>;
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Enables multiline input field for StringReactiveProperty. Default line is 3.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    [<span class="i n">System</span>.<a href="@0@mscorlib/A.html#2b75b4729f275854" class="t constructor">AttributeUsage</a>(<span class="i n">System</span>.<a href="@0@mscorlib/A.html#bbeab60ef22e6977" class="t t">AttributeTargets</a>.<a href="@0@mscorlib/A.html#ec95a76a5b6dfd85" class="i field">Field</a>, <a href="@0@mscorlib/A.html#d903bd9308253ef8" class="i property">AllowMultiple</a> = <b>false</b>, <a href="@0@mscorlib/A.html#390271738e01f721" class="i property">Inherited</a> = <b>false</b>)]
+    <b>public class</b> <a id="a0b4ac8730f3edda" href="../../../../../R/a0b4ac8730f3edda.html" target="n" data-glyph="0,0" class="t t">MultilineReactivePropertyAttribute</a> : <span class="i">PropertyAttribute</span>
+    {
+        <b>public int</b> <a id="ea3cc5663cb3b1e3" href="../../../../../R/ea3cc5663cb3b1e3.html" target="n" data-glyph="102,1" class="i property">Lines</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="d41a90df343e8cf5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">MultilineReactivePropertyAttribute</a>()
+        {
+            <a href="#ea3cc5663cb3b1e3" class="i property">Lines</a> = 3;
+        }
+ 
+        <b>public</b> <a id="f39299a01afbe506" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">MultilineReactivePropertyAttribute</a>(<b>int</b> <span id="r2 rd" class="r2 r">lines</span>)
+        {
+            <a href="#a0b4ac8730f3edda" class="k">this</a>.<a href="#ea3cc5663cb3b1e3" class="i property">Lines</a> = <span class="r2 r">lines</span>;
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Enables range input field for Int/FloatReactiveProperty.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    [<span class="i n">System</span>.<a href="@0@mscorlib/A.html#2b75b4729f275854" class="t constructor">AttributeUsage</a>(<span class="i n">System</span>.<a href="@0@mscorlib/A.html#bbeab60ef22e6977" class="t t">AttributeTargets</a>.<a href="@0@mscorlib/A.html#ec95a76a5b6dfd85" class="i field">Field</a>, <a href="@0@mscorlib/A.html#d903bd9308253ef8" class="i property">AllowMultiple</a> = <b>false</b>, <a href="@0@mscorlib/A.html#390271738e01f721" class="i property">Inherited</a> = <b>false</b>)]
+    <b>public class</b> <a id="4da5218db6fafaa8" href="../../../../../R/4da5218db6fafaa8.html" target="n" data-glyph="0,0" class="t t">RangeReactivePropertyAttribute</a> : <span class="i">PropertyAttribute</span>
+    {
+        <b>public float</b> <a id="52767209f1627be8" href="../../../../../R/52767209f1627be8.html" target="n" data-glyph="102,1" class="i property">Min</a> { <b>get</b>; <b>private set</b>; }
+        <b>public float</b> <a id="869d55f13ed6daa6" href="../../../../../R/869d55f13ed6daa6.html" target="n" data-glyph="102,1" class="i property">Max</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="55b5fd3f911f9699" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">RangeReactivePropertyAttribute</a>(<b>float</b> <span id="r3 rd" class="r3 r">min</span>, <b>float</b> <span id="r4 rd" class="r4 r">max</span>)
+        {
+            <a href="#4da5218db6fafaa8" class="k">this</a>.<a href="#52767209f1627be8" class="i property">Min</a> = <span class="r3 r">min</span>;
+            <a href="#4da5218db6fafaa8" class="k">this</a>.<a href="#869d55f13ed6daa6" class="i property">Max</a> = <span class="r4 r">max</span>;
+        }
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+ 
+ 
+    <span class="c">// InspectorDisplay and for Specialized ReactiveProperty</span>
+    <span class="c">// If you want to customize other specialized ReactiveProperty</span>
+    <span class="c">// [UnityEditor.CustomPropertyDrawer(typeof(YourSpecializedReactiveProperty))]</span>
+    <span class="c">// public class ExtendInspectorDisplayDrawer : InspectorDisplayDrawer { } </span>
+ 
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="#4c76d73c49605901" class="t t">InspectorDisplayAttribute</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#79e4005e5827f533" class="t t">IntReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#dc324e5416b27d5c" class="t t">LongReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#03399a767a31b5a6" class="t t">ByteReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#ac3b132971821e19" class="t t">FloatReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#8bba996767ee5d10" class="t t">DoubleReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#0c04ae5e1df85fb6" class="t t">StringReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#c4b0bfff3ced3836" class="t t">BoolReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#028fffeeed10c472" class="t t">Vector2ReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#35868c8745156ef2" class="t t">Vector3ReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#cdeb5ca97b8fbc0b" class="t t">Vector4ReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#f5cd175b1119291f" class="t t">ColorReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#0c8e54406d2cf638" class="t t">RectReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#782ee6aac716af8b" class="t t">AnimationCurveReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#b4e4a39450ffb07e" class="t t">BoundsReactiveProperty</a>))]
+    [<span class="i">UnityEditor</span>.<span class="i">CustomPropertyDrawer</span>(<b>typeof</b>(<a href="InspectableReactiveProperty.cs.html#0f6e212fc5325faf" class="t t">QuaternionReactiveProperty</a>))]
+    <b>public class</b> <a id="e18668c7b08a8582" href="../../../../../R/e18668c7b08a8582.html" target="n" data-glyph="0,0" class="t t"><span id="f1c2397a2f9eeca5">InspectorDisplayDrawer</span></a> : <span class="i">UnityEditor</span>.<span class="i">PropertyDrawer</span>
+    {
+        <b>public override void</b> <a id="c710a3b3e3c97159" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnGUI</a>(<span class="i">Rect</span> <span id="r5 rd" class="r5 r">position</span>, <span class="i">UnityEditor</span>.<span class="i">SerializedProperty</span> <span id="r6 rd" class="r6 r">property</span>, <span class="i">GUIContent</span> <span id="r7 rd" class="r7 r">label</span>)
+        {
+            <b>string</b> <span id="r8 rd" class="r8 r">fieldName</span>;
+            <b>bool</b> <span id="r9 rd" class="r9 r">notifyPropertyChanged</span>;
+            {
+                <a href="#4c76d73c49605901" class="k">var</a> <span id="r10 rd" class="r10 r">attr</span> = <a href="#e18668c7b08a8582" class="k">this</a>.<span class="i">attribute</span> <b>as</b> <a href="#4c76d73c49605901" class="t t">InspectorDisplayAttribute</a>;
+                <span class="r8 r">fieldName</span> = (<span class="r10 r">attr</span> == <b>null</b>) ? <span class="s">&quot;value&quot;</span> : <span class="r10 r">attr</span>.<a href="#2e9e7dd5a139bbb8" class="i property">FieldName</a>;
+                <span class="r9 r">notifyPropertyChanged</span> = (<span class="r10 r">attr</span> == <b>null</b>) ? <b>true</b> : <span class="r10 r">attr</span>.<a href="#571e2cde6bec1f5e" class="i property">NotifyPropertyChanged</a>;
+            }
+ 
+            <b>if</b> (<span class="r9 r">notifyPropertyChanged</span>)
+            {
+                <span class="i">EditorGUI</span>.<span class="i">BeginChangeCheck</span>();
+            }
+            <b>var</b> <span id="r11 rd" class="r11 r">targetSerializedProperty</span> = <span class="r6 r">property</span>.<span class="i">FindPropertyRelative</span>(<span class="r8 r">fieldName</span>);
+            <b>if</b> (<span class="r11 r">targetSerializedProperty</span> == <b>null</b>)
+            {
+                <span class="i">UnityEditor</span>.<span class="i">EditorGUI</span>.<span class="i">LabelField</span>(<span class="r5 r">position</span>, <span class="r7 r">label</span>, <b>new</b> <span class="i">GUIContent</span>() { <span class="i">text</span> = <span class="s">&quot;InspectorDisplay can&#39;t find target:&quot;</span> + <span class="r8 r">fieldName</span> });
+                <b>if</b> (<span class="r9 r">notifyPropertyChanged</span>)
+                {
+                    <span class="i">EditorGUI</span>.<span class="i">EndChangeCheck</span>();
+                }
+                <b>return</b>;
+            }
+            <b>else</b>
+            {
+                <span class="i">EmitPropertyField</span>(<span class="r5 r">position</span>, <span class="r11 r">targetSerializedProperty</span>, <span class="r7 r">label</span>);
+            }
+ 
+            <b>if</b> (<span class="r9 r">notifyPropertyChanged</span>)
+            {
+                <b>if</b> (<span class="i">EditorGUI</span>.<span class="i">EndChangeCheck</span>())
+                {
+                    <span class="r6 r">property</span>.<span class="i">serializedObject</span>.<span class="i">ApplyModifiedProperties</span>(); <span class="c">// deserialize to field</span>
+ 
+                    <b>var</b> <span id="r12 rd" class="r12 r">paths</span> = <span class="r6 r">property</span>.<span class="i">propertyPath</span>.<span class="i">Split</span>(<span class="s">&#39;.&#39;</span>); <span class="c">// X.Y.Z...</span>
+                    <b>var</b> <span id="r13 rd" class="r13 r">attachedComponent</span> = <span class="r6 r">property</span>.<span class="i">serializedObject</span>.<span class="i">targetObject</span>;
+ 
+                    <b>var</b> <span id="r14 rd" class="r14 r">targetProp</span> = (<span class="r12 r">paths</span>.<span class="i">Length</span> == 1)
+                        ? <span class="i">fieldInfo</span>.<span class="i">GetValue</span>(<span class="r13 r">attachedComponent</span>)
+                        : <span class="i">GetValueRecursive</span>(<span class="r13 r">attachedComponent</span>, 0, <span class="r12 r">paths</span>);
+                    <b>if</b> (<span class="r14 r">targetProp</span> == <b>null</b>) <b>return</b>;
+                    <b>var</b> <span id="r15 rd" class="r15 r">propInfo</span> = <span class="r14 r">targetProp</span>.<span class="i">GetType</span>().<span class="i">GetProperty</span>(<span class="r8 r">fieldName</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#67be9642c6aa5b98" class="i field">IgnoreCase</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#cf1565e3a3eb390e" class="i field">GetProperty</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+                    <b>var</b> <span id="r16 rd" class="r16 r">modifiedValue</span> = <span class="r15 r">propInfo</span>.<span class="i">GetValue</span>(<span class="r14 r">targetProp</span>, <b>null</b>); <span class="c">// retrieve new value</span>
+ 
+                    <b>var</b> <span id="r17 rd" class="r17 r">methodInfo</span> = <span class="r14 r">targetProp</span>.<span class="i">GetType</span>().<span class="i">GetMethod</span>(<span class="s">&quot;SetValueAndForceNotify&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#67be9642c6aa5b98" class="i field">IgnoreCase</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#f9c44802799330f2" class="i field">InvokeMethod</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+                    <b>if</b> (<span class="r17 r">methodInfo</span> != <b>null</b>)
+                    {
+                        <span class="r17 r">methodInfo</span>.<span class="i">Invoke</span>(<span class="r14 r">targetProp</span>, <b>new</b> <b>object</b>[] { <span class="r16 r">modifiedValue</span> });
+                    }
+                }
+                <b>else</b>
+                {
+                    <span class="r6 r">property</span>.<span class="i">serializedObject</span>.<span class="i">ApplyModifiedProperties</span>();
+                }
+            }
+        }
+ 
+        <b>object</b> <a id="b5602aedc1229b9c" href="../../../../../R/b5602aedc1229b9c.html" target="n" data-glyph="76,1" class="i method">GetValueRecursive</a>(<b>object</b> <span id="r18 rd" class="r18 r">obj</span>, <b>int</b> <span id="r19 rd" class="r19 r">index</span>, <b>string</b>[] <span id="r20 rd" class="r20 r">paths</span>)
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r21 rd" class="r21 r">path</span> = <span class="r20 r">paths</span>[<span class="r19 r">index</span>];
+            <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r22 rd" class="r22 r">fieldInfo</span> = <span class="r18 r">obj</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="r21 r">path</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#67be9642c6aa5b98" class="i field">IgnoreCase</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#3cd29d73949adaa3" class="i field">GetField</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+ 
+            <span class="c">// If array, path = Array.data[index]</span>
+            <b>if</b> (<span class="r22 r">fieldInfo</span> == <b>null</b> &amp;&amp; <span class="r21 r">path</span> == <span class="s">&quot;Array&quot;</span>)
+            {
+                <b>try</b>
+                {
+                    <span class="r21 r">path</span> = <span class="r20 r">paths</span>[++<span class="r19 r">index</span>];
+                    <a href="@0@System/A.html#d8a604d3af777b1c" class="k">var</a> <span id="r23 rd" class="r23 r">m</span> = <a href="@0@System/A.html#bbe3b2eb80ae5526" class="t t">Regex</a>.<a href="@0@System/A.html#c5bd3cd0e4ed488f" class="i method">Match</a>(<span class="r21 r">path</span>, <span class="s">@&quot;(.+)\[([0-9]+)*\]&quot;</span>);
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r24 rd" class="r24 r">arrayIndex</span> = <b>int</b>.<a href="@0@mscorlib/A.html#a438016f815a35c3" class="i method">Parse</a>(<span class="r23 r">m</span>.<a href="@0@System/A.html#882064d8e42ed216" class="i property">Groups</a>[2].<a href="@0@System/A.html#5cf0d171c91c6cc1" class="i property">Value</a>);
+                    <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r25 rd" class="r25 r">arrayValue</span> = (<span class="r18 r">obj</span> <b>as</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<a href="@0@mscorlib/A.html#5d74f6adfeaf6c7d" class="t t">IList</a>)[<span class="r24 r">arrayIndex</span>];
+                    <b>if</b> (<span class="r19 r">index</span> &lt; <span class="r20 r">paths</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> - 1)
+                    {
+                        <b>return</b> <a href="#b5602aedc1229b9c" class="i method">GetValueRecursive</a>(<span class="r25 r">arrayValue</span>, ++<span class="r19 r">index</span>, <span class="r20 r">paths</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <b>return</b> <span class="r25 r">arrayValue</span>;
+                    }
+                }
+                <b>catch</b>
+                {
+                    <span class="i">Debug</span>.<span class="i">Log</span>(<span class="s">&quot;InspectorDisplayDrawer Exception, objType:&quot;</span> + <span class="r18 r">obj</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a> + <span class="s">&quot; path:&quot;</span> + <b>string</b>.<a href="@0@mscorlib/A.html#881354baa56fc358" class="i method">Join</a>(<span class="s">&quot;, &quot;</span>, <span class="r20 r">paths</span>));
+                    <b>throw</b>;
+                }
+            }
+            <b>else if</b> (<span class="r22 r">fieldInfo</span> == <b>null</b>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#df2d82d91ca29e40" class="t constructor">Exception</a>(<span class="s">&quot;Can&#39;t decode path, please report to UniRx&#39;s GitHub issues:&quot;</span> + <b>string</b>.<a href="@0@mscorlib/A.html#881354baa56fc358" class="i method">Join</a>(<span class="s">&quot;, &quot;</span>, <span class="r20 r">paths</span>));
+            }
+ 
+            <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r26 rd" class="r26 r">v</span> = <span class="r22 r">fieldInfo</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r18 r">obj</span>);
+            <b>if</b> (<span class="r19 r">index</span> &lt; <span class="r20 r">paths</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> - 1)
+            {
+                <b>return</b> <a href="#b5602aedc1229b9c" class="i method">GetValueRecursive</a>(<span class="r26 r">v</span>, ++<span class="r19 r">index</span>, <span class="r20 r">paths</span>);
+            }
+ 
+            <b>return</b> <span class="r26 r">v</span>;
+        }
+ 
+        <b>public override float</b> <a id="1af23b587534030d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">GetPropertyHeight</a>(<span class="i">SerializedProperty</span> <span id="r27 rd" class="r27 r">property</span>, <span class="i">GUIContent</span> <span id="r28 rd" class="r28 r">label</span>)
+        {
+            <a href="#4c76d73c49605901" class="k">var</a> <span id="r29 rd" class="r29 r">attr</span> = <a href="#e18668c7b08a8582" class="k">this</a>.<span class="i">attribute</span> <b>as</b> <a href="#4c76d73c49605901" class="t t">InspectorDisplayAttribute</a>;
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r30 rd" class="r30 r">fieldName</span> = (<span class="r29 r">attr</span> == <b>null</b>) ? <span class="s">&quot;value&quot;</span> : <span class="r29 r">attr</span>.<a href="#2e9e7dd5a139bbb8" class="i property">FieldName</a>;
+ 
+            <b>var</b> <span id="r31 rd" class="r31 r">height</span> = <b>base</b>.<span class="i">GetPropertyHeight</span>(<span class="r27 r">property</span>, <span class="r28 r">label</span>);
+            <b>var</b> <span id="r32 rd" class="r32 r">valueProperty</span> = <span class="r27 r">property</span>.<span class="i">FindPropertyRelative</span>(<span class="r30 r">fieldName</span>);
+            <b>if</b> (<span class="r32 r">valueProperty</span> == <b>null</b>)
+            {
+                <b>return</b> <span class="r31 r">height</span>;
+            }
+ 
+            <b>if</b> (<span class="r32 r">valueProperty</span>.<span class="i">propertyType</span> == <span class="i">SerializedPropertyType</span>.<span class="i">Rect</span>)
+            {
+                <b>return</b> <span class="r31 r">height</span> * 2;
+            }
+            <b>if</b> (<span class="r32 r">valueProperty</span>.<span class="i">propertyType</span> == <span class="i">SerializedPropertyType</span>.<span class="i">Bounds</span>)
+            {
+                <b>return</b> <span class="r31 r">height</span> * 3;
+            }
+            <b>if</b> (<span class="r32 r">valueProperty</span>.<span class="i">propertyType</span> == <span class="i">SerializedPropertyType</span>.<span class="i">String</span>)
+            {
+                <a href="#a0b4ac8730f3edda" class="k">var</a> <span id="r33 rd" class="r33 r">multilineAttr</span> = <a href="#9a697263660f942e" class="i method">GetMultilineAttribute</a>();
+                <b>if</b> (<span class="r33 r">multilineAttr</span> != <b>null</b>)
+                {
+                    <b>return</b> ((!<span class="i">EditorGUIUtility</span>.<span class="i">wideMode</span>) ? 16f : 0f) + 16f + (<b>float</b>)((<span class="r33 r">multilineAttr</span>.<a href="#ea3cc5663cb3b1e3" class="i property">Lines</a> - 1) * 13);
+                };
+            }
+ 
+            <b>if</b> (<span class="r32 r">valueProperty</span>.<span class="i">isExpanded</span>)
+            {
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r34 rd" class="r34 r">count</span> = 0;
+                <b>var</b> <span id="r35 rd" class="r35 r">e</span> = <span class="r32 r">valueProperty</span>.<span class="i">GetEnumerator</span>();
+                <b>while</b> (<span class="r35 r">e</span>.<span class="i">MoveNext</span>()) <span class="r34 r">count</span>++;
+                <b>return</b> ((<span class="r31 r">height</span> + 4) * <span class="r34 r">count</span>) + 6; <span class="c">// (Line = 20 + Padding) ?</span>
+            }
+ 
+            <b>return</b> <span class="r31 r">height</span>;
+        }
+ 
+        <b>protected virtual void</b> <a id="04da28c45234ab05" href="../../../../../R/../../0000000000.html" target="n" data-glyph="75,1" class="i method">EmitPropertyField</a>(<span class="i">Rect</span> <span id="r36 rd" class="r36 r">position</span>, <span class="i">UnityEditor</span>.<span class="i">SerializedProperty</span> <span id="r37 rd" class="r37 r">targetSerializedProperty</span>, <span class="i">GUIContent</span> <span id="r38 rd" class="r38 r">label</span>)
+        {
+            <a href="#a0b4ac8730f3edda" class="k">var</a> <span id="r39 rd" class="r39 r">multiline</span> = <a href="#9a697263660f942e" class="i method">GetMultilineAttribute</a>();
+            <b>if</b> (<span class="r39 r">multiline</span> == <b>null</b>)
+            {
+                <a href="#4da5218db6fafaa8" class="k">var</a> <span id="r40 rd" class="r40 r">range</span> = <a href="#17933b8d04bddb1c" class="i method">GetRangeAttribute</a>();
+                <b>if</b> (<span class="r40 r">range</span> == <b>null</b>)
+                {
+                    <span class="i">UnityEditor</span>.<span class="i">EditorGUI</span>.<span class="i">PropertyField</span>(<span class="r36 r">position</span>, <span class="r37 r">targetSerializedProperty</span>, <span class="r38 r">label</span>, <span class="i">includeChildren</span>: <b>true</b>);
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (<span class="r37 r">targetSerializedProperty</span>.<span class="i">propertyType</span> == <span class="i">SerializedPropertyType</span>.<span class="i">Float</span>)
+                    {
+                        <span class="i">EditorGUI</span>.<span class="i">Slider</span>(<span class="r36 r">position</span>, <span class="r37 r">targetSerializedProperty</span>, <span class="r40 r">range</span>.<a href="#52767209f1627be8" class="i property">Min</a>, <span class="r40 r">range</span>.<a href="#869d55f13ed6daa6" class="i property">Max</a>, <span class="r38 r">label</span>);
+                    }
+                    <b>else if</b> (<span class="r37 r">targetSerializedProperty</span>.<span class="i">propertyType</span> == <span class="i">SerializedPropertyType</span>.<span class="i">Integer</span>)
+                    {
+                        <span class="i">EditorGUI</span>.<span class="i">IntSlider</span>(<span class="r36 r">position</span>, <span class="r37 r">targetSerializedProperty</span>, (<b>int</b>)<span class="r40 r">range</span>.<a href="#52767209f1627be8" class="i property">Min</a>, (<b>int</b>)<span class="r40 r">range</span>.<a href="#869d55f13ed6daa6" class="i property">Max</a>, <span class="r38 r">label</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="i">EditorGUI</span>.<span class="i">LabelField</span>(<span class="r36 r">position</span>, <span class="r38 r">label</span>.<span class="i">text</span>, <span class="s">&quot;Use Range with float or int.&quot;</span>);
+                    }
+                }
+            }
+            <b>else</b>
+            {
+                <b>var</b> <span id="r41 rd" class="r41 r">property</span> = <span class="r37 r">targetSerializedProperty</span>;
+ 
+                <span class="r38 r">label</span> = <span class="i">EditorGUI</span>.<span class="i">BeginProperty</span>(<span class="r36 r">position</span>, <span class="r38 r">label</span>, <span class="r41 r">property</span>);
+                <a href="@0@mscorlib/A.html#382d90b1fa682bac" class="k">var</a> <span id="r42 rd" class="r42 r">method</span> = <b>typeof</b>(<span class="i">EditorGUI</span>).<a href="@0@mscorlib/A.html#f24e0c9fd5441fd5" class="i method">GetMethod</a>(<span class="s">&quot;MultiFieldPrefixLabel&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#d1fa47f9abe3c16a" class="i field">Static</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#f9c44802799330f2" class="i field">InvokeMethod</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+                <span class="r36 r">position</span> = (<span class="i">Rect</span>)<span class="r42 r">method</span>.<a href="@0@mscorlib/A.html#c8277ed81262a367" class="i method">Invoke</a>(<b>null</b>, <b>new</b> <b>object</b>[] { <span class="r36 r">position</span>, 0, <span class="r38 r">label</span>, 1 });
+ 
+                <span class="i">EditorGUI</span>.<span class="i">BeginChangeCheck</span>();
+                <b>int</b> <span id="r43 rd" class="r43 r">indentLevel</span> = <span class="i">EditorGUI</span>.<span class="i">indentLevel</span>;
+                <span class="i">EditorGUI</span>.<span class="i">indentLevel</span> = 0;
+                <b>var</b> <span id="r44 rd" class="r44 r">stringValue</span> = <span class="i">EditorGUI</span>.<span class="i">TextArea</span>(<span class="r36 r">position</span>, <span class="r41 r">property</span>.<span class="i">stringValue</span>);
+                <span class="i">EditorGUI</span>.<span class="i">indentLevel</span> = <span class="r43 r">indentLevel</span>;
+                <b>if</b> (<span class="i">EditorGUI</span>.<span class="i">EndChangeCheck</span>())
+                {
+                    <span class="r41 r">property</span>.<span class="i">stringValue</span> = <span class="r44 r">stringValue</span>;
+                }
+                <span class="i">EditorGUI</span>.<span class="i">EndProperty</span>();
+            }
+        }
+ 
+        <a href="#a0b4ac8730f3edda" class="t t">MultilineReactivePropertyAttribute</a> <a id="9a697263660f942e" href="../../../../../R/9a697263660f942e.html" target="n" data-glyph="76,1" class="i method">GetMultilineAttribute</a>()
+        {
+            <b>var</b> <span id="r45 rd" class="r45 r">fi</span> = <a href="#e18668c7b08a8582" class="k">this</a>.<span class="i">fieldInfo</span>;
+            <b>if</b> (<span class="r45 r">fi</span> == <b>null</b>) <b>return null</b>;
+            <b>return</b> <span class="r45 r">fi</span>.<span class="i">GetCustomAttributes</span>(<b>false</b>).<span class="i">OfType</span>&lt;<a href="#a0b4ac8730f3edda" class="t t">MultilineReactivePropertyAttribute</a>&gt;().<span class="i">FirstOrDefault</span>();
+        }
+ 
+        <a href="#4da5218db6fafaa8" class="t t">RangeReactivePropertyAttribute</a> <a id="17933b8d04bddb1c" href="../../../../../R/17933b8d04bddb1c.html" target="n" data-glyph="76,1" class="i method">GetRangeAttribute</a>()
+        {
+            <b>var</b> <span id="r46 rd" class="r46 r">fi</span> = <a href="#e18668c7b08a8582" class="k">this</a>.<span class="i">fieldInfo</span>;
+            <b>if</b> (<span class="r46 r">fi</span> == <b>null</b>) <b>return null</b>;
+            <b>return</b> <span class="r46 r">fi</span>.<span class="i">GetCustomAttributes</span>(<b>false</b>).<span class="i">OfType</span>&lt;<a href="#4da5218db6fafaa8" class="t t">RangeReactivePropertyAttribute</a>&gt;().<span class="i">FirstOrDefault</span>();
+        }
+    }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+}</pre></td></tr></table></div></body></html>

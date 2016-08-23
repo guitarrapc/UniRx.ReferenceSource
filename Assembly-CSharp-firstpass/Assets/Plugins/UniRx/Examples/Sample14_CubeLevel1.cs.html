@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample14_CubeLevel1.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(51);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample14_CubeLevel1.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample14_CubeLevel1.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">Assets</span>.<span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <span class="c">// see:Sample14_PresenterBase</span>
+    <b>public class</b> <a id="0f32897f8addfd08" href="../../../../R/0f32897f8addfd08.html" target="n" data-glyph="0,0" class="t t"><span id="c2ccb64644c35a46">Sample14_CubeLevel1</span></a> : <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#e2409cb7857cbe5f" class="t t">PresenterBase</a>&lt;<b>float</b>&gt;
+    {
+        <b>public</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>float</b>&gt; <a id="e68a37e99ce4e0c8" href="../../../../R/e68a37e99ce4e0c8.html" target="n" data-glyph="102,1" class="i property">Number</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a href="Sample14_CubeLevel2.cs.html#8dfdb3d7d2321617" class="t t">Sample14_CubeLevel2</a> <a id="c4e3ac84a5db20e5" href="../../../../R/c4e3ac84a5db20e5.html" target="n" data-glyph="42,1" class="i field">child1</a>;
+        <b>public</b> <a href="Sample14_CubeLevel2.cs.html#8dfdb3d7d2321617" class="t t">Sample14_CubeLevel2</a> <a id="865219f81b924e5e" href="../../../../R/865219f81b924e5e.html" target="n" data-glyph="42,1" class="i field">child2</a>;
+ 
+        <b>protected override</b> <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#37414ce34e07779c" class="t t">IPresenter</a>[] <a id="606db344a315ca5a" href="../../../../R/606db344a315ca5a.html" target="n" data-glyph="105,1" class="i property">Children</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <b>new</b> <a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#37414ce34e07779c" class="t t">IPresenter</a>[] { <a href="#c4e3ac84a5db20e5" class="i field">child1</a>, <a href="#865219f81b924e5e" class="i field">child2</a> };
+            }
+        }
+ 
+        <b>protected override void</b> <a id="9e76646c71f7fc08" href="../../../../R/9e76646c71f7fc08.html" target="n" data-glyph="75,1" class="i method">OnAwake</a>()
+        {
+            <a href="Sample14_PresenterBase.cs.html#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkAwakePhase</span>(<a href="#0f32897f8addfd08" class="k">this</a>);
+        }
+ 
+        <b>protected override void</b> <a id="f0f22103898acfc4" href="../../../../R/f0f22103898acfc4.html" target="n" data-glyph="75,1" class="i method">BeforeInitialize</a>(<b>float</b> <span id="r0 rd" class="r0 r">argument</span>)
+        {
+            <a href="Sample14_PresenterBase.cs.html#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkCapturePhase</span>(<a href="#0f32897f8addfd08" class="k">this</a>);
+ 
+            <a href="#c4e3ac84a5db20e5" class="i field">child1</a>.<a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#280a6c0bc93226a0" class="i method">PropagateArgument</a>(<span class="r0 r">argument</span> * 2);
+            <a href="#865219f81b924e5e" class="i field">child2</a>.<a href="../Scripts/UnityEngineBridge/PresenterBase.cs.html#280a6c0bc93226a0" class="i method">PropagateArgument</a>(<span class="r0 r">argument</span> * 2);
+        }
+ 
+        <span class="c">// Initialize is like constructor.</span>
+        <span class="c">// This phase, called child -&gt; parent.</span>
+        <span class="c">// Therefore you can touch child&#39;s property safety.</span>
+        <b>protected override void</b> <a id="76aa9d5ede82b7df" href="../../../../R/76aa9d5ede82b7df.html" target="n" data-glyph="75,1" class="i method">Initialize</a>(<b>float</b> <span id="r1 rd" class="r1 r">argument</span>)
+        {
+            <a href="Sample14_PresenterBase.cs.html#a5858c3c5c4e5f99" class="t t">AnimationMarker</a>.<span class="i">MarkBubblingPhase</span>(<a href="#0f32897f8addfd08" class="k">this</a>);
+ 
+            <a href="#e68a37e99ce4e0c8" class="i property">Number</a> = <b>new</b> <a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>float</b>&gt;(<span class="r1 r">argument</span>);
+            <a href="#e68a37e99ce4e0c8" class="i property">Number</a>.<span class="i">Subscribe</span>(<span id="r2 rd" class="r2 r">x</span> =&gt;
+            {
+                <a href="#c4e3ac84a5db20e5" class="i field">child1</a>.<a href="Sample14_CubeLevel2.cs.html#0dfab9a3aa14186a" class="i property">Number</a>.<a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <span class="r2 r">x</span>;
+                <a href="#865219f81b924e5e" class="i field">child2</a>.<a href="Sample14_CubeLevel2.cs.html#0dfab9a3aa14186a" class="i property">Number</a>.<a href="../Scripts/UnityEngineBridge/ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <span class="r2 r">x</span>;
+                <a href="#0f32897f8addfd08" class="k">this</a>.<span class="i">GetComponent</span>&lt;<span class="i">Renderer</span>&gt;().<span class="i">material</span>.<span class="i">color</span> = <b>new</b> <span class="i">Color</span>(0.2f, <span class="r2 r">x</span>, 0.2f, 0);
+            });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

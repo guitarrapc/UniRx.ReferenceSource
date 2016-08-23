@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample09_EventHandling.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(69);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample09_EventHandling.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample09_EventHandling.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">disable</span> 0067
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="6fe671655b87fd55" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="73e26636d841ea7f">Sample09_EventHandling</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public class</b> <a id="193b8871e92e670c" href="../../../../R/193b8871e92e670c.html" target="n" data-glyph="0,1" class="t t"><span id="47bffcc60b5cea3f">MyEventArgs</span></a> : <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>
+        {
+            <b>public int</b> <a id="3ff467e19d111ea1" href="../../../../R/../../0000000000.html" target="n" data-glyph="102,2" class="i property">MyProperty</a> { <b>get</b>; <b>set</b>; }
+        }
+ 
+        <b>public event</b> <a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt; <a id="d4a5ac81088281b7" href="../../../../R/d4a5ac81088281b7.html" target="n" data-glyph="30,1" class="i">FooBar</a>;
+        <b>public event</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt; <a id="ad66a423086caaa8" href="../../../../R/ad66a423086caaa8.html" target="n" data-glyph="30,1" class="i">FooFoo</a>;
+ 
+        <a href="../Scripts/Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="t t">CompositeDisposable</a> <a id="b5e2c0942a710549" href="../../../../R/b5e2c0942a710549.html" target="n" data-glyph="46,1" class="i field">disposables</a> = <b>new</b> <a href="../Scripts/Disposables/CompositeDisposable.cs.html#b8fe93d2b696d1ee" class="t constructor">CompositeDisposable</a>();
+ 
+        <span class="c">// Subject is Rx&#39;s native event expression and recommend way for use Rx as event.</span>
+        <span class="c">// Subject.OnNext as fire event,</span>
+        <span class="c">// expose IObserver is subscibable for external source, it&#39;s no need convert.</span>
+        <a href="../Scripts/Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>int</b>&gt; <a id="fdaf5f80544ecd1b" href="../../../../R/fdaf5f80544ecd1b.html" target="n" data-glyph="46,1" class="i field">onBarBar</a> = <b>new</b> <a href="../Scripts/Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+        <b>public</b> <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="00a5e1c21cb7bb4d" href="../../../../R/00a5e1c21cb7bb4d.html" target="n" data-glyph="102,1" class="i property">OnBarBar</a> { <b>get</b> { <b>return</b> <a href="#fdaf5f80544ecd1b" class="i field">onBarBar</a>; } }
+ 
+        <b>void</b> <a id="e25c80fd87b0d761" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <span class="c">// convert to IO&lt;EventPattern&gt; as (sender, eventArgs)</span>
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Events.cs.html#686fa5d634964d8e" class="i method">FromEventPattern</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;, <a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;(
+                    <span id="r0 rd" class="r0 r">h</span> =&gt; <span class="r0 r">h</span>.<a href="@0@mscorlib/A.html#48225ee7c18a0e20" class="i method">Invoke</a>, <span id="r1 rd" class="r1 r">h</span> =&gt; <a href="#d4a5ac81088281b7" class="i">FooBar</a> += <span class="r1 r">h</span>, <span id="r2 rd" class="r2 r">h</span> =&gt; <a href="#d4a5ac81088281b7" class="i">FooBar</a> -= <span class="r2 r">h</span>)
+                .<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>()
+                .<a href="../Scripts/Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#b5e2c0942a710549" class="i field">disposables</a>); <span class="c">// IDisposable can add to collection easily by AddTo</span>
+ 
+            <span class="c">// convert to IO&lt;EventArgs&gt;, many situation this is useful than FromEventPattern</span>
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Events.cs.html#be55a8e5ff44c4ad" class="i method">FromEvent</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;, <a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;(
+                    <span id="r3 rd" class="r3 r">h</span> =&gt; (<span id="r4 rd" class="r4 r">sender</span>, <span id="r5 rd" class="r5 r">e</span>) =&gt; <span class="r3 r">h</span>(<span class="r5 r">e</span>), <span id="r6 rd" class="r6 r">h</span> =&gt; <a href="#d4a5ac81088281b7" class="i">FooBar</a> += <span class="r6 r">h</span>, <span id="r7 rd" class="r7 r">h</span> =&gt; <a href="#d4a5ac81088281b7" class="i">FooBar</a> -= <span class="r7 r">h</span>)
+                .<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>()
+                .<a href="../Scripts/Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#b5e2c0942a710549" class="i field">disposables</a>);
+ 
+            <span class="c">// You can convert Action like event.</span>
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Events.cs.html#80ac43fafe1e905c" class="i method">FromEvent</a>&lt;<b>int</b>&gt;(
+                    <span id="r8 rd" class="r8 r">h</span> =&gt; <a href="#ad66a423086caaa8" class="i">FooFoo</a> += <span class="r8 r">h</span>, <span id="r9 rd" class="r9 r">h</span> =&gt; <a href="#ad66a423086caaa8" class="i">FooFoo</a> -= <span class="r9 r">h</span>)
+                .<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>()
+                .<a href="../Scripts/Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#b5e2c0942a710549" class="i field">disposables</a>);
+ 
+            <span class="c">// AOT Safe EventHandling, use dummy capture, see:https://github.com/neuecc/UniRx/wiki/AOT-Exception-Patterns-and-Hacks</span>
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r10 rd" class="r10 r">capture</span> = 0;
+            <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/Observable.Events.cs.html#686fa5d634964d8e" class="i method">FromEventPattern</a>&lt;<a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;, <a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;(<span id="r11 rd" class="r11 r">h</span> =&gt;
+                {
+                    <span class="r10 r">capture</span>.<a href="@0@mscorlib/A.html#2d2b91f1bdc71dbb" class="i method">GetHashCode</a>(); <span class="c">// dummy for AOT</span>
+                    <b>return</b> <b>new</b> <span class="t">EventHandler</span>&lt;<a href="#193b8871e92e670c" class="t t">MyEventArgs</a>&gt;(<span class="r11 r">h</span>);
+                }, <span id="r12 rd" class="r12 r">h</span> =&gt; <a href="#d4a5ac81088281b7" class="i">FooBar</a> += <span class="r12 r">h</span>, <span id="r13 rd" class="r13 r">h</span> =&gt; <a href="#d4a5ac81088281b7" class="i">FooBar</a> -= <span class="r13 r">h</span>)
+                .<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>()
+                .<a href="../Scripts/Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#b5e2c0942a710549" class="i field">disposables</a>);
+ 
+            <span class="c">// Subject as like event.</span>
+            <a href="#00a5e1c21cb7bb4d" class="i property">OnBarBar</a>.<a href="../Scripts/Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>().<a href="../Scripts/Disposables/DisposableExtensions.cs.html#c51d3c66ab03fb0c" class="i method">AddTo</a>(<a href="#b5e2c0942a710549" class="i field">disposables</a>);
+            <a href="#fdaf5f80544ecd1b" class="i field">onBarBar</a>.<a href="../Scripts/Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(1); <span class="c">// fire event</span>
+        }
+ 
+        <b>void</b> <a id="aac062641bea960b" href="../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnDestroy</a>()
+        {
+            <span class="c">// manage subscription lifecycle</span>
+            <a href="#b5e2c0942a710549" class="i field">disposables</a>.<a href="../Scripts/Disposables/CompositeDisposable.cs.html#e408ca6ae4b425ae" class="i method">Dispose</a>();
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">pragma</span> <span class="k preprocess">warning</span> <span class="k preprocess">restore</span> 0067</pre></td></tr></table></div></body></html>

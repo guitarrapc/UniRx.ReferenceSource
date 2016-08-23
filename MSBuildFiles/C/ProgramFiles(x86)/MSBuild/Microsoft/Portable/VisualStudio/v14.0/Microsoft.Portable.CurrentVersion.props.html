@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Portable.CurrentVersion.props</title><link rel="stylesheet" href="../../../../../../../../styles.css"><script src="../../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(45);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/VisualStudio/v14.0/Microsoft.Portable.CurrentVersion.props" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\VisualStudio\v14.0\Microsoft.Portable.CurrentVersion.props</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.Portable.CurrentVersion.props
+ 
+Contains common properties that are shared by all portable library projects targeting a specific
+Visual Studio version.
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">ItemDefinitionGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;!--</span><span class="c"> Hide TargetPlatform items by default so that they don&#39;t show up as visible in the project </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn">TargetPlatform</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn">Visible</span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">Visible</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">TargetPlatform</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">ItemDefinitionGroup</span><span class="xd">&gt;</span><span class="xd">
+    
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetPlatformMonikerDisplayName.html" target="n" class="msbuildlink">TargetPlatformMonikerDisplayName</a></span><span class="xd">&gt;</span>Windows<span class="xd">&lt;/</span><span class="xn">TargetPlatformMonikerDisplayName</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/PortableSDKRoot.html" target="n" class="msbuildlink">PortableSDKRoot</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/PortableSDKRoot.html" target="n" class="msbuildlink">PortableSDKRoot</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildProgramFiles32.html" target="n" class="msbuildlink">MSBuildProgramFiles32</a>)\Microsoft SDKs\Portable\v$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)<span class="xd">&lt;/</span><span class="xn">PortableSDKRoot</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;!--</span><span class="c"> Assume TargetPlatformResourceVersion of 8.1 and AppxOSMinVersion of 6.3.0.
+             In future releases we may need to set this in the project or pull it from properties associated with the intersection. </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetPlatformResourceVersion.html" target="n" class="msbuildlink">TargetPlatformResourceVersion</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetPlatformResourceVersion.html" target="n" class="msbuildlink">TargetPlatformResourceVersion</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>8.1<span class="xd">&lt;/</span><span class="xn">TargetPlatformResourceVersion</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AppxOSMinVersion.html" target="n" class="msbuildlink">AppxOSMinVersion</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/AppxOSMinVersion.html" target="n" class="msbuildlink">AppxOSMinVersion</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>6.3.0<span class="xd">&lt;/</span><span class="xn">AppxOSMinVersion</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;!--</span><span class="c"> Use latest </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/XamlTargetPlatformVersion.html" target="n" class="msbuildlink">XamlTargetPlatformVersion</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/XamlTargetPlatformVersion.html" target="n" class="msbuildlink">XamlTargetPlatformVersion</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>8.1<span class="xd">&lt;/</span><span class="xn">XamlTargetPlatformVersion</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/WindowsUIXamlCommonTargets.html" target="n" class="msbuildlink">WindowsUIXamlCommonTargets</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/WindowsUIXamlCommonTargets.html" target="n" class="msbuildlink">WindowsUIXamlCommonTargets</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/MSBuildExtensionsPath32.html" target="n" class="msbuildlink">MSBuildExtensionsPath32</a>)\Microsoft\WindowsXaml\v$(<a href="/MSBuildProperties/R/VisualStudioVersion.html" target="n" class="msbuildlink">VisualStudioVersion</a>)\$(<a href="/MSBuildProperties/R/XamlTargetPlatformVersion.html" target="n" class="msbuildlink">XamlTargetPlatformVersion</a>)\Microsoft.Windows.UI.Xaml.Common.targets<span class="xd">&lt;/</span><span class="xn">WindowsUIXamlCommonTargets</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;!--</span><span class="c"> Set WindowsAppContainer to bring in the AppX targets for packaging outputs and resource support </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/WindowsAppContainer.html" target="n" class="msbuildlink">WindowsAppContainer</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/WindowsAppContainer.html" target="n" class="msbuildlink">WindowsAppContainer</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">WindowsAppContainer</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;!--</span><span class="c"> Automatically reference all WinMDs in the target platform </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImplicitlyExpandTargetPlatform.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatform</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetPlatform.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatform</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">ImplicitlyExpandTargetPlatform</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

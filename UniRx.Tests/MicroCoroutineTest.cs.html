@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html><head><title>MicroCoroutineTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(307);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/MicroCoroutineTest.cs" target="_top">MicroCoroutineTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Reflection</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    <b>class</b> <a id="879567f190b0404f" href="R/879567f190b0404f.html" target="n" data-glyph="2,0" class="t t">DecrementEnumerator</a> : <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>
+    {
+        <b>readonly int</b> <a id="3b383e50c31f78d1" href="R/3b383e50c31f78d1.html" target="n" data-glyph="46,1" class="i field">original</a>;
+        <b>int</b> <a id="69413be718a77e6e" href="R/69413be718a77e6e.html" target="n" data-glyph="46,1" class="i field">count</a>;
+ 
+        <b>public</b> <a id="2d9a2a5e17eed4a6" href="R/2d9a2a5e17eed4a6.html" target="n" data-glyph="72,1" class="i constructor">DecrementEnumerator</a>(<b>int</b> <span id="r0 rd" class="r0 r">count</span>)
+        {
+            <a href="#879567f190b0404f" class="k">this</a>.<a href="#3b383e50c31f78d1" class="i field">original</a> = <span class="r0 r">count</span>;
+            <a href="#879567f190b0404f" class="k">this</a>.<a href="#69413be718a77e6e" class="i field">count</a> = <span class="r0 r">count</span>;
+        }
+ 
+        <b>public object</b> <a id="b8dd12fe3bc88756" href="R/b8dd12fe3bc88756.html" target="n" data-glyph="102,1" class="i property">Current</a>
+        {
+            <b>get</b>
+            {
+                <b>return null</b>;
+            }
+        }
+        <b>public int</b> <a id="294d82239a709567" href="R/294d82239a709567.html" target="n" data-glyph="102,1" class="i property">OriginalCount</a> =&gt; <a href="#3b383e50c31f78d1" class="i field">original</a>;
+ 
+        <b>public int</b> <a id="9f2ac65f54acd268" href="R/9f2ac65f54acd268.html" target="n" data-glyph="102,1" class="i property">Count</a> =&gt; <a href="#69413be718a77e6e" class="i field">count</a>;
+ 
+        <b>public bool</b> <a id="4aa76726693f7fa9" href="R/4aa76726693f7fa9.html" target="n" data-glyph="72,1" class="i method">MoveNext</a>()
+        {
+            <b>return</b> <a href="#69413be718a77e6e" class="i field">count</a>-- &gt; 0;
+        }
+ 
+        <b>public void</b> <a id="c73f6a7cc0237d8d" href="R/c73f6a7cc0237d8d.html" target="n" data-glyph="72,1" class="i method">Reset</a>()
+        {
+            <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#ab0acd5f99886747" class="t constructor">NotSupportedException</a>();
+        }
+ 
+        <b>public override string</b> <a id="5aea76b3f0cd0a79" href="R/5aea76b3f0cd0a79.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">$&quot;</span>{<a href="#69413be718a77e6e" class="i field">count</a>}<span class="s">/</span>{<a href="#3b383e50c31f78d1" class="i field">original</a>}<span class="s">&quot;</span>;
+        }
+    }
+ 
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="0cc70a02d0aff64f" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="370e5417ccc5603a">MicroCoroutineTest</span></a>
+    {
+        <b>static</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="/UniRx/A.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <a id="e9f1f8157438b438" href="R/e9f1f8157438b438.html" target="n" data-glyph="76,1" class="i method">Create</a>()
+        {
+            <b>return</b> <b>new</b> <span class="i n">InternalUtil</span>.<a href="/UniRx/A.html#9ae1cfa971857447" class="t constructor">MicroCoroutine</a>(<span id="r1 rd" class="r1 r">ex</span> =&gt; <a href="@0@mscorlib/A.html#f907d79481da6ba4" class="t t">Console</a>.<a href="@0@mscorlib/A.html#17999987f8ff4399" class="i method">WriteLine</a>(<span class="r1 r">ex</span>));
+        }
+ 
+        <b>static int</b> <a id="e81960b3d0ffc514" href="R/e81960b3d0ffc514.html" target="n" data-glyph="76,1" class="i method">FindLast</a>(<span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="/UniRx/A.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <span id="r2 rd" class="r2 r">mc</span>)
+        {
+            <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r3 rd" class="r3 r">coroutines</span> = <span class="r2 r">mc</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="s">&quot;coroutines&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#3cd29d73949adaa3" class="i field">GetField</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a>);
+            <b>var</b> <span id="r4 rd" class="r4 r">enumerators</span> = (<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>[])<span class="r3 r">coroutines</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r2 r">mc</span>);
+ 
+            <b>int</b> <span id="r5 rd" class="r5 r">tail</span> = -1;
+            <b>for</b> (<b>int</b> <span id="r6 rd" class="r6 r">i</span> = 0; <span class="r6 r">i</span> &lt; <span class="r4 r">enumerators</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r6 r">i</span>++)
+            {
+                <b>if</b> (<span class="r4 r">enumerators</span>[<span class="r6 r">i</span>] == <b>null</b>)
+                {
+                    <b>if</b> (<span class="r5 r">tail</span> == -1)
+                    {
+                        <span class="r5 r">tail</span> = <span class="r6 r">i</span>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>if</b> (<span class="r5 r">tail</span> != -1)
+                    {
+                        <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#df2d82d91ca29e40" class="t constructor">Exception</a>(<span class="s">&quot;what&#39;s happen?&quot;</span>);
+                    }
+                }
+            }
+ 
+            <b>if</b> (<span class="r5 r">tail</span> == -1) <span class="r5 r">tail</span> = <span class="r4 r">enumerators</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+            <b>return</b> <span class="r5 r">tail</span>;
+        }
+ 
+        <b>static int</b> <a id="37ad711dc31de0cc" href="R/37ad711dc31de0cc.html" target="n" data-glyph="76,1" class="i method">GetTailDynamic</a>(<span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="/UniRx/A.html#20c342fba3b28c4c" class="t t">MicroCoroutine</a> <span id="r7 rd" class="r7 r">mc</span>)
+        {
+            <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r8 rd" class="r8 r">tail</span> = <span class="r7 r">mc</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="s">&quot;tail&quot;</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#3cd29d73949adaa3" class="i field">GetField</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a>);
+            <b>return</b> (<b>int</b>)<span class="r8 r">tail</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r7 r">mc</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="dbb713a85990eef6" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">EnumerationCycle</a>()
+        {
+            <b>var</b> <span id="r9 rd" class="r9 r">coroutines</span> = <b>new</b>[]
+            {
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(2),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(3),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(4),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(5),
+            };
+ 
+            <a href="/UniRx/A.html#20c342fba3b28c4c" class="k">var</a> <span id="r10 rd" class="r10 r">mc</span> = <a href="#e9f1f8157438b438" class="i method">Create</a>();
+            <b>foreach</b> (<a href="#879567f190b0404f" class="k">var</a> <span id="r11 rd" class="r11 r">item</span> <b>in</b> <span class="r9 r">coroutines</span>)
+            {
+                <span class="r10 r">mc</span>.<a href="/UniRx/A.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r11 r">item</span>);
+            }
+ 
+            <span class="r10 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r10 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5);
+            <span class="r9 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r12 rd" class="r12 r">x</span> =&gt; <span class="r12 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r13 rd" class="r13 r">x</span> =&gt; <span class="r13 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 1, 2, 3, 4);
+ 
+            <span class="r10 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r10 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(4);
+            <span class="r9 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r14 rd" class="r14 r">x</span> =&gt; <span class="r14 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r15 rd" class="r15 r">x</span> =&gt; <span class="r15 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, 0, 1, 2, 3);
+ 
+            <span class="r10 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r10 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(3);
+            <span class="r9 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r16 rd" class="r16 r">x</span> =&gt; <span class="r16 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r17 rd" class="r17 r">x</span> =&gt; <span class="r17 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, -1, 0, 1, 2);
+ 
+            <span class="r10 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r10 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(2);
+            <span class="r9 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r18 rd" class="r18 r">x</span> =&gt; <span class="r18 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r19 rd" class="r19 r">x</span> =&gt; <span class="r19 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, -1, -1, 0, 1);
+ 
+            <span class="r10 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r10 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(1);
+            <span class="r9 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r20 rd" class="r20 r">x</span> =&gt; <span class="r20 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r21 rd" class="r21 r">x</span> =&gt; <span class="r21 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, -1, -1, -1, 0);
+ 
+            <span class="r10 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r10 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+            <span class="r9 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r22 rd" class="r22 r">x</span> =&gt; <span class="r22 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r23 rd" class="r23 r">x</span> =&gt; <span class="r23 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, -1, -1, -1, -1);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="a6e673f93cc9dc0b" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">EnumerationCycleBlank</a>()
+        {
+            <b>var</b> <span id="r24 rd" class="r24 r">coroutines</span> = <b>new</b>[]
+            {
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(0),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(0),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(0),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(0),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(0),
+            };
+ 
+            <a href="/UniRx/A.html#20c342fba3b28c4c" class="k">var</a> <span id="r25 rd" class="r25 r">mc</span> = <a href="#e9f1f8157438b438" class="i method">Create</a>();
+            <b>foreach</b> (<a href="#879567f190b0404f" class="k">var</a> <span id="r26 rd" class="r26 r">item</span> <b>in</b> <span class="r24 r">coroutines</span>)
+            {
+                <span class="r25 r">mc</span>.<a href="/UniRx/A.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r26 r">item</span>);
+            }
+ 
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r25 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(5);
+ 
+            <span class="r25 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r25 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+            <span class="r24 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r27 rd" class="r27 r">x</span> =&gt; <span class="r27 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r28 rd" class="r28 r">x</span> =&gt; <span class="r28 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, -1, -1, -1, -1);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="9c54a874a1e5b7d4" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">EnumerationCycleFull</a>()
+        {
+            <b>var</b> <span id="r29 rd" class="r29 r">coroutines</span> = <b>new</b>[]
+            {
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+                <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(1),
+            };
+ 
+            <a href="/UniRx/A.html#20c342fba3b28c4c" class="k">var</a> <span id="r30 rd" class="r30 r">mc</span> = <a href="#e9f1f8157438b438" class="i method">Create</a>();
+            <b>foreach</b> (<a href="#879567f190b0404f" class="k">var</a> <span id="r31 rd" class="r31 r">item</span> <b>in</b> <span class="r29 r">coroutines</span>)
+            {
+                <span class="r30 r">mc</span>.<a href="/UniRx/A.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r31 r">item</span>);
+            }
+ 
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r30 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(16);
+ 
+            <span class="r30 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r30 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(16);
+            <span class="r29 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r32 rd" class="r32 r">x</span> =&gt; <span class="r32 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r33 rd" class="r33 r">x</span> =&gt; <span class="r33 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+ 
+            <span class="r30 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+            <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r30 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+            <span class="r29 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r34 rd" class="r34 r">x</span> =&gt; <span class="r34 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r35 rd" class="r35 r">x</span> =&gt; <span class="r35 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="83844d0f893d0754" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">EnumerationCycleRandom</a>()
+        {
+            <span class="c">// pattern for shuffle</span>
+            <a href="@0@mscorlib/A.html#bb77e610694e64ca" class="k">var</a> <span id="r36 rd" class="r36 r">rand</span> = <b>new</b> <span class="i n">System</span>.<a href="@0@mscorlib/A.html#5d22f8880fc9f8d9" class="t constructor">Random</a>();
+            <span class="c">// large number</span>
+            {
+                <b>for</b> (<b>int</b> <span id="r37 rd" class="r37 r">i</span> = 0; <span class="r37 r">i</span> &lt; 1000; <span class="r37 r">i</span>++)
+                {
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r38 rd" class="r38 r">expectedTail</span> = <span class="r36 r">rand</span>.<a href="@0@mscorlib/A.html#ddd1e9e09c70bab5" class="i method">Next</a>(1, 100);
+ 
+                    <b>var</b> <span id="r39 rd" class="r39 r">coroutines</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, <span class="r38 r">expectedTail</span>)
+                        .<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r40 rd" class="r40 r">x</span> =&gt; <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(<span class="r36 r">rand</span>.<a href="@0@mscorlib/A.html#ddd1e9e09c70bab5" class="i method">Next</a>(0, 100)))
+                        .<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                    <a href="/UniRx/A.html#20c342fba3b28c4c" class="k">var</a> <span id="r41 rd" class="r41 r">mc</span> = <a href="#e9f1f8157438b438" class="i method">Create</a>();
+                    <b>foreach</b> (<a href="#879567f190b0404f" class="k">var</a> <span id="r42 rd" class="r42 r">item</span> <b>in</b> <span class="r39 r">coroutines</span>)
+                    {
+                        <span class="r41 r">mc</span>.<a href="/UniRx/A.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r42 r">item</span>);
+                    }
+ 
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r43 rd" class="r43 r">maxRunCount</span> = <span class="r39 r">coroutines</span>.<a href="@0@System.Core/A.html#f74d20c7edf30968" class="i method">Max</a>(<span id="r44 rd" class="r44 r">x</span> =&gt; <span class="r44 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>);
+                    <b>var</b> <span id="r45 rd" class="r45 r">expected</span> = <span class="r39 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r46 rd" class="r46 r">x</span> =&gt; <span class="r46 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r47 rd" class="r47 r">x</span> =&gt; <span class="r47 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+ 
+ 
+                    <b>for</b> (<b>int</b> <span id="r48 rd" class="r48 r">j</span> = 0; <span class="r48 r">j</span> &lt; <span class="r43 r">maxRunCount</span> + 1; <span class="r48 r">j</span>++)
+                    {
+                        <span class="r41 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+ 
+                        <span class="c">// validate</span>
+                        <span class="r45 r">expected</span> = <span class="r45 r">expected</span>.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r49 rd" class="r49 r">x</span> =&gt; (<span class="r49 r">x</span> == -1) ? -1 : (<span class="r49 r">x</span> - 1)).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+                        <span class="r39 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r50 rd" class="r50 r">x</span> =&gt; <span class="r50 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r51 rd" class="r51 r">x</span> =&gt; <span class="r51 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="r45 r">expected</span>);
+ 
+                        <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r52 rd" class="r52 r">tail</span> = <a href="#e81960b3d0ffc514" class="i method">FindLast</a>(<span class="r41 r">mc</span>);
+                        <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r41 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<span class="r52 r">tail</span>);
+                    }
+                    <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r41 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+                }
+            }
+            {
+                <span class="c">// small case</span>
+                <b>for</b> (<b>int</b> <span id="r53 rd" class="r53 r">i</span> = 0; <span class="r53 r">i</span> &lt; 1000; <span class="r53 r">i</span>++)
+                {
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r54 rd" class="r54 r">expectedTail</span> = <span class="r36 r">rand</span>.<a href="@0@mscorlib/A.html#ddd1e9e09c70bab5" class="i method">Next</a>(1, 100);
+ 
+                    <b>var</b> <span id="r55 rd" class="r55 r">coroutines</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, <span class="r54 r">expectedTail</span>)
+                        .<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r56 rd" class="r56 r">x</span> =&gt; <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(<span class="r36 r">rand</span>.<a href="@0@mscorlib/A.html#ddd1e9e09c70bab5" class="i method">Next</a>(0, 5)))
+                        .<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                    <a href="/UniRx/A.html#20c342fba3b28c4c" class="k">var</a> <span id="r57 rd" class="r57 r">mc</span> = <a href="#e9f1f8157438b438" class="i method">Create</a>();
+                    <b>foreach</b> (<a href="#879567f190b0404f" class="k">var</a> <span id="r58 rd" class="r58 r">item</span> <b>in</b> <span class="r55 r">coroutines</span>)
+                    {
+                        <span class="r57 r">mc</span>.<a href="/UniRx/A.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r58 r">item</span>);
+                    }
+ 
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r59 rd" class="r59 r">maxRunCount</span> = <span class="r55 r">coroutines</span>.<a href="@0@System.Core/A.html#f74d20c7edf30968" class="i method">Max</a>(<span id="r60 rd" class="r60 r">x</span> =&gt; <span class="r60 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>);
+                    <b>var</b> <span id="r61 rd" class="r61 r">expected</span> = <span class="r55 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r62 rd" class="r62 r">x</span> =&gt; <span class="r62 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r63 rd" class="r63 r">x</span> =&gt; <span class="r63 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                    <b>for</b> (<b>int</b> <span id="r64 rd" class="r64 r">j</span> = 0; <span class="r64 r">j</span> &lt; <span class="r59 r">maxRunCount</span> + 1; <span class="r64 r">j</span>++)
+                    {
+                        <span class="r57 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+ 
+                        <span class="c">// validate</span>
+                        <span class="r61 r">expected</span> = <span class="r61 r">expected</span>.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r65 rd" class="r65 r">x</span> =&gt; (<span class="r65 r">x</span> == -1) ? -1 : (<span class="r65 r">x</span> - 1)).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+                        <span class="r55 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r66 rd" class="r66 r">x</span> =&gt; <span class="r66 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r67 rd" class="r67 r">x</span> =&gt; <span class="r67 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="r61 r">expected</span>);
+ 
+                        <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r68 rd" class="r68 r">tail</span> = <a href="#e81960b3d0ffc514" class="i method">FindLast</a>(<span class="r57 r">mc</span>);
+                        <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r57 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<span class="r68 r">tail</span>);
+                    }
+                    <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r57 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+                }
+            }
+            {
+                <span class="c">// small case2</span>
+                <b>for</b> (<b>int</b> <span id="r69 rd" class="r69 r">i</span> = 0; <span class="r69 r">i</span> &lt; 1000; <span class="r69 r">i</span>++)
+                {
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r70 rd" class="r70 r">expectedTail</span> = <span class="r36 r">rand</span>.<a href="@0@mscorlib/A.html#ddd1e9e09c70bab5" class="i method">Next</a>(1, 10);
+ 
+                    <b>var</b> <span id="r71 rd" class="r71 r">coroutines</span> = <a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#fda9d378095a6464" class="i method">Range</a>(1, <span class="r70 r">expectedTail</span>)
+                        .<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r72 rd" class="r72 r">x</span> =&gt; <b>new</b> <a href="#2d9a2a5e17eed4a6" class="t constructor">DecrementEnumerator</a>(<span class="r36 r">rand</span>.<a href="@0@mscorlib/A.html#ddd1e9e09c70bab5" class="i method">Next</a>(0, 5)))
+                        .<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                    <a href="/UniRx/A.html#20c342fba3b28c4c" class="k">var</a> <span id="r73 rd" class="r73 r">mc</span> = <a href="#e9f1f8157438b438" class="i method">Create</a>();
+                    <b>foreach</b> (<a href="#879567f190b0404f" class="k">var</a> <span id="r74 rd" class="r74 r">item</span> <b>in</b> <span class="r71 r">coroutines</span>)
+                    {
+                        <span class="r73 r">mc</span>.<a href="/UniRx/A.html#0b8951d0ecd60933" class="i method">AddCoroutine</a>(<span class="r74 r">item</span>);
+                    }
+ 
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r75 rd" class="r75 r">maxRunCount</span> = <span class="r71 r">coroutines</span>.<a href="@0@System.Core/A.html#f74d20c7edf30968" class="i method">Max</a>(<span id="r76 rd" class="r76 r">x</span> =&gt; <span class="r76 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>);
+                    <b>var</b> <span id="r77 rd" class="r77 r">expected</span> = <span class="r71 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r78 rd" class="r78 r">x</span> =&gt; <span class="r78 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r79 rd" class="r79 r">x</span> =&gt; <span class="r79 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+                    <b>for</b> (<b>int</b> <span id="r80 rd" class="r80 r">j</span> = 0; <span class="r80 r">j</span> &lt; <span class="r75 r">maxRunCount</span> + 1; <span class="r80 r">j</span>++)
+                    {
+                        <span class="r73 r">mc</span>.<a href="/UniRx/A.html#20107e2078f9d8d5" class="i method">Run</a>();
+ 
+                        <span class="c">// validate</span>
+                        <span class="r77 r">expected</span> = <span class="r77 r">expected</span>.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r81 rd" class="r81 r">x</span> =&gt; (<span class="r81 r">x</span> == -1) ? -1 : (<span class="r81 r">x</span> - 1)).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+                        <span class="r71 r">coroutines</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r82 rd" class="r82 r">x</span> =&gt; <span class="r82 r">x</span>.<a href="#294d82239a709567" class="i property">OriginalCount</a>).<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r83 rd" class="r83 r">x</span> =&gt; <span class="r83 r">x</span>.<a href="#9f2ac65f54acd268" class="i property">Count</a>).<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="r77 r">expected</span>);
+ 
+                        <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r84 rd" class="r84 r">tail</span> = <a href="#e81960b3d0ffc514" class="i method">FindLast</a>(<span class="r73 r">mc</span>);
+                        <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r73 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(<span class="r84 r">tail</span>);
+                    }
+                    <a href="#37ad711dc31de0cc" class="i method">GetTailDynamic</a>(<span class="r73 r">mc</span>).<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+                }
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

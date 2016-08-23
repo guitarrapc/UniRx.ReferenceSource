@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html><head><title>Range</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">80 references to Range</div><div class="rA">UniRx.Console (5)</div><div class="rG" id="UniRx.Console"><div class="rF"><div class="rN">Program.cs (5)</div>
+<a href="../../UniRx.Console/Program.cs.html#82"><b>82</b>Test(&quot;Range&quot;, () =&gt; Observable.<i>Range</i>(1, 3).Subscribe(x =&gt; Console.WriteLine(x)));</a>
+<a href="../../UniRx.Console/Program.cs.html#84"><b>84</b>Test(&quot;IgnoreElements&quot;, () =&gt; Observable.<i>Range</i>(1, 3).IgnoreElements().Subscribe(x =&gt; Console.WriteLine(x)));</a>
+<a href="../../UniRx.Console/Program.cs.html#88"><b>88</b>Test(&quot;ToArray&quot;, () =&gt; Observable.<i>Range</i>(1, 3).ToArray().Subscribe(xs =&gt; Console.WriteLine(xs.Length)));</a>
+<a href="../../UniRx.Console/Program.cs.html#98"><b>98</b>Test(&quot;Where&quot;, () =&gt; Observable.<i>Range</i>(1, 5).Where(x =&gt; x % 2 == 0).Subscribe());</a>
+<a href="../../UniRx.Console/Program.cs.html#100"><b>100</b>Test(&quot;SkipWhile&quot;, () =&gt; Observable.<i>Range</i>(1, 5).SkipWhile(x =&gt; x &lt;= 3).Subscribe(Console.WriteLine));</a>
+</div>
+</div>
+<div class="rA">UniRx.Tests (75)</div><div class="rG" id="UniRx.Tests"><div class="rF"><div class="rN">AggregateTest.cs (4)</div>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#12"><b>12</b>var range = Observable.<i>Range</i>(1, 5);</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#25"><b>25</b>Observable.<i>Range</i>(1, 5).Aggregate((x, y) =&gt; x + y).Wait().Is(15);</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#28"><b>28</b>Observable.<i>Range</i>(1, 5).Aggregate(100, (x, y) =&gt; x + y).Wait().Is(115);</a>
+<a href="../../UniRx.Tests/AggregateTest.cs.html#31"><b>31</b>Observable.<i>Range</i>(1, 5).Aggregate(100, (x, y) =&gt; x + y, x =&gt; x + x).Wait().Is(230);</a>
+</div>
+<div class="rF"><div class="rN">ConversionTest.cs (3)</div>
+<a href="../../UniRx.Tests/ConversionTest.cs.html#14"><b>14</b>Observable.<i>Range</i>(1, 10).AsObservable().ToArrayWait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../UniRx.Tests/ConversionTest.cs.html#20"><b>20</b>Observable.<i>Range</i>(1, 3).AsUnitObservable().ToArrayWait().IsCollection(Unit.Default, Unit.Default, Unit.Default);</a>
+<a href="../../UniRx.Tests/ConversionTest.cs.html#34"><b>34</b>Observable.<i>Range</i>(1, 3).Cast&lt;int, object&gt;().ToArrayWait().IsCollection(1, 2, 3);</a>
+</div>
+<div class="rF"><div class="rN">DoTest.cs (12)</div>
+<a href="../../UniRx.Tests/DoTest.cs.html#40"><b>40</b>Observable.<i>Range</i>(1, 5).Do(x =&gt; list.Add(x), ex =&gt; list.Add(100), () =&gt; list.Add(1000)).Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#44"><b>44</b>Observable.<i>Range</i>(1, 5).Concat(Observable.Throw&lt;int&gt;(new Exception())).Do(x =&gt; list.Add(x), ex =&gt; list.Add(100), () =&gt; list.Add(1000)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#56"><b>56</b>Observable.<i>Range</i>(1, 5).Do(observer).Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#60"><b>60</b>Observable.<i>Range</i>(1, 5).Concat(Observable.Throw&lt;int&gt;(new Exception())).Do(observer).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#72"><b>72</b>Observable.<i>Range</i>(1, 5).DoOnError(_ =&gt; list.Add(100)).Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#76"><b>76</b>Observable.<i>Range</i>(1, 5).Concat(Observable.Throw&lt;int&gt;(new Exception())).DoOnError(_ =&gt; list.Add(100)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#88"><b>88</b>Observable.<i>Range</i>(1, 5).DoOnCompleted(() =&gt; list.Add(1000)).Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#92"><b>92</b>Observable.<i>Range</i>(1, 5).Concat(Observable.Throw&lt;int&gt;(new Exception())).DoOnCompleted(() =&gt; list.Add(1000)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#104"><b>104</b>Observable.<i>Range</i>(1, 5).DoOnTerminate(() =&gt; list.Add(1000)).Wait();</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#108"><b>108</b>Observable.<i>Range</i>(1, 5).Concat(Observable.Throw&lt;int&gt;(new Exception())).DoOnTerminate(() =&gt; list.Add(1000)).Subscribe(_ =&gt; { }, _ =&gt; { }, () =&gt; { });</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#122"><b>122</b>Observable.<i>Range</i>(1, 5)</a>
+<a href="../../UniRx.Tests/DoTest.cs.html#128"><b>128</b>Observable.<i>Range</i>(1, 5).Concat(Observable.Throw&lt;int&gt;(new Exception()))</a>
+</div>
+<div class="rF"><div class="rN">Observable.ConcatTest.cs (1)</div>
+<a href="../../UniRx.Tests/Observable.ConcatTest.cs.html#608"><b>608</b>var seq = Observable.<i>Range</i>(1, 5);</a>
+</div>
+<div class="rF"><div class="rN">Observable.ConcurrencyTest.cs (7)</div>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#15"><b>15</b>var xs = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#40"><b>40</b>var xs = Observable.Return(10).Delay(TimeSpan.FromSeconds(1)).Concat(Observable.<i>Range</i>(1, 3));</a>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#42"><b>42</b>var xss = Observable.Return(10).Concat(Observable.<i>Range</i>(1, 3));</a>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#48"><b>48</b>var ys = Observable.Return(30).Delay(TimeSpan.FromSeconds(2)).Concat(Observable.<i>Range</i>(5, 3));</a>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#70"><b>70</b>var xs = Observable.Return(10).Delay(TimeSpan.FromSeconds(5)).Concat(Observable.<i>Range</i>(1, 3));</a>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#71"><b>71</b>var ys = Observable.Return(30).Delay(TimeSpan.FromSeconds(1)).Concat(Observable.<i>Range</i>(5, 3));</a>
+<a href="../../UniRx.Tests/Observable.ConcurrencyTest.cs.html#72"><b>72</b>var zs = Observable.Return(50).Delay(TimeSpan.FromSeconds(3)).Concat(Observable.<i>Range</i>(9, 3));</a>
+</div>
+<div class="rF"><div class="rN">Observable.ErrorHandlingTest.cs (2)</div>
+<a href="../../UniRx.Tests/Observable.ErrorHandlingTest.cs.html#38"><b>38</b>return Observable.<i>Range</i>(1, 3);</a>
+<a href="../../UniRx.Tests/Observable.ErrorHandlingTest.cs.html#53"><b>53</b>Observable.<i>Range</i>(10,2)</a>
+</div>
+<div class="rF"><div class="rN">Observable.GeneratorTest.cs (1)</div>
+<a href="../../UniRx.Tests/Observable.GeneratorTest.cs.html#33"><b>33</b>Observable.<i>Range</i>(1, 5).ToArray().Wait().IsCollection(1, 2, 3, 4, 5);</a>
+</div>
+<div class="rF"><div class="rN">Observable.PagingTest.cs (20)</div>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#15"><b>15</b>var xs = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#30"><b>30</b>var xs = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#96"><b>96</b>var xs = Observable.<i>Range</i>(1, 2)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#121"><b>121</b>var xs = Observable.<i>Range</i>(1, 10).Buffer(3, 1)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#139"><b>139</b>var xs = Observable.<i>Range</i>(1, 10).Buffer(3, 3)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#151"><b>151</b>var xs = Observable.<i>Range</i>(1, 20).Buffer(3, 5)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#169"><b>169</b>.Concat(Observable.<i>Range</i>(1, 7))</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#183"><b>183</b>.Concat(Observable.<i>Range</i>(1, 7))</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#199"><b>199</b>.Concat(Observable.<i>Range</i>(1, 2))</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#775"><b>775</b>Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#830"><b>830</b>Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#837"><b>837</b>var range = Observable.<i>Range</i>(1, 10);</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#881"><b>881</b>Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#891"><b>891</b>Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#946"><b>946</b>var xs = Observable.<i>Range</i>(1, 5).Pairwise((x, y) =&gt; x + &quot;:&quot; + y).ToArrayWait();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#953"><b>953</b>var xs = Observable.<i>Range</i>(1, 5).Pairwise().ToArrayWait();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#963"><b>963</b>var record = Observable.<i>Range</i>(1, 2).TakeLast(3).Record();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#966"><b>966</b>record = Observable.<i>Range</i>(1, 3).TakeLast(3).Record();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#969"><b>969</b>record = Observable.<i>Range</i>(1, 4).TakeLast(3).Record();</a>
+<a href="../../UniRx.Tests/Observable.PagingTest.cs.html#972"><b>972</b>record = Observable.<i>Range</i>(1, 10).TakeLast(3).Record();</a>
+</div>
+<div class="rF"><div class="rN">Observable.TimeTest.cs (1)</div>
+<a href="../../UniRx.Tests/Observable.TimeTest.cs.html#95"><b>95</b>var xs = Observable.<i>Range</i>(1, 3)</a>
+</div>
+<div class="rF"><div class="rN">ObservableTest.cs (8)</div>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#281"><b>281</b>m = Observable.<i>Range</i>(1, 3).Materialize().ToArrayWait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#287"><b>287</b>m = Observable.<i>Range</i>(1, 3).Concat(Observable.Throw&lt;int&gt;(new Exception())).Materialize().ToArrayWait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#300"><b>300</b>m = Observable.<i>Range</i>(1, 3).Materialize().Dematerialize().ToArrayWait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#304"><b>304</b>Observable.<i>Range</i>(1, 3).Concat(Observable.Throw&lt;int&gt;(new Exception())).Materialize()</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#313"><b>313</b>Observable.<i>Range</i>(1, 3).DefaultIfEmpty(-1).ToArrayWait().IsCollection(1, 2, 3);</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#320"><b>320</b>var xs = Observable.<i>Range</i>(1, 10).IgnoreElements().Materialize().ToArrayWait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#329"><b>329</b>var xs = Observable.<i>Range</i>(1, 10).ForEachAsync(x =&gt; list.Add(x)).ToArray().Wait();</a>
+<a href="../../UniRx.Tests/ObservableTest.cs.html#338"><b>338</b>var xs = Observable.<i>Range</i>(1, 10).ForEachAsync((x, i) =&gt;</a>
+</div>
+<div class="rF"><div class="rN">RangeTest.cs (3)</div>
+<a href="../../UniRx.Tests/RangeTest.cs.html#12"><b>12</b>AssertEx.Throws&lt;ArgumentOutOfRangeException&gt;(() =&gt; Observable.<i>Range</i>(1, -1).ToArray().Wait());</a>
+<a href="../../UniRx.Tests/RangeTest.cs.html#14"><b>14</b>Observable.<i>Range</i>(1, 0).ToArray().Wait().Length.Is(0);</a>
+<a href="../../UniRx.Tests/RangeTest.cs.html#15"><b>15</b>Observable.<i>Range</i>(1, 10).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+</div>
+<div class="rF"><div class="rN">SelectWhereOptimizeTest.cs (6)</div>
+<a href="../../UniRx.Tests/SelectWhereOptimizeTest.cs.html#25"><b>25</b>var wherewhere = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/SelectWhereOptimizeTest.cs.html#31"><b>31</b>var wherewhere2 = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/SelectWhereOptimizeTest.cs.html#41"><b>41</b>var selectWhere = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/SelectWhereOptimizeTest.cs.html#48"><b>48</b>var selectWhere2 = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/SelectWhereOptimizeTest.cs.html#59"><b>59</b>var whereSelect = Observable.<i>Range</i>(1, 10)</a>
+<a href="../../UniRx.Tests/SelectWhereOptimizeTest.cs.html#66"><b>66</b>var whereSelect2 = Observable.<i>Range</i>(1, 10)</a>
+</div>
+<div class="rF"><div class="rN">TakeTest.cs (1)</div>
+<a href="../../UniRx.Tests/TakeTest.cs.html#12"><b>12</b>var range = Observable.<i>Range</i>(1, 10);</a>
+</div>
+<div class="rF"><div class="rN">ToTest.cs (2)</div>
+<a href="../../UniRx.Tests/ToTest.cs.html#18"><b>18</b>Observable.<i>Range</i>(1, 10).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+<a href="../../UniRx.Tests/ToTest.cs.html#26"><b>26</b>Observable.<i>Range</i>(1, 10).ToList().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);</a>
+</div>
+<div class="rF"><div class="rN">WhenAllTest.cs (4)</div>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#26"><b>26</b>Observable.<i>Range</i>(1, 4))</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#38"><b>38</b>Observable.<i>Range</i>(1, 4)</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#60"><b>60</b>Observable.<i>Range</i>(1, 4).AsUnitObservable())</a>
+<a href="../../UniRx.Tests/WhenAllTest.cs.html#72"><b>72</b>Observable.<i>Range</i>(1, 4).AsUnitObservable()</a>
+</div>
+</div>
+</body></html>

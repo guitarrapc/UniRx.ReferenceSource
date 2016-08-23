@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html><head><title>Shim.cs</title><link rel="stylesheet" href="../../../../styles.css"><script src="../../../../scripts.js"></script></head>
+<body class="cB" onload="i(223);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/UnitTests/Tools/Shim.cs" target="_top">Assets\UnitTests\Tools\Shim.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>
+{
+    <b>public class</b> <a id="6b40741d1a8881ee" href="../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="aecf139ce083a447">TestClassAttribute</span></a> : <a href="@0@mscorlib/A.html#707d3dbc6c887265" class="t t">Attribute</a>
+    {
+    }
+    <b>public class</b> <a id="44c58e295c18fb80" href="../../../R/44c58e295c18fb80.html" target="n" data-glyph="0,0" class="t t"><span id="4cf3defe74e59b5f">TestMethodAttribute</span></a> : <a href="@0@mscorlib/A.html#707d3dbc6c887265" class="t t">Attribute</a>
+    {
+    }
+ 
+    <b>public class</b> <a id="246b21b66fd483b9" href="../../../R/246b21b66fd483b9.html" target="n" data-glyph="0,0" class="t t">AssertFailedException</a> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+    {
+        <b>public</b> <a id="e7a4c3ac38825eb6" href="../../../R/e7a4c3ac38825eb6.html" target="n" data-glyph="72,1" class="i constructor">AssertFailedException</a>(<b>string</b> <span id="r0 rd" class="r0 r">message</span>)
+            : <a href="@0@mscorlib/A.html#df2d82d91ca29e40" class="k">base</a>(<span class="r0 r">message</span>)
+        {
+ 
+        }
+    }
+ 
+    <b>public static class</b> <a id="5a2ae559c1359152" href="../../../R/5a2ae559c1359152.html" target="n" data-glyph="0,0" class="t t">Assert</a>
+    {
+        <b>public static void</b> <a id="787b55ee96ddc5e9" href="../../../R/787b55ee96ddc5e9.html" target="n" data-glyph="72,1" class="i method">AreEqual</a>&lt;<span id="r1 rd t" class="r1 r t">T</span>&gt;(<span class="r1 r t">T</span> <span id="r2 rd" class="r2 r">expected</span>, <span class="r1 r t">T</span> <span id="r3 rd" class="r3 r">actual</span>, <b>string</b> <span id="r4 rd" class="r4 r">message</span>)
+        {
+            <b>if</b> (!<b>object</b>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<span class="r2 r">expected</span>, <span class="r3 r">actual</span>))
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;AreEqual Failed. expected:{0} actual:{1} message:{2}&quot;</span>, <span class="r2 r">expected</span>, <span class="r3 r">actual</span>, <span class="r4 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="b66716cfa9780c56" href="../../../R/b66716cfa9780c56.html" target="n" data-glyph="72,1" class="i method">AreNotEqual</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt;(<span class="r5 r t">T</span> <span id="r6 rd" class="r6 r">notExpected</span>, <span class="r5 r t">T</span> <span id="r7 rd" class="r7 r">actual</span>, <b>string</b> <span id="r8 rd" class="r8 r">message</span>)
+        {
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<span class="r6 r">notExpected</span>, <span class="r7 r">actual</span>))
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;AreNotEqual Failed. notExpected:{0} actual:{1} message:{2}&quot;</span>, <span class="r6 r">notExpected</span>, <span class="r7 r">actual</span>, <span class="r8 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="263e214f99f55a5c" href="../../../R/263e214f99f55a5c.html" target="n" data-glyph="72,1" class="i method">IsTrue</a>(<b>bool</b> <span id="r9 rd" class="r9 r">condition</span>, <b>string</b> <span id="r10 rd" class="r10 r">message</span>)
+        {
+            <b>if</b> (!<span class="r9 r">condition</span>)
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;IsTrue Failed. message:{0}&quot;</span>, <span class="r10 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="5d92ad94e3d8fa81" href="../../../R/5d92ad94e3d8fa81.html" target="n" data-glyph="72,1" class="i method">IsNull</a>(<b>object</b> <span id="r11 rd" class="r11 r">value</span>, <b>string</b> <span id="r12 rd" class="r12 r">message</span>)
+        {
+            <b>if</b> (<span class="r11 r">value</span> != <b>null</b>)
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;IsNull Failed. value:{0} message:{1}&quot;</span>, <span class="r11 r">value</span>, <span class="r12 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="d27948036e131772" href="../../../R/d27948036e131772.html" target="n" data-glyph="72,1" class="i method">IsNotNull</a>(<b>object</b> <span id="r13 rd" class="r13 r">value</span>, <b>string</b> <span id="r14 rd" class="r14 r">message</span>)
+        {
+            <b>if</b> (<span class="r13 r">value</span> == <b>null</b>)
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;IsNotNull Failed. message:{0}&quot;</span>, <span class="r14 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="23203930c954cf18" href="../../../R/23203930c954cf18.html" target="n" data-glyph="72,1" class="i method">Fail</a>(<b>string</b> <span id="r15 rd" class="r15 r">msg</span>)
+        {
+            <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;Failed. message:{0}&quot;</span>, <span class="r15 r">msg</span>));
+        }
+ 
+        <b>public static void</b> <a id="bdfd5fec82494690" href="../../../R/bdfd5fec82494690.html" target="n" data-glyph="72,1" class="i method">AreSame</a>(<b>object</b> <span id="r16 rd" class="r16 r">expected</span>, <b>object</b> <span id="r17 rd" class="r17 r">actual</span>, <b>string</b> <span id="r18 rd" class="r18 r">message</span>)
+        {
+            <b>if</b> (!<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r16 r">expected</span>, <span class="r17 r">actual</span>))
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;AreSame Failed. expected:{0} actual:{1} message:{2}&quot;</span>, <span class="r16 r">expected</span>, <span class="r17 r">actual</span>, <span class="r18 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="a23269b311f7f040" href="../../../R/a23269b311f7f040.html" target="n" data-glyph="72,1" class="i method">AreNotSame</a>(<b>object</b> <span id="r19 rd" class="r19 r">notExpected</span>, <b>object</b> <span id="r20 rd" class="r20 r">actual</span>, <b>string</b> <span id="r21 rd" class="r21 r">message</span>)
+        {
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r19 r">notExpected</span>, <span class="r20 r">actual</span>))
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;AreNotSame Failed. notExpected:{0} actual:{1} message:{2}&quot;</span>, <span class="r19 r">notExpected</span>, <span class="r20 r">actual</span>, <span class="r21 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="471e1342e3d95df0" href="../../../R/471e1342e3d95df0.html" target="n" data-glyph="72,1" class="i method">IsInstanceOfType</a>(<b>object</b> <span id="r22 rd" class="r22 r">value</span>, <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a> <span id="r23 rd" class="r23 r">expectedType</span>, <b>string</b> <span id="r24 rd" class="r24 r">message</span>)
+        {
+            <b>if</b> (<span class="r22 r">value</span> == <b>null</b> || <span class="r22 r">value</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>() != <span class="r23 r">expectedType</span>)
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;IsInstanceOfType Failed. valueType:{0} expectedType:{1} message:{2}&quot;</span>, (<span class="r22 r">value</span> == <b>null</b>) ? <b>null</b> : <span class="r22 r">value</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>(), <span class="r23 r">expectedType</span>, <span class="r24 r">message</span>));
+            }
+        }
+ 
+        <b>public static void</b> <a id="ded3b01cc890a33d" href="../../../R/ded3b01cc890a33d.html" target="n" data-glyph="72,1" class="i method">IsNotInstanceOfType</a>(<b>object</b> <span id="r25 rd" class="r25 r">value</span>, <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a> <span id="r26 rd" class="r26 r">expectedType</span>, <b>string</b> <span id="r27 rd" class="r27 r">message</span>)
+        {
+            <b>if</b> (<span class="r25 r">value</span> != <b>null</b> || <span class="r25 r">value</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>() == <span class="r26 r">expectedType</span>)
+            {
+                <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;IsNotInstanceOfType Failed. valueType:{0} expectedType:{1} message:{2}&quot;</span>, (<span class="r25 r">value</span> == <b>null</b>) ? <b>null</b> : <span class="r25 r">value</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>(), <span class="r26 r">expectedType</span>, <span class="r27 r">message</span>));
+            }
+        }
+    }
+ 
+    <b>public static class</b> <a id="07ec53e8dfbd69a0" href="../../../R/07ec53e8dfbd69a0.html" target="n" data-glyph="0,0" class="t t">CollectionAssert</a>
+    {
+        <b>public static void</b> <a id="65ce871111584571" href="../../../R/65ce871111584571.html" target="n" data-glyph="72,1" class="i method">AreEqual</a>(<a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r28 rd" class="r28 r">expected</span>, <a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r29 rd" class="r29 r">actual</span>, <b>string</b> <span id="r30 rd" class="r30 r">message</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r31 rd" class="r31 r">index</span> = 0;
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r32 rd" class="r32 r">e1</span> = <span class="r28 r">expected</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+            <b>using</b> (<span class="r32 r">e1</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+            {
+                <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r33 rd" class="r33 r">e2</span> = <span class="r29 r">actual</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+                <b>using</b> (<span class="r33 r">e2</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r34 rd" class="r34 r">m1</span> = <span class="r32 r">e1</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r35 rd" class="r35 r">m2</span> = <span class="r33 r">e2</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <b>if</b> (<span class="r34 r">m1</span> != <span class="r35 r">m2</span>)
+                        {
+                            <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<span class="s">&quot;collection length is not equal. message:&quot;</span> + <span class="r30 r">message</span>);
+                        }
+                        <b>if</b> (<span class="r34 r">m1</span> == <b>false</b> &amp;&amp; <span class="r35 r">m2</span> == <b>false</b>) <b>return</b>;
+ 
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r36 rd" class="r36 r">c1</span> = <span class="r32 r">e1</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r37 rd" class="r37 r">c2</span> = <span class="r33 r">e2</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+ 
+                        <b>if</b> (!<b>object</b>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<span class="r36 r">c1</span>, <span class="r37 r">c2</span>)) <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;not equal index:{0} expected:{1} actual:{2} message:{3}&quot;</span>, <span class="r31 r">index</span>, <span class="r36 r">c1</span>, <span class="r37 r">c2</span>, <span class="r30 r">message</span>));
+                        <span class="r31 r">index</span>++;
+                    }
+                }
+            }
+        }
+ 
+        <b>public static void</b> <a id="a9ed2a8eed9d7531" href="../../../R/a9ed2a8eed9d7531.html" target="n" data-glyph="72,1" class="i method">AreEqual</a>(<a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r38 rd" class="r38 r">expected</span>, <a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r39 rd" class="r39 r">actual</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r40 rd" class="r40 r">comparer</span>, <b>string</b> <span id="r41 rd" class="r41 r">message</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r42 rd" class="r42 r">index</span> = 0;
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r43 rd" class="r43 r">e1</span> = <span class="r38 r">expected</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+            <b>using</b> (<span class="r43 r">e1</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+            {
+                <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r44 rd" class="r44 r">e2</span> = <span class="r39 r">actual</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+                <b>using</b> (<span class="r44 r">e2</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r45 rd" class="r45 r">m1</span> = <span class="r43 r">e1</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r46 rd" class="r46 r">m2</span> = <span class="r44 r">e2</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <b>if</b> (<span class="r45 r">m1</span> != <span class="r46 r">m2</span>)
+                        {
+                            <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<span class="s">&quot;collection length is not equal. message:&quot;</span> + <span class="r41 r">message</span>);
+                        }
+                        <b>if</b> (<span class="r45 r">m1</span> == <b>false</b> &amp;&amp; <span class="r46 r">m2</span> == <b>false</b>) <b>return</b>;
+ 
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r47 rd" class="r47 r">c1</span> = <span class="r43 r">e1</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r48 rd" class="r48 r">c2</span> = <span class="r44 r">e2</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+ 
+                        <b>if</b> (<span class="r40 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<span class="r47 r">c1</span>, <span class="r48 r">c2</span>) != 0) <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;not equal index:{0} expected:{1} actual:{2} message:{3}&quot;</span>, <span class="r42 r">index</span>, <span class="r47 r">c1</span>, <span class="r48 r">c2</span>, <span class="r41 r">message</span>));
+                        <span class="r42 r">index</span>++;
+                    }
+                }
+            }
+        }
+ 
+        <b>public static void</b> <a id="c66cda468a5f775d" href="../../../R/c66cda468a5f775d.html" target="n" data-glyph="72,1" class="i method">AreNotEqual</a>(<a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r49 rd" class="r49 r">notExpected</span>, <a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r50 rd" class="r50 r">actual</span>, <b>string</b> <span id="r51 rd" class="r51 r">message</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r52 rd" class="r52 r">index</span> = 0;
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r53 rd" class="r53 r">e1</span> = <span class="r49 r">notExpected</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+            <b>using</b> (<span class="r53 r">e1</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+            {
+                <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r54 rd" class="r54 r">e2</span> = <span class="r50 r">actual</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+                <b>using</b> (<span class="r54 r">e2</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r55 rd" class="r55 r">m1</span> = <span class="r53 r">e1</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r56 rd" class="r56 r">m2</span> = <span class="r54 r">e2</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <b>if</b> (<span class="r55 r">m1</span> != <span class="r56 r">m2</span>)
+                        {
+                            <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<span class="s">&quot;collection length is not equal. message:&quot;</span> + <span class="r51 r">message</span>);
+                        }
+                        <b>if</b> (<span class="r55 r">m1</span> == <b>false</b> &amp;&amp; <span class="r56 r">m2</span> == <b>false</b>) <b>return</b>;
+ 
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r57 rd" class="r57 r">c1</span> = <span class="r53 r">e1</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r58 rd" class="r58 r">c2</span> = <span class="r54 r">e2</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+ 
+                        <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<span class="r57 r">c1</span>, <span class="r58 r">c2</span>)) <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;equal index:{0} expected:{1} actual:{2} message:{3}&quot;</span>, <span class="r52 r">index</span>, <span class="r57 r">c1</span>, <span class="r58 r">c2</span>, <span class="r51 r">message</span>));
+                        <span class="r52 r">index</span>++;
+                    }
+                }
+            }
+        }
+ 
+        <b>public static void</b> <a id="41eb7c86b474a9b3" href="../../../R/41eb7c86b474a9b3.html" target="n" data-glyph="72,1" class="i method">AreNotEqual</a>(<a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r59 rd" class="r59 r">notExpected</span>, <a href="@0@mscorlib/A.html#cde8022b6e680e40" class="t t">ICollection</a> <span id="r60 rd" class="r60 r">actual</span>, <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a> <span id="r61 rd" class="r61 r">comparer</span>, <b>string</b> <span id="r62 rd" class="r62 r">message</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r63 rd" class="r63 r">index</span> = 0;
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r64 rd" class="r64 r">e1</span> = <span class="r59 r">notExpected</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+            <b>using</b> (<span class="r64 r">e1</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+            {
+                <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r65 rd" class="r65 r">e2</span> = <span class="r60 r">actual</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+                <b>using</b> (<span class="r65 r">e2</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r66 rd" class="r66 r">m1</span> = <span class="r64 r">e1</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r67 rd" class="r67 r">m2</span> = <span class="r65 r">e2</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <b>if</b> (<span class="r66 r">m1</span> != <span class="r67 r">m2</span>)
+                        {
+                            <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<span class="s">&quot;collection length is not equal. message:&quot;</span> + <span class="r62 r">message</span>);
+                        }
+                        <b>if</b> (<span class="r66 r">m1</span> == <b>false</b> &amp;&amp; <span class="r67 r">m2</span> == <b>false</b>) <b>return</b>;
+ 
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r68 rd" class="r68 r">c1</span> = <span class="r64 r">e1</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                        <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r69 rd" class="r69 r">c2</span> = <span class="r65 r">e2</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+ 
+                        <b>if</b> (<span class="r61 r">comparer</span>.<a href="@0@mscorlib/A.html#8912120c714bee9b" class="i method">Compare</a>(<span class="r68 r">c1</span>, <span class="r69 r">c2</span>) == 0) <b>throw</b> <b>new</b> <a href="#e7a4c3ac38825eb6" class="t constructor">AssertFailedException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;equal index:{0} expected:{1} actual:{2} message:{3}&quot;</span>, <span class="r63 r">index</span>, <span class="r68 r">c1</span>, <span class="r69 r">c2</span>, <span class="r62 r">message</span>));
+                        <span class="r63 r">index</span>++;
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

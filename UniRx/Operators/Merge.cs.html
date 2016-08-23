@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html><head><title>Merge.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(264);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/Merge.cs" target="_top">Operators\Merge.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="1f327220c0544a40" href="../R/1f327220c0544a40.html" target="n" data-glyph="2,0" class="t t">MergeObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>private readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <a id="1ba99d23b6119fc0" href="../R/1ba99d23b6119fc0.html" target="n" data-glyph="46,1" class="i field">sources</a>;
+        <b>private readonly int</b> <a id="a882de86525262ed" href="../R/a882de86525262ed.html" target="n" data-glyph="46,1" class="i field">maxConcurrent</a>;
+ 
+        <b>public</b> <a id="bdb2703284ede248" href="../R/bdb2703284ede248.html" target="n" data-glyph="72,1" class="i constructor">MergeObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <span id="r1 rd" class="r1 r">sources</span>, <b>bool</b> <span id="r2 rd" class="r2 r">isRequiredSubscribeOnCurrentThread</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r2 r">isRequiredSubscribeOnCurrentThread</span>)
+        {
+            <a href="#1f327220c0544a40" class="k">this</a>.<a href="#1ba99d23b6119fc0" class="i field">sources</a> = <span class="r1 r">sources</span>;
+        }
+ 
+        <b>public</b> <a id="ab16b857213321ee" href="../R/ab16b857213321ee.html" target="n" data-glyph="72,1" class="i constructor">MergeObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <span id="r3 rd" class="r3 r">sources</span>, <b>int</b> <span id="r4 rd" class="r4 r">maxConcurrent</span>, <b>bool</b> <span id="r5 rd" class="r5 r">isRequiredSubscribeOnCurrentThread</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r5 r">isRequiredSubscribeOnCurrentThread</span>)
+        {
+            <a href="#1f327220c0544a40" class="k">this</a>.<a href="#1ba99d23b6119fc0" class="i field">sources</a> = <span class="r3 r">sources</span>;
+            <a href="#1f327220c0544a40" class="k">this</a>.<a href="#a882de86525262ed" class="i field">maxConcurrent</a> = <span class="r4 r">maxConcurrent</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="ae5fea4976e45dde" href="../R/ae5fea4976e45dde.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r6 rd" class="r6 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">cancel</span>)
+        {
+            <b>if</b> (<a href="#a882de86525262ed" class="i field">maxConcurrent</a> &gt; 0)
+            {
+                <b>return</b> <b>new</b> <a href="#16b78880d44ecd38" class="t constructor">MergeConcurrentObserver</a>(<a href="#1f327220c0544a40" class="k">this</a>, <span class="r6 r">observer</span>, <span class="r7 r">cancel</span>).<a href="#31f22a3a71320f70" class="i method">Run</a>();
+            }
+            <b>else</b>
+            {
+                <b>return</b> <b>new</b> <a href="#29f332d849f10a2e" class="t constructor">MergeOuterObserver</a>(<a href="#1f327220c0544a40" class="k">this</a>, <span class="r6 r">observer</span>, <span class="r7 r">cancel</span>).<a href="#0104d48944f6fbcd" class="i method">Run</a>();
+            }
+        }
+ 
+        <b>class</b> <a id="800fecfb96c96cea" href="../R/800fecfb96c96cea.html" target="n" data-glyph="4,1" class="t t">MergeOuterObserver</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;, <span class="r0 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#1f327220c0544a40" class="t t">MergeObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="d03b7b7bc0a766e8" href="../R/d03b7b7bc0a766e8.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+ 
+            <a href="../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="t t">CompositeDisposable</a> <a id="01f94485e838131e" href="../R/01f94485e838131e.html" target="n" data-glyph="46,2" class="i field">collectionDisposable</a>;
+            <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t t">SingleAssignmentDisposable</a> <a id="f6b41175d3a207e6" href="../R/f6b41175d3a207e6.html" target="n" data-glyph="46,2" class="i field">sourceDisposable</a>;
+            <b>object</b> <a id="0cb85d19d9da5bfe" href="../R/0cb85d19d9da5bfe.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>bool</b> <a id="6b7af6d2c5de2a2c" href="../R/6b7af6d2c5de2a2c.html" target="n" data-glyph="46,2" class="i field">isStopped</a> = <b>false</b>;
+ 
+            <b>public</b> <a id="29f332d849f10a2e" href="../R/29f332d849f10a2e.html" target="n" data-glyph="72,2" class="i constructor">MergeOuterObserver</a>(<a href="#1f327220c0544a40" class="t t">MergeObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r8 rd" class="r8 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r9 rd" class="r9 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r10 rd" class="r10 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r9 r">observer</span>, <span class="r10 r">cancel</span>)
+            {
+                <a href="#800fecfb96c96cea" class="k">this</a>.<a href="#d03b7b7bc0a766e8" class="i field">parent</a> = <span class="r8 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="0104d48944f6fbcd" href="../R/0104d48944f6fbcd.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#01f94485e838131e" class="i field">collectionDisposable</a> = <b>new</b> <a href="../Disposables/CompositeDisposable.cs.html#b8fe93d2b696d1ee" class="t constructor">CompositeDisposable</a>();
+                <a href="#f6b41175d3a207e6" class="i field">sourceDisposable</a> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <a href="#01f94485e838131e" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<a href="#f6b41175d3a207e6" class="i field">sourceDisposable</a>);
+ 
+                <a href="#f6b41175d3a207e6" class="i field">sourceDisposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#d03b7b7bc0a766e8" class="i field">parent</a>.<a href="#1ba99d23b6119fc0" class="i field">sources</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#800fecfb96c96cea" class="k">this</a>);
+                <b>return</b> <a href="#01f94485e838131e" class="i field">collectionDisposable</a>;
+            }
+ 
+            <b>public override void</b> <a id="fce797673d5e1ebe" href="../R/fce797673d5e1ebe.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r11 rd" class="r11 r">value</span>)
+            {
+                <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r12 rd" class="r12 r">disposable</span> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <a href="#01f94485e838131e" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r12 r">disposable</span>);
+                <a href="#5f32646b1c17e568" class="k">var</a> <span id="r13 rd" class="r13 r">collectionObserver</span> = <b>new</b> <a href="#0881f8a0f7ba8c49" class="t constructor">Merge</a>(<a href="#800fecfb96c96cea" class="k">this</a>, <span class="r12 r">disposable</span>);
+                <span class="r12 r">disposable</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r11 r">value</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r13 r">collectionObserver</span>);
+            }
+ 
+            <b>public override void</b> <a id="fbdc66c4f764fd4a" href="../R/fbdc66c4f764fd4a.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r14 rd" class="r14 r">error</span>)
+            {
+                <b>lock</b> (<a href="#0cb85d19d9da5bfe" class="i field">gate</a>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r14 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                }
+            }
+ 
+            <b>public override void</b> <a id="4210cc61d47246ad" href="../R/4210cc61d47246ad.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <a href="#6b7af6d2c5de2a2c" class="i field">isStopped</a> = <b>true</b>;
+                <b>if</b> (<a href="#01f94485e838131e" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#86a5a3c7aaf0a49b" class="i property">Count</a> == 1)
+                {
+                    <b>lock</b> (<a href="#0cb85d19d9da5bfe" class="i field">gate</a>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                    }
+                }
+                <b>else</b>
+                {
+                    <a href="#f6b41175d3a207e6" class="i field">sourceDisposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#72979fa63d569e27" class="i method">Dispose</a>();
+                }
+            }
+ 
+            <b>class</b> <a id="5f32646b1c17e568" href="../R/5f32646b1c17e568.html" target="n" data-glyph="4,2" class="t t">Merge</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+            {
+                <b>readonly</b> <a href="#800fecfb96c96cea" class="t t">MergeOuterObserver</a> <a id="127eb0886a6c0779" href="../R/127eb0886a6c0779.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+                <b>readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="18a0502fd998a1b9" href="../R/18a0502fd998a1b9.html" target="n" data-glyph="46,3" class="i field">cancel</a>;
+ 
+                <b>public</b> <a id="0881f8a0f7ba8c49" href="../R/0881f8a0f7ba8c49.html" target="n" data-glyph="72,3" class="i constructor">Merge</a>(<a href="#800fecfb96c96cea" class="t t">MergeOuterObserver</a> <span id="r15 rd" class="r15 r">parent</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r16 rd" class="r16 r">cancel</span>)
+                    : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r15 r">parent</span>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>, <span class="r16 r">cancel</span>)
+                {
+                    <a href="#5f32646b1c17e568" class="k">this</a>.<a href="#127eb0886a6c0779" class="i field">parent</a> = <span class="r15 r">parent</span>;
+                    <a href="#5f32646b1c17e568" class="k">this</a>.<a href="#18a0502fd998a1b9" class="i field">cancel</a> = <span class="r16 r">cancel</span>;
+                }
+ 
+                <b>public override void</b> <a id="0e33a30ca6039806" href="../R/0e33a30ca6039806.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r17 rd" class="r17 r">value</span>)
+                {
+                    <b>lock</b> (<a href="#127eb0886a6c0779" class="i field">parent</a>.<a href="#0cb85d19d9da5bfe" class="i field">gate</a>)
+                    {
+                        <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r17 r">value</span>);
+                    }
+                }
+ 
+                <b>public override void</b> <a id="00de3989df9a7a57" href="../R/00de3989df9a7a57.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r18 rd" class="r18 r">error</span>)
+                {
+                    <b>lock</b> (<a href="#127eb0886a6c0779" class="i field">parent</a>.<a href="#0cb85d19d9da5bfe" class="i field">gate</a>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r18 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                    }
+                }
+ 
+                <b>public override void</b> <a id="671f9d1ee1f19b5a" href="../R/671f9d1ee1f19b5a.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <a href="#127eb0886a6c0779" class="i field">parent</a>.<a href="#01f94485e838131e" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#25c90ab90dccf547" class="i method">Remove</a>(<a href="#18a0502fd998a1b9" class="i field">cancel</a>);
+                    <b>if</b> (<a href="#127eb0886a6c0779" class="i field">parent</a>.<a href="#6b7af6d2c5de2a2c" class="i field">isStopped</a> &amp;&amp; <a href="#127eb0886a6c0779" class="i field">parent</a>.<a href="#01f94485e838131e" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#86a5a3c7aaf0a49b" class="i property">Count</a> == 1)
+                    {
+                        <b>lock</b> (<a href="#127eb0886a6c0779" class="i field">parent</a>.<a href="#0cb85d19d9da5bfe" class="i field">gate</a>)
+                        {
+                            <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                        }
+                    }
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="fa6b3776436f27e8" href="../R/fa6b3776436f27e8.html" target="n" data-glyph="4,1" class="t t">MergeConcurrentObserver</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;, <span class="r0 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#1f327220c0544a40" class="t t">MergeObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="3e75eb27e3e98daf" href="../R/3e75eb27e3e98daf.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+ 
+            <a href="../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="t t">CompositeDisposable</a> <a id="57636ffe070bca4a" href="../R/57636ffe070bca4a.html" target="n" data-glyph="46,2" class="i field">collectionDisposable</a>;
+            <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t t">SingleAssignmentDisposable</a> <a id="2400d026630ab776" href="../R/2400d026630ab776.html" target="n" data-glyph="46,2" class="i field">sourceDisposable</a>;
+            <b>object</b> <a id="10b0c12fa5723e86" href="../R/10b0c12fa5723e86.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <b>bool</b> <a id="6d04048033751351" href="../R/6d04048033751351.html" target="n" data-glyph="46,2" class="i field">isStopped</a> = <b>false</b>;
+ 
+            <span class="c">// concurrency</span>
+            <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <a id="3a3fb01974a45615" href="../R/3a3fb01974a45615.html" target="n" data-glyph="46,2" class="i field">q</a>;
+            <b>int</b> <a id="58b904027a9bc9f2" href="../R/58b904027a9bc9f2.html" target="n" data-glyph="46,2" class="i field">activeCount</a>;
+ 
+            <b>public</b> <a id="16b78880d44ecd38" href="../R/16b78880d44ecd38.html" target="n" data-glyph="72,2" class="i constructor">MergeConcurrentObserver</a>(<a href="#1f327220c0544a40" class="t t">MergeObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r19 rd" class="r19 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r20 rd" class="r20 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r21 rd" class="r21 r">cancel</span>) : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r20 r">observer</span>, <span class="r21 r">cancel</span>)
+            {
+                <a href="#fa6b3776436f27e8" class="k">this</a>.<a href="#3e75eb27e3e98daf" class="i field">parent</a> = <span class="r19 r">parent</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="31f22a3a71320f70" href="../R/31f22a3a71320f70.html" target="n" data-glyph="72,2" class="i method">Run</a>()
+            {
+                <a href="#3a3fb01974a45615" class="i field">q</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;&gt;();
+                <a href="#58b904027a9bc9f2" class="i field">activeCount</a> = 0;
+ 
+                <a href="#57636ffe070bca4a" class="i field">collectionDisposable</a> = <b>new</b> <a href="../Disposables/CompositeDisposable.cs.html#b8fe93d2b696d1ee" class="t constructor">CompositeDisposable</a>();
+                <a href="#2400d026630ab776" class="i field">sourceDisposable</a> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <a href="#57636ffe070bca4a" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<a href="#2400d026630ab776" class="i field">sourceDisposable</a>);
+ 
+                <a href="#2400d026630ab776" class="i field">sourceDisposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="#3e75eb27e3e98daf" class="i field">parent</a>.<a href="#1ba99d23b6119fc0" class="i field">sources</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#fa6b3776436f27e8" class="k">this</a>);
+                <b>return</b> <a href="#57636ffe070bca4a" class="i field">collectionDisposable</a>;
+            }
+ 
+            <b>public override void</b> <a id="5565869e00ac6d1e" href="../R/5565869e00ac6d1e.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r22 rd" class="r22 r">value</span>)
+            {
+                <b>lock</b> (<a href="#10b0c12fa5723e86" class="i field">gate</a>)
+                {
+                    <b>if</b> (<a href="#58b904027a9bc9f2" class="i field">activeCount</a> &lt; <a href="#3e75eb27e3e98daf" class="i field">parent</a>.<a href="#a882de86525262ed" class="i field">maxConcurrent</a>)
+                    {
+                        <a href="#58b904027a9bc9f2" class="i field">activeCount</a>++;
+                        <a href="#46f945652bc0d695" class="i method">Subscribe</a>(<span class="r22 r">value</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <a href="#3a3fb01974a45615" class="i field">q</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r22 r">value</span>);
+                    }
+                }
+            }
+ 
+            <b>public override void</b> <a id="0d5652e6d265d592" href="../R/0d5652e6d265d592.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r23 rd" class="r23 r">error</span>)
+            {
+                <b>lock</b> (<a href="#10b0c12fa5723e86" class="i field">gate</a>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r23 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                }
+            }
+ 
+            <b>public override void</b> <a id="7cb2ae0b982d1435" href="../R/7cb2ae0b982d1435.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>lock</b> (<a href="#10b0c12fa5723e86" class="i field">gate</a>)
+                {
+                    <a href="#6d04048033751351" class="i field">isStopped</a> = <b>true</b>;
+                    <b>if</b> (<a href="#58b904027a9bc9f2" class="i field">activeCount</a> == 0)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                    }
+                    <b>else</b>
+                    {
+                        <a href="#2400d026630ab776" class="i field">sourceDisposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#72979fa63d569e27" class="i method">Dispose</a>();
+                    }
+                }
+            }
+ 
+            <b>void</b> <a id="46f945652bc0d695" href="../R/46f945652bc0d695.html" target="n" data-glyph="76,2" class="i method">Subscribe</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r24 rd" class="r24 r">innerSource</span>)
+            {
+                <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="k">var</a> <span id="r25 rd" class="r25 r">disposable</span> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                <a href="#57636ffe070bca4a" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r25 r">disposable</span>);
+                <a href="#5c5b3bf35124e5ae" class="k">var</a> <span id="r26 rd" class="r26 r">collectionObserver</span> = <b>new</b> <a href="#c058fb659bd7aabb" class="t constructor">Merge</a>(<a href="#fa6b3776436f27e8" class="k">this</a>, <span class="r25 r">disposable</span>);
+                <span class="r25 r">disposable</span>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r24 r">innerSource</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r26 r">collectionObserver</span>);
+            }
+ 
+            <b>class</b> <a id="5c5b3bf35124e5ae" href="../R/5c5b3bf35124e5ae.html" target="n" data-glyph="4,2" class="t t">Merge</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+            {
+                <b>readonly</b> <a href="#fa6b3776436f27e8" class="t t">MergeConcurrentObserver</a> <a id="834ae4638c698431" href="../R/834ae4638c698431.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+                <b>readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="d2e3b7dbd6c4a364" href="../R/d2e3b7dbd6c4a364.html" target="n" data-glyph="46,3" class="i field">cancel</a>;
+ 
+                <b>public</b> <a id="c058fb659bd7aabb" href="../R/c058fb659bd7aabb.html" target="n" data-glyph="72,3" class="i constructor">Merge</a>(<a href="#fa6b3776436f27e8" class="t t">MergeConcurrentObserver</a> <span id="r27 rd" class="r27 r">parent</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r28 rd" class="r28 r">cancel</span>)
+                    : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r27 r">parent</span>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>, <span class="r28 r">cancel</span>)
+                {
+                    <a href="#5c5b3bf35124e5ae" class="k">this</a>.<a href="#834ae4638c698431" class="i field">parent</a> = <span class="r27 r">parent</span>;
+                    <a href="#5c5b3bf35124e5ae" class="k">this</a>.<a href="#d2e3b7dbd6c4a364" class="i field">cancel</a> = <span class="r28 r">cancel</span>;
+                }
+ 
+                <b>public override void</b> <a id="9b1aee7c80160c5f" href="../R/9b1aee7c80160c5f.html" target="n" data-glyph="72,3" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r29 rd" class="r29 r">value</span>)
+                {
+                    <b>lock</b> (<a href="#834ae4638c698431" class="i field">parent</a>.<a href="#10b0c12fa5723e86" class="i field">gate</a>)
+                    {
+                        <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r29 r">value</span>);
+                    }
+                }
+ 
+                <b>public override void</b> <a id="8a71f71281aec211" href="../R/8a71f71281aec211.html" target="n" data-glyph="72,3" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r30 rd" class="r30 r">error</span>)
+                {
+                    <b>lock</b> (<a href="#834ae4638c698431" class="i field">parent</a>.<a href="#10b0c12fa5723e86" class="i field">gate</a>)
+                    {
+                        <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r30 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                    }
+                }
+ 
+                <b>public override void</b> <a id="1fb803d609c9ae21" href="../R/1fb803d609c9ae21.html" target="n" data-glyph="72,3" class="i method">OnCompleted</a>()
+                {
+                    <a href="#834ae4638c698431" class="i field">parent</a>.<a href="#57636ffe070bca4a" class="i field">collectionDisposable</a>.<a href="../Disposables/CompositeDisposable.cs.html#25c90ab90dccf547" class="i method">Remove</a>(<a href="#d2e3b7dbd6c4a364" class="i field">cancel</a>);
+                    <b>lock</b> (<a href="#834ae4638c698431" class="i field">parent</a>.<a href="#10b0c12fa5723e86" class="i field">gate</a>)
+                    {
+                        <b>if</b> (<a href="#834ae4638c698431" class="i field">parent</a>.<a href="#3a3fb01974a45615" class="i field">q</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; 0)
+                        {
+                            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r31 rd" class="r31 r">source</span> = <a href="#834ae4638c698431" class="i field">parent</a>.<a href="#3a3fb01974a45615" class="i field">q</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                            <a href="#834ae4638c698431" class="i field">parent</a>.<a href="#46f945652bc0d695" class="i method">Subscribe</a>(<span class="r31 r">source</span>);
+                        }
+                        <b>else</b>
+                        {
+                            <a href="#834ae4638c698431" class="i field">parent</a>.<a href="#58b904027a9bc9f2" class="i field">activeCount</a>--;
+                            <b>if</b> (<a href="#834ae4638c698431" class="i field">parent</a>.<a href="#6d04048033751351" class="i field">isStopped</a> &amp;&amp; <a href="#834ae4638c698431" class="i field">parent</a>.<a href="#58b904027a9bc9f2" class="i field">activeCount</a> == 0)
+                            {
+                                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

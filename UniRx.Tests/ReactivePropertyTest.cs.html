@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReactivePropertyTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(275);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/ReactivePropertyTest.cs" target="_top">ReactivePropertyTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<span class="i n">Tasks</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="3f1602e2944a4355" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="cefe62b1b2f41b0e">ReactivePropertyTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="3f517a8a124e2320" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ValueType</a>()
+        {
+            {
+                <a href="/UniRx/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r0 rd" class="r0 r">rp</span> = <b>new</b> <a href="/UniRx/A.html#47e210ef7a1be0f6" class="t constructor">ReactiveProperty</a>&lt;<b>int</b>&gt;(); <span class="c">// 0</span>
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r1 rd" class="r1 r">result</span> = <span class="r0 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r1 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r0 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 0;
+                <span class="r1 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r0 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 10;
+                <span class="r1 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10);
+ 
+                <span class="r0 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 100;
+                <span class="r1 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+ 
+                <span class="r0 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 100;
+                <span class="r1 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+            }
+            {
+                <a href="/UniRx/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r2 rd" class="r2 r">rp</span> = <b>new</b> <a href="/UniRx/A.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>int</b>&gt;(20);
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r3 rd" class="r3 r">result</span> = <span class="r2 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r3 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(20);
+ 
+                <span class="r2 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 0;
+                <span class="r3 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(20, 0);
+ 
+                <span class="r2 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 10;
+                <span class="r3 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(20, 0, 10);
+ 
+                <span class="r2 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 100;
+                <span class="r3 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(20, 0, 10, 100);
+ 
+                <span class="r2 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = 100;
+                <span class="r3 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(20, 0, 10, 100);
+            }
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="60c139f343376e93" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ClassType</a>()
+        {
+            {
+                <a href="/UniRx/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r4 rd" class="r4 r">rp</span> = <b>new</b> <a href="/UniRx/A.html#47e210ef7a1be0f6" class="t constructor">ReactiveProperty</a>&lt;<b>string</b>&gt;(); <span class="c">// null</span>
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r5 rd" class="r5 r">result</span> = <span class="r4 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r5 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>);
+ 
+                <span class="r4 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <b>null</b>;
+                <span class="r5 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>);
+ 
+                <span class="r4 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;a&quot;</span>;
+                <span class="r5 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>);
+ 
+                <span class="r4 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;b&quot;</span>;
+                <span class="r5 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r4 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;b&quot;</span>;
+                <span class="r5 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+            }
+            {
+                <a href="/UniRx/A.html#15792ff57f70fe8c" class="k">var</a> <span id="r6 rd" class="r6 r">rp</span> = <b>new</b> <a href="/UniRx/A.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>string</b>&gt;(<span class="s">&quot;z&quot;</span>);
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r7 rd" class="r7 r">result</span> = <span class="r6 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r7 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <span class="r6 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;z&quot;</span>;
+                <span class="r7 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <span class="r6 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;a&quot;</span>;
+                <span class="r7 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>);
+ 
+                <span class="r6 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;b&quot;</span>;
+                <span class="r7 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r6 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <span class="s">&quot;b&quot;</span>;
+                <span class="r7 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r6 r">rp</span>.<a href="/UniRx/A.html#989001a432e3dbdd" class="i property">Value</a> = <b>null</b>;
+                <span class="r7 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <b>null</b>);
+            }
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="669686210e63d6ad" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ToReadOnlyReactivePropertyValueType</a>()
+        {
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r8 rd" class="r8 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r9 rd" class="r9 r">rp</span> = <span class="r8 r">source</span>.<a href="/UniRx/A.html#00f3b4d860851db6" class="i method">ToReadOnlyReactiveProperty</a>();
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r10 rd" class="r10 r">result</span> = <span class="r9 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r10 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+                <span class="r8 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(0);
+                <span class="r10 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r8 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(10);
+                <span class="r10 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10);
+ 
+                <span class="r8 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r10 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+ 
+                <span class="r8 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r10 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+            }
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r11 rd" class="r11 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r12 rd" class="r12 r">rp</span> = <span class="r11 r">source</span>.<a href="/UniRx/A.html#1ebe85465bc02860" class="i method">ToSequentialReadOnlyReactiveProperty</a>();
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r13 rd" class="r13 r">result</span> = <span class="r12 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r13 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+                <span class="r11 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(0);
+                <span class="r13 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r11 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(10);
+                <span class="r13 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10);
+ 
+                <span class="r11 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r13 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+ 
+                <span class="r11 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r13 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100, 100);
+            }
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r14 rd" class="r14 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r15 rd" class="r15 r">rp</span> = <span class="r14 r">source</span>.<a href="/UniRx/A.html#232ef1b76f621fd0" class="i method">ToReadOnlyReactiveProperty</a>(0);
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r16 rd" class="r16 r">result</span> = <span class="r15 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r16 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r14 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(0);
+                <span class="r16 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r14 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(10);
+                <span class="r16 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10);
+ 
+                <span class="r14 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r16 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+ 
+                <span class="r14 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r16 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 10, 100);
+            }
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r17 rd" class="r17 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r18 rd" class="r18 r">rp</span> = <span class="r17 r">source</span>.<a href="/UniRx/A.html#ad2936c58b19fa89" class="i method">ToSequentialReadOnlyReactiveProperty</a>(0);
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r19 rd" class="r19 r">result</span> = <span class="r18 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r19 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0);
+ 
+                <span class="r17 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(0);
+                <span class="r19 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 0);
+ 
+                <span class="r17 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(10);
+                <span class="r19 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 0, 10);
+ 
+                <span class="r17 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r19 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 0, 10, 100);
+ 
+                <span class="r17 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(100);
+                <span class="r19 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(0, 0, 10, 100, 100);
+            }
+        }
+ 
+ 
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="a9db6b4b0e20a7a8" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ToReadOnlyReactivePropertyClassType</a>()
+        {
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r20 rd" class="r20 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>string</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r21 rd" class="r21 r">rp</span> = <span class="r20 r">source</span>.<a href="/UniRx/A.html#00f3b4d860851db6" class="i method">ToReadOnlyReactiveProperty</a>();
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r22 rd" class="r22 r">result</span> = <span class="r21 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r22 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+                <span class="r20 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>null</b>);
+                <span class="r22 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>);
+ 
+                <span class="r20 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;a&quot;</span>);
+                <span class="r22 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>);
+ 
+                <span class="r20 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r22 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r20 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r22 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+            }
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r23 rd" class="r23 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>string</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r24 rd" class="r24 r">rp</span> = <span class="r23 r">source</span>.<a href="/UniRx/A.html#1ebe85465bc02860" class="i method">ToSequentialReadOnlyReactiveProperty</a>();
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r25 rd" class="r25 r">result</span> = <span class="r24 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r25 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="@0@mscorlib/A.html#78a69d857716bc68" class="i property">Count</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#c7201ebd94464089" class="i method">Is</a>(0);
+ 
+                <span class="r23 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>null</b>);
+                <span class="r25 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>);
+ 
+                <span class="r23 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;a&quot;</span>);
+                <span class="r25 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>);
+ 
+                <span class="r23 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r25 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r23 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r25 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>((<b>string</b>)<b>null</b>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;b&quot;</span>);
+            }
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r26 rd" class="r26 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>string</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r27 rd" class="r27 r">rp</span> = <span class="r26 r">source</span>.<a href="/UniRx/A.html#232ef1b76f621fd0" class="i method">ToReadOnlyReactiveProperty</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r28 rd" class="r28 r">result</span> = <span class="r27 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <span class="r26 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;z&quot;</span>);
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <span class="r26 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;a&quot;</span>);
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>);
+ 
+                <span class="r26 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r26 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r26 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>null</b>);
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <b>null</b>);
+ 
+                <span class="r26 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>null</b>);
+                <span class="r28 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <b>null</b>);
+            }
+            {
+                <a href="/UniRx/A.html#e84fb44e794ec78c" class="k">var</a> <span id="r29 rd" class="r29 r">source</span> = <b>new</b> <a href="/UniRx/A.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>string</b>&gt;();
+                <a href="/UniRx/A.html#e01ff9f342b6d170" class="k">var</a> <span id="r30 rd" class="r30 r">rp</span> = <span class="r29 r">source</span>.<a href="/UniRx/A.html#ad2936c58b19fa89" class="i method">ToSequentialReadOnlyReactiveProperty</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <a href="Tools/TestUtil.cs.html#6c890ab2d95907ce" class="k">var</a> <span id="r31 rd" class="r31 r">result</span> = <span class="r30 r">rp</span>.<a href="Tools/TestUtil.cs.html#ff6c9c81bca9717d" class="i method">Record</a>();
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>);
+ 
+                <span class="r29 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;z&quot;</span>);
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;z&quot;</span>);
+ 
+                <span class="r29 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;a&quot;</span>);
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>);
+ 
+                <span class="r29 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r29 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="s">&quot;b&quot;</span>);
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;b&quot;</span>);
+ 
+                <span class="r29 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>null</b>);
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;b&quot;</span>, <b>null</b>);
+ 
+                <span class="r29 r">source</span>.<a href="/UniRx/A.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>null</b>);
+                <span class="r31 r">result</span>.<a href="Tools/TestUtil.cs.html#7085fe0c236f6251" class="i property">Values</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#dd4ec24274eba848" class="i method">IsCollection</a>(<span class="s">&quot;z&quot;</span>, <span class="s">&quot;z&quot;</span>, <span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;b&quot;</span>, <b>null</b>, <b>null</b>);
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

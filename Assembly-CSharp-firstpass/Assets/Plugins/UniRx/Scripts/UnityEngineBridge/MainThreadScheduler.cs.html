@@ -1,0 +1,588 @@
+﻿<!DOCTYPE html>
+<html><head><title>MainThreadScheduler.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(579);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/MainThreadScheduler.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\MainThreadScheduler.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UniRxLibrary</span>
+<span class="e">    public static partial class SchedulerUnity
+    {
+</span><span class="k preprocess">#</span><span class="k preprocess">else</span>
+    <b>public static</b> <a href="../../../../../P/48627f587bfa2dac.html" target="s" class="k">partial</a> <b>class</b> <a id="48627f587bfa2dac" href="../../../../../R/48627f587bfa2dac.html" target="n" data-glyph="0,0" class="t t">Scheduler</a>
+    {
+        <b>public static void</b> <a id="a3e7dfc1cde936f3" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">SetDefaultForUnity</a>()
+        {
+            <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>;
+            <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#602b63e6223fbed8" class="i property">TailRecursion</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>;
+            <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>;
+            <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a> = <a href="#40c34fa13f14d53e" class="i property">MainThread</a>;
+            <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/ThreadPoolScheduler.cs.html#ef176e05cfd62133" class="i field">ThreadPool</a>;
+        }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        <b>static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="434ccc46b3bf81a8" href="../../../../../R/434ccc46b3bf81a8.html" target="n" data-glyph="46,1" class="i field">mainThread</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Unity native MainThread Queue Scheduler. Run on mainthread and delayed on coroutine update loop, elapsed time is calculated based on Time.time.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="40c34fa13f14d53e" href="../../../../../R/40c34fa13f14d53e.html" target="n" data-glyph="102,1" class="i property">MainThread</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#434ccc46b3bf81a8" class="i field">mainThread</a> ?? (<a href="#434ccc46b3bf81a8" class="i field">mainThread</a> = <b>new</b> <a href="#d512e78d479ef04e" class="t constructor">MainThreadScheduler</a>());
+            }
+        }
+ 
+        <b>static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="c7d3543b6c2ffb5e" href="../../../../../R/c7d3543b6c2ffb5e.html" target="n" data-glyph="46,1" class="i field">mainThreadIgnoreTimeScale</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Another MainThread scheduler, delay elapsed time is calculated based on Time.unscaledDeltaTime.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="bdeedf80c84f0a5d" href="../../../../../R/bdeedf80c84f0a5d.html" target="n" data-glyph="102,1" class="i property">MainThreadIgnoreTimeScale</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#c7d3543b6c2ffb5e" class="i field">mainThreadIgnoreTimeScale</a> ?? (<a href="#c7d3543b6c2ffb5e" class="i field">mainThreadIgnoreTimeScale</a> = <b>new</b> <a href="#93071482a8c83af8" class="t constructor">IgnoreTimeScaleMainThreadScheduler</a>());
+            }
+        }
+ 
+        <b>static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="b075f99b9937e249" href="../../../../../R/b075f99b9937e249.html" target="n" data-glyph="46,1" class="i field">mainThreadFixedUpdate</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Run on fixed update mainthread, delay elapsed time is calculated based on Time.fixedTime.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="a90caee87f79b651" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">MainThreadFixedUpdate</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#b075f99b9937e249" class="i field">mainThreadFixedUpdate</a> ?? (<a href="#b075f99b9937e249" class="i field">mainThreadFixedUpdate</a> = <b>new</b> <a href="#71b76f3cd11f1d9f" class="t constructor">FixedUpdateMainThreadScheduler</a>());
+            }
+        }
+ 
+        <b>static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="95a2a360b5b50366" href="../../../../../R/95a2a360b5b50366.html" target="n" data-glyph="46,1" class="i field">mainThreadEndOfFrame</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Run on end of frame mainthread, delay elapsed time is calculated based on Time.deltaTime.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="7d172a85c683fc83" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">MainThreadEndOfFrame</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#95a2a360b5b50366" class="i field">mainThreadEndOfFrame</a> ?? (<a href="#95a2a360b5b50366" class="i field">mainThreadEndOfFrame</a> = <b>new</b> <a href="#f679c2f538f7820d" class="t constructor">EndOfFrameMainThreadScheduler</a>());
+            }
+        }
+ 
+        <b>class</b> <a id="a84ac8a905b192ee" href="../../../../../R/a84ac8a905b192ee.html" target="n" data-glyph="4,1" class="t t">MainThreadScheduler</a> : <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>, <a href="../Schedulers/IScheduler.cs.html#f59e5129868b12fd" class="t t">ISchedulerPeriodic</a>, <a href="../Schedulers/IScheduler.cs.html#f569e3af81779a18" class="t t">ISchedulerQueueing</a>
+        {
+            <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <a id="9ef0589a41683854" href="../../../../../R/9ef0589a41683854.html" target="n" data-glyph="46,2" class="i field">scheduleAction</a>;
+ 
+            <b>public</b> <a id="d512e78d479ef04e" href="../../../../../R/d512e78d479ef04e.html" target="n" data-glyph="72,2" class="i constructor">MainThreadScheduler</a>()
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+                <a href="#9ef0589a41683854" class="i field">scheduleAction</a> = <b>new</b> <span class="t">Action</span>&lt;<b>object</b>&gt;(<a href="#0eb1e1f461cebfb5" class="i method">Schedule</a>);
+            }
+ 
+            <span class="c">// delay action is run in StartCoroutine</span>
+            <span class="c">// Okay to action run synchronous and guaranteed run on MainThread</span>
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="98100dbfd4e895ef" href="../../../../../R/98100dbfd4e895ef.html" target="n" data-glyph="76,2" class="i method">DelayAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r0 rd" class="r0 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r1 rd" class="r1 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r2 rd" class="r2 r">cancellation</span>)
+            {
+                <span class="c">// zero == every frame</span>
+                <b>if</b> (<span class="r0 r">dueTime</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>yield return null</b>; <span class="c">// not immediately, run next frame</span>
+                }
+                <b>else</b>
+                {
+                    <b>yield return</b> <b>new</b> <span class="i">WaitForSeconds</span>((<b>float</b>)<span class="r0 r">dueTime</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>);
+                }
+ 
+                <b>if</b> (<span class="r2 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r1 r">action</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="ee57cae8b811cc7f" href="../../../../../R/ee57cae8b811cc7f.html" target="n" data-glyph="76,2" class="i method">PeriodicAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r3 rd" class="r3 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r4 rd" class="r4 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r5 rd" class="r5 r">cancellation</span>)
+            {
+                <span class="c">// zero == every frame</span>
+                <b>if</b> (<span class="r3 r">period</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>; <span class="c">// not immediately, run next frame</span>
+                        <b>if</b> (<span class="r5 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                        <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r4 r">action</span>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r6 rd" class="r6 r">seconds</span> = (<b>float</b>)(<span class="r3 r">period</span>.<a href="@0@mscorlib/A.html#0001a4a9e0a9b848" class="i property">TotalMilliseconds</a> / 1000.0);
+                    <b>var</b> <span id="r7 rd" class="r7 r">yieldInstruction</span> = <b>new</b> <span class="i">WaitForSeconds</span>(<span class="r6 r">seconds</span>); <span class="c">// cache single instruction object</span>
+ 
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return</b> <span class="r7 r">yieldInstruction</span>;
+                        <b>if</b> (<span class="r5 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                        <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r4 r">action</span>);
+                    }
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="7ee747ca31293a4f" href="../../../../../R/7ee747ca31293a4f.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+ 
+            <b>void</b> <a id="0eb1e1f461cebfb5" href="../../../../../R/0eb1e1f461cebfb5.html" target="n" data-glyph="76,2" class="i method">Schedule</a>(<b>object</b> <span id="r8 rd" class="r8 r">state</span>)
+            {
+                <a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="k">var</a> <span id="r9 rd" class="r9 r">t</span> = (<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="t t">BooleanDisposable</a>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt;)<span class="r8 r">state</span>;
+                <b>if</b> (!<span class="r9 r">t</span>.<a href="../System/Tuple.cs.html#1ce3b84907bc93d0" class="i property">Item1</a>.<a href="../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>)
+                {
+                    <span class="r9 r">t</span>.<a href="../System/Tuple.cs.html#e8804a44d2c02690" class="i property">Item2</a>();
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="24f3bc563b9c3ddd" href="../../../../../R/24f3bc563b9c3ddd.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r10 rd" class="r10 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r11 rd" class="r11 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#d176d21fa1796741" class="i method">Post</a>(<a href="#9ef0589a41683854" class="i field">scheduleAction</a>, <a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="../System/Tuple.cs.html#f9644928b1f50449" class="i method">Create</a>(<span class="r11 r">d</span>, <span class="r10 r">action</span>));
+                <b>return</b> <span class="r11 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="214aa4cfcd9c663b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r12 rd" class="r12 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r13 rd" class="r13 r">action</span>)
+            {
+                <b>return</b> <a href="#a155daed76a3a8ad" class="i method">Schedule</a>(<span class="r12 r">dueTime</span> - <a href="#7ee747ca31293a4f" class="i property">Now</a>, <span class="r13 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a155daed76a3a8ad" href="../../../../../R/a155daed76a3a8ad.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r14 rd" class="r14 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r15 rd" class="r15 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r16 rd" class="r16 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r17 rd" class="r17 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r14 r">dueTime</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#4132c4557cdb710f" class="i method">SendStartCoroutine</a>(<a href="#98100dbfd4e895ef" class="i method">DelayAction</a>(<span class="r17 r">time</span>, <span class="r15 r">action</span>, <span class="r16 r">d</span>));
+ 
+                <b>return</b> <span class="r16 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="33ec3fde309f3afc" href="../../../../../R/33ec3fde309f3afc.html" target="n" data-glyph="72,2" class="i method">SchedulePeriodic</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r18 rd" class="r18 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r19 rd" class="r19 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r20 rd" class="r20 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r21 rd" class="r21 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r18 r">period</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#4132c4557cdb710f" class="i method">SendStartCoroutine</a>(<a href="#ee57cae8b811cc7f" class="i method">PeriodicAction</a>(<span class="r21 r">time</span>, <span class="r19 r">action</span>, <span class="r20 r">d</span>));
+ 
+                <b>return</b> <span class="r20 r">d</span>;
+            }
+ 
+            <b>void</b> <a id="b3982608afd606f0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,2" class="i method">ScheduleQueueing</a>&lt;<span id="r22 rd t" class="r22 r t">T</span>&gt;(<b>object</b> <span id="r23 rd" class="r23 r">state</span>)
+            {
+                <a href="../System/Tuple.cs.html#97e818b182c67e67" class="k">var</a> <span id="r24 rd" class="r24 r">t</span> = (<a href="../System/Tuple.cs.html#97e818b182c67e67" class="t t">Tuple</a>&lt;<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>, <span class="r22 r t">T</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r22 r t">T</span>&gt;&gt;)<span class="r23 r">state</span>;
+                <b>if</b> (!<span class="r24 r">t</span>.<a href="../System/Tuple.cs.html#b710cd33fa67d9c3" class="i property">Item1</a>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>)
+                {
+                    <span class="r24 r">t</span>.<a href="../System/Tuple.cs.html#d70f2614d027941e" class="i property">Item3</a>(<span class="r24 r">t</span>.<a href="../System/Tuple.cs.html#610631776241a57c" class="i property">Item2</a>);
+                }
+            }
+ 
+            <b>public void</b> <a id="5856a14af572b208" href="../../../../../R/5856a14af572b208.html" target="n" data-glyph="72,2" class="i method">ScheduleQueueing</a>&lt;<span id="r25 rd t" class="r25 r t">T</span>&gt;(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r26 rd" class="r26 r">cancel</span>, <span class="r25 r t">T</span> <span id="r27 rd" class="r27 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r25 r t">T</span>&gt; <span id="r28 rd" class="r28 r">action</span>)
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#d176d21fa1796741" class="i method">Post</a>(<a href="#011ea776ee8804a9" class="t t">QueuedAction</a>&lt;<span class="r25 r t">T</span>&gt;.<a href="#57771c4cc5dc65f1" class="i field">Instance</a>, <a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="../System/Tuple.cs.html#cff7efd51d1ce21c" class="i method">Create</a>(<span class="r26 r">cancel</span>, <span class="r27 r">state</span>, <span class="r28 r">action</span>));
+            }
+ 
+            <b>static class</b> <a id="011ea776ee8804a9" href="../../../../../R/011ea776ee8804a9.html" target="n" data-glyph="4,2" class="t t">QueuedAction</a>&lt;<span id="r29 rd t" class="r29 r t">T</span>&gt;
+            {
+                <b>public static readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <a id="57771c4cc5dc65f1" href="../../../../../R/57771c4cc5dc65f1.html" target="n" data-glyph="42,3" class="i field">Instance</a> = <b>new</b> <span class="t">Action</span>&lt;<b>object</b>&gt;(<a href="#02c909e8ba2c5ed6" class="i method">Invoke</a>);
+ 
+                <b>public static void</b> <a id="02c909e8ba2c5ed6" href="../../../../../R/02c909e8ba2c5ed6.html" target="n" data-glyph="72,3" class="i method">Invoke</a>(<b>object</b> <span id="r30 rd" class="r30 r">state</span>)
+                {
+                    <a href="../System/Tuple.cs.html#97e818b182c67e67" class="k">var</a> <span id="r31 rd" class="r31 r">t</span> = (<a href="../System/Tuple.cs.html#97e818b182c67e67" class="t t">Tuple</a>&lt;<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>, <span class="r29 r t">T</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r29 r t">T</span>&gt;&gt;)<span class="r30 r">state</span>;
+ 
+                    <b>if</b> (!<span class="r31 r">t</span>.<a href="../System/Tuple.cs.html#b710cd33fa67d9c3" class="i property">Item1</a>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>)
+                    {
+                        <span class="r31 r">t</span>.<a href="../System/Tuple.cs.html#d70f2614d027941e" class="i property">Item3</a>(<span class="r31 r">t</span>.<a href="../System/Tuple.cs.html#610631776241a57c" class="i property">Item2</a>);
+                    }
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="b8066d179249209e" href="../../../../../R/b8066d179249209e.html" target="n" data-glyph="4,1" class="t t">IgnoreTimeScaleMainThreadScheduler</a> : <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>, <a href="../Schedulers/IScheduler.cs.html#f59e5129868b12fd" class="t t">ISchedulerPeriodic</a>, <a href="../Schedulers/IScheduler.cs.html#f569e3af81779a18" class="t t">ISchedulerQueueing</a>
+        {
+            <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <a id="99e45dcc47e51c7b" href="../../../../../R/99e45dcc47e51c7b.html" target="n" data-glyph="46,2" class="i field">scheduleAction</a>;
+ 
+            <b>public</b> <a id="93071482a8c83af8" href="../../../../../R/93071482a8c83af8.html" target="n" data-glyph="72,2" class="i constructor">IgnoreTimeScaleMainThreadScheduler</a>()
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+                <a href="#99e45dcc47e51c7b" class="i field">scheduleAction</a> = <b>new</b> <span class="t">Action</span>&lt;<b>object</b>&gt;(<a href="#4ca5f33479dbccbd" class="i method">Schedule</a>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="59ef49d4559a7f04" href="../../../../../R/59ef49d4559a7f04.html" target="n" data-glyph="76,2" class="i method">DelayAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r32 rd" class="r32 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r33 rd" class="r33 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r34 rd" class="r34 r">cancellation</span>)
+            {
+                <b>if</b> (<span class="r32 r">dueTime</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>yield return null</b>;
+                    <b>if</b> (<span class="r34 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                    <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r33 r">action</span>);
+                }
+                <b>else</b>
+                {
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r35 rd" class="r35 r">elapsed</span> = 0f;
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r36 rd" class="r36 r">dt</span> = (<b>float</b>)<span class="r32 r">dueTime</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r34 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>break</b>;
+ 
+                        <span class="r35 r">elapsed</span> += <span class="i">Time</span>.<span class="i">unscaledDeltaTime</span>;
+                        <b>if</b> (<span class="r35 r">elapsed</span> &gt;= <span class="r36 r">dt</span>)
+                        {
+                            <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r33 r">action</span>);
+                            <b>break</b>;
+                        }
+                    }
+                }
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="8d29ffa6747b3c45" href="../../../../../R/8d29ffa6747b3c45.html" target="n" data-glyph="76,2" class="i method">PeriodicAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r37 rd" class="r37 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r38 rd" class="r38 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r39 rd" class="r39 r">cancellation</span>)
+            {
+                <span class="c">// zero == every frame</span>
+                <b>if</b> (<span class="r37 r">period</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>; <span class="c">// not immediately, run next frame</span>
+                        <b>if</b> (<span class="r39 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                        <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r38 r">action</span>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r40 rd" class="r40 r">elapsed</span> = 0f;
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r41 rd" class="r41 r">dt</span> = (<b>float</b>)<span class="r37 r">period</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r39 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>break</b>;
+ 
+                        <span class="r40 r">elapsed</span> += <span class="i">Time</span>.<span class="i">unscaledDeltaTime</span>;
+                        <b>if</b> (<span class="r40 r">elapsed</span> &gt;= <span class="r41 r">dt</span>)
+                        {
+                            <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r38 r">action</span>);
+                            <span class="r40 r">elapsed</span> = 0;
+                        }
+                    }
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="5625fff4175094d4" href="../../../../../R/5625fff4175094d4.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+ 
+            <b>void</b> <a id="4ca5f33479dbccbd" href="../../../../../R/4ca5f33479dbccbd.html" target="n" data-glyph="76,2" class="i method">Schedule</a>(<b>object</b> <span id="r42 rd" class="r42 r">state</span>)
+            {
+                <a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="k">var</a> <span id="r43 rd" class="r43 r">t</span> = (<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="t t">BooleanDisposable</a>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a>&gt;)<span class="r42 r">state</span>;
+                <b>if</b> (!<span class="r43 r">t</span>.<a href="../System/Tuple.cs.html#1ce3b84907bc93d0" class="i property">Item1</a>.<a href="../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>)
+                {
+                    <span class="r43 r">t</span>.<a href="../System/Tuple.cs.html#e8804a44d2c02690" class="i property">Item2</a>();
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="ef0631b64c120b5c" href="../../../../../R/ef0631b64c120b5c.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r44 rd" class="r44 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r45 rd" class="r45 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#d176d21fa1796741" class="i method">Post</a>(<a href="#99e45dcc47e51c7b" class="i field">scheduleAction</a>, <a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="../System/Tuple.cs.html#f9644928b1f50449" class="i method">Create</a>(<span class="r45 r">d</span>, <span class="r44 r">action</span>));
+                <b>return</b> <span class="r45 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="fa05bec73da763a0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r46 rd" class="r46 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r47 rd" class="r47 r">action</span>)
+            {
+                <b>return</b> <a href="#83fff178fc311257" class="i method">Schedule</a>(<span class="r46 r">dueTime</span> - <a href="#5625fff4175094d4" class="i property">Now</a>, <span class="r47 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="83fff178fc311257" href="../../../../../R/83fff178fc311257.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r48 rd" class="r48 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r49 rd" class="r49 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r50 rd" class="r50 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r51 rd" class="r51 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r48 r">dueTime</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#4132c4557cdb710f" class="i method">SendStartCoroutine</a>(<a href="#59ef49d4559a7f04" class="i method">DelayAction</a>(<span class="r51 r">time</span>, <span class="r49 r">action</span>, <span class="r50 r">d</span>));
+ 
+                <b>return</b> <span class="r50 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="3eedfff24e30dff2" href="../../../../../R/3eedfff24e30dff2.html" target="n" data-glyph="72,2" class="i method">SchedulePeriodic</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r52 rd" class="r52 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r53 rd" class="r53 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r54 rd" class="r54 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r55 rd" class="r55 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r52 r">period</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#4132c4557cdb710f" class="i method">SendStartCoroutine</a>(<a href="#8d29ffa6747b3c45" class="i method">PeriodicAction</a>(<span class="r55 r">time</span>, <span class="r53 r">action</span>, <span class="r54 r">d</span>));
+ 
+                <b>return</b> <span class="r54 r">d</span>;
+            }
+ 
+            <b>public void</b> <a id="69516b441991a9ac" href="../../../../../R/69516b441991a9ac.html" target="n" data-glyph="72,2" class="i method">ScheduleQueueing</a>&lt;<span id="r56 rd t" class="r56 r t">T</span>&gt;(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r57 rd" class="r57 r">cancel</span>, <span class="r56 r t">T</span> <span id="r58 rd" class="r58 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r56 r t">T</span>&gt; <span id="r59 rd" class="r59 r">action</span>)
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#d176d21fa1796741" class="i method">Post</a>(<a href="#66e261d7a6eca500" class="t t">QueuedAction</a>&lt;<span class="r56 r t">T</span>&gt;.<a href="#5550ff74a433ce2d" class="i field">Instance</a>, <a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<a href="../System/Tuple.cs.html#cff7efd51d1ce21c" class="i method">Create</a>(<span class="r57 r">cancel</span>, <span class="r58 r">state</span>, <span class="r59 r">action</span>));
+            }
+ 
+            <b>static class</b> <a id="66e261d7a6eca500" href="../../../../../R/66e261d7a6eca500.html" target="n" data-glyph="4,2" class="t t">QueuedAction</a>&lt;<span id="r60 rd t" class="r60 r t">T</span>&gt;
+            {
+                <b>public static readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <a id="5550ff74a433ce2d" href="../../../../../R/5550ff74a433ce2d.html" target="n" data-glyph="42,3" class="i field">Instance</a> = <b>new</b> <span class="t">Action</span>&lt;<b>object</b>&gt;(<a href="#e2bc3f55f88de3d2" class="i method">Invoke</a>);
+ 
+                <b>public static void</b> <a id="e2bc3f55f88de3d2" href="../../../../../R/e2bc3f55f88de3d2.html" target="n" data-glyph="72,3" class="i method">Invoke</a>(<b>object</b> <span id="r61 rd" class="r61 r">state</span>)
+                {
+                    <a href="../System/Tuple.cs.html#97e818b182c67e67" class="k">var</a> <span id="r62 rd" class="r62 r">t</span> = (<a href="../System/Tuple.cs.html#97e818b182c67e67" class="t t">Tuple</a>&lt;<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>, <span class="r60 r t">T</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r60 r t">T</span>&gt;&gt;)<span class="r61 r">state</span>;
+ 
+                    <b>if</b> (!<span class="r62 r">t</span>.<a href="../System/Tuple.cs.html#b710cd33fa67d9c3" class="i property">Item1</a>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>)
+                    {
+                        <span class="r62 r">t</span>.<a href="../System/Tuple.cs.html#d70f2614d027941e" class="i property">Item3</a>(<span class="r62 r">t</span>.<a href="../System/Tuple.cs.html#610631776241a57c" class="i property">Item2</a>);
+                    }
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="afb23e0b6fcf2442" href="../../../../../R/afb23e0b6fcf2442.html" target="n" data-glyph="4,1" class="t t">FixedUpdateMainThreadScheduler</a> : <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>, <a href="../Schedulers/IScheduler.cs.html#f59e5129868b12fd" class="t t">ISchedulerPeriodic</a>, <a href="../Schedulers/IScheduler.cs.html#f569e3af81779a18" class="t t">ISchedulerQueueing</a>
+        {
+            <b>public</b> <a id="71b76f3cd11f1d9f" href="../../../../../R/71b76f3cd11f1d9f.html" target="n" data-glyph="72,2" class="i constructor">FixedUpdateMainThreadScheduler</a>()
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="088b360ce2849739" href="../../../../../R/088b360ce2849739.html" target="n" data-glyph="76,2" class="i method">ImmediateAction</a>&lt;<span id="r63 rd t" class="r63 r t">T</span>&gt;(<span class="r63 r t">T</span> <span id="r64 rd" class="r64 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r63 r t">T</span>&gt; <span id="r65 rd" class="r65 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r66 rd" class="r66 r">cancellation</span>)
+            {
+                <b>yield return null</b>;
+                <b>if</b> (<span class="r66 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#ff540c3725041161" class="i method">UnsafeSend</a>(<span class="r65 r">action</span>, <span class="r64 r">state</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="c9b37fd731fb034c" href="../../../../../R/c9b37fd731fb034c.html" target="n" data-glyph="76,2" class="i method">DelayAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r67 rd" class="r67 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r68 rd" class="r68 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r69 rd" class="r69 r">cancellation</span>)
+            {
+                <b>if</b> (<span class="r67 r">dueTime</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>yield return null</b>;
+                    <b>if</b> (<span class="r69 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                    <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r68 r">action</span>);
+                }
+                <b>else</b>
+                {
+                    <b>var</b> <span id="r70 rd" class="r70 r">startTime</span> = <span class="i">Time</span>.<span class="i">fixedTime</span>;
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r71 rd" class="r71 r">dt</span> = (<b>float</b>)<span class="r67 r">dueTime</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r69 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>break</b>;
+ 
+                        <b>var</b> <span id="r72 rd" class="r72 r">elapsed</span> = <span class="i">Time</span>.<span class="i">fixedTime</span> - <span class="r70 r">startTime</span>;
+                        <b>if</b> (<span class="r72 r">elapsed</span> &gt;= <span class="r71 r">dt</span>)
+                        {
+                            <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r68 r">action</span>);
+                            <b>break</b>;
+                        }
+                    }
+                }
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="2a7b8bdb86b9cafe" href="../../../../../R/2a7b8bdb86b9cafe.html" target="n" data-glyph="76,2" class="i method">PeriodicAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r73 rd" class="r73 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r74 rd" class="r74 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r75 rd" class="r75 r">cancellation</span>)
+            {
+                <span class="c">// zero == every frame</span>
+                <b>if</b> (<span class="r73 r">period</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r75 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                        <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r74 r">action</span>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>var</b> <span id="r76 rd" class="r76 r">startTime</span> = <span class="i">Time</span>.<span class="i">fixedTime</span>;
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r77 rd" class="r77 r">dt</span> = (<b>float</b>)<span class="r73 r">period</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r75 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>break</b>;
+ 
+                        <b>var</b> <span id="r78 rd" class="r78 r">ft</span> = <span class="i">Time</span>.<span class="i">fixedTime</span>;
+                        <b>var</b> <span id="r79 rd" class="r79 r">elapsed</span> = <span class="r78 r">ft</span> - <span class="r76 r">startTime</span>;
+                        <b>if</b> (<span class="r79 r">elapsed</span> &gt;= <span class="r77 r">dt</span>)
+                        {
+                            <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r74 r">action</span>);
+                            <span class="r76 r">startTime</span> = <span class="r78 r">ft</span>;
+                        }
+                    }
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="415377794d759cbf" href="../../../../../R/415377794d759cbf.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="524e63f12c7183ae" href="../../../../../R/524e63f12c7183ae.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r80 rd" class="r80 r">action</span>)
+            {
+                <b>return</b> <a href="#0a7455050ac2a977" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>, <span class="r80 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="e431279ff6dad317" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r81 rd" class="r81 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r82 rd" class="r82 r">action</span>)
+            {
+                <b>return</b> <a href="#0a7455050ac2a977" class="i method">Schedule</a>(<span class="r81 r">dueTime</span> - <a href="#415377794d759cbf" class="i property">Now</a>, <span class="r82 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="0a7455050ac2a977" href="../../../../../R/0a7455050ac2a977.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r83 rd" class="r83 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r84 rd" class="r84 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r85 rd" class="r85 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r86 rd" class="r86 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r83 r">dueTime</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#ab8482527980dc38" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="#c9b37fd731fb034c" class="i method">DelayAction</a>(<span class="r86 r">time</span>, <span class="r84 r">action</span>, <span class="r85 r">d</span>));
+ 
+                <b>return</b> <span class="r85 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="284a7a2f7f4a62aa" href="../../../../../R/284a7a2f7f4a62aa.html" target="n" data-glyph="72,2" class="i method">SchedulePeriodic</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r87 rd" class="r87 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r88 rd" class="r88 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r89 rd" class="r89 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r90 rd" class="r90 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r87 r">period</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#ab8482527980dc38" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="#2a7b8bdb86b9cafe" class="i method">PeriodicAction</a>(<span class="r90 r">time</span>, <span class="r88 r">action</span>, <span class="r89 r">d</span>));
+ 
+                <b>return</b> <span class="r89 r">d</span>;
+            }
+ 
+            <b>public void</b> <a id="94d0e8d56d323712" href="../../../../../R/94d0e8d56d323712.html" target="n" data-glyph="72,2" class="i method">ScheduleQueueing</a>&lt;<span id="r91 rd t" class="r91 r t">T</span>&gt;(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r92 rd" class="r92 r">cancel</span>, <span class="r91 r t">T</span> <span id="r93 rd" class="r93 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r91 r t">T</span>&gt; <span id="r94 rd" class="r94 r">action</span>)
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#ab8482527980dc38" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="#088b360ce2849739" class="i method">ImmediateAction</a>(<span class="r93 r">state</span>, <span class="r94 r">action</span>, <span class="r92 r">cancel</span>));
+            }
+        }
+ 
+        <b>class</b> <a id="e95b36517b133050" href="../../../../../R/e95b36517b133050.html" target="n" data-glyph="4,1" class="t t">EndOfFrameMainThreadScheduler</a> : <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>, <a href="../Schedulers/IScheduler.cs.html#f59e5129868b12fd" class="t t">ISchedulerPeriodic</a>, <a href="../Schedulers/IScheduler.cs.html#f569e3af81779a18" class="t t">ISchedulerQueueing</a>
+        {
+            <b>public</b> <a id="f679c2f538f7820d" href="../../../../../R/f679c2f538f7820d.html" target="n" data-glyph="72,2" class="i constructor">EndOfFrameMainThreadScheduler</a>()
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#7fadb0cbf628eece" class="i method">Initialize</a>();
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="33f520e36d2a46ec" href="../../../../../R/33f520e36d2a46ec.html" target="n" data-glyph="76,2" class="i method">ImmediateAction</a>&lt;<span id="r95 rd t" class="r95 r t">T</span>&gt;(<span class="r95 r t">T</span> <span id="r96 rd" class="r96 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r95 r t">T</span>&gt; <span id="r97 rd" class="r97 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r98 rd" class="r98 r">cancellation</span>)
+            {
+                <b>yield return null</b>;
+                <b>if</b> (<span class="r98 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#ff540c3725041161" class="i method">UnsafeSend</a>(<span class="r97 r">action</span>, <span class="r96 r">state</span>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="76162213897799db" href="../../../../../R/76162213897799db.html" target="n" data-glyph="76,2" class="i method">DelayAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r99 rd" class="r99 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r100 rd" class="r100 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r101 rd" class="r101 r">cancellation</span>)
+            {
+                <b>if</b> (<span class="r99 r">dueTime</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>yield return null</b>;
+                    <b>if</b> (<span class="r101 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                    <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r100 r">action</span>);
+                }
+                <b>else</b>
+                {
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r102 rd" class="r102 r">elapsed</span> = 0f;
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r103 rd" class="r103 r">dt</span> = (<b>float</b>)<span class="r99 r">dueTime</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r101 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>break</b>;
+ 
+                        <span class="r102 r">elapsed</span> += <span class="i">Time</span>.<span class="i">deltaTime</span>;
+                        <b>if</b> (<span class="r102 r">elapsed</span> &gt;= <span class="r103 r">dt</span>)
+                        {
+                            <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r100 r">action</span>);
+                            <b>break</b>;
+                        }
+                    }
+                }
+            }
+ 
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="9006541ead0a9131" href="../../../../../R/9006541ead0a9131.html" target="n" data-glyph="76,2" class="i method">PeriodicAction</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r104 rd" class="r104 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r105 rd" class="r105 r">action</span>, <a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r106 rd" class="r106 r">cancellation</span>)
+            {
+                <span class="c">// zero == every frame</span>
+                <b>if</b> (<span class="r104 r">period</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                {
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r106 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>yield break</b>;
+ 
+                        <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r105 r">action</span>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r107 rd" class="r107 r">elapsed</span> = 0f;
+                    <a href="@0@mscorlib/A.html#dda909df0f8d2fd0" class="k">var</a> <span id="r108 rd" class="r108 r">dt</span> = (<b>float</b>)<span class="r104 r">period</span>.<a href="@0@mscorlib/A.html#061d7498e3227cfb" class="i property">TotalSeconds</a>;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>yield return null</b>;
+                        <b>if</b> (<span class="r106 r">cancellation</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>) <b>break</b>;
+                        
+                        <span class="r107 r">elapsed</span> += <span class="i">Time</span>.<span class="i">deltaTime</span>;
+                        <b>if</b> (<span class="r107 r">elapsed</span> &gt;= <span class="r108 r">dt</span>)
+                        {
+                            <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#8a3ac0df0ad04341" class="i method">UnsafeSend</a>(<span class="r105 r">action</span>);
+                            <span class="r107 r">elapsed</span> = 0;
+                        }
+                    }
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="6c709d8923a0a282" href="../../../../../R/6c709d8923a0a282.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b8db946d51d4dc1b" href="../../../../../R/b8db946d51d4dc1b.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r109 rd" class="r109 r">action</span>)
+            {
+                <b>return</b> <a href="#00ae2a7628091a69" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>, <span class="r109 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1577865c486fc997" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r110 rd" class="r110 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r111 rd" class="r111 r">action</span>)
+            {
+                <b>return</b> <a href="#00ae2a7628091a69" class="i method">Schedule</a>(<span class="r110 r">dueTime</span> - <a href="#6c709d8923a0a282" class="i property">Now</a>, <span class="r111 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="00ae2a7628091a69" href="../../../../../R/00ae2a7628091a69.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r112 rd" class="r112 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r113 rd" class="r113 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r114 rd" class="r114 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r115 rd" class="r115 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r112 r">dueTime</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="#76162213897799db" class="i method">DelayAction</a>(<span class="r115 r">time</span>, <span class="r113 r">action</span>, <span class="r114 r">d</span>));
+ 
+                <b>return</b> <span class="r114 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b4ef3db81ff92fb3" href="../../../../../R/b4ef3db81ff92fb3.html" target="n" data-glyph="72,2" class="i method">SchedulePeriodic</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r116 rd" class="r116 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r117 rd" class="r117 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r118 rd" class="r118 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r119 rd" class="r119 r">time</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r116 r">period</span>);
+ 
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="#9006541ead0a9131" class="i method">PeriodicAction</a>(<span class="r119 r">time</span>, <span class="r117 r">action</span>, <span class="r118 r">d</span>));
+ 
+                <b>return</b> <span class="r118 r">d</span>;
+            }
+ 
+            <b>public void</b> <a id="a774bf38eac60f37" href="../../../../../R/a774bf38eac60f37.html" target="n" data-glyph="72,2" class="i method">ScheduleQueueing</a>&lt;<span id="r120 rd t" class="r120 r t">T</span>&gt;(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r121 rd" class="r121 r">cancel</span>, <span class="r120 r t">T</span> <span id="r122 rd" class="r122 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r120 r t">T</span>&gt; <span id="r123 rd" class="r123 r">action</span>)
+            {
+                <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="#33f520e36d2a46ec" class="i method">ImmediateAction</a>(<span class="r122 r">state</span>, <span class="r123 r">action</span>, <span class="r121 r">cancel</span>));
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

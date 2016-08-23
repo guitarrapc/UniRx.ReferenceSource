@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableStateMachineTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(143);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableStateMachineTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableStateMachineTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// over Unity5 added StateMachineBehaviour</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_7</span> || <span class="i">UNITY_4_6</span> || <span class="i">UNITY_4_5</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_0_1</span> || <span class="i">UNITY_4_0</span> || <span class="i">UNITY_3_5</span> || <span class="i">UNITY_3_4</span> || <span class="i">UNITY_3_3</span> || <span class="i">UNITY_3_2</span> || <span class="i">UNITY_3_1</span> || <span class="i">UNITY_3_0_0</span> || <span class="i">UNITY_3_0</span> || <span class="i">UNITY_2_6_1</span> || <span class="i">UNITY_2_6</span>)
+ 
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="32fe8ee6fe0756a4" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="afa25b07b8d4bda9">ObservableStateMachineTrigger</span></a> : <span class="i">StateMachineBehaviour</span>
+    {
+        <b>public class</b> <a id="50631a36ce0bb362" href="../../../../../../R/50631a36ce0bb362.html" target="n" data-glyph="0,1" class="t t">OnStateInfo</a>
+        {
+            <b>public</b> <span class="i">Animator</span> <a id="cb1ef6cc6e6bd387" href="../../../../../../R/cb1ef6cc6e6bd387.html" target="n" data-glyph="102,2" class="i property">Animator</a> { <b>get</b>; <b>private set</b>; }
+            <b>public</b> <span class="i">AnimatorStateInfo</span> <a id="532e7534b388129d" href="../../../../../../R/532e7534b388129d.html" target="n" data-glyph="102,2" class="i property">StateInfo</a> { <b>get</b>; <b>private set</b>; }
+            <b>public int</b> <a id="347b73b0acddf41b" href="../../../../../../R/347b73b0acddf41b.html" target="n" data-glyph="102,2" class="i property">LayerIndex</a> { <b>get</b>; <b>private set</b>; }
+ 
+            <b>public</b> <a id="94886d6efa3bae29" href="../../../../../../R/94886d6efa3bae29.html" target="n" data-glyph="72,2" class="i constructor">OnStateInfo</a>(<span class="i">Animator</span> <span id="r0 rd" class="r0 r">animator</span>, <span class="i">AnimatorStateInfo</span> <span id="r1 rd" class="r1 r">stateInfo</span>, <b>int</b> <span id="r2 rd" class="r2 r">layerIndex</span>)
+            {
+                <a href="#cb1ef6cc6e6bd387" class="i property">Animator</a> = <span class="r0 r">animator</span>;
+                <a href="#532e7534b388129d" class="i property">StateInfo</a> = <span class="r1 r">stateInfo</span>;
+                <a href="#347b73b0acddf41b" class="i property">LayerIndex</a> = <span class="r2 r">layerIndex</span>;
+            }
+        }
+ 
+        <b>public class</b> <a id="4620b45d09e17624" href="../../../../../../R/4620b45d09e17624.html" target="n" data-glyph="0,1" class="t t">OnStateMachineInfo</a>
+        {
+            <b>public</b> <span class="i">Animator</span> <a id="680c47f7b3749536" href="../../../../../../R/680c47f7b3749536.html" target="n" data-glyph="102,2" class="i property">Animator</a> { <b>get</b>; <b>private set</b>; }
+            <b>public int</b> <a id="863cb752041fd7c6" href="../../../../../../R/863cb752041fd7c6.html" target="n" data-glyph="102,2" class="i property">StateMachinePathHash</a> { <b>get</b>; <b>private set</b>; }
+ 
+            <b>public</b> <a id="3c55d46f5d3f0fb8" href="../../../../../../R/3c55d46f5d3f0fb8.html" target="n" data-glyph="72,2" class="i constructor">OnStateMachineInfo</a>(<span class="i">Animator</span> <span id="r3 rd" class="r3 r">animator</span>, <b>int</b> <span id="r4 rd" class="r4 r">stateMachinePathHash</span>)
+            {
+                <a href="#680c47f7b3749536" class="i property">Animator</a> = <span class="r3 r">animator</span>;
+                <a href="#863cb752041fd7c6" class="i property">StateMachinePathHash</a> = <span class="r4 r">stateMachinePathHash</span>;
+            }
+        }
+ 
+        <span class="c">// OnStateExit</span>
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="7da57fad4ebb883a" href="../../../../../../R/7da57fad4ebb883a.html" target="n" data-glyph="46,1" class="i field">onStateExit</a>;
+ 
+        <b>public override void</b> <a id="b988534df3e2461a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateExit</a>(<span class="i">Animator</span> <span id="r5 rd" class="r5 r">animator</span>, <span class="i">AnimatorStateInfo</span> <span id="r6 rd" class="r6 r">stateInfo</span>, <b>int</b> <span id="r7 rd" class="r7 r">layerIndex</span>)
+        {
+            <b>if</b> (<a href="#7da57fad4ebb883a" class="i field">onStateExit</a> != <b>null</b>) <a href="#7da57fad4ebb883a" class="i field">onStateExit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#94886d6efa3bae29" class="t constructor">OnStateInfo</a>(<span class="r5 r">animator</span>, <span class="r6 r">stateInfo</span>, <span class="r7 r">layerIndex</span>));
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="4c8037c98125dd15" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#7da57fad4ebb883a" class="i field">onStateExit</a> ?? (<a href="#7da57fad4ebb883a" class="i field">onStateExit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt;());
+        }
+ 
+        <span class="c">// OnStateEnter</span>
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="d17a0bd8636d8bb4" href="../../../../../../R/d17a0bd8636d8bb4.html" target="n" data-glyph="46,1" class="i field">onStateEnter</a>;
+ 
+        <b>public override void</b> <a id="3dd1cbdc833f4275" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateEnter</a>(<span class="i">Animator</span> <span id="r8 rd" class="r8 r">animator</span>, <span class="i">AnimatorStateInfo</span> <span id="r9 rd" class="r9 r">stateInfo</span>, <b>int</b> <span id="r10 rd" class="r10 r">layerIndex</span>)
+        {
+            <b>if</b> (<a href="#d17a0bd8636d8bb4" class="i field">onStateEnter</a> != <b>null</b>) <a href="#d17a0bd8636d8bb4" class="i field">onStateEnter</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#94886d6efa3bae29" class="t constructor">OnStateInfo</a>(<span class="r8 r">animator</span>, <span class="r9 r">stateInfo</span>, <span class="r10 r">layerIndex</span>));
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="1728592fad114780" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#d17a0bd8636d8bb4" class="i field">onStateEnter</a> ?? (<a href="#d17a0bd8636d8bb4" class="i field">onStateEnter</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt;());
+        }
+ 
+        <span class="c">// OnStateIK</span>
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="7472fa20643a4212" href="../../../../../../R/7472fa20643a4212.html" target="n" data-glyph="46,1" class="i field">onStateIK</a>;
+ 
+        <b>public override void</b> <a id="60e71f26bc86e2d3" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateIK</a>(<span class="i">Animator</span> <span id="r11 rd" class="r11 r">animator</span>, <span class="i">AnimatorStateInfo</span> <span id="r12 rd" class="r12 r">stateInfo</span>, <b>int</b> <span id="r13 rd" class="r13 r">layerIndex</span>)
+        {
+            <b>if</b>(<a href="#7472fa20643a4212" class="i field">onStateIK</a> !=<b>null</b>) <a href="#7472fa20643a4212" class="i field">onStateIK</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#94886d6efa3bae29" class="t constructor">OnStateInfo</a>(<span class="r11 r">animator</span>, <span class="r12 r">stateInfo</span>, <span class="r13 r">layerIndex</span>));
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="d043f449dd53032f" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateIKAsObservable</a>()
+        {
+            <b>return</b> <a href="#7472fa20643a4212" class="i field">onStateIK</a> ?? (<a href="#7472fa20643a4212" class="i field">onStateIK</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt;());
+        }
+ 
+        <span class="c">// Does not implments OnStateMove.</span>
+        <span class="c">// ObservableStateMachine Trigger makes stop animating.</span>
+        <span class="c">// By defining OnAnimatorMove, you are signifying that you want to intercept the movement of the root object and apply it yourself.</span>
+        <span class="c">// http://fogbugz.unity3d.com/default.asp?700990_9jqaim4ev33i8e9h</span>
+ 
+        <span class="c">//// OnStateMove</span>
+ 
+        <span class="c">//Subject&lt;OnStateInfo&gt; onStateMove;</span>
+ 
+        <span class="c">//public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)</span>
+        <span class="c">//{</span>
+        <span class="c">//    if (onStateMove != null) onStateMove.OnNext(new OnStateInfo(animator, stateInfo, layerIndex));</span>
+        <span class="c">//}</span>
+ 
+        <span class="c">//public IObservable&lt;OnStateInfo&gt; OnStateMoveAsObservable()</span>
+        <span class="c">//{</span>
+        <span class="c">//    return onStateMove ?? (onStateMove = new Subject&lt;OnStateInfo&gt;());</span>
+        <span class="c">//}</span>
+ 
+        <span class="c">// OnStateUpdate</span>
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="ba745990fa31e853" href="../../../../../../R/ba745990fa31e853.html" target="n" data-glyph="46,1" class="i field">onStateUpdate</a>;
+ 
+        <b>public override void</b> <a id="9b4adf3ddef723ff" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateUpdate</a>(<span class="i">Animator</span> <span id="r14 rd" class="r14 r">animator</span>, <span class="i">AnimatorStateInfo</span> <span id="r15 rd" class="r15 r">stateInfo</span>, <b>int</b> <span id="r16 rd" class="r16 r">layerIndex</span>)
+        {
+            <b>if</b> (<a href="#ba745990fa31e853" class="i field">onStateUpdate</a> != <b>null</b>) <a href="#ba745990fa31e853" class="i field">onStateUpdate</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#94886d6efa3bae29" class="t constructor">OnStateInfo</a>(<span class="r14 r">animator</span>, <span class="r15 r">stateInfo</span>, <span class="r16 r">layerIndex</span>));
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt; <a id="271b4279ae049000" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateUpdateAsObservable</a>()
+        {
+            <b>return</b> <a href="#ba745990fa31e853" class="i field">onStateUpdate</a> ?? (<a href="#ba745990fa31e853" class="i field">onStateUpdate</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#50631a36ce0bb362" class="t t">OnStateInfo</a>&gt;());
+        }
+ 
+        <span class="c">// OnStateMachineEnter</span>
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#4620b45d09e17624" class="t t">OnStateMachineInfo</a>&gt; <a id="2505b7e3b369cdd2" href="../../../../../../R/2505b7e3b369cdd2.html" target="n" data-glyph="46,1" class="i field">onStateMachineEnter</a>;
+ 
+        <b>public override void</b> <a id="f0744a40df5ad48b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateMachineEnter</a>(<span class="i">Animator</span> <span id="r17 rd" class="r17 r">animator</span>, <b>int</b> <span id="r18 rd" class="r18 r">stateMachinePathHash</span>)
+        {
+            <b>if</b> (<a href="#2505b7e3b369cdd2" class="i field">onStateMachineEnter</a> != <b>null</b>) <a href="#2505b7e3b369cdd2" class="i field">onStateMachineEnter</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#3c55d46f5d3f0fb8" class="t constructor">OnStateMachineInfo</a>(<span class="r17 r">animator</span>, <span class="r18 r">stateMachinePathHash</span>));
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#4620b45d09e17624" class="t t">OnStateMachineInfo</a>&gt; <a id="b013c5dfb13bc529" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateMachineEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#2505b7e3b369cdd2" class="i field">onStateMachineEnter</a> ?? (<a href="#2505b7e3b369cdd2" class="i field">onStateMachineEnter</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#4620b45d09e17624" class="t t">OnStateMachineInfo</a>&gt;());
+        }
+ 
+        <span class="c">// OnStateMachineExit</span>
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#4620b45d09e17624" class="t t">OnStateMachineInfo</a>&gt; <a id="6d81eac53239bfcc" href="../../../../../../R/6d81eac53239bfcc.html" target="n" data-glyph="46,1" class="i field">onStateMachineExit</a>;
+ 
+        <b>public override void</b> <a id="e44b725bdff29c87" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateMachineExit</a>(<span class="i">Animator</span> <span id="r19 rd" class="r19 r">animator</span>, <b>int</b> <span id="r20 rd" class="r20 r">stateMachinePathHash</span>)
+        {
+            <b>if</b> (<a href="#6d81eac53239bfcc" class="i field">onStateMachineExit</a> != <b>null</b>) <a href="#6d81eac53239bfcc" class="i field">onStateMachineExit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#3c55d46f5d3f0fb8" class="t constructor">OnStateMachineInfo</a>(<span class="r19 r">animator</span>, <span class="r20 r">stateMachinePathHash</span>));
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#4620b45d09e17624" class="t t">OnStateMachineInfo</a>&gt; <a id="3e3106767e53b1fa" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnStateMachineExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#6d81eac53239bfcc" class="i field">onStateMachineExit</a> ?? (<a href="#6d81eac53239bfcc" class="i field">onStateMachineExit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#4620b45d09e17624" class="t t">OnStateMachineInfo</a>&gt;());
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReactiveProperty.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(539);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveProperty.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ReactiveProperty.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="c3c2f6824f02e021" href="../../../../../R/c3c2f6824f02e021.html" target="n" data-glyph="48,0" class="t t">IReadOnlyReactiveProperty</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <span class="r0 r t">T</span> <a id="65ac625d5f2078d2" href="../../../../../R/65ac625d5f2078d2.html" target="n" data-glyph="102,1" class="i property">Value</a> { <b>get</b>; }
+        <b>bool</b> <a id="49503295936b7816" href="../../../../../R/49503295936b7816.html" target="n" data-glyph="102,1" class="i property">HasValue</a> { <b>get</b>; }
+    }
+ 
+    <b>public interface</b> <a id="afa1dce75bfe3975" href="../../../../../R/afa1dce75bfe3975.html" target="n" data-glyph="48,0" class="t t">IReactiveProperty</a>&lt;<span id="r1 rd t" class="r1 r t">T</span>&gt; : <a href="#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<span class="r1 r t">T</span>&gt;
+    {
+        <b>new</b> <span class="r1 r t">T</span> <a id="f7b8ae965d258cc9" href="../../../../../R/f7b8ae965d258cc9.html" target="n" data-glyph="102,1" class="i property">Value</a> { <b>get</b>; <b>set</b>; }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Lightweight property broker.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="15792ff57f70fe8c" href="../../../../../R/15792ff57f70fe8c.html" target="n" data-glyph="0,0" class="t t">ReactiveProperty</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt; : <a href="#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<span class="r2 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="../System/IOptimizedObservable.cs.html#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r2 r t">T</span>&gt;
+    {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r2 r t">T</span>&gt; <a id="a54cefcb3b3c1e4a" href="../../../../../R/a54cefcb3b3c1e4a.html" target="n" data-glyph="46,1" class="i field">defaultEqualityComparer</a> = <a href="UnityEqualityComparer.cs.html#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="UnityEqualityComparer.cs.html#e7cc1a7d3ff064c1" class="i method">GetDefault</a>&lt;<span class="r2 r t">T</span>&gt;();
+<span class="k preprocess">#</span><span class="k preprocess">else</span>
+<span class="e">        static readonly IEqualityComparer&lt;T&gt; defaultEqualityComparer = EqualityComparer&lt;T&gt;.Default;
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <b>bool</b> <a id="d3a39b598d737e71" href="../../../../../R/d3a39b598d737e71.html" target="n" data-glyph="46,1" class="i field">canPublishValueOnSubscribe</a> = <b>false</b>;
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <b>bool</b> <a id="f7bd2f9b7762d81c" href="../../../../../R/f7bd2f9b7762d81c.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = <b>false</b>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+        [<span class="i">SerializeField</span>]
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+        <span class="r2 r t">T</span> <a id="1f6fa6397aa61302" href="../../../../../R/1f6fa6397aa61302.html" target="n" data-glyph="46,1" class="i field">value</a> = <b>default</b>(<span class="r2 r t">T</span>);
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r2 r t">T</span>&gt; <a id="662fc3018c77a6a4" href="../../../../../R/662fc3018c77a6a4.html" target="n" data-glyph="46,1" class="i field">publisher</a> = <b>null</b>;
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="8cbbe6a0cb333e65" href="../../../../../R/8cbbe6a0cb333e65.html" target="n" data-glyph="46,1" class="i field">sourceConnection</a> = <b>null</b>;
+ 
+        <b>protected virtual</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r2 r t">T</span>&gt; <a id="b76a8e842c782f80" href="../../../../../R/b76a8e842c782f80.html" target="n" data-glyph="105,1" class="i property">EqualityComparer</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#a54cefcb3b3c1e4a" class="i field">defaultEqualityComparer</a>;
+            }
+        }
+ 
+        <b>public</b> <span class="r2 r t">T</span> <a id="989001a432e3dbdd" href="../../../../../R/989001a432e3dbdd.html" target="n" data-glyph="102,1" class="i property">Value</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#1f6fa6397aa61302" class="i field">value</a>;
+            }
+            <b>set</b>
+            {
+                <b>if</b> (!<a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a>)
+                {
+                    <a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a> = <b>true</b>;
+                    <a href="#d85122a740e25009" class="i method">SetValue</a>(<b>value</b>);
+ 
+                    <b>if</b> (<a href="#f7bd2f9b7762d81c" class="i field">isDisposed</a>) <b>return</b>; <span class="c">// don&#39;t notify but set value</span>
+                    <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r3 rd" class="r3 r">p</span> = <a href="#662fc3018c77a6a4" class="i field">publisher</a>;
+                    <b>if</b> (<span class="r3 r">p</span> != <b>null</b>)
+                    {
+                        <span class="r3 r">p</span>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#15792ff57f70fe8c" class="k">this</a>.<a href="#1f6fa6397aa61302" class="i field">value</a>);
+                    }
+                    <b>return</b>;
+                }
+ 
+                <b>if</b> (!<a href="#b76a8e842c782f80" class="i property">EqualityComparer</a>.<a href="@0@mscorlib/A.html#fef57190b3709891" class="i method">Equals</a>(<a href="#15792ff57f70fe8c" class="k">this</a>.<a href="#1f6fa6397aa61302" class="i field">value</a>, <b>value</b>))
+                {
+                    <a href="#d85122a740e25009" class="i method">SetValue</a>(<b>value</b>);
+ 
+                    <b>if</b> (<a href="#f7bd2f9b7762d81c" class="i field">isDisposed</a>) <b>return</b>;
+                    <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r4 rd" class="r4 r">p</span> = <a href="#662fc3018c77a6a4" class="i field">publisher</a>;
+                    <b>if</b> (<span class="r4 r">p</span> != <b>null</b>)
+                    {
+                        <span class="r4 r">p</span>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#15792ff57f70fe8c" class="k">this</a>.<a href="#1f6fa6397aa61302" class="i field">value</a>);
+                    }
+                }
+            }
+        }
+ 
+        <b>public bool</b> <a id="b34542a4b6d586e2" href="../../../../../R/b34542a4b6d586e2.html" target="n" data-glyph="102,1" class="i property">HasValue</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a>;
+            }
+        }
+ 
+        <b>public</b> <a id="47e210ef7a1be0f6" href="../../../../../R/47e210ef7a1be0f6.html" target="n" data-glyph="72,1" class="i constructor">ReactiveProperty</a>()
+            : <a href="#690c4a961d36d179" class="k">this</a>(<b>default</b>(<span class="r2 r t">T</span>))
+        {
+            <span class="c">// default constructor &#39;can&#39; publish value on subscribe.</span>
+            <span class="c">// because sometimes value is deserialized from UnityEngine.</span>
+        }
+ 
+        <b>public</b> <a id="690c4a961d36d179" href="../../../../../R/690c4a961d36d179.html" target="n" data-glyph="72,1" class="i constructor">ReactiveProperty</a>(<span class="r2 r t">T</span> <span id="r5 rd" class="r5 r">initialValue</span>)
+        {
+            <a href="#d85122a740e25009" class="i method">SetValue</a>(<span class="r5 r">initialValue</span>);
+            <a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a> = <b>true</b>;
+        }
+ 
+        <b>public</b> <a id="3aef0587347c9507" href="../../../../../R/3aef0587347c9507.html" target="n" data-glyph="72,1" class="i constructor">ReactiveProperty</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r6 rd" class="r6 r">source</span>)
+        {
+            <span class="c">// initialized from source&#39;s ReactiveProperty `doesn&#39;t` publish value on subscribe.</span>
+            <span class="c">// because there ReactiveProeprty is `Future/Task/Promise`.</span>
+ 
+            <a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a> = <b>false</b>;
+            <a href="#662fc3018c77a6a4" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r2 r t">T</span>&gt;();
+            <a href="#8cbbe6a0cb333e65" class="i field">sourceConnection</a> = <span class="r6 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#0384b5c2057d8f22" class="t constructor">ReactivePropertyObserver</a>(<a href="#15792ff57f70fe8c" class="k">this</a>));
+        }
+ 
+        <b>public</b> <a id="937c51d184cadea9" href="../../../../../R/937c51d184cadea9.html" target="n" data-glyph="72,1" class="i constructor">ReactiveProperty</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r7 rd" class="r7 r">source</span>, <span class="r2 r t">T</span> <span id="r8 rd" class="r8 r">initialValue</span>)
+        {
+            <a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a> = <b>false</b>;
+            <a href="#989001a432e3dbdd" class="i property">Value</a> = <span class="r8 r">initialValue</span>; <span class="c">// Value set canPublishValueOnSubcribe = true</span>
+            <a href="#662fc3018c77a6a4" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r2 r t">T</span>&gt;();
+            <a href="#8cbbe6a0cb333e65" class="i field">sourceConnection</a> = <span class="r7 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#0384b5c2057d8f22" class="t constructor">ReactivePropertyObserver</a>(<a href="#15792ff57f70fe8c" class="k">this</a>));
+        }
+ 
+        <b>protected virtual void</b> <a id="d85122a740e25009" href="../../../../../R/d85122a740e25009.html" target="n" data-glyph="75,1" class="i method">SetValue</a>(<span class="r2 r t">T</span> <span id="r9 rd" class="r9 r">value</span>)
+        {
+            <a href="#15792ff57f70fe8c" class="k">this</a>.<a href="#1f6fa6397aa61302" class="i field">value</a> = <span class="r9 r">value</span>;
+        }
+ 
+        <b>public void</b> <a id="2b368397ffdd4256" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">SetValueAndForceNotify</a>(<span class="r2 r t">T</span> <span id="r10 rd" class="r10 r">value</span>)
+        {
+            <a href="#d85122a740e25009" class="i method">SetValue</a>(<span class="r10 r">value</span>);
+ 
+            <b>if</b> (<a href="#f7bd2f9b7762d81c" class="i field">isDisposed</a>) <b>return</b>;
+ 
+            <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r11 rd" class="r11 r">p</span> = <a href="#662fc3018c77a6a4" class="i field">publisher</a>;
+            <b>if</b> (<span class="r11 r">p</span> != <b>null</b>)
+            {
+                <span class="r11 r">p</span>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="#15792ff57f70fe8c" class="k">this</a>.<a href="#1f6fa6397aa61302" class="i field">value</a>);
+            }
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="07425202c84fdf20" href="../../../../../R/07425202c84fdf20.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r12 rd" class="r12 r">observer</span>)
+        {
+            <b>if</b> (<a href="#f7bd2f9b7762d81c" class="i field">isDisposed</a>)
+            {
+                <span class="r12 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+ 
+            <b>if</b> (<a href="#662fc3018c77a6a4" class="i field">publisher</a> == <b>null</b>)
+            {
+                <span class="c">// Interlocked.CompareExchange is bit slower, guarantee threasafety is overkill.</span>
+                <span class="c">// System.Threading.Interlocked.CompareExchange(ref publisher, new Subject&lt;T&gt;(), null);</span>
+                <a href="#662fc3018c77a6a4" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r2 r t">T</span>&gt;();
+            }
+ 
+            <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r13 rd" class="r13 r">p</span> = <a href="#662fc3018c77a6a4" class="i field">publisher</a>;
+            <b>if</b> (<span class="r13 r">p</span> != <b>null</b>)
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r14 rd" class="r14 r">subscription</span> = <span class="r13 r">p</span>.<a href="../Subjects/Subject.cs.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r12 r">observer</span>);
+                <b>if</b> (<a href="#d3a39b598d737e71" class="i field">canPublishValueOnSubscribe</a>)
+                {
+                    <span class="r12 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="#1f6fa6397aa61302" class="i field">value</a>); <span class="c">// raise latest value on subscribe</span>
+                }
+                <b>return</b> <span class="r14 r">subscription</span>;
+            }
+            <b>else</b>
+            {
+                <span class="r12 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+        }
+ 
+ 
+        <b>public void</b> <a id="862c22b037ac7323" href="../../../../../R/862c22b037ac7323.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#f489e7ff617a4a3a" class="i method">Dispose</a>(<b>true</b>);
+            <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#2673f5220a565bf2" class="i method">SuppressFinalize</a>(<a href="#15792ff57f70fe8c" class="k">this</a>);
+        }
+ 
+        <b>protected virtual void</b> <a id="f489e7ff617a4a3a" href="../../../../../R/f489e7ff617a4a3a.html" target="n" data-glyph="75,1" class="i method">Dispose</a>(<b>bool</b> <span id="r15 rd" class="r15 r">disposing</span>)
+        {
+            <b>if</b> (!<a href="#f7bd2f9b7762d81c" class="i field">isDisposed</a>)
+            {
+                <a href="#f7bd2f9b7762d81c" class="i field">isDisposed</a> = <b>true</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r16 rd" class="r16 r">sc</span> = <a href="#8cbbe6a0cb333e65" class="i field">sourceConnection</a>;
+                <b>if</b> (<span class="r16 r">sc</span> != <b>null</b>)
+                {
+                    <span class="r16 r">sc</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#8cbbe6a0cb333e65" class="i field">sourceConnection</a> = <b>null</b>;
+                }
+                <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r17 rd" class="r17 r">p</span> = <a href="#662fc3018c77a6a4" class="i field">publisher</a>;
+                <b>if</b> (<span class="r17 r">p</span> != <b>null</b>)
+                {
+                    <span class="c">// when dispose, notify OnCompleted</span>
+                    <b>try</b>
+                    {
+                        <span class="r17 r">p</span>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+                    }
+                    <b>finally</b>
+                    {
+                        <span class="r17 r">p</span>.<a href="../Subjects/Subject.cs.html#9aa899d2278a4ad0" class="i method">Dispose</a>();
+                        <a href="#662fc3018c77a6a4" class="i field">publisher</a> = <b>null</b>;
+                    }
+                }
+            }
+        }
+ 
+        <b>public override string</b> <a id="c35095c1bb756cf8" href="../../../../../R/c35095c1bb756cf8.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> (<a href="#1f6fa6397aa61302" class="i field">value</a> == <b>null</b>) ? <span class="s">&quot;null&quot;</span> : <a href="#1f6fa6397aa61302" class="i field">value</a>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>();
+        }
+ 
+        <b>public bool</b> <a id="9fe4a638bca49d7c" href="../../../../../R/9fe4a638bca49d7c.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>()
+        {
+            <b>return false</b>;
+        }
+ 
+        <b>class</b> <a id="0a45caffc8bb36e5" href="../../../../../R/0a45caffc8bb36e5.html" target="n" data-glyph="4,1" class="t t">ReactivePropertyObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r2 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<span class="r2 r t">T</span>&gt; <a id="8374742fe240bc85" href="../../../../../R/8374742fe240bc85.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>int</b> <a id="abb0e108fcb8060e" href="../../../../../R/abb0e108fcb8060e.html" target="n" data-glyph="46,2" class="i field">isStopped</a> = 0;
+ 
+            <b>public</b> <a id="0384b5c2057d8f22" href="../../../../../R/0384b5c2057d8f22.html" target="n" data-glyph="72,2" class="i constructor">ReactivePropertyObserver</a>(<a href="#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<span class="r2 r t">T</span>&gt; <span id="r18 rd" class="r18 r">parent</span>)
+            {
+                <a href="#0a45caffc8bb36e5" class="k">this</a>.<a href="#8374742fe240bc85" class="i field">parent</a> = <span class="r18 r">parent</span>;
+            }
+ 
+            <b>public void</b> <a id="4679f54fc760cbfd" href="../../../../../R/4679f54fc760cbfd.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r2 r t">T</span> <span id="r19 rd" class="r19 r">value</span>)
+            {
+                <a href="#8374742fe240bc85" class="i field">parent</a>.<a href="#989001a432e3dbdd" class="i property">Value</a> = <span class="r19 r">value</span>;
+            }
+ 
+            <b>public void</b> <a id="d2df547969aa45fe" href="../../../../../R/d2df547969aa45fe.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r20 rd" class="r20 r">error</span>)
+            {
+                <b>if</b> (<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#abb0e108fcb8060e" class="i field">isStopped</a>) == 1)
+                {
+                    <a href="#8374742fe240bc85" class="i field">parent</a>.<a href="#662fc3018c77a6a4" class="i field">publisher</a>.<a href="../Subjects/Subject.cs.html#6a7fea54dc5dd054" class="i method">OnError</a>(<span class="r20 r">error</span>);
+                }
+            }
+ 
+            <b>public void</b> <a id="39ae219faecd3cba" href="../../../../../R/39ae219faecd3cba.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>if</b> (<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#abb0e108fcb8060e" class="i field">isStopped</a>) == 1)
+                {
+                    <a href="#8374742fe240bc85" class="i field">parent</a>.<a href="#662fc3018c77a6a4" class="i field">publisher</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+                }
+            }
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Lightweight property broker.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="e01ff9f342b6d170" href="../../../../../R/e01ff9f342b6d170.html" target="n" data-glyph="0,0" class="t t">ReadOnlyReactiveProperty</a>&lt;<span id="r21 rd t" class="r21 r t">T</span>&gt; : <a href="#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<span class="r21 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="../System/IOptimizedObservable.cs.html#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r21 r t">T</span>&gt;
+    {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+        <b>static readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r21 r t">T</span>&gt; <a id="42e76d3fb63ca23f" href="../../../../../R/42e76d3fb63ca23f.html" target="n" data-glyph="46,1" class="i field">defaultEqualityComparer</a> = <a href="UnityEqualityComparer.cs.html#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="UnityEqualityComparer.cs.html#e7cc1a7d3ff064c1" class="i method">GetDefault</a>&lt;<span class="r21 r t">T</span>&gt;();
+<span class="k preprocess">#</span><span class="k preprocess">else</span>
+<span class="e">        static readonly IEqualityComparer&lt;T&gt; defaultEqualityComparer = EqualityComparer&lt;T&gt;.Default;
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+        <b>readonly bool</b> <a id="778b9ac779b8c285" href="../../../../../R/778b9ac779b8c285.html" target="n" data-glyph="46,1" class="i field">distinctUntilChanged</a> = <b>true</b>;
+ 
+        <b>bool</b> <a id="154f04aaa92f131d" href="../../../../../R/154f04aaa92f131d.html" target="n" data-glyph="46,1" class="i field">canPublishValueOnSubscribe</a> = <b>false</b>;
+ 
+        <b>bool</b> <a id="28534782a9cdec0d" href="../../../../../R/28534782a9cdec0d.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = <b>false</b>;
+ 
+        <span class="r21 r t">T</span> <a id="8da7a8db0671cd04" href="../../../../../R/8da7a8db0671cd04.html" target="n" data-glyph="46,1" class="i field">value</a> = <b>default</b>(<span class="r21 r t">T</span>);
+ 
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r21 r t">T</span>&gt; <a id="2ef0319d4877850a" href="../../../../../R/2ef0319d4877850a.html" target="n" data-glyph="46,1" class="i field">publisher</a> = <b>null</b>;
+ 
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a32378f36040ea04" href="../../../../../R/a32378f36040ea04.html" target="n" data-glyph="46,1" class="i field">sourceConnection</a> = <b>null</b>;
+ 
+        <b>public</b> <span class="r21 r t">T</span> <a id="6cb95a1c468aad94" href="../../../../../R/6cb95a1c468aad94.html" target="n" data-glyph="102,1" class="i property">Value</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#8da7a8db0671cd04" class="i field">value</a>;
+            }
+        }
+ 
+        <b>public bool</b> <a id="e17d1f4077f1b568" href="../../../../../R/e17d1f4077f1b568.html" target="n" data-glyph="102,1" class="i property">HasValue</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#154f04aaa92f131d" class="i field">canPublishValueOnSubscribe</a>;
+            }
+        }
+ 
+        <b>protected virtual</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r21 r t">T</span>&gt; <a id="d7151c602c0a4c9d" href="../../../../../R/d7151c602c0a4c9d.html" target="n" data-glyph="105,1" class="i property">EqualityComparer</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#42e76d3fb63ca23f" class="i field">defaultEqualityComparer</a>;
+            }
+        }
+ 
+        <b>public</b> <a id="3f037f22d11efcf1" href="../../../../../R/3f037f22d11efcf1.html" target="n" data-glyph="72,1" class="i constructor">ReadOnlyReactiveProperty</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r22 rd" class="r22 r">source</span>)
+        {
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r21 r t">T</span>&gt;();
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#a32378f36040ea04" class="i field">sourceConnection</a> = <span class="r22 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#346c77b881ac32dc" class="t constructor">ReadOnlyReactivePropertyObserver</a>(<a href="#e01ff9f342b6d170" class="k">this</a>));
+        }
+ 
+        <b>public</b> <a id="c6e34ec87511dc23" href="../../../../../R/c6e34ec87511dc23.html" target="n" data-glyph="72,1" class="i constructor">ReadOnlyReactiveProperty</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r23 rd" class="r23 r">source</span>, <b>bool</b> <span id="r24 rd" class="r24 r">distinctUntilChanged</span>)
+        {
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#778b9ac779b8c285" class="i field">distinctUntilChanged</a> = <span class="r24 r">distinctUntilChanged</span>;
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r21 r t">T</span>&gt;();
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#a32378f36040ea04" class="i field">sourceConnection</a> = <span class="r23 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#346c77b881ac32dc" class="t constructor">ReadOnlyReactivePropertyObserver</a>(<a href="#e01ff9f342b6d170" class="k">this</a>));
+        }
+ 
+        <b>public</b> <a id="b3b1bec6b55823cf" href="../../../../../R/b3b1bec6b55823cf.html" target="n" data-glyph="72,1" class="i constructor">ReadOnlyReactiveProperty</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r25 rd" class="r25 r">source</span>, <span class="r21 r t">T</span> <span id="r26 rd" class="r26 r">initialValue</span>)
+        {
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#8da7a8db0671cd04" class="i field">value</a> = <span class="r26 r">initialValue</span>;
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#154f04aaa92f131d" class="i field">canPublishValueOnSubscribe</a> = <b>true</b>;
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r21 r t">T</span>&gt;();
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#a32378f36040ea04" class="i field">sourceConnection</a> = <span class="r25 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#346c77b881ac32dc" class="t constructor">ReadOnlyReactivePropertyObserver</a>(<a href="#e01ff9f342b6d170" class="k">this</a>));
+        }
+ 
+        <b>public</b> <a id="f2b215777d3da1b9" href="../../../../../R/f2b215777d3da1b9.html" target="n" data-glyph="72,1" class="i constructor">ReadOnlyReactiveProperty</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r27 rd" class="r27 r">source</span>, <span class="r21 r t">T</span> <span id="r28 rd" class="r28 r">initialValue</span>, <b>bool</b> <span id="r29 rd" class="r29 r">distinctUntilChanged</span>)
+        {
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#778b9ac779b8c285" class="i field">distinctUntilChanged</a> = <span class="r29 r">distinctUntilChanged</span>;
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#8da7a8db0671cd04" class="i field">value</a> = <span class="r28 r">initialValue</span>;
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#154f04aaa92f131d" class="i field">canPublishValueOnSubscribe</a> = <b>true</b>;
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r21 r t">T</span>&gt;();
+            <a href="#e01ff9f342b6d170" class="k">this</a>.<a href="#a32378f36040ea04" class="i field">sourceConnection</a> = <span class="r27 r">source</span>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#346c77b881ac32dc" class="t constructor">ReadOnlyReactivePropertyObserver</a>(<a href="#e01ff9f342b6d170" class="k">this</a>));
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="d776f2be203992a7" href="../../../../../R/d776f2be203992a7.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r30 rd" class="r30 r">observer</span>)
+        {
+            <b>if</b> (<a href="#28534782a9cdec0d" class="i field">isDisposed</a>)
+            {
+                <span class="r30 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+ 
+            <b>if</b> (<a href="#2ef0319d4877850a" class="i field">publisher</a> == <b>null</b>)
+            {
+                <span class="c">// Interlocked.CompareExchange is bit slower, guarantee threasafety is overkill.</span>
+                <span class="c">// System.Threading.Interlocked.CompareExchange(ref publisher, new Subject&lt;T&gt;(), null);</span>
+                <a href="#2ef0319d4877850a" class="i field">publisher</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r21 r t">T</span>&gt;();
+            }
+ 
+            <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r31 rd" class="r31 r">p</span> = <a href="#2ef0319d4877850a" class="i field">publisher</a>;
+            <b>if</b> (<span class="r31 r">p</span> != <b>null</b>)
+            {
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r32 rd" class="r32 r">subscription</span> = <span class="r31 r">p</span>.<a href="../Subjects/Subject.cs.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r30 r">observer</span>);
+                <b>if</b> (<a href="#154f04aaa92f131d" class="i field">canPublishValueOnSubscribe</a>)
+                {
+                    <span class="r30 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<a href="#8da7a8db0671cd04" class="i field">value</a>); <span class="c">// raise latest value on subscribe</span>
+                }
+                <b>return</b> <span class="r32 r">subscription</span>;
+            }
+            <b>else</b>
+            {
+                <span class="r30 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+        }
+ 
+        <b>public void</b> <a id="6b27f70de410f804" href="../../../../../R/6b27f70de410f804.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#d35357af96400bdd" class="i method">Dispose</a>(<b>true</b>);
+            <a href="@0@mscorlib/A.html#25d9c1e022317a99" class="t t">GC</a>.<a href="@0@mscorlib/A.html#2673f5220a565bf2" class="i method">SuppressFinalize</a>(<a href="#e01ff9f342b6d170" class="k">this</a>);
+        }
+ 
+        <b>protected virtual void</b> <a id="d35357af96400bdd" href="../../../../../R/d35357af96400bdd.html" target="n" data-glyph="75,1" class="i method">Dispose</a>(<b>bool</b> <span id="r33 rd" class="r33 r">disposing</span>)
+        {
+            <b>if</b> (!<a href="#28534782a9cdec0d" class="i field">isDisposed</a>)
+            {
+                <a href="#28534782a9cdec0d" class="i field">isDisposed</a> = <b>true</b>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r34 rd" class="r34 r">sc</span> = <a href="#a32378f36040ea04" class="i field">sourceConnection</a>;
+                <b>if</b> (<span class="r34 r">sc</span> != <b>null</b>)
+                {
+                    <span class="r34 r">sc</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                    <a href="#a32378f36040ea04" class="i field">sourceConnection</a> = <b>null</b>;
+                }
+ 
+                <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r35 rd" class="r35 r">p</span> = <a href="#2ef0319d4877850a" class="i field">publisher</a>;
+                <b>if</b> (<span class="r35 r">p</span> != <b>null</b>)
+                {
+                    <span class="c">// when dispose, notify OnCompleted</span>
+                    <b>try</b>
+                    {
+                        <span class="r35 r">p</span>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+                    }
+                    <b>finally</b>
+                    {
+                        <span class="r35 r">p</span>.<a href="../Subjects/Subject.cs.html#9aa899d2278a4ad0" class="i method">Dispose</a>();
+                        <a href="#2ef0319d4877850a" class="i field">publisher</a> = <b>null</b>;
+                    }
+                }
+            }
+        }
+ 
+        <b>public override string</b> <a id="0a89bd22de777b7e" href="../../../../../R/0a89bd22de777b7e.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> (<a href="#8da7a8db0671cd04" class="i field">value</a> == <b>null</b>) ? <span class="s">&quot;null&quot;</span> : <a href="#8da7a8db0671cd04" class="i field">value</a>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>();
+        }
+ 
+        <b>public bool</b> <a id="88a50a33fa349acc" href="../../../../../R/88a50a33fa349acc.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>()
+        {
+            <b>return false</b>;
+        }
+ 
+        <b>class</b> <a id="9270e2506d1c0e00" href="../../../../../R/9270e2506d1c0e00.html" target="n" data-glyph="4,1" class="t t">ReadOnlyReactivePropertyObserver</a> : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r21 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#e01ff9f342b6d170" class="t t">ReadOnlyReactiveProperty</a>&lt;<span class="r21 r t">T</span>&gt; <a id="a8b840dba4d2d2f9" href="../../../../../R/a8b840dba4d2d2f9.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>int</b> <a id="04077361c5474d86" href="../../../../../R/04077361c5474d86.html" target="n" data-glyph="46,2" class="i field">isStopped</a> = 0;
+ 
+            <b>public</b> <a id="346c77b881ac32dc" href="../../../../../R/346c77b881ac32dc.html" target="n" data-glyph="72,2" class="i constructor">ReadOnlyReactivePropertyObserver</a>(<a href="#e01ff9f342b6d170" class="t t">ReadOnlyReactiveProperty</a>&lt;<span class="r21 r t">T</span>&gt; <span id="r36 rd" class="r36 r">parent</span>)
+            {
+                <a href="#9270e2506d1c0e00" class="k">this</a>.<a href="#a8b840dba4d2d2f9" class="i field">parent</a> = <span class="r36 r">parent</span>;
+            }
+ 
+            <b>public void</b> <a id="d900f8f174093cfc" href="../../../../../R/d900f8f174093cfc.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r21 r t">T</span> <span id="r37 rd" class="r37 r">value</span>)
+            {
+                <b>if</b> (<a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#778b9ac779b8c285" class="i field">distinctUntilChanged</a> &amp;&amp; <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#154f04aaa92f131d" class="i field">canPublishValueOnSubscribe</a>)
+                {
+                    <b>if</b> (!<a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#d7151c602c0a4c9d" class="i property">EqualityComparer</a>.<a href="@0@mscorlib/A.html#fef57190b3709891" class="i method">Equals</a>(<a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#8da7a8db0671cd04" class="i field">value</a>, <span class="r37 r">value</span>))
+                    {
+                        <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#8da7a8db0671cd04" class="i field">value</a> = <span class="r37 r">value</span>;
+                        <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r37 r">value</span>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#8da7a8db0671cd04" class="i field">value</a> = <span class="r37 r">value</span>;
+                    <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#154f04aaa92f131d" class="i field">canPublishValueOnSubscribe</a> = <b>true</b>;
+                    <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r37 r">value</span>);
+                }
+            }
+ 
+            <b>public void</b> <a id="7535c43d769734ee" href="../../../../../R/7535c43d769734ee.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r38 rd" class="r38 r">error</span>)
+            {
+                <b>if</b> (<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#04077361c5474d86" class="i field">isStopped</a>) == 1)
+                {
+                    <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a>.<a href="../Subjects/Subject.cs.html#6a7fea54dc5dd054" class="i method">OnError</a>(<span class="r38 r">error</span>);
+                }
+            }
+ 
+            <b>public void</b> <a id="da41bf658e186203" href="../../../../../R/da41bf658e186203.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>if</b> (<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <a href="#04077361c5474d86" class="i field">isStopped</a>) == 1)
+                {
+                    <a href="#a8b840dba4d2d2f9" class="i field">parent</a>.<a href="#2ef0319d4877850a" class="i field">publisher</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+                }
+            }
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Extension methods of ReactiveProperty</span><span class="c">&amp;lt;</span><span class="c">T</span><span class="c">&amp;gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public static class</b> <a id="42f0dd4adc578b93" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ReactivePropertyExtensions</a>
+    {
+        <b>public static</b> <a href="#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<span class="r39 r t">T</span>&gt; <a id="0aaec21b70bdea4b" href="../../../../../R/0aaec21b70bdea4b.html" target="n" data-glyph="220,1" class="i method">ToReactiveProperty</a>&lt;<span id="r39 rd t" class="r39 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r39 r t">T</span>&gt; <span id="r40 rd" class="r40 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#3aef0587347c9507" class="t constructor">ReactiveProperty</a>&lt;<span class="r39 r t">T</span>&gt;(<span class="r40 r">source</span>);
+        }
+ 
+        <b>public static</b> <a href="#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<span class="r41 r t">T</span>&gt; <a id="bc468759681d9165" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToReactiveProperty</a>&lt;<span id="r41 rd t" class="r41 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r41 r t">T</span>&gt; <span id="r42 rd" class="r42 r">source</span>, <span class="r41 r t">T</span> <span id="r43 rd" class="r43 r">initialValue</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#937c51d184cadea9" class="t constructor">ReactiveProperty</a>&lt;<span class="r41 r t">T</span>&gt;(<span class="r42 r">source</span>, <span class="r43 r">initialValue</span>);
+        }
+ 
+        <b>public static</b> <a href="#e01ff9f342b6d170" class="t t">ReadOnlyReactiveProperty</a>&lt;<span class="r44 r t">T</span>&gt; <a id="00f3b4d860851db6" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToReadOnlyReactiveProperty</a>&lt;<span id="r44 rd t" class="r44 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r44 r t">T</span>&gt; <span id="r45 rd" class="r45 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#3f037f22d11efcf1" class="t constructor">ReadOnlyReactiveProperty</a>&lt;<span class="r44 r t">T</span>&gt;(<span class="r45 r">source</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create ReadOnlyReactiveProperty with distinctUntilChanged: false.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#e01ff9f342b6d170" class="t t">ReadOnlyReactiveProperty</a>&lt;<span class="r46 r t">T</span>&gt; <a id="1ebe85465bc02860" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToSequentialReadOnlyReactiveProperty</a>&lt;<span id="r46 rd t" class="r46 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r46 r t">T</span>&gt; <span id="r47 rd" class="r47 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#c6e34ec87511dc23" class="t constructor">ReadOnlyReactiveProperty</a>&lt;<span class="r46 r t">T</span>&gt;(<span class="r47 r">source</span>, <span class="r48 r">distinctUntilChanged</span>: <b>false</b>);
+        }
+ 
+        <b>public static</b> <a href="#e01ff9f342b6d170" class="t t">ReadOnlyReactiveProperty</a>&lt;<span class="r49 r t">T</span>&gt; <a id="232ef1b76f621fd0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToReadOnlyReactiveProperty</a>&lt;<span id="r49 rd t" class="r49 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r49 r t">T</span>&gt; <span id="r50 rd" class="r50 r">source</span>, <span class="r49 r t">T</span> <span id="r51 rd" class="r51 r">initialValue</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#b3b1bec6b55823cf" class="t constructor">ReadOnlyReactiveProperty</a>&lt;<span class="r49 r t">T</span>&gt;(<span class="r50 r">source</span>, <span class="r51 r">initialValue</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create ReadOnlyReactiveProperty with distinctUntilChanged: false.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#e01ff9f342b6d170" class="t t">ReadOnlyReactiveProperty</a>&lt;<span class="r52 r t">T</span>&gt; <a id="ad2936c58b19fa89" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToSequentialReadOnlyReactiveProperty</a>&lt;<span id="r52 rd t" class="r52 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r52 r t">T</span>&gt; <span id="r53 rd" class="r53 r">source</span>, <span class="r52 r t">T</span> <span id="r54 rd" class="r54 r">initialValue</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#f2b215777d3da1b9" class="t constructor">ReadOnlyReactiveProperty</a>&lt;<span class="r52 r t">T</span>&gt;(<span class="r53 r">source</span>, <span class="r54 r">initialValue</span>, <span class="r55 r">distinctUntilChanged</span>: <b>false</b>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r56 r t">T</span>&gt; <a id="acb7b67dd1a28397" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">SkipLatestValueOnSubscribe</a>&lt;<span id="r56 rd t" class="r56 r t">T</span>&gt;(<b>this</b> <a href="#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<span class="r56 r t">T</span>&gt; <span id="r57 rd" class="r57 r">source</span>)
+        {
+            <b>return</b> <span class="r57 r">source</span>.<a href="#49503295936b7816" class="i property">HasValue</a> ? <span class="r57 r">source</span>.<a href="../Observable.Paging.cs.html#9a6d3f1abb0b18b8" class="i method">Skip</a>(1) : <span class="r57 r">source</span>;
+        }
+ 
+        <span class="c">// for multiple toggle or etc..</span>
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Lastest values of each sequence are all true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="97e76f4fe1411cef" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">CombineLatestValuesAreAllTrue</a>(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt;&gt; <span id="r58 rd" class="r58 r">sources</span>)
+        {
+            <b>return</b> <span class="r58 r">sources</span>.<a href="../Observable.Concatenate.cs.html#e1dc2cccf605aebd" class="i method">CombineLatest</a>().<a href="../Observable.cs.html#79105120ffc929e6" class="i method">Select</a>(<span id="r59 rd" class="r59 r">xs</span> =&gt;
+            {
+                <b>foreach</b> (<a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r60 rd" class="r60 r">item</span> <b>in</b> <span class="r59 r">xs</span>)
+                {
+                    <b>if</b> (<span class="r60 r">item</span> == <b>false</b>) <b>return false</b>;
+                }
+                <b>return true</b>;
+            });
+        }
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Lastest values of each sequence are all false.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="b124754d8f2b05f1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">CombineLatestValuesAreAllFalse</a>(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt;&gt; <span id="r61 rd" class="r61 r">sources</span>)
+        {
+            <b>return</b> <span class="r61 r">sources</span>.<a href="../Observable.Concatenate.cs.html#e1dc2cccf605aebd" class="i method">CombineLatest</a>().<a href="../Observable.cs.html#79105120ffc929e6" class="i method">Select</a>(<span id="r62 rd" class="r62 r">xs</span> =&gt;
+            {
+                <b>foreach</b> (<a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r63 rd" class="r63 r">item</span> <b>in</b> <span class="r62 r">xs</span>)
+                {
+                    <b>if</b> (<span class="r63 r">item</span> == <b>true</b>) <b>return false</b>;
+                }
+                <b>return true</b>;
+            });
+        }
+    }
+}</pre></td></tr></table></div></body></html>

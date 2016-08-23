@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<html><head><title>ChainingAssertion.Unity.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(419);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/Tools/ChainingAssertion.Unity.cs" target="_top">Tools\ChainingAssertion.Unity.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// modified for Unity</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>.<span class="i n">Expressions</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Reflection</span>;
+ 
+<b>namespace</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>
+{
+    <span class="k preprocess">#</span><span class="k preprocess">region</span> Extensions
+ 
+    [<span class="i n">System</span>.<span class="i n">Diagnostics</span>.<a href="@0@mscorlib/A.html#15085db4bf5c94f0" class="t constructor">DebuggerStepThroughAttribute</a>]
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="3aeb75bd766c7c2b" href="../R/3aeb75bd766c7c2b.html" target="n" data-glyph="0,0" class="t t">AssertEx</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.AreEqual, if T is IEnumerable then CollectionAssert.AreEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="c7201ebd94464089" href="../R/c7201ebd94464089.html" target="n" data-glyph="220,1" class="i method">Is</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">actual</span>, <span class="r0 r t">T</span> <span id="r2 rd" class="r2 r">expected</span>, <b>string</b> <span id="r3 rd" class="r3 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <b>if</b> (<b>typeof</b>(<span class="r0 r t">T</span>) != <b>typeof</b>(<b>string</b>) &amp;&amp; <b>typeof</b>(<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>).<a href="@0@mscorlib/A.html#ba0cffea035fe210" class="i method">IsAssignableFrom</a>(<b>typeof</b>(<span class="r0 r t">T</span>)))
+            {
+                ((<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r1 r">actual</span>).<a href="@0@System.Core/A.html#27bb217a6d5457ec" class="i method">Cast</a>&lt;<b>object</b>&gt;().<a href="#c7201ebd94464089" class="i method">Is</a>(((<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r2 r">expected</span>).<a href="@0@System.Core/A.html#27bb217a6d5457ec" class="i method">Cast</a>&lt;<b>object</b>&gt;(), <span class="r3 r">message</span>);
+                <b>return</b>;
+            }
+            
+            <span class="t t">Assert</span>.<span class="i method">AreEqual</span>(<span class="r2 r">expected</span>, <span class="r1 r">actual</span>, <span class="r3 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.IsTrue(predicate(value))</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="7d5534b9648a9a1b" href="../R/7d5534b9648a9a1b.html" target="n" data-glyph="220,1" class="i method">Is</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<b>this</b> <span class="r4 r t">T</span> <span id="r5 rd" class="r5 r">value</span>, <a href="@0@mscorlib/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r4 r t">T</span>, <b>bool</b>&gt; <span id="r6 rd" class="r6 r">predicate</span>, <b>string</b> <span id="r7 rd" class="r7 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<span class="r6 r">predicate</span>(<span class="r5 r">value</span>), <span class="r7 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="dd4ec24274eba848" href="../R/dd4ec24274eba848.html" target="n" data-glyph="220,1" class="i method">IsCollection</a>&lt;<span id="r8 rd t" class="r8 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r8 r t">T</span>&gt; <span id="r9 rd" class="r9 r">actual</span>, <b>params</b> <span class="r8 r t">T</span>[] <span id="r10 rd" class="r10 r">expected</span>)
+        {
+            <a href="#9cbccb9219fc93b5" class="i method">IsCollection</a>(<span class="r9 r">actual</span>, <span class="r10 r">expected</span>.<a href="@0@System.Core/A.html#3ee4ab000402fbeb" class="i method">AsEnumerable</a>());
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="9cbccb9219fc93b5" href="../R/9cbccb9219fc93b5.html" target="n" data-glyph="220,1" class="i method">IsCollection</a>&lt;<span id="r11 rd t" class="r11 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r11 r t">T</span>&gt; <span id="r12 rd" class="r12 r">actual</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r11 r t">T</span>&gt; <span id="r13 rd" class="r13 r">expected</span>, <b>string</b> <span id="r14 rd" class="r14 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">CollectionAssert</span>.<span class="i method">AreEqual</span>(<span class="r13 r">expected</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <span class="r12 r">actual</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <span class="r14 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="2c5a54c83e941056" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsCollection</a>&lt;<span id="r15 rd t" class="r15 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r16 rd" class="r16 r">actual</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r17 rd" class="r17 r">expected</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r15 r t">T</span>&gt; <span id="r18 rd" class="r18 r">comparer</span>, <b>string</b> <span id="r19 rd" class="r19 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <a href="#e645d8bbfee0de40" class="i method">IsCollection</a>(<span class="r16 r">actual</span>, <span class="r17 r">expected</span>, <span class="r18 r">comparer</span>.<a href="@0@mscorlib/A.html#fef57190b3709891" class="i method">Equals</a>, <span class="r19 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="e645d8bbfee0de40" href="../R/e645d8bbfee0de40.html" target="n" data-glyph="220,1" class="i method">IsCollection</a>&lt;<span id="r20 rd t" class="r20 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r20 r t">T</span>&gt; <span id="r21 rd" class="r21 r">actual</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r20 r t">T</span>&gt; <span id="r22 rd" class="r22 r">expected</span>, <a href="@0@mscorlib/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r20 r t">T</span>, <span class="r20 r t">T</span>, <b>bool</b>&gt; <span id="r23 rd" class="r23 r">equalityComparison</span>, <b>string</b> <span id="r24 rd" class="r24 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">CollectionAssert</span>.<span class="i method">AreEqual</span>(<span class="r22 r">expected</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <span class="r21 r">actual</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <b>new</b> <a href="#4d17704d852c4ee4" class="t constructor">ComparisonComparer</a>&lt;<span class="r20 r t">T</span>&gt;(<span class="r23 r">equalityComparison</span>), <span class="r24 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.AreNotEqual, if T is IEnumerable then CollectionAssert.AreNotEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="04b8cd16dd807d9c" href="../R/04b8cd16dd807d9c.html" target="n" data-glyph="220,1" class="i method">IsNot</a>&lt;<span id="r25 rd t" class="r25 r t">T</span>&gt;(<b>this</b> <span class="r25 r t">T</span> <span id="r26 rd" class="r26 r">actual</span>, <span class="r25 r t">T</span> <span id="r27 rd" class="r27 r">notExpected</span>, <b>string</b> <span id="r28 rd" class="r28 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <b>if</b> (<b>typeof</b>(<span class="r25 r t">T</span>) != <b>typeof</b>(<b>string</b>) &amp;&amp; <b>typeof</b>(<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>).<a href="@0@mscorlib/A.html#ba0cffea035fe210" class="i method">IsAssignableFrom</a>(<b>typeof</b>(<span class="r25 r t">T</span>)))
+            {
+                ((<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r26 r">actual</span>).<a href="@0@System.Core/A.html#27bb217a6d5457ec" class="i method">Cast</a>&lt;<b>object</b>&gt;().<a href="#04b8cd16dd807d9c" class="i method">IsNot</a>(((<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r27 r">notExpected</span>).<a href="@0@System.Core/A.html#27bb217a6d5457ec" class="i method">Cast</a>&lt;<b>object</b>&gt;(), <span class="r28 r">message</span>);
+                <b>return</b>;
+            }
+ 
+            <span class="t t">Assert</span>.<span class="i method">AreNotEqual</span>(<span class="r27 r">notExpected</span>, <span class="r26 r">actual</span>, <span class="r28 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreNotEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="4a7cd45430f90ecc" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsNotCollection</a>&lt;<span id="r29 rd t" class="r29 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r29 r t">T</span>&gt; <span id="r30 rd" class="r30 r">actual</span>, <b>params</b> <span class="r29 r t">T</span>[] <span id="r31 rd" class="r31 r">notExpected</span>)
+        {
+            <a href="#4457ed719be13222" class="i method">IsNotCollection</a>(<span class="r30 r">actual</span>, <span class="r31 r">notExpected</span>.<a href="@0@System.Core/A.html#3ee4ab000402fbeb" class="i method">AsEnumerable</a>());
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreNotEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="4457ed719be13222" href="../R/4457ed719be13222.html" target="n" data-glyph="220,1" class="i method">IsNotCollection</a>&lt;<span id="r32 rd t" class="r32 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r32 r t">T</span>&gt; <span id="r33 rd" class="r33 r">actual</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r32 r t">T</span>&gt; <span id="r34 rd" class="r34 r">notExpected</span>, <b>string</b> <span id="r35 rd" class="r35 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">CollectionAssert</span>.<span class="i method">AreNotEqual</span>(<span class="r34 r">notExpected</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <span class="r33 r">actual</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <span class="r35 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreNotEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="563fdf57328957b1" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsNotCollection</a>&lt;<span id="r36 rd t" class="r36 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r36 r t">T</span>&gt; <span id="r37 rd" class="r37 r">actual</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r36 r t">T</span>&gt; <span id="r38 rd" class="r38 r">notExpected</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r36 r t">T</span>&gt; <span id="r39 rd" class="r39 r">comparer</span>, <b>string</b> <span id="r40 rd" class="r40 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <a href="#cc0c4ef7363b1b86" class="i method">IsNotCollection</a>(<span class="r37 r">actual</span>, <span class="r38 r">notExpected</span>, <span class="r39 r">comparer</span>.<a href="@0@mscorlib/A.html#fef57190b3709891" class="i method">Equals</a>, <span class="r40 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">CollectionAssert.AreNotEqual</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="cc0c4ef7363b1b86" href="../R/cc0c4ef7363b1b86.html" target="n" data-glyph="220,1" class="i method">IsNotCollection</a>&lt;<span id="r41 rd t" class="r41 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r41 r t">T</span>&gt; <span id="r42 rd" class="r42 r">actual</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r41 r t">T</span>&gt; <span id="r43 rd" class="r43 r">notExpected</span>, <a href="@0@mscorlib/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r41 r t">T</span>, <span class="r41 r t">T</span>, <b>bool</b>&gt; <span id="r44 rd" class="r44 r">equalityComparison</span>, <b>string</b> <span id="r45 rd" class="r45 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">CollectionAssert</span>.<span class="i method">AreNotEqual</span>(<span class="r43 r">notExpected</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <span class="r42 r">actual</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>(), <b>new</b> <a href="#4d17704d852c4ee4" class="t constructor">ComparisonComparer</a>&lt;<span class="r41 r t">T</span>&gt;(<span class="r44 r">equalityComparison</span>), <span class="r45 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.IsNull</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="85730c71a93f3f82" href="../R/85730c71a93f3f82.html" target="n" data-glyph="220,1" class="i method">IsNull</a>&lt;<span id="r46 rd t" class="r46 r t">T</span>&gt;(<b>this</b> <span class="r46 r t">T</span> <span id="r47 rd" class="r47 r">value</span>, <b>string</b> <span id="r48 rd" class="r48 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">IsNull</span>(<span class="r47 r">value</span>, <span class="r48 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.IsNotNull</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="6a85661bc34f3323" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsNotNull</a>&lt;<span id="r49 rd t" class="r49 r t">T</span>&gt;(<b>this</b> <span class="r49 r t">T</span> <span id="r50 rd" class="r50 r">value</span>, <b>string</b> <span id="r51 rd" class="r51 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">IsNotNull</span>(<span class="r50 r">value</span>, <span class="r51 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Is(true)</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="a51c066b5ee91d76" href="../R/a51c066b5ee91d76.html" target="n" data-glyph="220,1" class="i method">IsTrue</a>(<b>this</b> <b>bool</b> <span id="r52 rd" class="r52 r">value</span>, <b>string</b> <span id="r53 rd" class="r53 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="r52 r">value</span>.<a href="#c7201ebd94464089" class="i method">Is</a>(<b>true</b>, <span class="r53 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Is(false)</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="0179db6ebd324ebd" href="../R/0179db6ebd324ebd.html" target="n" data-glyph="220,1" class="i method">IsFalse</a>(<b>this</b> <b>bool</b> <span id="r54 rd" class="r54 r">value</span>, <b>string</b> <span id="r55 rd" class="r55 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="r54 r">value</span>.<a href="#c7201ebd94464089" class="i method">Is</a>(<b>false</b>, <span class="r55 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.AreSame</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="d33313a1b8a45403" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsSameReferenceAs</a>&lt;<span id="r56 rd t" class="r56 r t">T</span>&gt;(<b>this</b> <span class="r56 r t">T</span> <span id="r57 rd" class="r57 r">actual</span>, <span class="r56 r t">T</span> <span id="r58 rd" class="r58 r">expected</span>, <b>string</b> <span id="r59 rd" class="r59 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">AreSame</span>(<span class="r58 r">expected</span>, <span class="r57 r">actual</span>, <span class="r59 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.AreNotSame</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="669fd3897466f011" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsNotSameReferenceAs</a>&lt;<span id="r60 rd t" class="r60 r t">T</span>&gt;(<b>this</b> <span class="r60 r t">T</span> <span id="r61 rd" class="r61 r">actual</span>, <span class="r60 r t">T</span> <span id="r62 rd" class="r62 r">notExpected</span>, <b>string</b> <span id="r63 rd" class="r63 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">AreNotSame</span>(<span class="r62 r">notExpected</span>, <span class="r61 r">actual</span>, <span class="r63 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.IsInstanceOf</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r64 r t">TExpected</span> <a id="035f91a156c7e7c9" href="../R/035f91a156c7e7c9.html" target="n" data-glyph="220,1" class="i method">IsInstanceOf</a>&lt;<span id="r64 rd t" class="r64 r t">TExpected</span>&gt;(<b>this</b> <b>object</b> <span id="r65 rd" class="r65 r">value</span>, <b>string</b> <span id="r66 rd" class="r66 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">IsInstanceOfType</span>(<span class="r65 r">value</span>, <b>typeof</b>(<span class="r64 r t">TExpected</span>), <span class="r66 r">message</span>);
+            <b>return</b> (<span class="r64 r t">TExpected</span>)<span class="r65 r">value</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert.IsNotInstanceOf</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="805fabfb913127f5" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsNotInstanceOf</a>&lt;<span id="r67 rd t" class="r67 r t">TWrong</span>&gt;(<b>this</b> <b>object</b> <span id="r68 rd" class="r68 r">value</span>, <b>string</b> <span id="r69 rd" class="r69 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="t t">Assert</span>.<span class="i method">IsNotInstanceOfType</span>(<span class="r68 r">value</span>, <b>typeof</b>(<span class="r67 r t">TWrong</span>), <span class="r69 r">message</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Alternative of ExpectedExceptionAttribute(allow derived type)</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r70 r t">T</span> <a id="278bf21db630f8eb" href="../R/278bf21db630f8eb.html" target="n" data-glyph="72,1" class="i method">Catch</a>&lt;<span id="r70 rd t" class="r70 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r71 rd" class="r71 r">testCode</span>, <b>string</b> <span id="r72 rd" class="r72 r">message</span> = <span class="s">&quot;&quot;</span>) <b>where</b> <span class="r70 r t">T</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="k">var</a> <span id="r73 rd" class="r73 r">exception</span> = <a href="#31f62c1ad7073e1c" class="i method">ExecuteCode</a>(<span class="r71 r">testCode</span>);
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r74 rd" class="r74 r">headerMsg</span> = <span class="s">&quot;Failed Throws&lt;&quot;</span> + <b>typeof</b>(<span class="r70 r t">T</span>).<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a> + <span class="s">&quot;&gt;.&quot;</span>;
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r75 rd" class="r75 r">additionalMsg</span> = <b>string</b>.<a href="@0@mscorlib/A.html#23a8597f842071f4" class="i method">IsNullOrEmpty</a>(<span class="r72 r">message</span>) ? <span class="s">&quot;&quot;</span> : <span class="s">&quot;, &quot;</span> + <span class="r72 r">message</span>;
+ 
+            <b>if</b> (<span class="r73 r">exception</span> == <b>null</b>)
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r76 rd" class="r76 r">formatted</span> = <span class="r74 r">headerMsg</span> + <span class="s">&quot; No exception was thrown&quot;</span> + <span class="r75 r">additionalMsg</span>;
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="r76 r">formatted</span>);
+            }
+            <b>else if</b> (!<b>typeof</b>(<span class="r70 r t">T</span>).<a href="@0@mscorlib/A.html#fe506f282c6fb9c5" class="i method">IsInstanceOfType</a>(<span class="r73 r">exception</span>))
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r77 rd" class="r77 r">formatted</span> = <b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;{0} Catched:{1}{2}&quot;</span>, <span class="r74 r">headerMsg</span>, <span class="r73 r">exception</span>.<a href="@0@mscorlib/A.html#cf7a3679f8b67db4" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>, <span class="r75 r">additionalMsg</span>);
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="r77 r">formatted</span>);
+            }
+ 
+            <b>return</b> (<span class="r70 r t">T</span>)<span class="r73 r">exception</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Alternative of ExpectedExceptionAttribute(not allow derived type)</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r78 r t">T</span> <a id="d78e2baeb229601c" href="../R/d78e2baeb229601c.html" target="n" data-glyph="72,1" class="i method">Throws</a>&lt;<span id="r78 rd t" class="r78 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r79 rd" class="r79 r">testCode</span>, <b>string</b> <span id="r80 rd" class="r80 r">message</span> = <span class="s">&quot;&quot;</span>) <b>where</b> <span class="r78 r t">T</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <span class="r78 r t">var</span> <span id="r81 rd" class="r81 r">exception</span> = <a href="#278bf21db630f8eb" class="i method">Catch</a>&lt;<span class="r78 r t">T</span>&gt;(<span class="r79 r">testCode</span>, <span class="r80 r">message</span>);
+ 
+            <b>if</b> (!<b>typeof</b>(<span class="r78 r t">T</span>).<a href="@0@mscorlib/A.html#6ad282f6c8736636" class="i method">Equals</a>(<span class="r81 r">exception</span>.<a href="@0@mscorlib/A.html#cf7a3679f8b67db4" class="i method">GetType</a>()))
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r82 rd" class="r82 r">headerMsg</span> = <span class="s">&quot;Failed Throws&lt;&quot;</span> + <b>typeof</b>(<span class="r78 r t">T</span>).<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a> + <span class="s">&quot;&gt;.&quot;</span>;
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r83 rd" class="r83 r">additionalMsg</span> = <b>string</b>.<a href="@0@mscorlib/A.html#23a8597f842071f4" class="i method">IsNullOrEmpty</a>(<span class="r80 r">message</span>) ? <span class="s">&quot;&quot;</span> : <span class="s">&quot;, &quot;</span> + <span class="r80 r">message</span>;
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r84 rd" class="r84 r">formatted</span> = <b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;{0} Catched:{1}{2}&quot;</span>, <span class="r82 r">headerMsg</span>, <span class="r81 r">exception</span>.<a href="@0@mscorlib/A.html#cf7a3679f8b67db4" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>, <span class="r83 r">additionalMsg</span>);
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="r84 r">formatted</span>);
+            }
+ 
+            <b>return</b> (<span class="r78 r t">T</span>)<span class="r81 r">exception</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">does not throw any exceptions</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="3c76344086585eb7" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">DoesNotThrow</a>(<a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r85 rd" class="r85 r">testCode</span>, <b>string</b> <span id="r86 rd" class="r86 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="k">var</a> <span id="r87 rd" class="r87 r">exception</span> = <a href="#31f62c1ad7073e1c" class="i method">ExecuteCode</a>(<span class="r85 r">testCode</span>);
+            <b>if</b> (<span class="r87 r">exception</span> != <b>null</b>)
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r88 rd" class="r88 r">formatted</span> = <b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;Failed DoesNotThrow. Catched:{0}{1}&quot;</span>, <span class="r87 r">exception</span>.<a href="@0@mscorlib/A.html#cf7a3679f8b67db4" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>, <b>string</b>.<a href="@0@mscorlib/A.html#23a8597f842071f4" class="i method">IsNullOrEmpty</a>(<span class="r86 r">message</span>) ? <span class="s">&quot;&quot;</span> : <span class="s">&quot;, &quot;</span> + <span class="r86 r">message</span>);
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="r88 r">formatted</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">execute action and return exception when catched otherwise return null</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>private static</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="31f62c1ad7073e1c" href="../R/31f62c1ad7073e1c.html" target="n" data-glyph="76,1" class="i method">ExecuteCode</a>(<a href="@0@mscorlib/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r89 rd" class="r89 r">testCode</span>)
+        {
+            <b>try</b>
+            {
+                <span class="r89 r">testCode</span>();
+                <b>return null</b>;
+            }
+            <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r90 rd" class="r90 r">e</span>)
+            {
+                <b>return</b> <span class="r90 r">e</span>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">EqualityComparison to IComparer Converter for CollectionAssert</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>private class</b> <a id="9bf2c2695c369573" href="../R/9bf2c2695c369573.html" target="n" data-glyph="4,1" class="t t">ComparisonComparer</a>&lt;<span id="r91 rd t" class="r91 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#71c2d8fb30991441" class="t t">IComparer</a>
+        {
+            <b>readonly</b> <a href="@0@mscorlib/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r91 r t">T</span>, <span class="r91 r t">T</span>, <b>bool</b>&gt; <a id="f9fe7fedf170de67" href="../R/f9fe7fedf170de67.html" target="n" data-glyph="46,2" class="i field">comparison</a>;
+ 
+            <b>public</b> <a id="4d17704d852c4ee4" href="../R/4d17704d852c4ee4.html" target="n" data-glyph="72,2" class="i constructor">ComparisonComparer</a>(<a href="@0@mscorlib/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r91 r t">T</span>, <span class="r91 r t">T</span>, <b>bool</b>&gt; <span id="r92 rd" class="r92 r">comparison</span>)
+            {
+                <a href="#9bf2c2695c369573" class="k">this</a>.<a href="#f9fe7fedf170de67" class="i field">comparison</a> = <span class="r92 r">comparison</span>;
+            }
+ 
+            <b>public int</b> <a id="97e680c6637403bb" href="../R/97e680c6637403bb.html" target="n" data-glyph="72,2" class="i method">Compare</a>(<b>object</b> <span id="r93 rd" class="r93 r">x</span>, <b>object</b> <span id="r94 rd" class="r94 r">y</span>)
+            {
+                <b>return</b> (<a href="#f9fe7fedf170de67" class="i field">comparison</a> != <b>null</b>)
+                    ? <a href="#f9fe7fedf170de67" class="i field">comparison</a>((<span class="r91 r t">T</span>)<span class="r93 r">x</span>, (<span class="r91 r t">T</span>)<span class="r94 r">y</span>) ? 0 : -1
+                    : <b>object</b>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<span class="r93 r">x</span>, <span class="r94 r">y</span>) ? 0 : -1;
+            }
+        }
+ 
+        <b>private class</b> <a id="981660f82cdddac8" href="../R/../../0000000000.html" target="n" data-glyph="4,1" class="t t">ReflectAccessor</a>&lt;<span id="r95 rd t" class="r95 r t">T</span>&gt;
+        {
+            <b>public</b> <a href="@0@mscorlib/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<b>object</b>&gt; <a id="6fe665d84be3d85f" href="../R/6fe665d84be3d85f.html" target="n" data-glyph="102,2" class="i property">GetValue</a> { <b>get</b>; <b>private set</b>; }
+            <b>public</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>object</b>&gt; <a id="0049067d4fa4fa2e" href="../R/0049067d4fa4fa2e.html" target="n" data-glyph="102,2" class="i property">SetValue</a> { <b>get</b>; <b>private set</b>; }
+ 
+            <b>public</b> <a id="fdaa64a86b2d97a3" href="../R/../../0000000000.html" target="n" data-glyph="72,2" class="i constructor">ReflectAccessor</a>(<span class="r95 r t">T</span> <span id="r96 rd" class="r96 r">target</span>, <b>string</b> <span id="r97 rd" class="r97 r">name</span>)
+            {
+                <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r98 rd" class="r98 r">field</span> = <b>typeof</b>(<span class="r95 r t">T</span>).<a href="@0@mscorlib/A.html#0a8706ee1c09aece" class="i method">GetField</a>(<span class="r97 r">name</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+                <b>if</b> (<span class="r98 r">field</span> != <b>null</b>)
+                {
+                    <a href="#6fe665d84be3d85f" class="i property">GetValue</a> = () =&gt; <span class="r98 r">field</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r96 r">target</span>);
+                    <a href="#0049067d4fa4fa2e" class="i property">SetValue</a> = <span id="r99 rd" class="r99 r">value</span> =&gt; <span class="r98 r">field</span>.<a href="@0@mscorlib/A.html#4625270857af627c" class="i method">SetValue</a>(<span class="r96 r">target</span>, <span class="r99 r">value</span>);
+                    <b>return</b>;
+                }
+ 
+                <a href="@0@mscorlib/A.html#f3f0ea5f89a8f162" class="k">var</a> <span id="r100 rd" class="r100 r">prop</span> = <b>typeof</b>(<span class="r95 r t">T</span>).<a href="@0@mscorlib/A.html#90cb501901e16fa4" class="i method">GetProperty</a>(<span class="r97 r">name</span>, <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#5144189c11f6b668" class="i field">NonPublic</a>);
+                <b>if</b> (<span class="r100 r">prop</span> != <b>null</b>)
+                {
+                    <a href="#6fe665d84be3d85f" class="i property">GetValue</a> = () =&gt; <span class="r100 r">prop</span>.<a href="@0@mscorlib/A.html#0308429a99d58f37" class="i method">GetValue</a>(<span class="r96 r">target</span>, <b>null</b>);
+                    <a href="#0049067d4fa4fa2e" class="i property">SetValue</a> = <span id="r101 rd" class="r101 r">value</span> =&gt; <span class="r100 r">prop</span>.<a href="@0@mscorlib/A.html#fac5bcae675d50eb" class="i method">SetValue</a>(<span class="r96 r">target</span>, <span class="r101 r">value</span>, <b>null</b>);
+                    <b>return</b>;
+                }
+ 
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<b>string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;\&quot;{0}\&quot; not found : Type &lt;{1}&gt;&quot;</span>, <span class="r97 r">name</span>, <b>typeof</b>(<span class="r95 r t">T</span>).<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>));
+            }
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> StructuralEqual
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert by deep recursive value equality compare</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="cf3f926354467b74" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsStructuralEqual</a>(<b>this</b> <b>object</b> <span id="r102 rd" class="r102 r">actual</span>, <b>object</b> <span id="r103 rd" class="r103 r">expected</span>, <b>string</b> <span id="r104 rd" class="r104 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="r104 r">message</span> = (<b>string</b>.<a href="@0@mscorlib/A.html#23a8597f842071f4" class="i method">IsNullOrEmpty</a>(<span class="r104 r">message</span>) ? <span class="s">&quot;&quot;</span> : <span class="s">&quot;, &quot;</span> + <span class="r104 r">message</span>);
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r102 r">actual</span>, <span class="r103 r">expected</span>)) <b>return</b>;
+ 
+            <b>if</b> (<span class="r102 r">actual</span> == <b>null</b>) { <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="s">&quot;actual is null&quot;</span> + <span class="r104 r">message</span>); <b>return</b>; }
+            <b>if</b> (<span class="r103 r">expected</span> == <b>null</b>) { <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="s">&quot;actual is not null&quot;</span> + <span class="r104 r">message</span>); <b>return</b>; }
+            <b>if</b> (<span class="r102 r">actual</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>() != <span class="r103 r">expected</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>())
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r105 rd" class="r105 r">msg</span> = <b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;expected type is {0} but actual type is {1}{2}&quot;</span>,
+                    <span class="r103 r">expected</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>, <span class="r102 r">actual</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a>, <span class="r104 r">message</span>);
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="r105 r">msg</span>);
+                <b>return</b>;
+            }
+ 
+            <a href="#713745dce5b03dc4" class="k">var</a> <span id="r106 rd" class="r106 r">r</span> = <a href="#3d27ba3070ca8418" class="i method">StructuralEqual</a>(<span class="r102 r">actual</span>, <span class="r103 r">expected</span>, <b>new</b>[] { <span class="r102 r">actual</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a> }); <span class="c">// root type</span>
+            <b>if</b> (!<span class="r106 r">r</span>.<a href="#395e126a117f95b7" class="i field">IsEquals</a>)
+            {
+                <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r107 rd" class="r107 r">msg</span> = <b>string</b>.<a href="@0@mscorlib/A.html#ad9f5b0b214ae8f3" class="i method">Format</a>(<span class="s">&quot;is not structural equal, failed at {0}, actual = {1} expected = {2}{3}&quot;</span>,
+                    <b>string</b>.<a href="@0@mscorlib/A.html#881354baa56fc358" class="i method">Join</a>(<span class="s">&quot;.&quot;</span>, <span class="r106 r">r</span>.<a href="#3c4d63d00dc465b7" class="i field">Names</a>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>()), <span class="r106 r">r</span>.<a href="#b144f77cb9d4ceec" class="i field">Left</a>, <span class="r106 r">r</span>.<a href="#62c2b1ced25034d3" class="i field">Right</a>, <span class="r104 r">message</span>);
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="r107 r">msg</span>);
+                <b>return</b>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Assert by deep recursive value equality compare</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static void</b> <a id="5a3b8c7fbda8fb48" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">IsNotStructuralEqual</a>(<b>this</b> <b>object</b> <span id="r108 rd" class="r108 r">actual</span>, <b>object</b> <span id="r109 rd" class="r109 r">expected</span>, <b>string</b> <span id="r110 rd" class="r110 r">message</span> = <span class="s">&quot;&quot;</span>)
+        {
+            <span class="r110 r">message</span> = (<b>string</b>.<a href="@0@mscorlib/A.html#23a8597f842071f4" class="i method">IsNullOrEmpty</a>(<span class="r110 r">message</span>) ? <span class="s">&quot;&quot;</span> : <span class="s">&quot;, &quot;</span> + <span class="r110 r">message</span>);
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r108 r">actual</span>, <span class="r109 r">expected</span>))
+            {
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="s">&quot;actual is same reference&quot;</span> + <span class="r110 r">message</span>);
+                <b>return</b>;
+            }
+ 
+            <b>if</b> (<span class="r108 r">actual</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<span class="r109 r">expected</span> == <b>null</b>) <b>return</b>;
+            <b>if</b> (<span class="r108 r">actual</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>() != <span class="r109 r">expected</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>())
+            {
+                <b>return</b>;
+            }
+ 
+            <a href="#713745dce5b03dc4" class="k">var</a> <span id="r111 rd" class="r111 r">r</span> = <a href="#3d27ba3070ca8418" class="i method">StructuralEqual</a>(<span class="r108 r">actual</span>, <span class="r109 r">expected</span>, <b>new</b>[] { <span class="r108 r">actual</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a> }); <span class="c">// root type</span>
+            <b>if</b> (<span class="r111 r">r</span>.<a href="#395e126a117f95b7" class="i field">IsEquals</a>)
+            {
+                <span class="t t">Assert</span>.<span class="i method">Fail</span>(<span class="s">&quot;is structural equal&quot;</span> + <span class="r110 r">message</span>);
+            }
+        }
+ 
+        <b>static</b> <a href="#713745dce5b03dc4" class="t t">EqualInfo</a> <a id="06b5c2b495507278" href="../R/06b5c2b495507278.html" target="n" data-glyph="76,1" class="i method">SequenceEqual</a>(<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a> <span id="r112 rd" class="r112 r">leftEnumerable</span>, <a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a> <span id="r113 rd" class="r113 r">rightEnumarable</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<b>string</b>&gt; <span id="r114 rd" class="r114 r">names</span>)
+        {
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r115 rd" class="r115 r">le</span> = <span class="r112 r">leftEnumerable</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+            <b>using</b> (<span class="r115 r">le</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+            {
+                <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r116 rd" class="r116 r">re</span> = <span class="r113 r">rightEnumarable</span>.<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+ 
+                <b>using</b> (<span class="r116 r">re</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+                {
+                    <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r117 rd" class="r117 r">index</span> = 0;
+                    <b>while</b> (<b>true</b>)
+                    {
+                        <b>object</b> <span id="r118 rd" class="r118 r">lValue</span> = <b>null</b>;
+                        <b>object</b> <span id="r119 rd" class="r119 r">rValue</span> = <b>null</b>;
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r120 rd" class="r120 r">lMove</span> = <span class="r115 r">le</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r121 rd" class="r121 r">rMove</span> = <span class="r116 r">re</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>();
+                        <b>if</b> (<span class="r120 r">lMove</span>) <span class="r118 r">lValue</span> = <span class="r115 r">le</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                        <b>if</b> (<span class="r121 r">rMove</span>) <span class="r119 r">rValue</span> = <span class="r116 r">re</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+ 
+                        <b>if</b> (<span class="r120 r">lMove</span> &amp;&amp; <span class="r121 r">rMove</span>)
+                        {
+                            <a href="#713745dce5b03dc4" class="k">var</a> <span id="r122 rd" class="r122 r">result</span> = <a href="#3d27ba3070ca8418" class="i method">StructuralEqual</a>(<span class="r118 r">lValue</span>, <span class="r119 r">rValue</span>, <span class="r114 r">names</span>.<a href="@0@System.Core/A.html#9c0a66e386e37265" class="i method">Concat</a>(<b>new</b>[] { <span class="s">&quot;[&quot;</span> + <span class="r117 r">index</span> + <span class="s">&quot;]&quot;</span> }));
+                            <b>if</b> (!<span class="r122 r">result</span>.<a href="#395e126a117f95b7" class="i field">IsEquals</a>)
+                            {
+                                <b>return</b> <span class="r122 r">result</span>;
+                            }
+                        }
+ 
+                        <b>if</b> ((<span class="r120 r">lMove</span> == <b>true</b> &amp;&amp; <span class="r121 r">rMove</span> == <b>false</b>) || (<span class="r120 r">lMove</span> == <b>false</b> &amp;&amp; <span class="r121 r">rMove</span> == <b>true</b>))
+                        {
+                            <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <b>false</b>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r118 r">lValue</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r119 r">rValue</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r114 r">names</span>.<a href="@0@System.Core/A.html#9c0a66e386e37265" class="i method">Concat</a>(<b>new</b>[] { <span class="s">&quot;[&quot;</span> + <span class="r117 r">index</span> + <span class="s">&quot;]&quot;</span> }) };
+                        }
+                        <b>if</b> (<span class="r120 r">lMove</span> == <b>false</b> &amp;&amp; <span class="r121 r">rMove</span> == <b>false</b>) <b>break</b>;
+                        <span class="r117 r">index</span>++;
+                    }
+                }
+            }
+            <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <b>true</b>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r112 r">leftEnumerable</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r113 r">rightEnumarable</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r114 r">names</span> };
+        }
+ 
+        <b>static</b> <a href="#713745dce5b03dc4" class="t t">EqualInfo</a> <a id="3d27ba3070ca8418" href="../R/3d27ba3070ca8418.html" target="n" data-glyph="76,1" class="i method">StructuralEqual</a>(<b>object</b> <span id="r123 rd" class="r123 r">left</span>, <b>object</b> <span id="r124 rd" class="r124 r">right</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<b>string</b>&gt; <span id="r125 rd" class="r125 r">names</span>)
+        {
+            <span class="c">// type and basic checks</span>
+            <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#4d607d6d56a93c7e" class="i method">ReferenceEquals</a>(<span class="r123 r">left</span>, <span class="r124 r">right</span>)) <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <b>true</b>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r123 r">left</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r124 r">right</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r125 r">names</span> };
+            <b>if</b> (<span class="r123 r">left</span> == <b>null</b> || <span class="r124 r">right</span> == <b>null</b>) <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <b>false</b>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r123 r">left</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r124 r">right</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r125 r">names</span> };
+            <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="k">var</a> <span id="r126 rd" class="r126 r">lType</span> = <span class="r123 r">left</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>();
+            <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="k">var</a> <span id="r127 rd" class="r127 r">rType</span> = <span class="r124 r">right</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>();
+            <b>if</b> (<span class="r126 r">lType</span> != <span class="r127 r">rType</span>) <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <b>false</b>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r123 r">left</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r124 r">right</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r125 r">names</span> };
+ 
+            <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="k">var</a> <span id="r128 rd" class="r128 r">type</span> = <span class="r123 r">left</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>();
+ 
+            <span class="c">// not object(int, string, etc...)</span>
+            <b>if</b> (<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>.<a href="@0@mscorlib/A.html#a202a549b245b494" class="i method">GetTypeCode</a>(<span class="r128 r">type</span>) != <a href="@0@mscorlib/A.html#c5d283ec0427bcdb" class="t t">TypeCode</a>.<a href="@0@mscorlib/A.html#063b29dec9de71cf" class="i field">Object</a>)
+            {
+                <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <span class="r123 r">left</span>.<a href="@0@mscorlib/A.html#517682d5f6f4f8b4" class="i method">Equals</a>(<span class="r124 r">right</span>), <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r123 r">left</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r124 r">right</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r125 r">names</span> };
+            }
+ 
+            <span class="c">// is sequence</span>
+            <b>if</b> (<b>typeof</b>(<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>).<a href="@0@mscorlib/A.html#ba0cffea035fe210" class="i method">IsAssignableFrom</a>(<span class="r128 r">type</span>))
+            {
+                <b>return</b> <a href="#06b5c2b495507278" class="i method">SequenceEqual</a>((<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r123 r">left</span>, (<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r124 r">right</span>, <span class="r125 r">names</span>);
+            }
+ 
+            <span class="c">// IEquatable&lt;T&gt;</span>
+            <a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="k">var</a> <span id="r129 rd" class="r129 r">equatable</span> = <b>typeof</b>(<a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;&gt;).<a href="@0@mscorlib/A.html#3e82dbae123f91fc" class="i method">MakeGenericType</a>(<span class="r128 r">type</span>);
+            <b>if</b> (<span class="r129 r">equatable</span>.<a href="@0@mscorlib/A.html#ba0cffea035fe210" class="i method">IsAssignableFrom</a>(<span class="r128 r">type</span>))
+            {
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r130 rd" class="r130 r">result</span> = (<b>bool</b>)<span class="r129 r">equatable</span>.<a href="@0@mscorlib/A.html#aa0028890b299af1" class="i method">GetMethod</a>(<span class="s">&quot;Equals&quot;</span>).<a href="@0@mscorlib/A.html#c8277ed81262a367" class="i method">Invoke</a>(<span class="r123 r">left</span>, <b>new</b>[] { <span class="r124 r">right</span> });
+                <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <span class="r130 r">result</span>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r123 r">left</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r124 r">right</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r125 r">names</span> };
+            }
+ 
+            <span class="c">// is object</span>
+            <b>var</b> <span id="r131 rd" class="r131 r">fields</span> = <span class="r123 r">left</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#6e620aa7cbd52b97" class="i method">GetFields</a>(<a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a>);
+            <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="k">var</a> <span id="r132 rd" class="r132 r">properties</span> = <span class="r123 r">left</span>.<a href="@0@mscorlib/A.html#4d73eb225aef8a61" class="i method">GetType</a>().<a href="@0@mscorlib/A.html#bc75fdb60d33fb57" class="i method">GetProperties</a>(<a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#54a14f747b06c614" class="i field">Instance</a> | <a href="@0@mscorlib/A.html#4795caf3b483702d" class="t t">BindingFlags</a>.<a href="@0@mscorlib/A.html#ef2ef39bdfa059df" class="i field">Public</a>).<a href="@0@System.Core/A.html#e73922753675387a" class="i method">Where</a>(<span id="r133 rd" class="r133 r">x</span> =&gt; <span class="r133 r">x</span>.<a href="@0@mscorlib/A.html#7d6aeedaa6a70581" class="i method">GetGetMethod</a>(<b>false</b>) != <b>null</b>);
+            <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="k">var</a> <span id="r134 rd" class="r134 r">members</span> = <span class="r131 r">fields</span>.<a href="@0@System.Core/A.html#27bb217a6d5457ec" class="i method">Cast</a>&lt;<a href="@0@mscorlib/A.html#f837137ea25e482a" class="t t">MemberInfo</a>&gt;().<a href="@0@System.Core/A.html#9c0a66e386e37265" class="i method">Concat</a>(<span class="r132 r">properties</span>.<a href="@0@System.Core/A.html#27bb217a6d5457ec" class="i method">Cast</a>&lt;<a href="@0@mscorlib/A.html#f837137ea25e482a" class="t t">MemberInfo</a>&gt;());
+ 
+            <b>foreach</b> (<a href="@0@mscorlib/A.html#f837137ea25e482a" class="k">var</a> <span id="r135 rd" class="r135 r">mi</span> <b>in</b> <span class="r134 r">members</span>)
+            {
+                <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="k">var</a> <span id="r136 rd" class="r136 r">concatNames</span> = <span class="r125 r">names</span>.<a href="@0@System.Core/A.html#9c0a66e386e37265" class="i method">Concat</a>(<b>new</b>[] { (<b>string</b>)<span class="r135 r">mi</span>.<a href="@0@mscorlib/A.html#aa4f112f79364b6e" class="i property">Name</a> });
+                <b>object</b> <span id="r137 rd" class="r137 r">lv</span> = <b>null</b>;
+                <b>object</b> <span id="r138 rd" class="r138 r">rv</span> = <b>null</b>;
+                <b>if</b> (<span class="r135 r">mi</span> <b>is</b> <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="t t">FieldInfo</a>)
+                {
+                    <a href="@0@mscorlib/A.html#329d417f4b15c86c" class="k">var</a> <span id="r139 rd" class="r139 r">fi</span> = (<a href="@0@mscorlib/A.html#329d417f4b15c86c" class="t t">FieldInfo</a>)<span class="r135 r">mi</span>;
+                    <span class="r139 r">fi</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r123 r">left</span>);
+                    <span class="r139 r">fi</span>.<a href="@0@mscorlib/A.html#f8ddbb1dc1c6b29e" class="i method">GetValue</a>(<span class="r124 r">right</span>);
+                }
+                <b>else if</b> (<span class="r135 r">mi</span> <b>is</b> <a href="@0@mscorlib/A.html#f3f0ea5f89a8f162" class="t t">PropertyInfo</a>)
+                {
+                    <a href="@0@mscorlib/A.html#f3f0ea5f89a8f162" class="k">var</a> <span id="r140 rd" class="r140 r">pi</span> = (<a href="@0@mscorlib/A.html#f3f0ea5f89a8f162" class="t t">PropertyInfo</a>)<span class="r135 r">mi</span>;
+                    <span class="r140 r">pi</span>.<a href="@0@mscorlib/A.html#0308429a99d58f37" class="i method">GetValue</a>(<span class="r123 r">left</span>, <b>null</b>);
+                    <span class="r140 r">pi</span>.<a href="@0@mscorlib/A.html#0308429a99d58f37" class="i method">GetValue</a>(<span class="r124 r">right</span>, <b>null</b>);
+                }
+ 
+                <a href="#713745dce5b03dc4" class="k">var</a> <span id="r141 rd" class="r141 r">result</span> = <a href="#3d27ba3070ca8418" class="i method">StructuralEqual</a>(<span class="r137 r">lv</span>, <span class="r138 r">rv</span>, <span class="r136 r">concatNames</span>);
+                <b>if</b> (!<span class="r141 r">result</span>.<a href="#395e126a117f95b7" class="i field">IsEquals</a>)
+                {
+                    <b>return</b> <span class="r141 r">result</span>;
+                }
+            }
+ 
+            <b>return</b> <b>new</b> <a href="#713745dce5b03dc4" class="t constructor">EqualInfo</a> { <a href="#395e126a117f95b7" class="i field">IsEquals</a> = <b>true</b>, <a href="#b144f77cb9d4ceec" class="i field">Left</a> = <span class="r123 r">left</span>, <a href="#62c2b1ced25034d3" class="i field">Right</a> = <span class="r124 r">right</span>, <a href="#3c4d63d00dc465b7" class="i field">Names</a> = <span class="r125 r">names</span> };
+        }
+ 
+        <b>private class</b> <a id="713745dce5b03dc4" href="../R/713745dce5b03dc4.html" target="n" data-glyph="4,1" class="t t"><span id="2f2329792ee7bb5d">EqualInfo</span></a>
+        {
+            <b>public object</b> <a id="b144f77cb9d4ceec" href="../R/b144f77cb9d4ceec.html" target="n" data-glyph="42,2" class="i field">Left</a>;
+            <b>public object</b> <a id="62c2b1ced25034d3" href="../R/62c2b1ced25034d3.html" target="n" data-glyph="42,2" class="i field">Right</a>;
+            <b>public bool</b> <a id="395e126a117f95b7" href="../R/395e126a117f95b7.html" target="n" data-glyph="42,2" class="i field">IsEquals</a>;
+            <b>public</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<b>string</b>&gt; <a id="3c4d63d00dc465b7" href="../R/3c4d63d00dc465b7.html" target="n" data-glyph="42,2" class="i field">Names</a>;
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+    }
+ 
+    <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+}</pre></td></tr></table></div></body></html>

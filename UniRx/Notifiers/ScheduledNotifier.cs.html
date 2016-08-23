@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html><head><title>ScheduledNotifier.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(72);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Notifiers/ScheduledNotifier.cs" target="_top">Notifiers\ScheduledNotifier.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Notify value on setuped scheduler.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="98ec41de600a9d1c" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ScheduledNotifier</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="40b158b1e340f5f4" href="../R/40b158b1e340f5f4.html" target="n" data-glyph="46,1" class="i field">scheduler</a>;
+        <b>readonly</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r0 r t">T</span>&gt; <a id="a44b9991c06b0e09" href="../R/a44b9991c06b0e09.html" target="n" data-glyph="46,1" class="i field">trigger</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r0 r t">T</span>&gt;();
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Use scheduler is Scheduler.DefaultSchedulers.ConstantTimeOperations.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="4fcbaf055adf1fe8" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">ScheduledNotifier</a>()
+        {
+            <a href="#98ec41de600a9d1c" class="k">this</a>.<a href="#40b158b1e340f5f4" class="i field">scheduler</a> = <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a>;
+        }
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Use scheduler is argument&#39;s scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="423cf746f256c3cc" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">ScheduledNotifier</a>(<a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r1 rd" class="r1 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r1 r">scheduler</span> == <b>null</b>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;scheduler&quot;</span>);
+            }
+ 
+            <a href="#98ec41de600a9d1c" class="k">this</a>.<a href="#40b158b1e340f5f4" class="i field">scheduler</a> = <span class="r1 r">scheduler</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Push value to subscribers on setuped scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="4ade2efdeccdaa76" href="../R/4ade2efdeccdaa76.html" target="n" data-glyph="72,1" class="i method">Report</a>(<span class="r0 r t">T</span> <span id="r2 rd" class="r2 r">value</span>)
+        {
+            <a href="#40b158b1e340f5f4" class="i field">scheduler</a>.<a href="../Schedulers/IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt; <a href="#a44b9991c06b0e09" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">value</span>));
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Push value to subscribers on setuped scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="7d435c6d1d4b8010" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Report</a>(<span class="r0 r t">T</span> <span id="r3 rd" class="r3 r">value</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r4 rd" class="r4 r">dueTime</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r5 rd" class="r5 r">cancel</span> = <a href="#40b158b1e340f5f4" class="i field">scheduler</a>.<a href="../Schedulers/IScheduler.cs.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<span class="r4 r">dueTime</span>, () =&gt; <a href="#a44b9991c06b0e09" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r3 r">value</span>));
+            <b>return</b> <span class="r5 r">cancel</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Push value to subscribers on setuped scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="2fd19b766955ae94" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Report</a>(<span class="r0 r t">T</span> <span id="r6 rd" class="r6 r">value</span>, <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r7 rd" class="r7 r">dueTime</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r8 rd" class="r8 r">cancel</span> = <a href="#40b158b1e340f5f4" class="i field">scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#cbd0d2ce69bc62cb" class="i method">Schedule</a>(<span class="r7 r">dueTime</span>, () =&gt; <a href="#a44b9991c06b0e09" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r6 r">value</span>));
+            <b>return</b> <span class="r8 r">cancel</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Subscribe observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="ff729e760f0ce368" href="../R/ff729e760f0ce368.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r9 rd" class="r9 r">observer</span>)
+        {
+            <b>if</b> (<span class="r9 r">observer</span> == <b>null</b>)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+            }
+ 
+            <b>return</b> <a href="#a44b9991c06b0e09" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r9 r">observer</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

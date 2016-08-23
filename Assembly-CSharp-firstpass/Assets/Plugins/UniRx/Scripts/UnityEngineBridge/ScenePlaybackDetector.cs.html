@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html><head><title>ScenePlaybackDetector.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(80);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ScenePlaybackDetector.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ScenePlaybackDetector.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+ 
+<b>using</b> <span class="i">UnityEditor</span>;
+<b>using</b> <span class="i">UnityEditor</span>.<span class="i">Callbacks</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    [<span class="i">InitializeOnLoad</span>]
+    <b>public class</b> <a id="a812c09b704c31b0" href="../../../../../R/a812c09b704c31b0.html" target="n" data-glyph="0,0" class="t t"><span id="c337df7bdc186833">ScenePlaybackDetector</span></a>
+    {
+        <b>private static bool</b> <a id="4bb388668ad15d9e" href="../../../../../R/4bb388668ad15d9e.html" target="n" data-glyph="46,1" class="i field">_isPlaying</a> = <b>false</b>;
+ 
+        <b>private static bool</b> <a id="717f5e22d8777fe7" href="../../../../../R/717f5e22d8777fe7.html" target="n" data-glyph="106,1" class="i property">AboutToStartScene</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <span class="i">EditorPrefs</span>.<span class="i">GetBool</span>(<span class="s">&quot;AboutToStartScene&quot;</span>);
+            }
+            <b>set</b>
+            {
+                <span class="i">EditorPrefs</span>.<span class="i">SetBool</span>(<span class="s">&quot;AboutToStartScene&quot;</span>, <b>value</b>);
+            }
+        }
+ 
+        <b>public static bool</b> <a id="5b83026a1fd44639" href="../../../../../R/5b83026a1fd44639.html" target="n" data-glyph="102,1" class="i property">IsPlaying</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#4bb388668ad15d9e" class="i field">_isPlaying</a>;
+            }
+            <b>set</b>
+            {
+                <b>if</b> (<a href="#4bb388668ad15d9e" class="i field">_isPlaying</a> != <b>value</b>)
+                {
+                    <a href="#4bb388668ad15d9e" class="i field">_isPlaying</a> = <b>value</b>;
+                }
+            }
+        }
+ 
+        <span class="c">// This callback is notified after scripts have been reloaded.</span>
+        [<span class="i">DidReloadScripts</span>]
+        <b>public static void</b> <a id="1c74ad1d6a2e7ff4" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDidReloadScripts</a>()
+        {
+            <span class="c">// Filter DidReloadScripts callbacks to the moment where playmodeState transitions into isPlaying.</span>
+            <b>if</b> (<a href="#717f5e22d8777fe7" class="i property">AboutToStartScene</a>)
+            {
+                <a href="#5b83026a1fd44639" class="i property">IsPlaying</a> = <b>true</b>;
+            }
+        }
+ 
+        <span class="c">// InitializeOnLoad ensures that this constructor is called when the Unity Editor is started.</span>
+        <b>static</b> <a id="f8854c2298d2e408" href="../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">ScenePlaybackDetector</a>()
+        {
+            <span class="i">EditorApplication</span>.<span class="i">playmodeStateChanged</span> += () =&gt;
+            {
+                <span class="c">// Before scene start:          isPlayingOrWillChangePlaymode = false;  isPlaying = false</span>
+                <span class="c">// Pressed Playback button:     isPlayingOrWillChangePlaymode = true;   isPlaying = false</span>
+                <span class="c">// Playing:                     isPlayingOrWillChangePlaymode = false;  isPlaying = true</span>
+                <span class="c">// Pressed stop button:         isPlayingOrWillChangePlaymode = true;   isPlaying = true</span>
+                <b>if</b> (<span class="i">EditorApplication</span>.<span class="i">isPlayingOrWillChangePlaymode</span> &amp;&amp; !<span class="i">EditorApplication</span>.<span class="i">isPlaying</span>)
+                {
+                    <a href="#717f5e22d8777fe7" class="i property">AboutToStartScene</a> = <b>true</b>;
+                }
+                <b>else</b>
+                {
+                    <a href="#717f5e22d8777fe7" class="i property">AboutToStartScene</a> = <b>false</b>;
+                }
+ 
+                <span class="c">// Detect when playback is stopped.</span>
+                <b>if</b> (!<span class="i">EditorApplication</span>.<span class="i">isPlaying</span>)
+                {
+                    <a href="#5b83026a1fd44639" class="i property">IsPlaying</a> = <b>false</b>;
+                }
+            };
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

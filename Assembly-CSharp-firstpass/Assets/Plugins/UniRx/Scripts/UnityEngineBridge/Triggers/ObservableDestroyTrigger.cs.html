@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableDestroyTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(60);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableDestroyTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableDestroyTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="6c749f109a8ae545" href="../../../../../../R/6c749f109a8ae545.html" target="n" data-glyph="0,0" class="t t"><span id="a3e85b5cedeca693">ObservableDestroyTrigger</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>bool</b> <a id="21726d622a47aeca" href="../../../../../../R/21726d622a47aeca.html" target="n" data-glyph="46,1" class="i field">calledDestroy</a> = <b>false</b>;
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="c01b15f815dc56de" href="../../../../../../R/c01b15f815dc56de.html" target="n" data-glyph="46,1" class="i field">onDestroy</a>;
+        <a href="../../Disposables/CompositeDisposable.cs.html#fd453f2122f5c4b8" class="t t">CompositeDisposable</a> <a id="44887b8273c76f1d" href="../../../../../../R/44887b8273c76f1d.html" target="n" data-glyph="46,1" class="i field">disposablesOnDestroy</a>;
+ 
+        [<a href="@0@mscorlib/A.html#66ed4e142f4e14e7" class="t constructor">Obsolete</a>(<span class="s">&quot;Internal Use.&quot;</span>)]
+        <b>internal bool</b> <a id="fd47ecc03f25487d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="104,1" class="i property">IsMonitoredActivate</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public bool</b> <a id="c8288b2c78d41d06" href="../../../../../../R/c8288b2c78d41d06.html" target="n" data-glyph="102,1" class="i property">IsActivated</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>void</b> <a id="b65305fd0906961a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <a href="#c8288b2c78d41d06" class="i property">IsActivated</a> = <b>true</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="7a79b16626bf05a7" href="../../../../../../R/7a79b16626bf05a7.html" target="n" data-glyph="76,1" class="i method">OnDestroy</a>()
+        {
+            <b>if</b> (!<a href="#21726d622a47aeca" class="i field">calledDestroy</a>)
+            {
+                <a href="#21726d622a47aeca" class="i field">calledDestroy</a> = <b>true</b>;
+                <b>if</b> (<a href="#44887b8273c76f1d" class="i field">disposablesOnDestroy</a> != <b>null</b>) <a href="#44887b8273c76f1d" class="i field">disposablesOnDestroy</a>.<a href="../../Disposables/CompositeDisposable.cs.html#e408ca6ae4b425ae" class="i method">Dispose</a>();
+                <b>if</b> (<a href="#c01b15f815dc56de" class="i field">onDestroy</a> != <b>null</b>) { <a href="#c01b15f815dc56de" class="i field">onDestroy</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>); <a href="#c01b15f815dc56de" class="i field">onDestroy</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>(); }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">This function is called when the MonoBehaviour will be destroyed.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="d99d66b16d06a3c4" href="../../../../../../R/d99d66b16d06a3c4.html" target="n" data-glyph="72,1" class="i method">OnDestroyAsObservable</a>()
+        {
+            <b>if</b> (<a href="#6c749f109a8ae545" class="k">this</a> == <b>null</b>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>if</b> (<a href="#21726d622a47aeca" class="i field">calledDestroy</a>) <b>return</b> <a href="../../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../../Observable.Creation.cs.html#a4ad56ba27ef2310" class="i method">Return</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>return</b> <a href="#c01b15f815dc56de" class="i field">onDestroy</a> ?? (<a href="#c01b15f815dc56de" class="i field">onDestroy</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Invoke OnDestroy, this method is used on internal.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="882dfe696c72c459" href="../../../../../../R/882dfe696c72c459.html" target="n" data-glyph="72,1" class="i method">ForceRaiseOnDestroy</a>()
+        {
+            <a href="#7a79b16626bf05a7" class="i method">OnDestroy</a>();
+        }
+ 
+        <b>public void</b> <a id="74e50e3df1d2c67f" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">AddDisposableOnDestroy</a>(<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r0 rd" class="r0 r">disposable</span>)
+        {
+            <b>if</b> (<a href="#21726d622a47aeca" class="i field">calledDestroy</a>)
+            {
+                <span class="r0 r">disposable</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                <b>return</b>;
+            }
+ 
+            <b>if</b> (<a href="#44887b8273c76f1d" class="i field">disposablesOnDestroy</a> == <b>null</b>) <a href="#44887b8273c76f1d" class="i field">disposablesOnDestroy</a> = <b>new</b> <a href="../../Disposables/CompositeDisposable.cs.html#b8fe93d2b696d1ee" class="t constructor">CompositeDisposable</a>();
+            <a href="#44887b8273c76f1d" class="i field">disposablesOnDestroy</a>.<a href="../../Disposables/CompositeDisposable.cs.html#f28124695cede8a9" class="i method">Add</a>(<span class="r0 r">disposable</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

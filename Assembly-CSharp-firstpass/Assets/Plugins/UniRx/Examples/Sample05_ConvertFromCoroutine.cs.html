@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample05_ConvertFromCoroutine.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(38);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample05_ConvertFromCoroutine.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample05_ConvertFromCoroutine.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="5490bc86b5fdb8b8" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="35f8363e307a37e1">Sample05_ConvertFromCoroutine</span></a>
+    {
+        <span class="c">// public method</span>
+        <b>public static</b> <a href="../Scripts/System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>string</b>&gt; <a id="82763d3016ff1d49" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">GetWWW</a>(<b>string</b> <span id="r0 rd" class="r0 r">url</span>)
+        {
+            <span class="c">// convert coroutine to IObservable</span>
+            <b>return</b> <a href="../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Scripts/UnityEngineBridge/Observable.Unity.cs.html#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<b>string</b>&gt;((<span id="r1 rd" class="r1 r">observer</span>, <span id="r2 rd" class="r2 r">cancellationToken</span>) =&gt; <a href="#129d92318ecf643b" class="i method">GetWWWCore</a>(<span class="r0 r">url</span>, <span class="r1 r">observer</span>, <span class="r2 r">cancellationToken</span>));
+        }
+ 
+        <span class="c">// IEnumerator with callback</span>
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="129d92318ecf643b" href="../../../../R/129d92318ecf643b.html" target="n" data-glyph="76,1" class="i method">GetWWWCore</a>(<b>string</b> <span id="r3 rd" class="r3 r">url</span>, <a href="../Scripts/System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>string</b>&gt; <span id="r4 rd" class="r4 r">observer</span>, <a href="../Scripts/UnityEngineBridge/CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r5 rd" class="r5 r">cancellationToken</span>)
+        {
+            <b>var</b> <span id="r6 rd" class="r6 r">www</span> = <b>new</b> <span class="i">UnityEngine</span>.<span class="i">WWW</span>(<span class="r3 r">url</span>);
+            <b>while</b> (!<span class="r6 r">www</span>.<span class="i">isDone</span> &amp;&amp; !<span class="r5 r">cancellationToken</span>.<a href="../Scripts/UnityEngineBridge/CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>yield return null</b>;
+            }
+ 
+            <b>if</b> (<span class="r5 r">cancellationToken</span>.<a href="../Scripts/UnityEngineBridge/CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>) <b>yield break</b>;
+ 
+            <b>if</b> (<span class="r6 r">www</span>.<span class="i">error</span> != <b>null</b>)
+            {
+                <span class="r4 r">observer</span>.<a href="../Scripts/System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<b>new</b> <span class="t">Exception</span>(<span class="r6 r">www</span>.<span class="i">error</span>));
+            }
+            <b>else</b>
+            {
+                <span class="r4 r">observer</span>.<span class="i">OnNext</span>(<span class="r6 r">www</span>.<span class="i">text</span>);
+                <span class="r4 r">observer</span>.<a href="../Scripts/System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

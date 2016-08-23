@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html><head><title>DiagnosticResult.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(87);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer.Test/Helpers/DiagnosticResult.cs" target="_top">Helpers\DiagnosticResult.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer.Test" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer.Test\UniRxAnalyzer.Test.csproj</a> (UniRxAnalyzer.Test)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">TestHelper</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Location where the diagnostic appears, as determined by path, line number, and column number.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public struct</b> <a id="db0dc12f86bfb6f1" href="../R/db0dc12f86bfb6f1.html" target="n" data-glyph="108,0" class="t t"><span id="5e8f45f22e21f12a">DiagnosticResultLocation</span></a>
+    {
+        <b>public</b> <a id="721419f0a1f92da9" href="../R/721419f0a1f92da9.html" target="n" data-glyph="72,1" class="i constructor">DiagnosticResultLocation</a>(<b>string</b> <span id="r0 rd" class="r0 r">path</span>, <b>int</b> <span id="r1 rd" class="r1 r">line</span>, <b>int</b> <span id="r2 rd" class="r2 r">column</span>)
+        {
+            <b>if</b> (<span class="r1 r">line</span> &lt; -1)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#27138d3b17d5ff6b" class="t constructor">ArgumentOutOfRangeException</a>(<b>nameof</b>(<span class="r1 r">line</span>), <span class="s">&quot;line must be &gt;= -1&quot;</span>);
+            }
+ 
+            <b>if</b> (<span class="r2 r">column</span> &lt; -1)
+            {
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#27138d3b17d5ff6b" class="t constructor">ArgumentOutOfRangeException</a>(<b>nameof</b>(<span class="r1 r">line</span>), <span class="s">&quot;column must be &gt;= -1&quot;</span>);
+            }
+ 
+            <a href="#db0dc12f86bfb6f1" class="k">this</a>.<a href="#4ebc35ee80c7fdcf" class="i property">Path</a> = <span class="r0 r">path</span>;
+            <a href="#db0dc12f86bfb6f1" class="k">this</a>.<a href="#19e5d5b0284e1b78" class="i property">Line</a> = <span class="r1 r">line</span>;
+            <a href="#db0dc12f86bfb6f1" class="k">this</a>.<a href="#ebf9f01fa82d88b5" class="i property">Column</a> = <span class="r2 r">column</span>;
+        }
+ 
+        <b>public string</b> <a id="4ebc35ee80c7fdcf" href="../R/4ebc35ee80c7fdcf.html" target="n" data-glyph="102,1" class="i property">Path</a> { <b>get</b>; }
+        <b>public int</b> <a id="19e5d5b0284e1b78" href="../R/19e5d5b0284e1b78.html" target="n" data-glyph="102,1" class="i property">Line</a> { <b>get</b>; }
+        <b>public int</b> <a id="ebf9f01fa82d88b5" href="../R/ebf9f01fa82d88b5.html" target="n" data-glyph="102,1" class="i property">Column</a> { <b>get</b>; }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Struct that stores information about a Diagnostic appearing in a source</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public struct</b> <a id="5c4f2723301334e4" href="../R/5c4f2723301334e4.html" target="n" data-glyph="108,0" class="t t"><span id="12e92d967cf2995b">DiagnosticResult</span></a>
+    {
+        <b>private</b> <a href="#db0dc12f86bfb6f1" class="t t">DiagnosticResultLocation</a>[] <a id="0478c79f194c342f" href="../R/0478c79f194c342f.html" target="n" data-glyph="46,1" class="i field">locations</a>;
+ 
+        <b>public</b> <a href="#db0dc12f86bfb6f1" class="t t">DiagnosticResultLocation</a>[] <a id="ec6b3b1aad9a4c20" href="../R/ec6b3b1aad9a4c20.html" target="n" data-glyph="102,1" class="i property">Locations</a>
+        {
+            <b>get</b>
+            {
+                <b>if</b> (<a href="#5c4f2723301334e4" class="k">this</a>.<a href="#0478c79f194c342f" class="i field">locations</a> == <b>null</b>)
+                {
+                    <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#0478c79f194c342f" class="i field">locations</a> = <b>new</b> <a href="#db0dc12f86bfb6f1" class="t t">DiagnosticResultLocation</a>[] { };
+                }
+                <b>return</b> <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#0478c79f194c342f" class="i field">locations</a>;
+            }
+ 
+            <b>set</b>
+            {
+                <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#0478c79f194c342f" class="i field">locations</a> = <b>value</b>;
+            }
+        }
+ 
+        <b>public</b> <span class="i">DiagnosticSeverity</span> <a id="0ac4ec49810723c0" href="../R/0ac4ec49810723c0.html" target="n" data-glyph="102,1" class="i property">Severity</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public string</b> <a id="9e787d43fbb9d9a0" href="../R/9e787d43fbb9d9a0.html" target="n" data-glyph="102,1" class="i property">Id</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public string</b> <a id="a31ac224552b04ae" href="../R/a31ac224552b04ae.html" target="n" data-glyph="102,1" class="i property">Message</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public string</b> <a id="e8b693758f49c766" href="../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Path</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#ec6b3b1aad9a4c20" class="i property">Locations</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> &gt; 0 ? <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#ec6b3b1aad9a4c20" class="i property">Locations</a>[0].<a href="#4ebc35ee80c7fdcf" class="i property">Path</a> : <span class="s">&quot;&quot;</span>;
+            }
+        }
+ 
+        <b>public int</b> <a id="c5e02913dabd5a69" href="../R/c5e02913dabd5a69.html" target="n" data-glyph="102,1" class="i property">Line</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#ec6b3b1aad9a4c20" class="i property">Locations</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> &gt; 0 ? <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#ec6b3b1aad9a4c20" class="i property">Locations</a>[0].<a href="#19e5d5b0284e1b78" class="i property">Line</a> : -1;
+            }
+        }
+ 
+        <b>public int</b> <a id="b01d37cb46b272e7" href="../R/b01d37cb46b272e7.html" target="n" data-glyph="102,1" class="i property">Column</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#ec6b3b1aad9a4c20" class="i property">Locations</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> &gt; 0 ? <a href="#5c4f2723301334e4" class="k">this</a>.<a href="#ec6b3b1aad9a4c20" class="i property">Locations</a>[0].<a href="#ebf9f01fa82d88b5" class="i property">Column</a> : -1;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

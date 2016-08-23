@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html><head><title>Container.cs</title><link rel="stylesheet" href="../../../../styles.css"><script src="../../../../scripts.js"></script></head>
+<body class="cB" onload="i(167);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/UnitTests/Tools/Container.cs" target="_top">Assets\UnitTests\Tools\Container.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    <b>public</b> <a href="../../../P/1b83ab0555d9ea6e.html" target="s" class="k">partial</a> <b>class</b> <a id="1b83ab0555d9ea6e" href="../../../R/1b83ab0555d9ea6e.html" target="n" data-glyph="0,0" class="t t"><span id="e443983fef3e3c80">SchedulerTest</span></a>
+    {
+        <b>private static string</b>[] <a id="ccb208bc7330730c" href="../../../R/ccb208bc7330730c.html" target="n" data-glyph="76,1" class="i method">ScheduleTasks</a>(<a href="/Assembly-CSharp-firstpass/A.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r0 rd" class="r0 r">scheduler</span>)
+        {
+            <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r1 rd" class="r1 r">list</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>string</b>&gt;();
+ 
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r2 rd" class="r2 r">leafAction</span> = () =&gt; <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;----leafAction.&quot;</span>);
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r3 rd" class="r3 r">innerAction</span> = () =&gt;
+            {
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;--innerAction start.&quot;</span>);
+                <span class="r0 r">scheduler</span>.<a href="/Assembly-CSharp-firstpass/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r2 r">leafAction</span>);
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;--innerAction end.&quot;</span>);
+            };
+            <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r4 rd" class="r4 r">outerAction</span> = () =&gt;
+            {
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;outer start.&quot;</span>);
+                <span class="r0 r">scheduler</span>.<a href="/Assembly-CSharp-firstpass/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r3 r">innerAction</span>);
+                <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="s">&quot;outer end.&quot;</span>);
+            };
+            <span class="r0 r">scheduler</span>.<a href="/Assembly-CSharp-firstpass/A.html#e0dd22c68ad50c68" class="i method">Schedule</a>(<span class="r4 r">outerAction</span>);
+ 
+            <b>return</b> <span class="r1 r">list</span>.<a href="@0@mscorlib/A.html#d4409b7542728cec" class="i method">ToArray</a>();
+        }
+    }
+ 
+    <b>public delegate void</b> <a id="1226adea70cadb4e" href="../../../R/1226adea70cadb4e.html" target="n" data-glyph="12,0" class="t t"><span id="ac5f34b7ce7c0179">LikeUnityAction</span></a>();
+    <b>public delegate void</b> <a id="e8f52279a9d25539" href="../../../R/e8f52279a9d25539.html" target="n" data-glyph="12,0" class="t t"><span id="1413d0a47900e410">LikeUnityAction</span></a>&lt;<span id="r5 rd t" class="r5 r t">T0</span>&gt;(<span class="r5 r t">T0</span> <span id="r6 rd" class="r6 r">arg0</span>);
+ 
+    <b>public class</b> <a id="6d5c19190286ed10" href="../../../R/6d5c19190286ed10.html" target="n" data-glyph="0,0" class="t t">MyEventArgs</a> : <a href="@0@mscorlib/A.html#9a1496aa60befd10" class="t t">EventArgs</a>
+    {
+        <b>public int</b> <a id="b6d2c5efb4c5613b" href="../../../R/b6d2c5efb4c5613b.html" target="n" data-glyph="102,1" class="i property">MyProperty</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public</b> <a id="91c56bb4a1293091" href="../../../R/91c56bb4a1293091.html" target="n" data-glyph="72,1" class="i constructor">MyEventArgs</a>()
+        {
+ 
+        }
+ 
+        <b>public</b> <a id="1675433aa3da63c1" href="../../../R/1675433aa3da63c1.html" target="n" data-glyph="72,1" class="i constructor">MyEventArgs</a>(<b>int</b> <span id="r7 rd" class="r7 r">x</span>)
+        {
+            <a href="#6d5c19190286ed10" class="k">this</a>.<a href="#b6d2c5efb4c5613b" class="i property">MyProperty</a> = <span class="r7 r">x</span>;
+        }
+    }
+ 
+    <b>public class</b> <a id="c36056dd1ebf4548" href="../../../R/c36056dd1ebf4548.html" target="n" data-glyph="0,0" class="t t"><span id="2edb47514dd49c92">EventTester</span></a>
+    {
+        <b>public</b> <a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#6d5c19190286ed10" class="t t">MyEventArgs</a>&gt; <a id="9b190826d420c72b" href="../../../R/9b190826d420c72b.html" target="n" data-glyph="42,1" class="i field">genericEventHandler</a>;
+        <b>public</b> <a href="#1226adea70cadb4e" class="t t">LikeUnityAction</a> <a id="45830b5e60f9cb35" href="../../../R/45830b5e60f9cb35.html" target="n" data-glyph="42,1" class="i field">unityAction</a>;
+        <b>public</b> <a href="#e8f52279a9d25539" class="t t">LikeUnityAction</a>&lt;<b>int</b>&gt; <a id="f8ea46dbb3c02ecc" href="../../../R/f8ea46dbb3c02ecc.html" target="n" data-glyph="42,1" class="i field">intUnityAction</a>;
+        <b>public</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt; <a id="7d4fb411796ea57a" href="../../../R/7d4fb411796ea57a.html" target="n" data-glyph="42,1" class="i field">intAction</a>;
+        <b>public</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="069a96d63c4f10db" href="../../../R/069a96d63c4f10db.html" target="n" data-glyph="42,1" class="i field">unitAction</a>;
+ 
+        <b>public void</b> <a id="e4e18cd353995815" href="../../../R/e4e18cd353995815.html" target="n" data-glyph="72,1" class="i method">Fire</a>(<b>int</b> <span id="r8 rd" class="r8 r">x</span>)
+        {
+            <b>if</b> (<a href="#9b190826d420c72b" class="i field">genericEventHandler</a> != <b>null</b>)
+            {
+                <a href="#9b190826d420c72b" class="i field">genericEventHandler</a>.<a href="@0@mscorlib/A.html#48225ee7c18a0e20" class="i method">Invoke</a>(<a href="#c36056dd1ebf4548" class="k">this</a>, <b>new</b> <a href="#1675433aa3da63c1" class="t constructor">MyEventArgs</a>(<span class="r8 r">x</span>));
+            }
+            <b>else if</b> (<a href="#45830b5e60f9cb35" class="i field">unityAction</a> != <b>null</b>)
+            {
+                <a href="#45830b5e60f9cb35" class="i field">unityAction</a>();
+            }
+            <b>else if</b> (<a href="#f8ea46dbb3c02ecc" class="i field">intUnityAction</a> != <b>null</b>)
+            {
+                <a href="#f8ea46dbb3c02ecc" class="i field">intUnityAction</a>(<span class="r8 r">x</span>);
+            }
+            <b>else if</b> (<a href="#7d4fb411796ea57a" class="i field">intAction</a> != <b>null</b>)
+            {
+                <a href="#7d4fb411796ea57a" class="i field">intAction</a>.<a href="@0@mscorlib/A.html#2d4ce5e8c3a9aa80" class="i method">Invoke</a>(<span class="r8 r">x</span>);
+            }
+            <b>else if</b> (<a href="#069a96d63c4f10db" class="i field">unitAction</a> != <b>null</b>)
+            {
+                <a href="#069a96d63c4f10db" class="i field">unitAction</a>.<a href="@0@System.Core/A.html#6fbb51427c383a3a" class="i method">Invoke</a>();
+            }
+        }
+    }
+ 
+    <b>public class</b> <a id="8abd24905c9801e8" href="../../../R/8abd24905c9801e8.html" target="n" data-glyph="0,0" class="t t"><span id="06988d398e2369eb">EventTestesr</span></a>
+    {
+        <b>public event</b> <a href="@0@mscorlib/A.html#3b79d2b06c15f250" class="t t">EventHandler</a> <a id="423cc5b15c9aef6d" href="../../../R/423cc5b15c9aef6d.html" target="n" data-glyph="30,1" class="i">Event1</a>;
+        <b>public event</b> <a href="@0@mscorlib/A.html#96ed969784b9d510" class="t t">EventHandler</a>&lt;<a href="#6d5c19190286ed10" class="t t">MyEventArgs</a>&gt; <a id="2af4340eb7b8a605" href="../../../R/2af4340eb7b8a605.html" target="n" data-glyph="30,1" class="i">Event2</a>;
+        <b>public event</b> <a href="#7fd3e6ddb6ab6377" class="t t">MyEventHandler</a> <a id="95c00b8b07765c9d" href="../../../R/95c00b8b07765c9d.html" target="n" data-glyph="30,1" class="i">Event3</a>;
+        <b>public event</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="e36cf3b3dbc65653" href="../../../R/e36cf3b3dbc65653.html" target="n" data-glyph="30,1" class="i">Event4</a>;
+        <b>public event</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<b>int</b>&gt; <a id="439e1d12ad86f7c8" href="../../../R/439e1d12ad86f7c8.html" target="n" data-glyph="30,1" class="i">Event5</a>;
+        <b>public event</b> <a href="@0@System.Core/A.html#27863de72c2c9b49" class="t t">Action</a>&lt;<b>int</b>, <b>string</b>&gt; <a id="ca96ff6fc7f79d4a" href="../../../R/ca96ff6fc7f79d4a.html" target="n" data-glyph="30,1" class="i">Event6</a>;
+ 
+        <b>public void</b> <a id="2fad0987bae878e1" href="../../../R/2fad0987bae878e1.html" target="n" data-glyph="72,1" class="i method">Fire</a>(<b>int</b> <span id="r9 rd" class="r9 r">num</span>)
+        {
+            <b>switch</b> (<span class="r9 r">num</span>)
+            {
+                <b>case</b> 1:
+                    <b>if</b> (<a href="#423cc5b15c9aef6d" class="i">Event1</a> == <b>null</b>) <b>return</b>;
+                    <a href="#423cc5b15c9aef6d" class="i">Event1</a>(<a href="#8abd24905c9801e8" class="k">this</a>, <b>new</b> <a href="@0@mscorlib/A.html#99ae272fd6e74a90" class="t constructor">EventArgs</a>());
+                    <b>break</b>;
+                <b>case</b> 2:
+                    <b>if</b> (<a href="#2af4340eb7b8a605" class="i">Event2</a> == <b>null</b>) <b>return</b>;
+                    <a href="#2af4340eb7b8a605" class="i">Event2</a>(<a href="#8abd24905c9801e8" class="k">this</a>, <b>new</b> <a href="#91c56bb4a1293091" class="t constructor">MyEventArgs</a>());
+                    <b>break</b>;
+                <b>case</b> 3:
+                    <b>if</b> (<a href="#95c00b8b07765c9d" class="i">Event3</a> == <b>null</b>) <b>return</b>;
+                    <a href="#95c00b8b07765c9d" class="i">Event3</a>(<a href="#8abd24905c9801e8" class="k">this</a>, <b>new</b> <a href="#91c56bb4a1293091" class="t constructor">MyEventArgs</a>());
+                    <b>break</b>;
+                <b>case</b> 4:
+                    <b>if</b> (<a href="#e36cf3b3dbc65653" class="i">Event4</a> == <b>null</b>) <b>return</b>;
+                    <a href="#e36cf3b3dbc65653" class="i">Event4</a>();
+                    <b>break</b>;
+                <b>case</b> 5:
+                    <b>if</b> (<a href="#439e1d12ad86f7c8" class="i">Event5</a> == <b>null</b>) <b>return</b>;
+                    <a href="#439e1d12ad86f7c8" class="i">Event5</a>(100);
+                    <b>break</b>;
+                <b>case</b> 6:
+                    <b>if</b> (<a href="#ca96ff6fc7f79d4a" class="i">Event6</a> == <b>null</b>) <b>return</b>;
+                    <a href="#ca96ff6fc7f79d4a" class="i">Event6</a>(100, <span class="s">&quot;hogehoge&quot;</span>);
+                    <b>break</b>;
+                <b>default</b>:
+                    <b>break</b>;
+            }
+        }
+    }
+ 
+    <b>public delegate void</b> <a id="7fd3e6ddb6ab6377" href="../../../R/7fd3e6ddb6ab6377.html" target="n" data-glyph="12,0" class="t t"><span id="44e1d233d7442157">MyEventHandler</span></a>(<b>object</b> <span id="r10 rd" class="r10 r">sender</span>, <a href="#6d5c19190286ed10" class="t t">MyEventArgs</a> <span id="r11 rd" class="r11 r">eventArgs</span>);
+ 
+ 
+    <b>public class</b> <a id="e2871ec60392c19b" href="../../../R/e2871ec60392c19b.html" target="n" data-glyph="0,0" class="t t">IdDisp</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        <b>public bool</b> <a id="41e159e5a7698fa7" href="../../../R/41e159e5a7698fa7.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a> { <b>get</b>; <b>set</b>; }
+        <b>public int</b> <a id="3ee5cead5e8498cf" href="../../../R/3ee5cead5e8498cf.html" target="n" data-glyph="102,1" class="i property">Id</a> { <b>get</b>; <b>set</b>; }
+ 
+        <b>public</b> <a id="7fa5753eafa8b791" href="../../../R/7fa5753eafa8b791.html" target="n" data-glyph="72,1" class="i constructor">IdDisp</a>(<b>int</b> <span id="r12 rd" class="r12 r">id</span>)
+        {
+            <a href="#e2871ec60392c19b" class="k">this</a>.<a href="#3ee5cead5e8498cf" class="i property">Id</a> = <span class="r12 r">id</span>;
+        }
+ 
+ 
+        <b>public void</b> <a id="c0498fe37ffb16d1" href="../../../R/c0498fe37ffb16d1.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#41e159e5a7698fa7" class="i property">IsDisposed</a> = <b>true</b>;
+        }
+    }
+ 
+    <b>public class</b> <a id="822f99ffe63f9efb" href="../../../R/822f99ffe63f9efb.html" target="n" data-glyph="0,0" class="t t"><span id="9e65078491334a08">ListObserver</span></a> : <a href="/Assembly-CSharp-firstpass/A.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>int</b>&gt;
+    {
+        <b>public</b> <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<b>int</b>&gt; <a id="bd5be4cc6cfcc46d" href="../../../R/bd5be4cc6cfcc46d.html" target="n" data-glyph="42,1" class="i field">list</a> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<b>int</b>&gt;();
+ 
+        <b>public void</b> <a id="126775fba096d6db" href="../../../R/126775fba096d6db.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <a href="#bd5be4cc6cfcc46d" class="i field">list</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(1000);
+        }
+ 
+        <b>public void</b> <a id="fea9c6b4b478c5a0" href="../../../R/fea9c6b4b478c5a0.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r13 rd" class="r13 r">error</span>)
+        {
+            <a href="#bd5be4cc6cfcc46d" class="i field">list</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(100);
+        }
+ 
+        <b>public void</b> <a id="d9f0257d781f606a" href="../../../R/d9f0257d781f606a.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<b>int</b> <span id="r14 rd" class="r14 r">value</span>)
+        {
+            <a href="#bd5be4cc6cfcc46d" class="i field">list</a>.<a href="@0@mscorlib/A.html#9cc11588bffd57c1" class="i method">Add</a>(<span class="r14 r">value</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

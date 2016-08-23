@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html><head><title>MicroCoroutine.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(170);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/InternalUtil/MicroCoroutine.cs" target="_top">InternalUtil\MicroCoroutine.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Simple supports(only yield return null) lightweight, threadsafe coroutine dispatcher.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="20c342fba3b28c4c" href="../R/20c342fba3b28c4c.html" target="n" data-glyph="0,0" class="t t">MicroCoroutine</a>
+    {
+        <b>const int</b> <a id="ae6a5f354b9c5f1b" href="../R/ae6a5f354b9c5f1b.html" target="n" data-glyph="10,1" class="i field">InitialSize</a> = 16;
+ 
+        <b>readonly object</b> <a id="fcddec0ee5ddba9b" href="../R/fcddec0ee5ddba9b.html" target="n" data-glyph="46,1" class="i field">runningAndQueueLock</a> = <b>new</b> <b>object</b>();
+        <b>readonly object</b> <a id="6432ea76529d693f" href="../R/6432ea76529d693f.html" target="n" data-glyph="46,1" class="i field">arrayLock</a> = <b>new</b> <b>object</b>();
+        <b>readonly</b> <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <a id="2493b1a2988be718" href="../R/2493b1a2988be718.html" target="n" data-glyph="46,1" class="i field">unhandledExceptionCallback</a>;
+ 
+        <b>int</b> <a id="a8d701050b318d1a" href="../R/a8d701050b318d1a.html" target="n" data-glyph="46,1" class="i field">tail</a> = 0;
+        <b>bool</b> <a id="682e83d6ef98d712" href="../R/682e83d6ef98d712.html" target="n" data-glyph="46,1" class="i field">running</a> = <b>false</b>;
+        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>[] <a id="21f815d38b556e3e" href="../R/21f815d38b556e3e.html" target="n" data-glyph="46,1" class="i field">coroutines</a> = <b>new</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>[<a href="#ae6a5f354b9c5f1b" class="i field">InitialSize</a>];
+        <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <a id="51a314ea928dbd37" href="../R/51a314ea928dbd37.html" target="n" data-glyph="46,1" class="i field">waitQueue</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt;();
+ 
+        <b>public</b> <a id="9ae1cfa971857447" href="../R/9ae1cfa971857447.html" target="n" data-glyph="72,1" class="i constructor">MicroCoroutine</a>(<a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt; <span id="r0 rd" class="r0 r">unhandledExceptionCallback</span>)
+        {
+            <a href="#20c342fba3b28c4c" class="k">this</a>.<a href="#2493b1a2988be718" class="i field">unhandledExceptionCallback</a> = <span class="r0 r">unhandledExceptionCallback</span>;
+        }
+ 
+        <b>public void</b> <a id="0b8951d0ecd60933" href="../R/0b8951d0ecd60933.html" target="n" data-glyph="72,1" class="i method">AddCoroutine</a>(<a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <span id="r1 rd" class="r1 r">enumerator</span>)
+        {
+            <b>lock</b> (<a href="#fcddec0ee5ddba9b" class="i field">runningAndQueueLock</a>)
+            {
+                <b>if</b> (<a href="#682e83d6ef98d712" class="i field">running</a>)
+                {
+                    <a href="#51a314ea928dbd37" class="i field">waitQueue</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<span class="r1 r">enumerator</span>);
+                    <b>return</b>;
+                }
+            }
+ 
+            <span class="c">// worst case at multi threading, wait lock until finish Run() but it is super rarely.</span>
+            <b>lock</b> (<a href="#6432ea76529d693f" class="i field">arrayLock</a>)
+            {
+                <span class="c">// Ensure Capacity</span>
+                <b>if</b> (<a href="#21f815d38b556e3e" class="i field">coroutines</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == <a href="#a8d701050b318d1a" class="i field">tail</a>)
+                {
+                    <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#71074deaf111c4e3" class="i method">Resize</a>(<b>ref</b> <a href="#21f815d38b556e3e" class="i field">coroutines</a>, <b>checked</b>(<a href="#a8d701050b318d1a" class="i field">tail</a> * 2));
+                }
+                <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<a href="#a8d701050b318d1a" class="i field">tail</a>++] = <span class="r1 r">enumerator</span>;
+            }
+        }
+ 
+        <b>public void</b> <a id="20107e2078f9d8d5" href="../R/20107e2078f9d8d5.html" target="n" data-glyph="72,1" class="i method">Run</a>()
+        {
+            <b>lock</b> (<a href="#fcddec0ee5ddba9b" class="i field">runningAndQueueLock</a>)
+            {
+                <a href="#682e83d6ef98d712" class="i field">running</a> = <b>true</b>;
+            }
+ 
+            <b>lock</b> (<a href="#6432ea76529d693f" class="i field">arrayLock</a>)
+            {
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r2 rd" class="r2 r">j</span> = <a href="#a8d701050b318d1a" class="i field">tail</a> - 1;
+ 
+                <span class="c">// eliminate array-bound check for i</span>
+                <b>for</b> (<b>int</b> <span id="r3 rd" class="r3 r">i</span> = 0; <span class="r3 r">i</span> &lt; <a href="#21f815d38b556e3e" class="i field">coroutines</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r3 r">i</span>++)
+                {
+                    <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r4 rd" class="r4 r">coroutine</span> = <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r3 r">i</span>];
+                    <b>if</b> (<span class="r4 r">coroutine</span> != <b>null</b>)
+                    {
+                        <b>try</b>
+                        {
+                            <b>if</b> (!<span class="r4 r">coroutine</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>())
+                            {
+                                <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r3 r">i</span>] = <b>null</b>;
+                            }
+                            <b>else</b>
+                            {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+<span class="e">                                // validation only on Editor.
+                                if (coroutine.Current != null)
+                                {
+                                    UnityEngine.Debug.LogWarning(&quot;MicroCoroutine supports only yield return null. return value = &quot; + coroutine.Current);
+                                }
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+                                <b>continue</b>; <span class="c">// next i </span>
+                            }
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r5 rd" class="r5 r">ex</span>)
+                        {
+                            <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r3 r">i</span>] = <b>null</b>;
+                            <b>try</b>
+                            {
+                                <a href="#2493b1a2988be718" class="i field">unhandledExceptionCallback</a>(<span class="r5 r">ex</span>);
+                            }
+                            <b>catch</b> { }
+                        }
+                    }
+ 
+                    <span class="c">// find null, loop from tail</span>
+                    <b>while</b> (<span class="r3 r">i</span> &lt; <span class="r2 r">j</span>)
+                    {
+                        <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r6 rd" class="r6 r">fromTail</span> = <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r2 r">j</span>];
+                        <b>if</b> (<span class="r6 r">fromTail</span> != <b>null</b>)
+                        {
+                            <b>try</b>
+                            {
+                                <b>if</b> (!<span class="r6 r">fromTail</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>())
+                                {
+                                    <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r2 r">j</span>] = <b>null</b>;
+                                    <span class="r2 r">j</span>--;
+                                    <b>continue</b>; <span class="c">// next j</span>
+                                }
+                                <b>else</b>
+                                {
+<span class="k preprocess">#</span><span class="k preprocess">if</span> <span class="i">UNITY_EDITOR</span>
+<span class="e">                                    // validation only on Editor.
+                                    if (fromTail.Current != null)
+                                    {
+                                        UnityEngine.Debug.LogWarning(&quot;MicroCoroutine supports only yield return null. return value = &quot; + coroutine.Current);
+                                    }
+</span><span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+                                    <span class="c">// swap</span>
+                                    <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r3 r">i</span>] = <span class="r6 r">fromTail</span>;
+                                    <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r2 r">j</span>] = <b>null</b>;
+                                    <span class="r2 r">j</span>--;
+                                    <b>goto</b> <span class="i">NEXT_LOOP</span>; <span class="c">// next i</span>
+                                }
+                            }
+                            <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r7 rd" class="r7 r">ex</span>)
+                            {
+                                <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<span class="r2 r">j</span>] = <b>null</b>;
+                                <span class="r2 r">j</span>--;
+                                <b>try</b>
+                                {
+                                    <a href="#2493b1a2988be718" class="i field">unhandledExceptionCallback</a>(<span class="r7 r">ex</span>);
+                                }
+                                <b>catch</b> { }
+                                <b>continue</b>; <span class="c">// next j</span>
+                            }
+                        }
+                        <b>else</b>
+                        {
+                            <span class="r2 r">j</span>--;
+                        }
+                    }
+ 
+                    <a href="#a8d701050b318d1a" class="i field">tail</a> = <span class="r3 r">i</span>; <span class="c">// loop end</span>
+                    <b>break</b>; <span class="c">// LOOP END</span>
+ 
+                    <span class="i">NEXT_LOOP</span>:
+                    <b>continue</b>;
+                }
+ 
+ 
+                <b>lock</b> (<a href="#fcddec0ee5ddba9b" class="i field">runningAndQueueLock</a>)
+                {
+                    <a href="#682e83d6ef98d712" class="i field">running</a> = <b>false</b>;
+                    <b>while</b> (<a href="#51a314ea928dbd37" class="i field">waitQueue</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> != 0)
+                    {
+                        <b>if</b> (<a href="#21f815d38b556e3e" class="i field">coroutines</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == <a href="#a8d701050b318d1a" class="i field">tail</a>)
+                        {
+                            <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#71074deaf111c4e3" class="i method">Resize</a>(<b>ref</b> <a href="#21f815d38b556e3e" class="i field">coroutines</a>, <b>checked</b>(<a href="#a8d701050b318d1a" class="i field">tail</a> * 2));
+                        }
+                        <a href="#21f815d38b556e3e" class="i field">coroutines</a>[<a href="#a8d701050b318d1a" class="i field">tail</a>++] = <a href="#51a314ea928dbd37" class="i field">waitQueue</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObserveExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(182);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ObserveExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ObserveExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+<b>using</b> <span class="t">ObservableUnity</span> = <span class="i n">UniRx</span>.<a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="59e9edbd18e0e4ea" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ObserveExtensions</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Publish target property when value is changed. If source is destroyed/destructed, publish OnCompleted.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TProperty</span>&gt; <a id="b94f40cf023ba239" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ObserveEveryValueChanged</a>&lt;<span id="r1 rd t" class="r1 r t">TSource</span>, <span id="r0 rd t" class="r0 r t">TProperty</span>&gt;(<b>this</b> <span class="r1 r t">TSource</span> <span id="r2 rd" class="r2 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r1 r t">TSource</span>, <span class="r0 r t">TProperty</span>&gt; <span id="r3 rd" class="r3 r">propertySelector</span>, <a href="Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r4 rd" class="r4 r">frameCountType</span> = <a href="Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="Observable.Unity.cs.html#52219005ab7cec81" class="i field">Update</a>)
+            <b>where</b> <span class="r1 r t">TSource</span> : <b>class</b>
+        {
+            <b>return</b> <a href="#84104e68bf34bb02" class="i method">ObserveEveryValueChanged</a>(<span class="r2 r">source</span>, <span class="r3 r">propertySelector</span>, <span class="r4 r">frameCountType</span>, <a href="UnityEqualityComparer.cs.html#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="UnityEqualityComparer.cs.html#e7cc1a7d3ff064c1" class="i method">GetDefault</a>&lt;<span class="r0 r t">TProperty</span>&gt;());
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Publish target property when value is changed. If source is destroyed/destructed, publish OnCompleted.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">TProperty</span>&gt; <a id="84104e68bf34bb02" href="../../../../../R/84104e68bf34bb02.html" target="n" data-glyph="220,1" class="i method">ObserveEveryValueChanged</a>&lt;<span id="r6 rd t" class="r6 r t">TSource</span>, <span id="r5 rd t" class="r5 r t">TProperty</span>&gt;(<b>this</b> <span class="r6 r t">TSource</span> <span id="r7 rd" class="r7 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r6 r t">TSource</span>, <span class="r5 r t">TProperty</span>&gt; <span id="r8 rd" class="r8 r">propertySelector</span>, <a href="Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r9 rd" class="r9 r">frameCountType</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r5 r t">TProperty</span>&gt; <span id="r10 rd" class="r10 r">comparer</span>)
+            <b>where</b> <span class="r6 r t">TSource</span> : <b>class</b>
+        {
+            <b>if</b> (<span class="r7 r">source</span> == <b>null</b>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="r5 r t">TProperty</span>&gt;();
+            <b>if</b> (<span class="r10 r">comparer</span> == <b>null</b>) <span class="r10 r">comparer</span> = <a href="UnityEqualityComparer.cs.html#b297979dd74fdcb1" class="t t">UnityEqualityComparer</a>.<a href="UnityEqualityComparer.cs.html#e7cc1a7d3ff064c1" class="i method">GetDefault</a>&lt;<span class="r5 r t">TProperty</span>&gt;();
+ 
+            <b>var</b> <span id="r11 rd" class="r11 r">unityObject</span> = <span class="r7 r">source</span> <b>as</b> <span class="i">UnityEngine</span>.<span class="i">Object</span>;
+            <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r12 rd" class="r12 r">isUnityObject</span> = <span class="r7 r">source</span> <b>is</b> <span class="i">UnityEngine</span>.<span class="i">Object</span>;
+            <b>if</b> (<span class="r12 r">isUnityObject</span> &amp;&amp; <span class="r11 r">unityObject</span> == <b>null</b>) <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="r5 r t">TProperty</span>&gt;();
+ 
+            <span class="c">// MicroCoroutine does not publish value immediately, so publish value on subscribe.</span>
+            <b>if</b> (<span class="r12 r">isUnityObject</span>)
+            {
+                <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<a href="Observable.Unity.cs.html#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<span class="r5 r t">TProperty</span>&gt;((<span id="r13 rd" class="r13 r">observer</span>, <span id="r14 rd" class="r14 r">cancellationToken</span>) =&gt;
+                {
+                    <b>if</b> (<span class="r11 r">unityObject</span> != <b>null</b>)
+                    {
+                        <span class="r5 r t">var</span> <span id="r15 rd" class="r15 r">firstValue</span> = <b>default</b>(<span class="r5 r t">TProperty</span>);
+                        <b>try</b>
+                        {
+                            <span class="r15 r">firstValue</span> = <span class="r8 r">propertySelector</span>((<span class="r6 r t">TSource</span>)(<b>object</b>)<span class="r11 r">unityObject</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r16 rd" class="r16 r">ex</span>)
+                        {
+                            <span class="r13 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r16 r">ex</span>);
+                            <b>return</b> <a href="#56bad96cd2394b3a" class="i method">EmptyEnumerator</a>();
+                        }
+ 
+                        <span class="r13 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r15 r">firstValue</span>);
+                        <b>return</b> <a href="#f1705115ce734fdd" class="i method">PublishUnityObjectValueChanged</a>(<span class="r11 r">unityObject</span>, <span class="r15 r">firstValue</span>, <span class="r8 r">propertySelector</span>, <span class="r10 r">comparer</span>, <span class="r13 r">observer</span>, <span class="r14 r">cancellationToken</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="r13 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                        <b>return</b> <a href="#56bad96cd2394b3a" class="i method">EmptyEnumerator</a>();
+                    }
+                }, <span class="r9 r">frameCountType</span>);
+            }
+            <b>else</b>
+            {
+                <a href="@0@mscorlib/A.html#985a18841b9c6087" class="k">var</a> <span id="r17 rd" class="r17 r">reference</span> = <b>new</b> <a href="@0@mscorlib/A.html#85dfe4b08772c72b" class="t constructor">WeakReference</a>(<span class="r7 r">source</span>);
+                <span class="r7 r">source</span> = <b>null</b>;
+ 
+                <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<a href="Observable.Unity.cs.html#9277a146bd1df828" class="i method">FromMicroCoroutine</a>&lt;<span class="r5 r t">TProperty</span>&gt;((<span id="r18 rd" class="r18 r">observer</span>, <span id="r19 rd" class="r19 r">cancellationToken</span>) =&gt;
+                {
+                    <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r20 rd" class="r20 r">target</span> = <span class="r17 r">reference</span>.<a href="@0@mscorlib/A.html#7ec0249fd1fddd83" class="i property">Target</a>;
+                    <b>if</b> (<span class="r20 r">target</span> != <b>null</b>)
+                    {
+                        <span class="r5 r t">var</span> <span id="r21 rd" class="r21 r">firstValue</span> = <b>default</b>(<span class="r5 r t">TProperty</span>);
+                        <b>try</b>
+                        {
+                            <span class="r21 r">firstValue</span> = <span class="r8 r">propertySelector</span>((<span class="r6 r t">TSource</span>)<span class="r20 r">target</span>);
+                        }
+                        <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r22 rd" class="r22 r">ex</span>)
+                        {
+                            <span class="r18 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r22 r">ex</span>);
+                            <b>return</b> <a href="#56bad96cd2394b3a" class="i method">EmptyEnumerator</a>();
+                        }
+                        <b>finally</b>
+                        {
+                            <span class="r20 r">target</span> = <b>null</b>;
+                        }
+ 
+                        <span class="r18 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r21 r">firstValue</span>);
+                        <b>return</b> <a href="#6ea71d5f6adf7f19" class="i method">PublishPocoValueChanged</a>(<span class="r17 r">reference</span>, <span class="r21 r">firstValue</span>, <span class="r8 r">propertySelector</span>, <span class="r10 r">comparer</span>, <span class="r18 r">observer</span>, <span class="r19 r">cancellationToken</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <span class="r18 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                        <b>return</b> <a href="#56bad96cd2394b3a" class="i method">EmptyEnumerator</a>();
+                    }
+                }, <span class="r9 r">frameCountType</span>);
+            }
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="56bad96cd2394b3a" href="../../../../../R/56bad96cd2394b3a.html" target="n" data-glyph="76,1" class="i method">EmptyEnumerator</a>()
+        {
+            <b>yield break</b>;
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="6ea71d5f6adf7f19" href="../../../../../R/6ea71d5f6adf7f19.html" target="n" data-glyph="76,1" class="i method">PublishPocoValueChanged</a>&lt;<span id="r23 rd t" class="r23 r t">TSource</span>, <span id="r24 rd t" class="r24 r t">TProperty</span>&gt;(<a href="@0@mscorlib/A.html#985a18841b9c6087" class="t t">WeakReference</a> <span id="r25 rd" class="r25 r">sourceReference</span>, <span class="r24 r t">TProperty</span> <span id="r26 rd" class="r26 r">firstValue</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r23 r t">TSource</span>, <span class="r24 r t">TProperty</span>&gt; <span id="r27 rd" class="r27 r">propertySelector</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r24 r t">TProperty</span>&gt; <span id="r28 rd" class="r28 r">comparer</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r24 r t">TProperty</span>&gt; <span id="r29 rd" class="r29 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r30 rd" class="r30 r">cancellationToken</span>)
+        {
+            <span class="r24 r t">var</span> <span id="r31 rd" class="r31 r">currentValue</span> = <b>default</b>(<span class="r24 r t">TProperty</span>);
+            <span class="r24 r t">var</span> <span id="r32 rd" class="r32 r">prevValue</span> = <span class="r26 r">firstValue</span>;
+ 
+            <b>while</b> (!<span class="r30 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <a href="@0@mscorlib/A.html#d9262ceecc1719ab" class="k">var</a> <span id="r33 rd" class="r33 r">target</span> = <span class="r25 r">sourceReference</span>.<a href="@0@mscorlib/A.html#7ec0249fd1fddd83" class="i property">Target</a>;
+                <b>if</b> (<span class="r33 r">target</span> != <b>null</b>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r31 r">currentValue</span> = <span class="r27 r">propertySelector</span>((<span class="r23 r t">TSource</span>)<span class="r33 r">target</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r34 rd" class="r34 r">ex</span>)
+                    {
+                        <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r34 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                    <b>finally</b>
+                    {
+                        <span class="r33 r">target</span> = <b>null</b>; <span class="c">// remove reference(must need!)</span>
+                    }
+                }
+                <b>else</b>
+                {
+                    <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (!<span class="r28 r">comparer</span>.<a href="@0@mscorlib/A.html#fef57190b3709891" class="i method">Equals</a>(<span class="r31 r">currentValue</span>, <span class="r32 r">prevValue</span>))
+                {
+                    <span class="r29 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r31 r">currentValue</span>);
+                    <span class="r32 r">prevValue</span> = <span class="r31 r">currentValue</span>;
+                }
+ 
+                <b>yield return null</b>;
+            }
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="f1705115ce734fdd" href="../../../../../R/f1705115ce734fdd.html" target="n" data-glyph="76,1" class="i method">PublishUnityObjectValueChanged</a>&lt;<span id="r35 rd t" class="r35 r t">TSource</span>, <span id="r36 rd t" class="r36 r t">TProperty</span>&gt;(<span class="i">UnityEngine</span>.<span class="i">Object</span> <span id="r37 rd" class="r37 r">unityObject</span>, <span class="r36 r t">TProperty</span> <span id="r38 rd" class="r38 r">firstValue</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r35 r t">TSource</span>, <span class="r36 r t">TProperty</span>&gt; <span id="r39 rd" class="r39 r">propertySelector</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r36 r t">TProperty</span>&gt; <span id="r40 rd" class="r40 r">comparer</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r36 r t">TProperty</span>&gt; <span id="r41 rd" class="r41 r">observer</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r42 rd" class="r42 r">cancellationToken</span>)
+        {
+            <span class="r36 r t">var</span> <span id="r43 rd" class="r43 r">currentValue</span> = <b>default</b>(<span class="r36 r t">TProperty</span>);
+            <span class="r36 r t">var</span> <span id="r44 rd" class="r44 r">prevValue</span> = <span class="r38 r">firstValue</span>;
+ 
+            <span class="r35 r t">var</span> <span id="r45 rd" class="r45 r">source</span> = (<span class="r35 r t">TSource</span>)(<b>object</b>)<span class="r37 r">unityObject</span>;
+ 
+            <b>while</b> (!<span class="r42 r">cancellationToken</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+            {
+                <b>if</b> (<span class="r37 r">unityObject</span> != <b>null</b>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r43 r">currentValue</span> = <span class="r39 r">propertySelector</span>(<span class="r45 r">source</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r46 rd" class="r46 r">ex</span>)
+                    {
+                        <span class="r41 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r46 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <span class="r41 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+                    <b>yield break</b>;
+                }
+ 
+                <b>if</b> (!<span class="r40 r">comparer</span>.<a href="@0@mscorlib/A.html#fef57190b3709891" class="i method">Equals</a>(<span class="r43 r">currentValue</span>, <span class="r44 r">prevValue</span>))
+                {
+                    <span class="r41 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r43 r">currentValue</span>);
+                    <span class="r44 r">prevValue</span> = <span class="r43 r">currentValue</span>;
+                }
+ 
+                <b>yield return null</b>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

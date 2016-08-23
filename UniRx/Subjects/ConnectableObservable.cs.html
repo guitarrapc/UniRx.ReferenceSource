@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html><head><title>ConnectableObservable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(71);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Subjects/ConnectableObservable.cs" target="_top">Subjects\ConnectableObservable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="edc7de070aa049f4" href="../R/edc7de070aa049f4.html" target="n" data-glyph="48,0" class="t t">IConnectableObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1a2fb75497d7f5be" href="../R/1a2fb75497d7f5be.html" target="n" data-glyph="72,1" class="i method">Connect</a>();
+    }
+ 
+    <b>public static</b> <a href="../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>class</b> <a id="19c4ee81346bce30" href="../R/19c4ee81346bce30.html" target="n" data-glyph="4,1" class="t t">ConnectableObservable</a>&lt;<span id="r1 rd t" class="r1 r t">T</span>&gt; : <a href="#edc7de070aa049f4" class="t t">IConnectableObservable</a>&lt;<span class="r1 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">T</span>&gt; <a id="a94af09ae285bee7" href="../R/a94af09ae285bee7.html" target="n" data-glyph="46,2" class="i field">source</a>;
+            <b>readonly</b> <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r1 r t">T</span>&gt; <a id="49a588b46d8f5739" href="../R/49a588b46d8f5739.html" target="n" data-glyph="46,2" class="i field">subject</a>;
+            <b>readonly object</b> <a id="9d3950b25510f239" href="../R/9d3950b25510f239.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#92e87d8e17e05107" class="t t">Connection</a> <a id="63fbe7d2e7d86aa4" href="../R/63fbe7d2e7d86aa4.html" target="n" data-glyph="46,2" class="i field">connection</a>;
+ 
+            <b>public</b> <a id="08710253a329ddc0" href="../R/08710253a329ddc0.html" target="n" data-glyph="72,2" class="i constructor">ConnectableObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r2 rd" class="r2 r">source</span>, <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r3 rd" class="r3 r">subject</span>)
+            {
+                <a href="#19c4ee81346bce30" class="k">this</a>.<a href="#a94af09ae285bee7" class="i field">source</a> = <span class="r2 r">source</span>.<a href="../Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+                <a href="#19c4ee81346bce30" class="k">this</a>.<a href="#49a588b46d8f5739" class="i field">subject</a> = <span class="r3 r">subject</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="bd35bd0c87dfc207" href="../R/bd35bd0c87dfc207.html" target="n" data-glyph="72,2" class="i method">Connect</a>()
+            {
+                <b>lock</b> (<a href="#9d3950b25510f239" class="i field">gate</a>)
+                {
+                    <span class="c">// don&#39;t subscribe twice</span>
+                    <b>if</b> (<a href="#63fbe7d2e7d86aa4" class="i field">connection</a> == <b>null</b>)
+                    {
+                        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r4 rd" class="r4 r">subscription</span> = <a href="#a94af09ae285bee7" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<a href="#49a588b46d8f5739" class="i field">subject</a>);
+                        <a href="#63fbe7d2e7d86aa4" class="i field">connection</a> = <b>new</b> <a href="#7580cddb7aad7142" class="t constructor">Connection</a>(<a href="#19c4ee81346bce30" class="k">this</a>, <span class="r4 r">subscription</span>);
+                    }
+ 
+                    <b>return</b> <a href="#63fbe7d2e7d86aa4" class="i field">connection</a>;
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="39a0a39c7655a7d4" href="../R/39a0a39c7655a7d4.html" target="n" data-glyph="72,2" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r5 rd" class="r5 r">observer</span>)
+            {
+                <b>return</b> <a href="#49a588b46d8f5739" class="i field">subject</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r5 r">observer</span>);
+            }
+ 
+            <b>class</b> <a id="92e87d8e17e05107" href="../R/92e87d8e17e05107.html" target="n" data-glyph="4,2" class="t t">Connection</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+            {
+                <b>readonly</b> <a href="#19c4ee81346bce30" class="t t">ConnectableObservable</a>&lt;<span class="r1 r t">T</span>&gt; <a id="b2538cf5e0b65b20" href="../R/b2538cf5e0b65b20.html" target="n" data-glyph="46,3" class="i field">parent</a>;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="a18c830996ba0d3f" href="../R/a18c830996ba0d3f.html" target="n" data-glyph="46,3" class="i field">subscription</a>;
+ 
+                <b>public</b> <a id="7580cddb7aad7142" href="../R/7580cddb7aad7142.html" target="n" data-glyph="72,3" class="i constructor">Connection</a>(<a href="#19c4ee81346bce30" class="t t">ConnectableObservable</a>&lt;<span class="r1 r t">T</span>&gt; <span id="r6 rd" class="r6 r">parent</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">subscription</span>)
+                {
+                    <a href="#92e87d8e17e05107" class="k">this</a>.<a href="#b2538cf5e0b65b20" class="i field">parent</a> = <span class="r6 r">parent</span>;
+                    <a href="#92e87d8e17e05107" class="k">this</a>.<a href="#a18c830996ba0d3f" class="i field">subscription</a> = <span class="r7 r">subscription</span>;
+                }
+ 
+                <b>public void</b> <a id="52145a73ab4d4c42" href="../R/52145a73ab4d4c42.html" target="n" data-glyph="72,3" class="i method">Dispose</a>()
+                {
+                    <b>lock</b> (<a href="#b2538cf5e0b65b20" class="i field">parent</a>.<a href="#9d3950b25510f239" class="i field">gate</a>)
+                    {
+                        <b>if</b> (<a href="#a18c830996ba0d3f" class="i field">subscription</a> != <b>null</b>)
+                        {
+                            <a href="#a18c830996ba0d3f" class="i field">subscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                            <a href="#a18c830996ba0d3f" class="i field">subscription</a> = <b>null</b>;
+                            <a href="#b2538cf5e0b65b20" class="i field">parent</a>.<a href="#63fbe7d2e7d86aa4" class="i field">connection</a> = <b>null</b>;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

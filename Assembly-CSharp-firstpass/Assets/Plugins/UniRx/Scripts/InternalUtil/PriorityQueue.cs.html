@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html><head><title>PriorityQueue.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(149);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/InternalUtil/PriorityQueue.cs" target="_top">Assets\Plugins\UniRx\Scripts\InternalUtil\PriorityQueue.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// this code is borrowed from RxOfficial(rx.codeplex.com) and modified</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>
+{
+    <b>internal class</b> <a id="54f1868d59e9a888" href="../../../../../R/54f1868d59e9a888.html" target="n" data-glyph="2,0" class="t t">PriorityQueue</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; <b>where</b> <span class="r0 r t">T</span> : <a href="@0@mscorlib/A.html#3911354c40e0c30e" class="t t">IComparable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>private static long</b> <a id="b860304f8e9655c6" href="../../../../../R/b860304f8e9655c6.html" target="n" data-glyph="46,1" class="i field">_count</a> = <b>long</b>.<a href="@0@mscorlib/A.html#6159ffbc81b2a9a9" class="i field">MinValue</a>;
+ 
+        <b>private</b> <a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a>[] <a id="5cce8aeaa38e605f" href="../../../../../R/5cce8aeaa38e605f.html" target="n" data-glyph="46,1" class="i field">_items</a>;
+        <b>private int</b> <a id="584a2914ca211e47" href="../../../../../R/584a2914ca211e47.html" target="n" data-glyph="46,1" class="i field">_size</a>;
+ 
+        <b>public</b> <a id="ee5f523c5b0d27dd" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">PriorityQueue</a>()
+            : <a href="#d51c284ea7dd5e19" class="k">this</a>(16)
+        {
+        }
+ 
+        <b>public</b> <a id="d51c284ea7dd5e19" href="../../../../../R/d51c284ea7dd5e19.html" target="n" data-glyph="72,1" class="i constructor">PriorityQueue</a>(<b>int</b> <span id="r1 rd" class="r1 r">capacity</span>)
+        {
+            <a href="#5cce8aeaa38e605f" class="i field">_items</a> = <b>new</b> <a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a>[<span class="r1 r">capacity</span>];
+            <a href="#584a2914ca211e47" class="i field">_size</a> = 0;
+        }
+ 
+        <b>private bool</b> <a id="0727c4fc04675c83" href="../../../../../R/0727c4fc04675c83.html" target="n" data-glyph="76,1" class="i method">IsHigherPriority</a>(<b>int</b> <span id="r2 rd" class="r2 r">left</span>, <b>int</b> <span id="r3 rd" class="r3 r">right</span>)
+        {
+            <b>return</b> <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r2 r">left</span>].<a href="#2033aba0c5838057" class="i method">CompareTo</a>(<a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r3 r">right</span>]) &lt; 0;
+        }
+ 
+        <b>private void</b> <a id="96b90c620ebbe99b" href="../../../../../R/96b90c620ebbe99b.html" target="n" data-glyph="76,1" class="i method">Percolate</a>(<b>int</b> <span id="r4 rd" class="r4 r">index</span>)
+        {
+            <b>if</b> (<span class="r4 r">index</span> &gt;= <a href="#584a2914ca211e47" class="i field">_size</a> || <span class="r4 r">index</span> &lt; 0)
+                <b>return</b>;
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r5 rd" class="r5 r">parent</span> = (<span class="r4 r">index</span> - 1) / 2;
+            <b>if</b> (<span class="r5 r">parent</span> &lt; 0 || <span class="r5 r">parent</span> == <span class="r4 r">index</span>)
+                <b>return</b>;
+ 
+            <b>if</b> (<a href="#0727c4fc04675c83" class="i method">IsHigherPriority</a>(<span class="r4 r">index</span>, <span class="r5 r">parent</span>))
+            {
+                <a href="#ffdc2c02efc2240e" class="k">var</a> <span id="r6 rd" class="r6 r">temp</span> = <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r4 r">index</span>];
+                <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r4 r">index</span>] = <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r5 r">parent</span>];
+                <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r5 r">parent</span>] = <span class="r6 r">temp</span>;
+                <a href="#96b90c620ebbe99b" class="i method">Percolate</a>(<span class="r5 r">parent</span>);
+            }
+        }
+ 
+        <b>private void</b> <a id="3000e21249a30012" href="../../../../../R/3000e21249a30012.html" target="n" data-glyph="76,1" class="i method">Heapify</a>()
+        {
+            <a href="#6a71b789de779462" class="i method">Heapify</a>(0);
+        }
+ 
+        <b>private void</b> <a id="6a71b789de779462" href="../../../../../R/6a71b789de779462.html" target="n" data-glyph="76,1" class="i method">Heapify</a>(<b>int</b> <span id="r7 rd" class="r7 r">index</span>)
+        {
+            <b>if</b> (<span class="r7 r">index</span> &gt;= <a href="#584a2914ca211e47" class="i field">_size</a> || <span class="r7 r">index</span> &lt; 0)
+                <b>return</b>;
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r8 rd" class="r8 r">left</span> = 2 * <span class="r7 r">index</span> + 1;
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r9 rd" class="r9 r">right</span> = 2 * <span class="r7 r">index</span> + 2;
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r10 rd" class="r10 r">first</span> = <span class="r7 r">index</span>;
+ 
+            <b>if</b> (<span class="r8 r">left</span> &lt; <a href="#584a2914ca211e47" class="i field">_size</a> &amp;&amp; <a href="#0727c4fc04675c83" class="i method">IsHigherPriority</a>(<span class="r8 r">left</span>, <span class="r10 r">first</span>))
+                <span class="r10 r">first</span> = <span class="r8 r">left</span>;
+            <b>if</b> (<span class="r9 r">right</span> &lt; <a href="#584a2914ca211e47" class="i field">_size</a> &amp;&amp; <a href="#0727c4fc04675c83" class="i method">IsHigherPriority</a>(<span class="r9 r">right</span>, <span class="r10 r">first</span>))
+                <span class="r10 r">first</span> = <span class="r9 r">right</span>;
+            <b>if</b> (<span class="r10 r">first</span> != <span class="r7 r">index</span>)
+            {
+                <a href="#ffdc2c02efc2240e" class="k">var</a> <span id="r11 rd" class="r11 r">temp</span> = <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r7 r">index</span>];
+                <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r7 r">index</span>] = <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r10 r">first</span>];
+                <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r10 r">first</span>] = <span class="r11 r">temp</span>;
+                <a href="#6a71b789de779462" class="i method">Heapify</a>(<span class="r10 r">first</span>);
+            }
+        }
+ 
+        <b>public int</b> <a id="b879b56fbb37d35c" href="../../../../../R/b879b56fbb37d35c.html" target="n" data-glyph="102,1" class="i property">Count</a> { <b>get</b> { <b>return</b> <a href="#584a2914ca211e47" class="i field">_size</a>; } }
+ 
+        <b>public</b> <span class="r0 r t">T</span> <a id="5a110c449f40336b" href="../../../../../R/5a110c449f40336b.html" target="n" data-glyph="72,1" class="i method">Peek</a>()
+        {
+            <b>if</b> (<a href="#584a2914ca211e47" class="i field">_size</a> == 0)
+                <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;HEAP is Empty&quot;</span>);
+ 
+            <b>return</b> <a href="#5cce8aeaa38e605f" class="i field">_items</a>[0].<a href="#0edd3447d68f9b50" class="i field">Value</a>;
+        }
+ 
+        <b>private void</b> <a id="8d8cf8113dae1eac" href="../../../../../R/8d8cf8113dae1eac.html" target="n" data-glyph="76,1" class="i method">RemoveAt</a>(<b>int</b> <span id="r12 rd" class="r12 r">index</span>)
+        {
+            <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r12 r">index</span>] = <a href="#5cce8aeaa38e605f" class="i field">_items</a>[--<a href="#584a2914ca211e47" class="i field">_size</a>];
+            <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<a href="#584a2914ca211e47" class="i field">_size</a>] = <b>default</b>(<a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a>);
+            <a href="#3000e21249a30012" class="i method">Heapify</a>();
+            <b>if</b> (<a href="#584a2914ca211e47" class="i field">_size</a> &lt; <a href="#5cce8aeaa38e605f" class="i field">_items</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> / 4)
+            {
+                <b>var</b> <span id="r13 rd" class="r13 r">temp</span> = <a href="#5cce8aeaa38e605f" class="i field">_items</a>;
+                <a href="#5cce8aeaa38e605f" class="i field">_items</a> = <b>new</b> <a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a>[<a href="#5cce8aeaa38e605f" class="i field">_items</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> / 2];
+                <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#7441c6721593042c" class="i method">Copy</a>(<span class="r13 r">temp</span>, 0, <a href="#5cce8aeaa38e605f" class="i field">_items</a>, 0, <a href="#584a2914ca211e47" class="i field">_size</a>);
+            }
+        }
+ 
+        <b>public</b> <span class="r0 r t">T</span> <a id="99410009155ba111" href="../../../../../R/99410009155ba111.html" target="n" data-glyph="72,1" class="i method">Dequeue</a>()
+        {
+            <span class="r0 r t">var</span> <span id="r14 rd" class="r14 r">result</span> = <a href="#5a110c449f40336b" class="i method">Peek</a>();
+            <a href="#8d8cf8113dae1eac" class="i method">RemoveAt</a>(0);
+            <b>return</b> <span class="r14 r">result</span>;
+        }
+ 
+        <b>public void</b> <a id="d2735b69f20d5c59" href="../../../../../R/d2735b69f20d5c59.html" target="n" data-glyph="72,1" class="i method">Enqueue</a>(<span class="r0 r t">T</span> <span id="r15 rd" class="r15 r">item</span>)
+        {
+            <b>if</b> (<a href="#584a2914ca211e47" class="i field">_size</a> &gt;= <a href="#5cce8aeaa38e605f" class="i field">_items</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>)
+            {
+                <b>var</b> <span id="r16 rd" class="r16 r">temp</span> = <a href="#5cce8aeaa38e605f" class="i field">_items</a>;
+                <a href="#5cce8aeaa38e605f" class="i field">_items</a> = <b>new</b> <a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a>[<a href="#5cce8aeaa38e605f" class="i field">_items</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> * 2];
+                <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#1a86a6b8b02d0948" class="i method">Copy</a>(<span class="r16 r">temp</span>, <a href="#5cce8aeaa38e605f" class="i field">_items</a>, <span class="r16 r">temp</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>);
+            }
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r17 rd" class="r17 r">index</span> = <a href="#584a2914ca211e47" class="i field">_size</a>++;
+            <a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r17 r">index</span>] = <b>new</b> <a href="#ffdc2c02efc2240e" class="t constructor">IndexedItem</a> { <a href="#0edd3447d68f9b50" class="i field">Value</a> = <span class="r15 r">item</span>, <a href="#d29588a67ca74502" class="i field">Id</a> = <a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#d379c1b796ccdc6f" class="i method">Increment</a>(<b>ref</b> <a href="#b860304f8e9655c6" class="i field">_count</a>) };
+            <a href="#96b90c620ebbe99b" class="i method">Percolate</a>(<span class="r17 r">index</span>);
+        }
+ 
+        <b>public bool</b> <a id="7f0790f8e38db04f" href="../../../../../R/7f0790f8e38db04f.html" target="n" data-glyph="72,1" class="i method">Remove</a>(<span class="r0 r t">T</span> <span id="r18 rd" class="r18 r">item</span>)
+        {
+            <b>for</b> (<a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r19 rd" class="r19 r">i</span> = 0; <span class="r19 r">i</span> &lt; <a href="#584a2914ca211e47" class="i field">_size</a>; ++<span class="r19 r">i</span>)
+            {
+                <b>if</b> (<a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#5cce8aeaa38e605f" class="i field">_items</a>[<span class="r19 r">i</span>].<a href="#0edd3447d68f9b50" class="i field">Value</a>, <span class="r18 r">item</span>))
+                {
+                    <a href="#8d8cf8113dae1eac" class="i method">RemoveAt</a>(<span class="r19 r">i</span>);
+                    <b>return true</b>;
+                }
+            }
+ 
+            <b>return false</b>;
+        }
+ 
+        <b>struct</b> <a id="ffdc2c02efc2240e" href="../../../../../R/ffdc2c02efc2240e.html" target="n" data-glyph="112,1" class="t t"><span id="3d05d1ed789fa8b4">IndexedItem</span></a> : <a href="@0@mscorlib/A.html#3911354c40e0c30e" class="t t">IComparable</a>&lt;<a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a>&gt;
+        {
+            <b>public</b> <span class="r0 r t">T</span> <a id="0edd3447d68f9b50" href="../../../../../R/0edd3447d68f9b50.html" target="n" data-glyph="42,2" class="i field">Value</a>;
+            <b>public long</b> <a id="d29588a67ca74502" href="../../../../../R/d29588a67ca74502.html" target="n" data-glyph="42,2" class="i field">Id</a>;
+ 
+            <b>public int</b> <a id="2033aba0c5838057" href="../../../../../R/2033aba0c5838057.html" target="n" data-glyph="72,2" class="i method">CompareTo</a>(<a href="#ffdc2c02efc2240e" class="t t">IndexedItem</a> <span id="r20 rd" class="r20 r">other</span>)
+            {
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r21 rd" class="r21 r">c</span> = <a href="#0edd3447d68f9b50" class="i field">Value</a>.<a href="@0@mscorlib/A.html#a2960726573f0256" class="i method">CompareTo</a>(<span class="r20 r">other</span>.<a href="#0edd3447d68f9b50" class="i field">Value</a>);
+                <b>if</b> (<span class="r21 r">c</span> == 0)
+                    <span class="r21 r">c</span> = <a href="#d29588a67ca74502" class="i field">Id</a>.<a href="@0@mscorlib/A.html#f7d60ca2ee04eae8" class="i method">CompareTo</a>(<span class="r20 r">other</span>.<a href="#d29588a67ca74502" class="i field">Id</a>);
+                <b>return</b> <span class="r21 r">c</span>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

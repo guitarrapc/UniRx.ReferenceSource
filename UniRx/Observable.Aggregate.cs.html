@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Aggregate.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(36);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Observable.Aggregate.cs" target="_top">Observable.Aggregate.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TSource</span>&gt; <a id="59a9f276fb3a7db3" href="R/59a9f276fb3a7db3.html" target="n" data-glyph="220,1" class="i method">Scan</a>&lt;<span id="r0 rd t" class="r0 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TSource</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>, <span class="r0 r t">TSource</span>&gt; <span id="r2 rd" class="r2 r">accumulator</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Scan.cs.html#1d6e9b08f7113b86" class="t constructor">ScanObservable</a>&lt;<span class="r0 r t">TSource</span>&gt;(<span class="r1 r">source</span>, <span class="r2 r">accumulator</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">TAccumulate</span>&gt; <a id="fab4f269f6171d74" href="R/fab4f269f6171d74.html" target="n" data-glyph="220,1" class="i method">Scan</a>&lt;<span id="r4 rd t" class="r4 r t">TSource</span>, <span id="r3 rd t" class="r3 r t">TAccumulate</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">TSource</span>&gt; <span id="r5 rd" class="r5 r">source</span>, <span class="r3 r t">TAccumulate</span> <span id="r6 rd" class="r6 r">seed</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r3 r t">TAccumulate</span>, <span class="r4 r t">TSource</span>, <span class="r3 r t">TAccumulate</span>&gt; <span id="r7 rd" class="r7 r">accumulator</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Scan.cs.html#88c3ebcee9abab50" class="t constructor">ScanObservable</a>&lt;<span class="r4 r t">TSource</span>, <span class="r3 r t">TAccumulate</span>&gt;(<span class="r5 r">source</span>, <span class="r6 r">seed</span>, <span class="r7 r">accumulator</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">TSource</span>&gt; <a id="eeb2b9c0c750d738" href="R/eeb2b9c0c750d738.html" target="n" data-glyph="220,1" class="i method">Aggregate</a>&lt;<span id="r8 rd t" class="r8 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">TSource</span>&gt; <span id="r9 rd" class="r9 r">source</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r8 r t">TSource</span>, <span class="r8 r t">TSource</span>, <span class="r8 r t">TSource</span>&gt; <span id="r10 rd" class="r10 r">accumulator</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Aggregate.cs.html#1e58fc44ed266b01" class="t constructor">AggregateObservable</a>&lt;<span class="r8 r t">TSource</span>&gt;(<span class="r9 r">source</span>, <span class="r10 r">accumulator</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r11 r t">TAccumulate</span>&gt; <a id="724129f75426324e" href="R/724129f75426324e.html" target="n" data-glyph="220,1" class="i method">Aggregate</a>&lt;<span id="r12 rd t" class="r12 r t">TSource</span>, <span id="r11 rd t" class="r11 r t">TAccumulate</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r12 r t">TSource</span>&gt; <span id="r13 rd" class="r13 r">source</span>, <span class="r11 r t">TAccumulate</span> <span id="r14 rd" class="r14 r">seed</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r11 r t">TAccumulate</span>, <span class="r12 r t">TSource</span>, <span class="r11 r t">TAccumulate</span>&gt; <span id="r15 rd" class="r15 r">accumulator</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Aggregate.cs.html#2c16239daf8cdb83" class="t constructor">AggregateObservable</a>&lt;<span class="r12 r t">TSource</span>, <span class="r11 r t">TAccumulate</span>&gt;(<span class="r13 r">source</span>, <span class="r14 r">seed</span>, <span class="r15 r">accumulator</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r16 r t">TResult</span>&gt; <a id="ab8b059326ac3794" href="R/ab8b059326ac3794.html" target="n" data-glyph="220,1" class="i method">Aggregate</a>&lt;<span id="r17 rd t" class="r17 r t">TSource</span>, <span id="r18 rd t" class="r18 r t">TAccumulate</span>, <span id="r16 rd t" class="r16 r t">TResult</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r17 r t">TSource</span>&gt; <span id="r19 rd" class="r19 r">source</span>, <span class="r18 r t">TAccumulate</span> <span id="r20 rd" class="r20 r">seed</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r18 r t">TAccumulate</span>, <span class="r17 r t">TSource</span>, <span class="r18 r t">TAccumulate</span>&gt; <span id="r21 rd" class="r21 r">accumulator</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r18 r t">TAccumulate</span>, <span class="r16 r t">TResult</span>&gt; <span id="r22 rd" class="r22 r">resultSelector</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Aggregate.cs.html#7d41ac02e4c1c9fd" class="t constructor">AggregateObservable</a>&lt;<span class="r17 r t">TSource</span>, <span class="r18 r t">TAccumulate</span>, <span class="r16 r t">TResult</span>&gt;(<span class="r19 r">source</span>, <span class="r20 r">seed</span>, <span class="r21 r">accumulator</span>, <span class="r22 r">resultSelector</span>);
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

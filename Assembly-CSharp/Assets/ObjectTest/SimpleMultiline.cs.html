@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html><head><title>SimpleMultiline.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(32);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/SimpleMultiline.cs" target="_top">Assets\ObjectTest\SimpleMultiline.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+ 
+<b>public class</b> <a id="20d712c0a71f8349" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="b895b2bd42a1dda8">SimpleMultiline</span></a> : <span class="i">MonoBehaviour</span>
+{
+ 
+    <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#0c04ae5e1df85fb6" class="t t">StringReactiveProperty</a> <a id="44f2b0404dc4238b" href="../../R/44f2b0404dc4238b.html" target="n" data-glyph="42,1" class="i field">SinglelineString</a>;
+ 
+    [<span class="i">MultilineReactiveProperty</span>]
+    <b>public</b> <a href="/Assembly-CSharp-firstpass/A.html#0c04ae5e1df85fb6" class="t t">StringReactiveProperty</a> <a id="6ec9355c142a1135" href="../../R/6ec9355c142a1135.html" target="n" data-glyph="42,1" class="i field">MultineString</a>;
+ 
+    [<span class="i">Multiline</span>(3)]
+    <b>public string</b> <a id="f4beaa7db91e3d40" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">ML</a>;
+ 
+    [<span class="i">TextArea</span>(5, 10)]
+    <b>public string</b> <a id="cbf43792adb54ec1" href="../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">TA</a>;
+ 
+    <b>void</b> <a id="cea5ba3e59630d63" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+    {
+        <a href="#44f2b0404dc4238b" class="i field">SinglelineString</a>.<span class="i">Subscribe</span>(<span id="r0 rd" class="r0 r">x</span> =&gt;
+        {
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r0 r">x</span>);
+        });
+ 
+        <a href="#6ec9355c142a1135" class="i field">MultineString</a>.<span class="i">Subscribe</span>(<span id="r1 rd" class="r1 r">x</span> =&gt;
+        {
+            <span class="i">Debug</span>.<span class="i">Log</span>(<span class="r1 r">x</span>);
+        });
+    }
+}
+</pre></td></tr></table></div></body></html>

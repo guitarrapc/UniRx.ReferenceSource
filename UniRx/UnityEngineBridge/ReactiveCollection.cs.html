@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReactiveCollection.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(332);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/UnityEngineBridge/ReactiveCollection.cs" target="_top">UnityEngineBridge\ReactiveCollection.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">ObjectModel</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public struct</b> <a id="c502674d0e30c001" href="../R/c502674d0e30c001.html" target="n" data-glyph="108,0" class="t t"><span id="97c0655067da276f">CollectionAddEvent</span></a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r0 r t">T</span>&gt;&gt;
+    {
+        <b>public int</b> <a id="63ab2e2bba855748" href="../R/63ab2e2bba855748.html" target="n" data-glyph="102,1" class="i property">Index</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="r0 r t">T</span> <a id="3b7fb365f07a08c8" href="../R/3b7fb365f07a08c8.html" target="n" data-glyph="102,1" class="i property">Value</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="a3770b62ab5d3ed9" href="../R/a3770b62ab5d3ed9.html" target="n" data-glyph="72,1" class="i constructor">CollectionAddEvent</a>(<b>int</b> <span id="r1 rd" class="r1 r">index</span>, <span class="r0 r t">T</span> <span id="r2 rd" class="r2 r">value</span>)
+            :<a href="#c502674d0e30c001" class="k">this</a>()
+        {
+            <a href="#63ab2e2bba855748" class="i property">Index</a> = <span class="r1 r">index</span>;
+            <a href="#3b7fb365f07a08c8" class="i property">Value</a> = <span class="r2 r">value</span>;
+        }
+ 
+        <b>public override string</b> <a id="7f621b62a4aa74b3" href="../R/7f621b62a4aa74b3.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;Index:{0} Value:{1}&quot;</span>, <a href="#63ab2e2bba855748" class="i property">Index</a>, <a href="#3b7fb365f07a08c8" class="i property">Value</a>);
+        }
+ 
+        <b>public override int</b> <a id="ec67eee6e97269fe" href="../R/ec67eee6e97269fe.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> <a href="#63ab2e2bba855748" class="i property">Index</a>.<a href="@0@mscorlib/A.html#2d2b91f1bdc71dbb" class="i method">GetHashCode</a>() ^ <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#3b7fb365f07a08c8" class="i property">Value</a>) &lt;&lt; 2;
+        }
+ 
+        <b>public bool</b> <a id="966d9eec78850fc0" href="../R/966d9eec78850fc0.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r3 rd" class="r3 r">other</span>)
+        {
+            <b>return</b> <a href="#63ab2e2bba855748" class="i property">Index</a>.<a href="@0@mscorlib/A.html#5bbcdb40f939dc50" class="i method">Equals</a>(<span class="r3 r">other</span>.<a href="#63ab2e2bba855748" class="i property">Index</a>) &amp;&amp; <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#3b7fb365f07a08c8" class="i property">Value</a>, <span class="r3 r">other</span>.<a href="#3b7fb365f07a08c8" class="i property">Value</a>);
+        }
+    }
+ 
+    <b>public struct</b> <a id="8dc00bfa1e9add43" href="../R/8dc00bfa1e9add43.html" target="n" data-glyph="108,0" class="t t"><span id="db65397f617ca587">CollectionRemoveEvent</span></a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r4 r t">T</span>&gt;&gt;
+    {
+        <b>public int</b> <a id="701d6957ff59252f" href="../R/701d6957ff59252f.html" target="n" data-glyph="102,1" class="i property">Index</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="r4 r t">T</span> <a id="69c6a40ba6184dd9" href="../R/69c6a40ba6184dd9.html" target="n" data-glyph="102,1" class="i property">Value</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="7e735ea2f28473d7" href="../R/7e735ea2f28473d7.html" target="n" data-glyph="72,1" class="i constructor">CollectionRemoveEvent</a>(<b>int</b> <span id="r5 rd" class="r5 r">index</span>, <span class="r4 r t">T</span> <span id="r6 rd" class="r6 r">value</span>)
+            : <a href="#8dc00bfa1e9add43" class="k">this</a>()
+        {
+            <a href="#701d6957ff59252f" class="i property">Index</a> = <span class="r5 r">index</span>;
+            <a href="#69c6a40ba6184dd9" class="i property">Value</a> = <span class="r6 r">value</span>;
+        }
+ 
+        <b>public override string</b> <a id="e8128c0053da7f8c" href="../R/e8128c0053da7f8c.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return string</b>.<a href="@0@mscorlib/A.html#7432dab173fae5fc" class="i method">Format</a>(<span class="s">&quot;Index:{0} Value:{1}&quot;</span>, <a href="#701d6957ff59252f" class="i property">Index</a>, <a href="#69c6a40ba6184dd9" class="i property">Value</a>);
+        }
+ 
+        <b>public override int</b> <a id="4572baa1be5de400" href="../R/4572baa1be5de400.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> <a href="#701d6957ff59252f" class="i property">Index</a>.<a href="@0@mscorlib/A.html#2d2b91f1bdc71dbb" class="i method">GetHashCode</a>() ^ <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r4 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#69c6a40ba6184dd9" class="i property">Value</a>) &lt;&lt; 2;
+        }
+ 
+        <b>public bool</b> <a id="d6a9326ba677f8c7" href="../R/d6a9326ba677f8c7.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r4 r t">T</span>&gt; <span id="r7 rd" class="r7 r">other</span>)
+        {
+            <b>return</b> <a href="#701d6957ff59252f" class="i property">Index</a>.<a href="@0@mscorlib/A.html#5bbcdb40f939dc50" class="i method">Equals</a>(<span class="r7 r">other</span>.<a href="#701d6957ff59252f" class="i property">Index</a>) &amp;&amp; <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r4 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#69c6a40ba6184dd9" class="i property">Value</a>, <span class="r7 r">other</span>.<a href="#69c6a40ba6184dd9" class="i property">Value</a>);
+        }
+    }
+ 
+    <b>public struct</b> <a id="dbdef56a3e590a02" href="../R/dbdef56a3e590a02.html" target="n" data-glyph="108,0" class="t t"><span id="01ec33bbaa5416fc">CollectionMoveEvent</span></a>&lt;<span id="r8 rd t" class="r8 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r8 r t">T</span>&gt;&gt;
+    {
+        <b>public int</b> <a id="c29c0ebbf175c4af" href="../R/c29c0ebbf175c4af.html" target="n" data-glyph="102,1" class="i property">OldIndex</a> { <b>get</b>; <b>private set</b>; }
+        <b>public int</b> <a id="47b30dcf801899a1" href="../R/47b30dcf801899a1.html" target="n" data-glyph="102,1" class="i property">NewIndex</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="r8 r t">T</span> <a id="fc9849e73358efb9" href="../R/fc9849e73358efb9.html" target="n" data-glyph="102,1" class="i property">Value</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="b81dc95532b89fa3" href="../R/b81dc95532b89fa3.html" target="n" data-glyph="72,1" class="i constructor">CollectionMoveEvent</a>(<b>int</b> <span id="r9 rd" class="r9 r">oldIndex</span>, <b>int</b> <span id="r10 rd" class="r10 r">newIndex</span>, <span class="r8 r t">T</span> <span id="r11 rd" class="r11 r">value</span>)
+            : <a href="#dbdef56a3e590a02" class="k">this</a>()
+        {
+            <a href="#c29c0ebbf175c4af" class="i property">OldIndex</a> = <span class="r9 r">oldIndex</span>;
+            <a href="#47b30dcf801899a1" class="i property">NewIndex</a> = <span class="r10 r">newIndex</span>;
+            <a href="#fc9849e73358efb9" class="i property">Value</a> = <span class="r11 r">value</span>;
+        }
+ 
+        <b>public override string</b> <a id="9106ecc04f29f58c" href="../R/9106ecc04f29f58c.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;OldIndex:{0} NewIndex:{1} Value:{2}&quot;</span>, <a href="#c29c0ebbf175c4af" class="i property">OldIndex</a>, <a href="#47b30dcf801899a1" class="i property">NewIndex</a>, <a href="#fc9849e73358efb9" class="i property">Value</a>);
+        }
+ 
+        <b>public override int</b> <a id="ca8e89d5d11eab7f" href="../R/ca8e89d5d11eab7f.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> <a href="#c29c0ebbf175c4af" class="i property">OldIndex</a>.<a href="@0@mscorlib/A.html#2d2b91f1bdc71dbb" class="i method">GetHashCode</a>() ^ <a href="#47b30dcf801899a1" class="i property">NewIndex</a>.<a href="@0@mscorlib/A.html#2d2b91f1bdc71dbb" class="i method">GetHashCode</a>() &lt;&lt; 2 ^ <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r8 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#fc9849e73358efb9" class="i property">Value</a>) &gt;&gt; 2;
+        }
+ 
+        <b>public bool</b> <a id="87eb21c1661a570a" href="../R/87eb21c1661a570a.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r8 r t">T</span>&gt; <span id="r12 rd" class="r12 r">other</span>)
+        {
+            <b>return</b> <a href="#c29c0ebbf175c4af" class="i property">OldIndex</a>.<a href="@0@mscorlib/A.html#5bbcdb40f939dc50" class="i method">Equals</a>(<span class="r12 r">other</span>.<a href="#c29c0ebbf175c4af" class="i property">OldIndex</a>) &amp;&amp; <a href="#47b30dcf801899a1" class="i property">NewIndex</a>.<a href="@0@mscorlib/A.html#5bbcdb40f939dc50" class="i method">Equals</a>(<span class="r12 r">other</span>.<a href="#47b30dcf801899a1" class="i property">NewIndex</a>) &amp;&amp; <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r8 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#fc9849e73358efb9" class="i property">Value</a>, <span class="r12 r">other</span>.<a href="#fc9849e73358efb9" class="i property">Value</a>);
+        }
+    }
+ 
+    <b>public struct</b> <a id="079618b03dc6e64a" href="../R/079618b03dc6e64a.html" target="n" data-glyph="108,0" class="t t"><span id="65436a5e808f0ff7">CollectionReplaceEvent</span></a>&lt;<span id="r13 rd t" class="r13 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r13 r t">T</span>&gt;&gt;
+    {
+        <b>public int</b> <a id="2ba8516aa4c2505d" href="../R/2ba8516aa4c2505d.html" target="n" data-glyph="102,1" class="i property">Index</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="r13 r t">T</span> <a id="9546872d968caf70" href="../R/9546872d968caf70.html" target="n" data-glyph="102,1" class="i property">OldValue</a> { <b>get</b>; <b>private set</b>; }
+        <b>public</b> <span class="r13 r t">T</span> <a id="18086f020d8ac0a8" href="../R/18086f020d8ac0a8.html" target="n" data-glyph="102,1" class="i property">NewValue</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="32cf6b3e66bced78" href="../R/32cf6b3e66bced78.html" target="n" data-glyph="72,1" class="i constructor">CollectionReplaceEvent</a>(<b>int</b> <span id="r14 rd" class="r14 r">index</span>, <span class="r13 r t">T</span> <span id="r15 rd" class="r15 r">oldValue</span>, <span class="r13 r t">T</span> <span id="r16 rd" class="r16 r">newValue</span>)
+            : <a href="#079618b03dc6e64a" class="k">this</a>()
+        {
+            <a href="#2ba8516aa4c2505d" class="i property">Index</a> = <span class="r14 r">index</span>;
+            <a href="#9546872d968caf70" class="i property">OldValue</a> = <span class="r15 r">oldValue</span>;
+            <a href="#18086f020d8ac0a8" class="i property">NewValue</a> = <span class="r16 r">newValue</span>;
+        }
+ 
+        <b>public override string</b> <a id="a22fe4c337bd3e04" href="../R/a22fe4c337bd3e04.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;Index:{0} OldValue:{1} NewValue:{2}&quot;</span>, <a href="#2ba8516aa4c2505d" class="i property">Index</a>, <a href="#9546872d968caf70" class="i property">OldValue</a>, <a href="#18086f020d8ac0a8" class="i property">NewValue</a>);
+        }
+ 
+        <b>public override int</b> <a id="77913e8bed9bd35c" href="../R/77913e8bed9bd35c.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> <a href="#2ba8516aa4c2505d" class="i property">Index</a>.<a href="@0@mscorlib/A.html#2d2b91f1bdc71dbb" class="i method">GetHashCode</a>() ^ <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r13 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#9546872d968caf70" class="i property">OldValue</a>) &lt;&lt; 2 ^ <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r13 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#bb3b30ae8820b27b" class="i method">GetHashCode</a>(<a href="#18086f020d8ac0a8" class="i property">NewValue</a>) &gt;&gt; 2;
+        }
+ 
+        <b>public bool</b> <a id="ef7c3e09e901d941" href="../R/ef7c3e09e901d941.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r13 r t">T</span>&gt; <span id="r17 rd" class="r17 r">other</span>)
+        {
+            <b>return</b> <a href="#2ba8516aa4c2505d" class="i property">Index</a>.<a href="@0@mscorlib/A.html#5bbcdb40f939dc50" class="i method">Equals</a>(<span class="r17 r">other</span>.<a href="#2ba8516aa4c2505d" class="i property">Index</a>)
+                &amp;&amp; <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r13 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#9546872d968caf70" class="i property">OldValue</a>, <span class="r17 r">other</span>.<a href="#9546872d968caf70" class="i property">OldValue</a>)
+                &amp;&amp; <a href="@0@mscorlib/A.html#d8e28972e89a3e86" class="t t">EqualityComparer</a>&lt;<span class="r13 r t">T</span>&gt;.<a href="@0@mscorlib/A.html#910b559cdb8bd73e" class="i property">Default</a>.<a href="@0@mscorlib/A.html#0a059518e815968d" class="i method">Equals</a>(<a href="#18086f020d8ac0a8" class="i property">NewValue</a>, <span class="r17 r">other</span>.<a href="#18086f020d8ac0a8" class="i property">NewValue</a>);
+        }
+    }
+ 
+    <span class="c">// IReadOnlyList&lt;out T&gt; is from .NET 4.5</span>
+    <b>public interface</b> <a id="931b6687ff0f02ed" href="../R/931b6687ff0f02ed.html" target="n" data-glyph="48,0" class="t t">IReadOnlyReactiveCollection</a>&lt;<span id="r18 rd t" class="r18 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r18 r t">T</span>&gt;
+    {
+        <b>int</b> <a id="7a191aca3be45051" href="../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Count</a> { <b>get</b>; }
+        <span class="r18 r t">T</span> <a id="ec63e2f4e5f412b2" href="../R/../../0000000000.html" target="n" data-glyph="102,1" class="k">this</a>[<b>int</b> <span id="r19 rd" class="r19 r">index</span>] { <b>get</b>; }
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r18 r t">T</span>&gt;&gt; <a id="8068d3e365f87187" href="../R/8068d3e365f87187.html" target="n" data-glyph="72,1" class="i method">ObserveAdd</a>();
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="917b6686f5e0adc6" href="../R/917b6686f5e0adc6.html" target="n" data-glyph="72,1" class="i method">ObserveCountChanged</a>(<b>bool</b> <span id="r20 rd" class="r20 r">notifyCurrentCount</span> = <b>false</b>);
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r18 r t">T</span>&gt;&gt; <a id="9fa6a637c743e65c" href="../R/9fa6a637c743e65c.html" target="n" data-glyph="72,1" class="i method">ObserveMove</a>();
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r18 r t">T</span>&gt;&gt; <a id="b2763a0aa2ac8cbd" href="../R/b2763a0aa2ac8cbd.html" target="n" data-glyph="72,1" class="i method">ObserveRemove</a>();
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r18 r t">T</span>&gt;&gt; <a id="850ec5876e18055e" href="../R/850ec5876e18055e.html" target="n" data-glyph="72,1" class="i method">ObserveReplace</a>();
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="2fdaccb6efb8f939" href="../R/2fdaccb6efb8f939.html" target="n" data-glyph="72,1" class="i method">ObserveReset</a>();
+    }
+ 
+    <b>public interface</b> <a id="d15d5decc86f2a24" href="../R/d15d5decc86f2a24.html" target="n" data-glyph="48,0" class="t t">IReactiveCollection</a>&lt;<span id="r21 rd t" class="r21 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#b19f71a84062554b" class="t t">IList</a>&lt;<span class="r21 r t">T</span>&gt;, <a href="#931b6687ff0f02ed" class="t t">IReadOnlyReactiveCollection</a>&lt;<span class="r21 r t">T</span>&gt;
+    {
+        <b>new</b> <b>int</b> <a id="d3171a34aeea0d12" href="../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">Count</a> { <b>get</b>; }
+        <b>new</b> <span class="r21 r t">T</span> <a id="4e893a22c0e22635" href="../R/../../0000000000.html" target="n" data-glyph="102,1" class="k">this</a>[<b>int</b> <span id="r22 rd" class="r22 r">index</span>] { <b>get</b>; <b>set</b>; }
+        <b>void</b> <a id="9f4da87f258e1696" href="../R/9f4da87f258e1696.html" target="n" data-glyph="72,1" class="i method">Move</a>(<b>int</b> <span id="r23 rd" class="r23 r">oldIndex</span>, <b>int</b> <span id="r24 rd" class="r24 r">newIndex</span>);
+    }
+ 
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public class</b> <a id="22992f386bb7d26e" href="../R/22992f386bb7d26e.html" target="n" data-glyph="0,0" class="t t">ReactiveCollection</a>&lt;<span id="r25 rd t" class="r25 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#281923b8611114ec" class="t t">Collection</a>&lt;<span class="r25 r t">T</span>&gt;, <a href="#d15d5decc86f2a24" class="t t">IReactiveCollection</a>&lt;<span class="r25 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <b>bool</b> <a id="938dc804c1ad3561" href="../R/938dc804c1ad3561.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = <b>false</b>;
+ 
+        <b>public</b> <a id="86f207d83fc408bf" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCollection</a>()
+        {
+ 
+        }
+ 
+        <b>public</b> <a id="6fcbeff8749aa8e0" href="../R/6fcbeff8749aa8e0.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCollection</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r25 r t">T</span>&gt; <span id="r26 rd" class="r26 r">collection</span>)
+        {
+            <b>if</b> (<span class="r26 r">collection</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;collection&quot;</span>);
+ 
+            <b>foreach</b> (<span class="r25 r t">var</span> <span id="r27 rd" class="r27 r">item</span> <b>in</b> <span class="r26 r">collection</span>)
+            {
+                <a href="@0@mscorlib/A.html#5c61cc24de82f7e7" class="i method">Add</a>(<span class="r27 r">item</span>);
+            }
+        }
+ 
+        <b>public</b> <a id="5e6f6c8e4507c75a" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCollection</a>(<a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="t t">List</a>&lt;<span class="r25 r t">T</span>&gt; <span id="r28 rd" class="r28 r">list</span>)
+            : <a href="@0@mscorlib/A.html#f89eec626d3cfff1" class="k">base</a>(<span class="r28 r">list</span> != <b>null</b> ? <b>new</b> <a href="@0@mscorlib/A.html#d2ac2c19c9cf1d44" class="t constructor">List</a>&lt;<span class="r25 r t">T</span>&gt;(<span class="r28 r">list</span>) : <b>null</b>)
+        {
+        }
+ 
+        <b>protected override void</b> <a id="1a4df81f7dfd8293" href="../R/1a4df81f7dfd8293.html" target="n" data-glyph="75,1" class="i method">ClearItems</a>()
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r29 rd" class="r29 r">beforeCount</span> = <a href="@0@mscorlib/A.html#f2419069e9890f5d" class="i property">Count</a>;
+            <a href="@0@mscorlib/A.html#281923b8611114ec" class="k">base</a>.<a href="@0@mscorlib/A.html#a58edc12c2636b2f" class="i method">ClearItems</a>();
+ 
+            <b>if</b> (<a href="#39320c0f72758771" class="i field">collectionReset</a> != <b>null</b>) <a href="#39320c0f72758771" class="i field">collectionReset</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+            <b>if</b> (<span class="r29 r">beforeCount</span> &gt; 0)
+            {
+                <b>if</b> (<a href="#fac5acdaea82a871" class="i field">countChanged</a> != <b>null</b>) <a href="#fac5acdaea82a871" class="i field">countChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="@0@mscorlib/A.html#f2419069e9890f5d" class="i property">Count</a>);
+            }
+        }
+ 
+        <b>protected override void</b> <a id="3d9b2cd2b00c0165" href="../R/3d9b2cd2b00c0165.html" target="n" data-glyph="75,1" class="i method">InsertItem</a>(<b>int</b> <span id="r30 rd" class="r30 r">index</span>, <span class="r25 r t">T</span> <span id="r31 rd" class="r31 r">item</span>)
+        {
+            <a href="@0@mscorlib/A.html#281923b8611114ec" class="k">base</a>.<a href="@0@mscorlib/A.html#27856ca310c02729" class="i method">InsertItem</a>(<span class="r30 r">index</span>, <span class="r31 r">item</span>);
+ 
+            <b>if</b> (<a href="#617c2bb3e662ba02" class="i field">collectionAdd</a> != <b>null</b>) <a href="#617c2bb3e662ba02" class="i field">collectionAdd</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#a3770b62ab5d3ed9" class="t constructor">CollectionAddEvent</a>&lt;<span class="r25 r t">T</span>&gt;(<span class="r30 r">index</span>, <span class="r31 r">item</span>));
+            <b>if</b> (<a href="#fac5acdaea82a871" class="i field">countChanged</a> != <b>null</b>) <a href="#fac5acdaea82a871" class="i field">countChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="@0@mscorlib/A.html#f2419069e9890f5d" class="i property">Count</a>);
+        }
+ 
+        <b>public void</b> <a id="448ac3abb3b3ee8a" href="../R/448ac3abb3b3ee8a.html" target="n" data-glyph="72,1" class="i method">Move</a>(<b>int</b> <span id="r32 rd" class="r32 r">oldIndex</span>, <b>int</b> <span id="r33 rd" class="r33 r">newIndex</span>)
+        {
+            <a href="#3973bf2141d517aa" class="i method">MoveItem</a>(<span class="r32 r">oldIndex</span>, <span class="r33 r">newIndex</span>);
+        }
+ 
+        <b>protected virtual void</b> <a id="3973bf2141d517aa" href="../R/3973bf2141d517aa.html" target="n" data-glyph="75,1" class="i method">MoveItem</a>(<b>int</b> <span id="r34 rd" class="r34 r">oldIndex</span>, <b>int</b> <span id="r35 rd" class="r35 r">newIndex</span>)
+        {
+            <span class="r25 r t">T</span> <span id="r36 rd" class="r36 r">item</span> = <a href="#22992f386bb7d26e" class="k">this</a><a href="@0@mscorlib/A.html#e39c46878aa03f65">[</a><span class="r34 r">oldIndex</span>];
+            <a href="@0@mscorlib/A.html#281923b8611114ec" class="k">base</a>.<a href="@0@mscorlib/A.html#4034c0d8bc8eedb4" class="i method">RemoveItem</a>(<span class="r34 r">oldIndex</span>);
+            <a href="@0@mscorlib/A.html#281923b8611114ec" class="k">base</a>.<a href="@0@mscorlib/A.html#27856ca310c02729" class="i method">InsertItem</a>(<span class="r35 r">newIndex</span>, <span class="r36 r">item</span>);
+ 
+            <b>if</b> (<a href="#561f3295711f8702" class="i field">collectionMove</a> != <b>null</b>) <a href="#561f3295711f8702" class="i field">collectionMove</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#b81dc95532b89fa3" class="t constructor">CollectionMoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;(<span class="r34 r">oldIndex</span>, <span class="r35 r">newIndex</span>, <span class="r36 r">item</span>));
+        }
+ 
+        <b>protected override void</b> <a id="fbdfaf8de0e250ef" href="../R/fbdfaf8de0e250ef.html" target="n" data-glyph="75,1" class="i method">RemoveItem</a>(<b>int</b> <span id="r37 rd" class="r37 r">index</span>)
+        {
+            <span class="r25 r t">T</span> <span id="r38 rd" class="r38 r">item</span> = <a href="#22992f386bb7d26e" class="k">this</a><a href="@0@mscorlib/A.html#e39c46878aa03f65">[</a><span class="r37 r">index</span>];
+            <a href="@0@mscorlib/A.html#281923b8611114ec" class="k">base</a>.<a href="@0@mscorlib/A.html#4034c0d8bc8eedb4" class="i method">RemoveItem</a>(<span class="r37 r">index</span>);
+ 
+            <b>if</b> (<a href="#541eff10ad787962" class="i field">collectionRemove</a> != <b>null</b>) <a href="#541eff10ad787962" class="i field">collectionRemove</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#7e735ea2f28473d7" class="t constructor">CollectionRemoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;(<span class="r37 r">index</span>, <span class="r38 r">item</span>));
+            <b>if</b> (<a href="#fac5acdaea82a871" class="i field">countChanged</a> != <b>null</b>) <a href="#fac5acdaea82a871" class="i field">countChanged</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="@0@mscorlib/A.html#f2419069e9890f5d" class="i property">Count</a>);
+        }
+ 
+        <b>protected override void</b> <a id="cb1eff2a769abca6" href="../R/cb1eff2a769abca6.html" target="n" data-glyph="75,1" class="i method">SetItem</a>(<b>int</b> <span id="r39 rd" class="r39 r">index</span>, <span class="r25 r t">T</span> <span id="r40 rd" class="r40 r">item</span>)
+        {
+            <span class="r25 r t">T</span> <span id="r41 rd" class="r41 r">oldItem</span> = <a href="#22992f386bb7d26e" class="k">this</a><a href="@0@mscorlib/A.html#e39c46878aa03f65">[</a><span class="r39 r">index</span>];
+            <a href="@0@mscorlib/A.html#281923b8611114ec" class="k">base</a>.<a href="@0@mscorlib/A.html#b6f9f86b6678e149" class="i method">SetItem</a>(<span class="r39 r">index</span>, <span class="r40 r">item</span>);
+ 
+            <b>if</b> (<a href="#35aa3d488f871d51" class="i field">collectionReplace</a> != <b>null</b>) <a href="#35aa3d488f871d51" class="i field">collectionReplace</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>new</b> <a href="#32cf6b3e66bced78" class="t constructor">CollectionReplaceEvent</a>&lt;<span class="r25 r t">T</span>&gt;(<span class="r39 r">index</span>, <span class="r41 r">oldItem</span>, <span class="r40 r">item</span>));
+        }
+ 
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>int</b>&gt; <a id="fac5acdaea82a871" href="../R/fac5acdaea82a871.html" target="n" data-glyph="46,1" class="i field">countChanged</a> = <b>null</b>;
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="0f04383ec9f48760" href="../R/0f04383ec9f48760.html" target="n" data-glyph="72,1" class="i method">ObserveCountChanged</a>(<b>bool</b> <span id="r42 rd" class="r42 r">notifyCurrentCount</span> = <b>false</b>)
+        {
+            <b>if</b> (<a href="#938dc804c1ad3561" class="i field">isDisposed</a>) <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<b>int</b>&gt;();
+ 
+            <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="k">var</a> <span id="r43 rd" class="r43 r">subject</span> = <a href="#fac5acdaea82a871" class="i field">countChanged</a> ?? (<a href="#fac5acdaea82a871" class="i field">countChanged</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>int</b>&gt;());
+            <b>if</b> (<span class="r42 r">notifyCurrentCount</span>)
+            {
+                <b>return</b> <span class="r43 r">subject</span>.<a href="../Observable.Concatenate.cs.html#136c245b8114a788" class="i method">StartWith</a>(() =&gt; <a href="#22992f386bb7d26e" class="k">this</a>.<a href="@0@mscorlib/A.html#f2419069e9890f5d" class="i property">Count</a>);
+            }
+            <b>else</b>
+            {
+                <b>return</b> <span class="r43 r">subject</span>;
+            }
+        }
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="39320c0f72758771" href="../R/39320c0f72758771.html" target="n" data-glyph="46,1" class="i field">collectionReset</a> = <b>null</b>;
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="4a0a7ee3b7178c5c" href="../R/4a0a7ee3b7178c5c.html" target="n" data-glyph="72,1" class="i method">ObserveReset</a>()
+        {
+            <b>if</b> (<a href="#938dc804c1ad3561" class="i field">isDisposed</a>) <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+            <b>return</b> <a href="#39320c0f72758771" class="i field">collectionReset</a> ?? (<a href="#39320c0f72758771" class="i field">collectionReset</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="617c2bb3e662ba02" href="../R/617c2bb3e662ba02.html" target="n" data-glyph="46,1" class="i field">collectionAdd</a> = <b>null</b>;
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="277890097a9dbfd4" href="../R/277890097a9dbfd4.html" target="n" data-glyph="72,1" class="i method">ObserveAdd</a>()
+        {
+            <b>if</b> (<a href="#938dc804c1ad3561" class="i field">isDisposed</a>) <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;();
+            <b>return</b> <a href="#617c2bb3e662ba02" class="i field">collectionAdd</a> ?? (<a href="#617c2bb3e662ba02" class="i field">collectionAdd</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#c502674d0e30c001" class="t t">CollectionAddEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;());
+        }
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="561f3295711f8702" href="../R/561f3295711f8702.html" target="n" data-glyph="46,1" class="i field">collectionMove</a> = <b>null</b>;
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="d6d6ea79aa999fd2" href="../R/d6d6ea79aa999fd2.html" target="n" data-glyph="72,1" class="i method">ObserveMove</a>()
+        {
+            <b>if</b> (<a href="#938dc804c1ad3561" class="i field">isDisposed</a>) <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;();
+            <b>return</b> <a href="#561f3295711f8702" class="i field">collectionMove</a> ?? (<a href="#561f3295711f8702" class="i field">collectionMove</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#dbdef56a3e590a02" class="t t">CollectionMoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;());
+        }
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="541eff10ad787962" href="../R/541eff10ad787962.html" target="n" data-glyph="46,1" class="i field">collectionRemove</a> = <b>null</b>;
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="3a48091f9de1ba1d" href="../R/3a48091f9de1ba1d.html" target="n" data-glyph="72,1" class="i method">ObserveRemove</a>()
+        {
+            <b>if</b> (<a href="#938dc804c1ad3561" class="i field">isDisposed</a>) <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;();
+            <b>return</b> <a href="#541eff10ad787962" class="i field">collectionRemove</a> ?? (<a href="#541eff10ad787962" class="i field">collectionRemove</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#8dc00bfa1e9add43" class="t t">CollectionRemoveEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;());
+        }
+ 
+        [<a href="@0@mscorlib/A.html#e40334fe9d974639" class="t constructor">NonSerialized</a>]
+        <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="35aa3d488f871d51" href="../R/35aa3d488f871d51.html" target="n" data-glyph="46,1" class="i field">collectionReplace</a> = <b>null</b>;
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt; <a id="22c01cac4bb9684a" href="../R/22c01cac4bb9684a.html" target="n" data-glyph="72,1" class="i method">ObserveReplace</a>()
+        {
+            <b>if</b> (<a href="#938dc804c1ad3561" class="i field">isDisposed</a>) <b>return</b> <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;();
+            <b>return</b> <a href="#35aa3d488f871d51" class="i field">collectionReplace</a> ?? (<a href="#35aa3d488f871d51" class="i field">collectionReplace</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="#079618b03dc6e64a" class="t t">CollectionReplaceEvent</a>&lt;<span class="r25 r t">T</span>&gt;&gt;());
+        }
+ 
+        <b>void</b> <a id="417919cf359dd4e9" href="../R/417919cf359dd4e9.html" target="n" data-glyph="76,1" class="i method">DisposeSubject</a>&lt;<span id="r44 rd t" class="r44 r t">TSubject</span>&gt;(<b>ref</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r44 r t">TSubject</span>&gt; <span id="r45 rd" class="r45 r">subject</span>)
+        {
+            <b>if</b> (<span class="r45 r">subject</span> != <b>null</b>)
+            {
+                <b>try</b>
+                {
+                    <span class="r45 r">subject</span>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+                }
+                <b>finally</b>
+                {
+                    <span class="r45 r">subject</span>.<a href="../Subjects/Subject.cs.html#9aa899d2278a4ad0" class="i method">Dispose</a>();
+                    <span class="r45 r">subject</span> = <b>null</b>;
+                }
+            }
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IDisposable Support
+ 
+        <b>private bool</b> <a id="b225bbe439bc3094" href="../R/b225bbe439bc3094.html" target="n" data-glyph="46,1" class="i field">disposedValue</a> = <b>false</b>;
+ 
+        <b>protected virtual void</b> <a id="187501d97d945b97" href="../R/187501d97d945b97.html" target="n" data-glyph="75,1" class="i method">Dispose</a>(<b>bool</b> <span id="r46 rd" class="r46 r">disposing</span>)
+        {
+            <b>if</b> (!<a href="#b225bbe439bc3094" class="i field">disposedValue</a>)
+            {
+                <b>if</b> (<span class="r46 r">disposing</span>)
+                {
+                    <a href="#417919cf359dd4e9" class="i method">DisposeSubject</a>(<b>ref</b> <a href="#39320c0f72758771" class="i field">collectionReset</a>);
+                    <a href="#417919cf359dd4e9" class="i method">DisposeSubject</a>(<b>ref</b> <a href="#617c2bb3e662ba02" class="i field">collectionAdd</a>);
+                    <a href="#417919cf359dd4e9" class="i method">DisposeSubject</a>(<b>ref</b> <a href="#561f3295711f8702" class="i field">collectionMove</a>);
+                    <a href="#417919cf359dd4e9" class="i method">DisposeSubject</a>(<b>ref</b> <a href="#541eff10ad787962" class="i field">collectionRemove</a>);
+                    <a href="#417919cf359dd4e9" class="i method">DisposeSubject</a>(<b>ref</b> <a href="#35aa3d488f871d51" class="i field">collectionReplace</a>);
+                }
+ 
+                <a href="#b225bbe439bc3094" class="i field">disposedValue</a> = <b>true</b>;
+            }
+        }
+ 
+        <b>public void</b> <a id="d9907b67727ae6c0" href="../R/d9907b67727ae6c0.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#187501d97d945b97" class="i method">Dispose</a>(<b>true</b>);
+        }
+        
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+    }
+ 
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="bd706857dafb7c2e" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ReactiveCollectionExtensions</a>
+    {
+        <b>public static</b> <a href="#22992f386bb7d26e" class="t t">ReactiveCollection</a>&lt;<span class="r47 r t">T</span>&gt; <a id="7454aee2bacae4ef" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToReactiveCollection</a>&lt;<span id="r47 rd t" class="r47 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r47 r t">T</span>&gt; <span id="r48 rd" class="r48 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#6fcbeff8749aa8e0" class="t constructor">ReactiveCollection</a>&lt;<span class="r47 r t">T</span>&gt;(<span class="r48 r">source</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

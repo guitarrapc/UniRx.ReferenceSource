@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html><head><title>ThreadPoolScheduler.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(197);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Schedulers/ThreadPoolScheduler.cs" target="_top">Assets\Plugins\UniRx\Scripts\Schedulers\ThreadPoolScheduler.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UNITY_METRO</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../../P/48627f587bfa2dac.html" target="s" class="k">partial</a> <b>class</b> <a id="48627f587bfa2dac" href="../../../../../R/48627f587bfa2dac.html" target="n" data-glyph="0,0" class="t t">Scheduler</a>
+    {
+        <b>public static readonly</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="ef176e05cfd62133" href="../../../../../R/ef176e05cfd62133.html" target="n" data-glyph="42,1" class="i field">ThreadPool</a> = <b>new</b> <a href="#013ce7b134dbe36f" class="t constructor">ThreadPoolScheduler</a>();
+ 
+        <b>class</b> <a id="11d97e57789c2bf8" href="../../../../../R/11d97e57789c2bf8.html" target="n" data-glyph="4,1" class="t t">ThreadPoolScheduler</a> : <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>, <a href="IScheduler.cs.html#f59e5129868b12fd" class="t t">ISchedulerPeriodic</a>, <a href="IScheduler.cs.html#f569e3af81779a18" class="t t">ISchedulerQueueing</a>
+        {
+            <b>public</b> <a id="013ce7b134dbe36f" href="../../../../../R/013ce7b134dbe36f.html" target="n" data-glyph="72,2" class="i constructor">ThreadPoolScheduler</a>()
+            {
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="8f67744fd4e9a201" href="../../../../../R/8f67744fd4e9a201.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="0c5608aa5a386d78" href="../../../../../R/0c5608aa5a386d78.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r0 rd" class="r0 r">action</span>)
+            {
+                <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r1 rd" class="r1 r">d</span> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+ 
+                <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8449b4bfef11bfa3" class="t t">ThreadPool</a>.<a href="@0@mscorlib/A.html#59750145eb10bef7" class="i method">QueueUserWorkItem</a>(<span id="r2 rd" class="r2 r">_</span> =&gt;
+                {
+                    <b>if</b> (!<span class="r1 r">d</span>.<a href="../Disposables/BooleanDisposable.cs.html#b764ec70b21ab894" class="i property">IsDisposed</a>)
+                    {
+                        <span class="r0 r">action</span>();
+                    }
+                });
+ 
+                <b>return</b> <span class="r1 r">d</span>;
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="4e916c06c2e1b1a4" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r3 rd" class="r3 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r4 rd" class="r4 r">action</span>)
+            {
+                <b>return</b> <a href="#6795e422089e607b" class="i method">Schedule</a>(<span class="r3 r">dueTime</span> - <a href="#8f67744fd4e9a201" class="i property">Now</a>, <span class="r4 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="6795e422089e607b" href="../../../../../R/6795e422089e607b.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r5 rd" class="r5 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r6 rd" class="r6 r">action</span>)
+            {
+                <b>return</b> <b>new</b> <a href="#6c0c8bb7af43d08b" class="t constructor">Timer</a>(<span class="r5 r">dueTime</span>, <span class="r6 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1efbffae3cabd066" href="../../../../../R/1efbffae3cabd066.html" target="n" data-glyph="72,2" class="i method">SchedulePeriodic</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r7 rd" class="r7 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r8 rd" class="r8 r">action</span>)
+            {
+                <b>return</b> <b>new</b> <a href="#c273bfe5bc9620be" class="t constructor">PeriodicTimer</a>(<span class="r7 r">period</span>, <span class="r8 r">action</span>);
+            }
+ 
+            <b>public void</b> <a id="5e22f48c154b2962" href="../../../../../R/5e22f48c154b2962.html" target="n" data-glyph="72,2" class="i method">ScheduleQueueing</a>&lt;<span id="r9 rd t" class="r9 r t">T</span>&gt;(<a href="../Disposables/ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a> <span id="r10 rd" class="r10 r">cancel</span>, <span class="r9 r t">T</span> <span id="r11 rd" class="r11 r">state</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r9 r t">T</span>&gt; <span id="r12 rd" class="r12 r">action</span>)
+            {
+                <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8449b4bfef11bfa3" class="t t">ThreadPool</a>.<a href="@0@mscorlib/A.html#f560db3064a23d73" class="i method">QueueUserWorkItem</a>(<span id="r13 rd" class="r13 r">callBackState</span> =&gt;
+                {
+                    <b>if</b> (!<span class="r10 r">cancel</span>.<a href="../Disposables/ICancelable.cs.html#f5207938d7587331" class="i property">IsDisposed</a>)
+                    {
+                        <span class="r12 r">action</span>((<span class="r9 r t">T</span>)<span class="r13 r">callBackState</span>);
+                    }
+                }, <span class="r11 r">state</span>);
+            }
+ 
+            <span class="c">// timer was borrwed from Rx Official</span>
+ 
+            <b>sealed class</b> <a id="bd988fadca2c15f0" href="../../../../../R/bd988fadca2c15f0.html" target="n" data-glyph="4,2" class="t t">Timer</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+            {
+                <b>static readonly</b> <a href="@0@System.Core/A.html#2d265edc718b158b" class="t t">HashSet</a>&lt;<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a>&gt; <a id="2c791b582d4ac26a" href="../../../../../R/2c791b582d4ac26a.html" target="n" data-glyph="46,3" class="i field">s_timers</a> = <b>new</b> <a href="@0@System.Core/A.html#eca9ea30fa3b2c28" class="t constructor">HashSet</a>&lt;<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a>&gt;();
+ 
+                <b>private readonly</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t t">SingleAssignmentDisposable</a> <a id="216c0af7eb223d25" href="../../../../../R/216c0af7eb223d25.html" target="n" data-glyph="46,3" class="i field">_disposable</a>;
+ 
+                <b>private</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="da05a51350198570" href="../../../../../R/da05a51350198570.html" target="n" data-glyph="46,3" class="i field">_action</a>;
+                <b>private</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a> <a id="c65d7e4dd6ad209e" href="../../../../../R/c65d7e4dd6ad209e.html" target="n" data-glyph="46,3" class="i field">_timer</a>;
+ 
+                <b>private bool</b> <a id="b6741542191e5329" href="../../../../../R/b6741542191e5329.html" target="n" data-glyph="46,3" class="i field">_hasAdded</a>;
+                <b>private bool</b> <a id="42ce1f63926d1e17" href="../../../../../R/42ce1f63926d1e17.html" target="n" data-glyph="46,3" class="i field">_hasRemoved</a>;
+ 
+                <b>public</b> <a id="6c0c8bb7af43d08b" href="../../../../../R/6c0c8bb7af43d08b.html" target="n" data-glyph="72,3" class="i constructor">Timer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r14 rd" class="r14 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r15 rd" class="r15 r">action</span>)
+                {
+                    <a href="#216c0af7eb223d25" class="i field">_disposable</a> = <b>new</b> <a href="../Disposables/SingleAssignmentDisposable.cs.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+                    <a href="#216c0af7eb223d25" class="i field">_disposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#305b3f94a3d60af4" class="i property">Disposable</a> = <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(<a href="#ba1f2d9ec972868d" class="i method">Unroot</a>);
+ 
+                    <a href="#da05a51350198570" class="i field">_action</a> = <span class="r15 r">action</span>;
+                    <a href="#c65d7e4dd6ad209e" class="i field">_timer</a> = <b>new</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#c454f2afe745d4d3" class="t constructor">Timer</a>(<a href="#266432c0a0146996" class="i method">Tick</a>, <b>null</b>, <span class="r14 r">dueTime</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#6b53654d3452a8df" class="t t">Timeout</a>.<a href="@0@mscorlib/A.html#17ac04506b89ddd8" class="i field">Infinite</a>));
+ 
+                    <b>lock</b> (<a href="#2c791b582d4ac26a" class="i field">s_timers</a>)
+                    {
+                        <b>if</b> (!<a href="#42ce1f63926d1e17" class="i field">_hasRemoved</a>)
+                        {
+                            <a href="#2c791b582d4ac26a" class="i field">s_timers</a>.<a href="@0@System.Core/A.html#43a2b651926474a7" class="i method">Add</a>(<a href="#c65d7e4dd6ad209e" class="i field">_timer</a>);
+ 
+                            <a href="#b6741542191e5329" class="i field">_hasAdded</a> = <b>true</b>;
+                        }
+                    }
+                }
+ 
+                <b>private void</b> <a id="266432c0a0146996" href="../../../../../R/266432c0a0146996.html" target="n" data-glyph="76,3" class="i method">Tick</a>(<b>object</b> <span id="r16 rd" class="r16 r">state</span>)
+                {
+                    <b>try</b>
+                    {
+                        <b>if</b> (!<a href="#216c0af7eb223d25" class="i field">_disposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#c9e92cc7adb8879e" class="i property">IsDisposed</a>)
+                        {
+                            <a href="#da05a51350198570" class="i field">_action</a>();
+                        }
+                    }
+                    <b>finally</b>
+                    {
+                        <a href="#ba1f2d9ec972868d" class="i method">Unroot</a>();
+                    }
+                }
+ 
+                <b>private void</b> <a id="ba1f2d9ec972868d" href="../../../../../R/ba1f2d9ec972868d.html" target="n" data-glyph="76,3" class="i method">Unroot</a>()
+                {
+                    <a href="#da05a51350198570" class="i field">_action</a> = <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#1e1c67fe30c0b5f9" class="i field">Nop</a>;
+ 
+                    <a href="@0@mscorlib/A.html#051a39d380760b26" class="k">var</a> <span id="r17 rd" class="r17 r">timer</span> = <b>default</b>(<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a>);
+ 
+                    <b>lock</b> (<a href="#2c791b582d4ac26a" class="i field">s_timers</a>)
+                    {
+                        <b>if</b> (!<a href="#42ce1f63926d1e17" class="i field">_hasRemoved</a>)
+                        {
+                            <span class="r17 r">timer</span> = <a href="#c65d7e4dd6ad209e" class="i field">_timer</a>;
+                            <a href="#c65d7e4dd6ad209e" class="i field">_timer</a> = <b>null</b>;
+ 
+                            <b>if</b> (<a href="#b6741542191e5329" class="i field">_hasAdded</a> &amp;&amp; <span class="r17 r">timer</span> != <b>null</b>)
+                                <a href="#2c791b582d4ac26a" class="i field">s_timers</a>.<a href="@0@System.Core/A.html#4e77ae9204a00be6" class="i method">Remove</a>(<span class="r17 r">timer</span>);
+ 
+                            <a href="#42ce1f63926d1e17" class="i field">_hasRemoved</a> = <b>true</b>;
+                        }
+                    }
+ 
+                    <b>if</b> (<span class="r17 r">timer</span> != <b>null</b>)
+                        <span class="r17 r">timer</span>.<a href="@0@mscorlib/A.html#4a8e954275723902" class="i method">Dispose</a>();
+                }
+ 
+                <b>public void</b> <a id="3faac61fe5248d54" href="../../../../../R/3faac61fe5248d54.html" target="n" data-glyph="72,3" class="i method">Dispose</a>()
+                {
+                    <a href="#216c0af7eb223d25" class="i field">_disposable</a>.<a href="../Disposables/SingleAssignmentDisposable.cs.html#72979fa63d569e27" class="i method">Dispose</a>();
+                }
+            }
+ 
+            <b>sealed class</b> <a id="f4cca91b6c489990" href="../../../../../R/f4cca91b6c489990.html" target="n" data-glyph="4,2" class="t t">PeriodicTimer</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+            {
+                <b>static readonly</b> <a href="@0@System.Core/A.html#2d265edc718b158b" class="t t">HashSet</a>&lt;<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a>&gt; <a id="7248b6a673ac2468" href="../../../../../R/7248b6a673ac2468.html" target="n" data-glyph="46,3" class="i field">s_timers</a> = <b>new</b> <a href="@0@System.Core/A.html#eca9ea30fa3b2c28" class="t constructor">HashSet</a>&lt;<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a>&gt;();
+ 
+                <b>private</b> <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <a id="a2ef5188dd1288ab" href="../../../../../R/a2ef5188dd1288ab.html" target="n" data-glyph="46,3" class="i field">_action</a>;
+                <b>private</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a> <a id="083dd8cc2e5ccdf5" href="../../../../../R/083dd8cc2e5ccdf5.html" target="n" data-glyph="46,3" class="i field">_timer</a>;
+                <b>private readonly</b> <a href="../InternalUtil/AscynLock.cs.html#429f7385c34c3f8a" class="t t">AsyncLock</a> <a id="5f05f3f444583b6a" href="../../../../../R/5f05f3f444583b6a.html" target="n" data-glyph="46,3" class="i field">_gate</a>;
+ 
+                <b>public</b> <a id="c273bfe5bc9620be" href="../../../../../R/c273bfe5bc9620be.html" target="n" data-glyph="72,3" class="i constructor">PeriodicTimer</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r18 rd" class="r18 r">period</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r19 rd" class="r19 r">action</span>)
+                {
+                    <a href="#f4cca91b6c489990" class="k">this</a>.<a href="#a2ef5188dd1288ab" class="i field">_action</a> = <span class="r19 r">action</span>;
+                    <a href="#f4cca91b6c489990" class="k">this</a>.<a href="#083dd8cc2e5ccdf5" class="i field">_timer</a> = <b>new</b> <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#c454f2afe745d4d3" class="t constructor">Timer</a>(<a href="#a5b0b2c1b6cd9fca" class="i method">Tick</a>, <b>null</b>, <span class="r18 r">period</span>, <span class="r18 r">period</span>);
+                    <a href="#f4cca91b6c489990" class="k">this</a>.<a href="#5f05f3f444583b6a" class="i field">_gate</a> = <b>new</b> <a href="../InternalUtil/AscynLock.cs.html#429f7385c34c3f8a" class="t constructor">AsyncLock</a>();
+ 
+                    <b>lock</b> (<a href="#7248b6a673ac2468" class="i field">s_timers</a>)
+                    {
+                        <a href="#7248b6a673ac2468" class="i field">s_timers</a>.<a href="@0@System.Core/A.html#43a2b651926474a7" class="i method">Add</a>(<a href="#083dd8cc2e5ccdf5" class="i field">_timer</a>);
+                    }
+                }
+ 
+                <b>private void</b> <a id="a5b0b2c1b6cd9fca" href="../../../../../R/a5b0b2c1b6cd9fca.html" target="n" data-glyph="76,3" class="i method">Tick</a>(<b>object</b> <span id="r20 rd" class="r20 r">state</span>)
+                {
+                    <a href="#5f05f3f444583b6a" class="i field">_gate</a>.<a href="../InternalUtil/AscynLock.cs.html#1e3b0b0c61233314" class="i method">Wait</a>(() =&gt;
+                    {
+                        <a href="#a2ef5188dd1288ab" class="i field">_action</a>();
+                    });
+                }
+ 
+                <b>public void</b> <a id="a1c1eabc747d2b12" href="../../../../../R/a1c1eabc747d2b12.html" target="n" data-glyph="72,3" class="i method">Dispose</a>()
+                {
+                    <a href="@0@mscorlib/A.html#051a39d380760b26" class="k">var</a> <span id="r21 rd" class="r21 r">timer</span> = <b>default</b>(<span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#051a39d380760b26" class="t t">Timer</a>);
+ 
+                    <b>lock</b> (<a href="#7248b6a673ac2468" class="i field">s_timers</a>)
+                    {
+                        <span class="r21 r">timer</span> = <a href="#083dd8cc2e5ccdf5" class="i field">_timer</a>;
+                        <a href="#083dd8cc2e5ccdf5" class="i field">_timer</a> = <b>null</b>;
+ 
+                        <b>if</b> (<span class="r21 r">timer</span> != <b>null</b>)
+                            <a href="#7248b6a673ac2468" class="i field">s_timers</a>.<a href="@0@System.Core/A.html#4e77ae9204a00be6" class="i method">Remove</a>(<span class="r21 r">timer</span>);
+                    }
+ 
+                    <b>if</b> (<span class="r21 r">timer</span> != <b>null</b>)
+                    {
+                        <span class="r21 r">timer</span>.<a href="@0@mscorlib/A.html#4a8e954275723902" class="i method">Dispose</a>();
+                        <a href="#a2ef5188dd1288ab" class="i field">_action</a> = <a href="../Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="../Observer.cs.html#1e1c67fe30c0b5f9" class="i field">Nop</a>;
+                    }
+                }
+            }
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

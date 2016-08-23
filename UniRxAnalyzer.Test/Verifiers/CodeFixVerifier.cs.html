@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html><head><title>CodeFixVerifier.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(128);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer.Test/Verifiers/CodeFixVerifier.cs" target="_top">Verifiers\CodeFixVerifier.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer.Test" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer.Test\UniRxAnalyzer.Test.csproj</a> (UniRxAnalyzer.Test)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CodeActions</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CodeFixes</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Diagnostics</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Formatting</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">TestHelper</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Superclass of all Unit tests made for diagnostics with codefixes.</span>
+    <span class="c">///</span><span class="c"> Contains methods used to verify correctness of codefixes</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract</b> <a href="../P/efa90788a4db0a11.html" target="s" class="k">partial</a> <b>class</b> <a id="efa90788a4db0a11" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="58ef2a1c3fdcf635">CodeFixVerifier</span></a> : <a href="../P/59516b4495d86dfd.html#59516b4495d86dfd" class="t t">DiagnosticVerifier</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns the codefix being tested (C#) - to be implemented in non-abstract class</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The CodeFixProvider to be used for CSharp code</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>protected virtual</b> <span class="i">CodeFixProvider</span> <a id="21660d0b73fec85b" href="../R/21660d0b73fec85b.html" target="n" data-glyph="75,1" class="i method">GetCSharpCodeFixProvider</a>()
+        {
+            <b>return null</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Returns the codefix being tested (VB) - to be implemented in non-abstract class</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The CodeFixProvider to be used for VisualBasic code</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>protected virtual</b> <span class="i">CodeFixProvider</span> <a id="255e1bc73c216373" href="../R/255e1bc73c216373.html" target="n" data-glyph="75,1" class="i method">GetBasicCodeFixProvider</a>()
+        {
+            <b>return null</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called to test a C# codefix when applied on the inputted string as a source</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">oldSource</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string before the CodeFix was applied to it</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r">newSource</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string after the CodeFix was applied to it</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r2 r">codeFixIndex</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Index determining which codefix to apply if there are multiple</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r3 r">allowNewCompilerDiagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="250561959e13429a" href="../R/../../0000000000.html" target="n" data-glyph="75,1" class="i method">VerifyCSharpFix</a>(<b>string</b> <span id="r0 rd" class="r0 r">oldSource</span>, <b>string</b> <span id="r1 rd" class="r1 r">newSource</span>, <b>int</b>? <span id="r2 rd" class="r2 r">codeFixIndex</span> = <b>null</b>, <b>bool</b> <span id="r3 rd" class="r3 r">allowNewCompilerDiagnostics</span> = <b>false</b>)
+        {
+            <span class="i">VerifyFix</span>(<span class="i">LanguageNames</span>.<span class="i">CSharp</span>, <a href="DiagnosticVerifier.cs.html#7b02f34d3a1d16ae" class="i method">GetCSharpDiagnosticAnalyzer</a>(), <a href="#21660d0b73fec85b" class="i method">GetCSharpCodeFixProvider</a>(), <span class="r0 r">oldSource</span>, <span class="r1 r">newSource</span>, <span class="r2 r">codeFixIndex</span>, <span class="r3 r">allowNewCompilerDiagnostics</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called to test a VB codefix when applied on the inputted string as a source</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r">oldSource</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string before the CodeFix was applied to it</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r5 r">newSource</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string after the CodeFix was applied to it</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r6 r">codeFixIndex</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Index determining which codefix to apply if there are multiple</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r7 r">allowNewCompilerDiagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="02aa3f05580e1dbe" href="../R/../../0000000000.html" target="n" data-glyph="75,1" class="i method">VerifyBasicFix</a>(<b>string</b> <span id="r4 rd" class="r4 r">oldSource</span>, <b>string</b> <span id="r5 rd" class="r5 r">newSource</span>, <b>int</b>? <span id="r6 rd" class="r6 r">codeFixIndex</span> = <b>null</b>, <b>bool</b> <span id="r7 rd" class="r7 r">allowNewCompilerDiagnostics</span> = <b>false</b>)
+        {
+            <span class="i">VerifyFix</span>(<span class="i">LanguageNames</span>.<span class="i">VisualBasic</span>, <a href="DiagnosticVerifier.cs.html#57f01e4c2f0d36ab" class="i method">GetBasicDiagnosticAnalyzer</a>(), <a href="#255e1bc73c216373" class="i method">GetBasicCodeFixProvider</a>(), <span class="r4 r">oldSource</span>, <span class="r5 r">newSource</span>, <span class="r6 r">codeFixIndex</span>, <span class="r7 r">allowNewCompilerDiagnostics</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> General verifier for codefixes.</span>
+        <span class="c">///</span><span class="c"> Creates a Document from the source string, then gets diagnostics on it and applies the relevant codefixes.</span>
+        <span class="c">///</span><span class="c"> Then gets the string after the codefix is applied and compares it with the expected result.</span>
+        <span class="c">///</span><span class="c"> Note: If any codefix causes new diagnostics to show up, the test fails unless allowNewCompilerDiagnostics is set to true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r8 r">language</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The language the source code is in</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r9 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer to be applied to the source code</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r10 r">codeFixProvider</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The codefix to be applied to the code wherever the relevant Diagnostic is found</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r11 r">oldSource</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string before the CodeFix was applied to it</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r12 r">newSource</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string after the CodeFix was applied to it</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r13 r">codeFixIndex</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Index determining which codefix to apply if there are multiple</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r14 r">allowNewCompilerDiagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>private void</b> <a id="0e8cf36af50d93bf" href="../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">VerifyFix</a>(<b>string</b> <span id="r8 rd" class="r8 r">language</span>, <span class="i">DiagnosticAnalyzer</span> <span id="r9 rd" class="r9 r">analyzer</span>, <span class="i">CodeFixProvider</span> <span id="r10 rd" class="r10 r">codeFixProvider</span>, <b>string</b> <span id="r11 rd" class="r11 r">oldSource</span>, <b>string</b> <span id="r12 rd" class="r12 r">newSource</span>, <b>int</b>? <span id="r13 rd" class="r13 r">codeFixIndex</span>, <b>bool</b> <span id="r14 rd" class="r14 r">allowNewCompilerDiagnostics</span>)
+        {
+            <b>var</b> <span id="r15 rd" class="r15 r">document</span> = <a href="../Helpers/DiagnosticVerifier.Helper.cs.html#969951cdf10d4843" class="i method">CreateDocument</a>(<span class="r11 r">oldSource</span>, <span class="r8 r">language</span>);
+            <b>var</b> <span id="r16 rd" class="r16 r">analyzerDiagnostics</span> = <a href="../Helpers/DiagnosticVerifier.Helper.cs.html#d8033cc98ce28c0f" class="i method">GetSortedDiagnosticsFromDocuments</a>(<span class="r9 r">analyzer</span>, <b>new</b>[] { <span class="r15 r">document</span> });
+            <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="k">var</a> <span id="r17 rd" class="r17 r">compilerDiagnostics</span> = <a href="../Helpers/CodeFixVerifier.Helper.cs.html#7a8729535a181660" class="i method">GetCompilerDiagnostics</a>(<span class="r15 r">document</span>);
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r18 rd" class="r18 r">attempts</span> = <span class="r16 r">analyzerDiagnostics</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+ 
+            <b>for</b> (<b>int</b> <span id="r19 rd" class="r19 r">i</span> = 0; <span class="r19 r">i</span> &lt; <span class="r18 r">attempts</span>; ++<span class="r19 r">i</span>)
+            {
+                <a href="@0@mscorlib/A.html#cf7f4095e4de7646" class="k">var</a> <span id="r20 rd" class="r20 r">actions</span> = <b>new</b> <a href="@0@mscorlib/A.html#9e5352b2b304ceba" class="t constructor">List</a>&lt;<span class="i">CodeAction</span>&gt;();
+                <b>var</b> <span id="r21 rd" class="r21 r">context</span> = <b>new</b> <span class="i">CodeFixContext</span>(<span class="r15 r">document</span>, <span class="r16 r">analyzerDiagnostics</span>[0], (<span id="r22 rd" class="r22 r">a</span>, <span id="r23 rd" class="r23 r">d</span>) =&gt; <span class="r20 r">actions</span>.<span class="i">Add</span>(<span class="r22 r">a</span>), <a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t t">CancellationToken</a>.<a href="@0@mscorlib/A.html#ec32c41597007382" class="i property">None</a>);
+                <span class="r10 r">codeFixProvider</span>.<span class="i">RegisterCodeFixesAsync</span>(<span class="r21 r">context</span>).<span class="i">Wait</span>();
+ 
+                <b>if</b> (!<span class="r20 r">actions</span>.<a href="@0@System.Core/A.html#8788153112b7ffd0" class="i method">Any</a>())
+                {
+                    <b>break</b>;
+                }
+ 
+                <b>if</b> (<span class="r13 r">codeFixIndex</span> != <b>null</b>)
+                {
+                    <span class="r15 r">document</span> = <a href="../Helpers/CodeFixVerifier.Helper.cs.html#45e762081c3ef4bd" class="i method">ApplyFix</a>(<span class="r15 r">document</span>, <span class="r20 r">actions</span>.<a href="@0@System.Core/A.html#7db56d44563d8761" class="i method">ElementAt</a>((<b>int</b>)<span class="r13 r">codeFixIndex</span>));
+                    <b>break</b>;
+                }
+ 
+                <span class="r15 r">document</span> = <a href="../Helpers/CodeFixVerifier.Helper.cs.html#45e762081c3ef4bd" class="i method">ApplyFix</a>(<span class="r15 r">document</span>, <span class="r20 r">actions</span>.<a href="@0@System.Core/A.html#7db56d44563d8761" class="i method">ElementAt</a>(0));
+                <span class="r16 r">analyzerDiagnostics</span> = <a href="../Helpers/DiagnosticVerifier.Helper.cs.html#d8033cc98ce28c0f" class="i method">GetSortedDiagnosticsFromDocuments</a>(<span class="r9 r">analyzer</span>, <b>new</b>[] { <span class="r15 r">document</span> });
+ 
+                <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="k">var</a> <span id="r24 rd" class="r24 r">newCompilerDiagnostics</span> = <a href="../Helpers/CodeFixVerifier.Helper.cs.html#4a1e5847cc5a66e7" class="i method">GetNewDiagnostics</a>(<span class="r17 r">compilerDiagnostics</span>, <a href="../Helpers/CodeFixVerifier.Helper.cs.html#7a8729535a181660" class="i method">GetCompilerDiagnostics</a>(<span class="r15 r">document</span>));
+ 
+                <span class="c">//check if applying the code fix introduced any new compiler diagnostics</span>
+                <b>if</b> (!<span class="r14 r">allowNewCompilerDiagnostics</span> &amp;&amp; <span class="r24 r">newCompilerDiagnostics</span>.<a href="@0@System.Core/A.html#8788153112b7ffd0" class="i method">Any</a>())
+                {
+                    <span class="c">// Format and get the compiler diagnostics again so that the locations make sense in the output</span>
+                    <span class="r15 r">document</span> = <span class="r15 r">document</span>.<span class="i">WithSyntaxRoot</span>(<span class="i">Formatter</span>.<span class="i">Format</span>(<span class="r15 r">document</span>.<span class="i">GetSyntaxRootAsync</span>().<span class="i">Result</span>, <span class="i">Formatter</span>.<span class="i">Annotation</span>, <span class="r15 r">document</span>.<span class="i">Project</span>.<span class="i">Solution</span>.<span class="i">Workspace</span>));
+                    <span class="r24 r">newCompilerDiagnostics</span> = <a href="../Helpers/CodeFixVerifier.Helper.cs.html#4a1e5847cc5a66e7" class="i method">GetNewDiagnostics</a>(<span class="r17 r">compilerDiagnostics</span>, <a href="../Helpers/CodeFixVerifier.Helper.cs.html#7a8729535a181660" class="i method">GetCompilerDiagnostics</a>(<span class="r15 r">document</span>));
+ 
+                    <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                        <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Fix introduced new compiler diagnostics:\r\n{0}\r\n\r\nNew document:\r\n{1}\r\n&quot;</span>,
+                            <b>string</b>.<a href="@0@mscorlib/A.html#da0d95b54df01dcf" class="i method">Join</a>(<span class="s">&quot;\r\n&quot;</span>, <span class="r24 r">newCompilerDiagnostics</span>.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r25 rd" class="r25 r">d</span> =&gt; <span class="r25 r">d</span>.<span class="i">ToString</span>())),
+                            <span class="r15 r">document</span>.<span class="i">GetSyntaxRootAsync</span>().<span class="i">Result</span>.<span class="i">ToFullString</span>()));
+                }
+ 
+                <span class="c">//check if there are analyzer diagnostics left after the code fix</span>
+                <b>if</b> (!<span class="r16 r">analyzerDiagnostics</span>.<a href="@0@System.Core/A.html#8788153112b7ffd0" class="i method">Any</a>())
+                {
+                    <b>break</b>;
+                }
+            }
+ 
+            <span class="c">//after applying all of the code fixes, compare the resulting string to the inputted one</span>
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r26 rd" class="r26 r">actual</span> = <a href="../Helpers/CodeFixVerifier.Helper.cs.html#699e775049150869" class="i method">GetStringFromDocument</a>(<span class="r15 r">document</span>);
+            <span class="t t">Assert</span>.<span class="i method">AreEqual</span>(<span class="r12 r">newSource</span>, <span class="r26 r">actual</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

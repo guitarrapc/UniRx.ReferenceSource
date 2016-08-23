@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposableTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(190);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx.Tests/DisposableTest.cs" target="_top">DisposableTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx.Tests" target="_top">Tests\UniRx.Tests\UniRx.Tests.csproj</a> (UniRx.Tests)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Tests</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="a675ceeece26c24e" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="55f1fea0b0356411">DisposableTest</span></a>
+    {
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="ef79354098257e6f" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">SingleAssignment</a>()
+        {
+            <a href="/UniRx/A.html#adcb61162c529f98" class="k">var</a> <span id="r0 rd" class="r0 r">d</span> = <b>new</b> <a href="/UniRx/A.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#c9e92cc7adb8879e" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r1 rd" class="r1 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r2 rd" class="r2 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r3 rd" class="r3 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+ 
+            <span class="c">// dispose first</span>
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#72979fa63d569e27" class="i method">Dispose</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#c9e92cc7adb8879e" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r1 r">id1</span>; <span class="r1 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r2 r">id2</span>; <span class="r2 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r3 r">id3</span>; <span class="r3 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// normal flow</span>
+            <span class="r0 r">d</span> = <b>new</b> <a href="/UniRx/A.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+            <span class="r1 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r2 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <span class="r3 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+ 
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r1 r">id1</span>; <span class="r1 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#72979fa63d569e27" class="i method">Dispose</a>();
+            <span class="r1 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r2 r">id2</span>; <span class="r2 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r3 r">id3</span>; <span class="r3 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// exception flow</span>
+            <span class="r0 r">d</span> = <b>new</b> <a href="/UniRx/A.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+            <span class="r1 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r2 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <span class="r3 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r1 r">id1</span>;
+            <a href="Tools/ChainingAssertion.Unity.cs.html#3aeb75bd766c7c2b" class="t t">AssertEx</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#278bf21db630f8eb" class="i method">Catch</a>&lt;<a href="@0@mscorlib/A.html#beac22dfca574cd4" class="t t">InvalidOperationException</a>&gt;(() =&gt; <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <span class="r2 r">id2</span>);
+ 
+            <span class="c">// null</span>
+            <span class="r0 r">d</span> = <b>new</b> <a href="/UniRx/A.html#adcb61162c529f98" class="t constructor">SingleAssignmentDisposable</a>();
+            <span class="r1 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <b>null</b>;
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#72979fa63d569e27" class="i method">Dispose</a>();
+            <span class="r0 r">d</span>.<a href="/UniRx/A.html#305b3f94a3d60af4" class="i property">Disposable</a> = <b>null</b>;
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="b199ba9c03918c4c" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">MultipleAssignment</a>()
+        {
+            <a href="/UniRx/A.html#34d257b3f0ebdeee" class="k">var</a> <span id="r4 rd" class="r4 r">d</span> = <b>new</b> <a href="/UniRx/A.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#4fc7785dcd92e557" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r5 rd" class="r5 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r6 rd" class="r6 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r7 rd" class="r7 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+ 
+            <span class="c">// dispose first</span>
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#abcea6fd68e799a4" class="i method">Dispose</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#4fc7785dcd92e557" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r5 r">id1</span>; <span class="r5 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r6 r">id2</span>; <span class="r6 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r7 r">id3</span>; <span class="r7 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// normal flow</span>
+            <span class="r4 r">d</span> = <b>new</b> <a href="/UniRx/A.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+            <span class="r5 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r6 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <span class="r7 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+ 
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r5 r">id1</span>; <span class="r5 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#abcea6fd68e799a4" class="i method">Dispose</a>();
+            <span class="r5 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r6 r">id2</span>; <span class="r6 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r7 r">id3</span>; <span class="r7 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// exception flow</span>
+            <span class="r4 r">d</span> = <b>new</b> <a href="/UniRx/A.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+            <span class="r5 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r6 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <span class="r7 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r5 r">id1</span>;
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r6 r">id2</span>;
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <span class="r7 r">id3</span>;
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#abcea6fd68e799a4" class="i method">Dispose</a>();
+            <span class="r5 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r6 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r7 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// null</span>
+            <span class="r4 r">d</span> = <b>new</b> <a href="/UniRx/A.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+            <span class="r5 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <b>null</b>;
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#abcea6fd68e799a4" class="i method">Dispose</a>();
+            <span class="r4 r">d</span>.<a href="/UniRx/A.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <b>null</b>;
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="411f6ab200986bfb" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Serial</a>()
+        {
+            <a href="/UniRx/A.html#ea065681bf3a82fd" class="k">var</a> <span id="r8 rd" class="r8 r">d</span> = <b>new</b> <a href="/UniRx/A.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#97c86740dbc10ef8" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r9 rd" class="r9 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r10 rd" class="r10 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <a href="#94e798d53666a984" class="k">var</a> <span id="r11 rd" class="r11 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+ 
+            <span class="c">// dispose first</span>
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#b66f18345c9aa0ca" class="i method">Dispose</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#97c86740dbc10ef8" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r9 r">id1</span>; <span class="r9 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r10 r">id2</span>; <span class="r10 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r11 r">id3</span>; <span class="r11 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// normal flow</span>
+            <span class="r8 r">d</span> = <b>new</b> <a href="/UniRx/A.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+            <span class="r9 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r10 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <span class="r11 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+ 
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r9 r">id1</span>; <span class="r9 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#b66f18345c9aa0ca" class="i method">Dispose</a>();
+            <span class="r9 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r10 r">id2</span>; <span class="r10 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r11 r">id3</span>; <span class="r11 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// exception flow</span>
+            <span class="r8 r">d</span> = <b>new</b> <a href="/UniRx/A.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+            <span class="r9 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r10 r">id2</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(2);
+            <span class="r11 r">id3</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(3);
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r9 r">id1</span>;
+            <span class="r9 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r10 r">id2</span>;
+            <span class="r9 r">id1</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r10 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <span class="r11 r">id3</span>;
+            <span class="r10 r">id2</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+            <span class="r11 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+ 
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#b66f18345c9aa0ca" class="i method">Dispose</a>();
+            
+            <span class="r11 r">id3</span>.<a href="#10a29e4a46e650be" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+ 
+            <span class="c">// null</span>
+            <span class="r8 r">d</span> = <b>new</b> <a href="/UniRx/A.html#ea065681bf3a82fd" class="t constructor">SerialDisposable</a>();
+            <span class="r9 r">id1</span> = <b>new</b> <a href="#18e1a51470fa512a" class="t constructor">IdDisp</a>(1);
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <b>null</b>;
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#b66f18345c9aa0ca" class="i method">Dispose</a>();
+            <span class="r8 r">d</span>.<a href="/UniRx/A.html#8897cbfbddf8a622" class="i property">Disposable</a> = <b>null</b>;
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="d7e372eb845da8ac" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Boolean</a>()
+        {
+            <a href="/UniRx/A.html#45b9c7444c27222b" class="k">var</a> <span id="r12 rd" class="r12 r">bd</span> = <b>new</b> <a href="/UniRx/A.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+            <span class="r12 r">bd</span>.<a href="/UniRx/A.html#b764ec70b21ab894" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#0179db6ebd324ebd" class="i method">IsFalse</a>();
+            <span class="r12 r">bd</span>.<a href="/UniRx/A.html#424d82cc13c375f8" class="i method">Dispose</a>();
+            <span class="r12 r">bd</span>.<a href="/UniRx/A.html#b764ec70b21ab894" class="i property">IsDisposed</a>.<a href="Tools/ChainingAssertion.Unity.cs.html#a51c066b5ee91d76" class="i method">IsTrue</a>();
+        }
+ 
+ 
+        <b>class</b> <a id="94e798d53666a984" href="R/94e798d53666a984.html" target="n" data-glyph="4,1" class="t t">IdDisp</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>public bool</b> <a id="10a29e4a46e650be" href="R/10a29e4a46e650be.html" target="n" data-glyph="102,2" class="i property">IsDisposed</a> { <b>get</b>; <b>set</b>; }
+            <b>public int</b> <a id="f897622ed5ba5d86" href="R/f897622ed5ba5d86.html" target="n" data-glyph="102,2" class="i property">Id</a> { <b>get</b>; <b>set</b>; }
+ 
+            <b>public</b> <a id="18e1a51470fa512a" href="R/18e1a51470fa512a.html" target="n" data-glyph="72,2" class="i constructor">IdDisp</a>(<b>int</b> <span id="r13 rd" class="r13 r">id</span>)
+            {
+                <a href="#94e798d53666a984" class="k">this</a>.<a href="#f897622ed5ba5d86" class="i property">Id</a> = <span class="r13 r">id</span>;
+            }
+ 
+ 
+            <b>public void</b> <a id="a5ab86056fb5e119" href="R/a5ab86056fb5e119.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <a href="#10a29e4a46e650be" class="i property">IsDisposed</a> = <b>true</b>;
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html><head><title>CodeFixVerifier.Helper.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(86);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer.Test/Helpers/CodeFixVerifier.Helper.cs" target="_top">Helpers\CodeFixVerifier.Helper.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer.Test" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer.Test\UniRxAnalyzer.Test.csproj</a> (UniRxAnalyzer.Test)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CodeActions</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Formatting</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Simplification</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">TestHelper</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Diagnostic Producer class with extra methods dealing with applying codefixes</span>
+    <span class="c">///</span><span class="c"> All methods are static</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract</b> <a href="../P/efa90788a4db0a11.html" target="s" class="k">partial</a> <b>class</b> <a id="efa90788a4db0a11" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="58ef2a1c3fdcf635">CodeFixVerifier</span></a> : <a href="../P/59516b4495d86dfd.html#59516b4495d86dfd" class="t t">DiagnosticVerifier</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Apply the inputted CodeAction to the inputted document.</span>
+        <span class="c">///</span><span class="c"> Meant to be used to apply codefixes.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">document</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Document to apply the fix on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r">codeAction</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A CodeAction that will be applied to the Document.</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A Document with the changes from the CodeAction</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <span class="i">Document</span> <a id="45e762081c3ef4bd" href="../R/45e762081c3ef4bd.html" target="n" data-glyph="76,1" class="i method">ApplyFix</a>(<span class="i">Document</span> <span id="r0 rd" class="r0 r">document</span>, <span class="i">CodeAction</span> <span id="r1 rd" class="r1 r">codeAction</span>)
+        {
+            <b>var</b> <span id="r2 rd" class="r2 r">operations</span> = <span class="r1 r">codeAction</span>.<span class="i">GetOperationsAsync</span>(<a href="@0@mscorlib/A.html#36b17ded8b1a228c" class="t t">CancellationToken</a>.<a href="@0@mscorlib/A.html#ec32c41597007382" class="i property">None</a>).<span class="i">Result</span>;
+            <b>var</b> <span id="r3 rd" class="r3 r">solution</span> = <span class="r2 r">operations</span>.<span class="i">OfType</span>&lt;<span class="i">ApplyChangesOperation</span>&gt;().<span class="i">Single</span>().<span class="i">ChangedSolution</span>;
+            <b>return</b> <span class="r3 r">solution</span>.<span class="i">GetDocument</span>(<span class="r0 r">document</span>.<span class="i">Id</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Compare two collections of Diagnostics,and return a list of any new diagnostics that appear only in the second collection.</span>
+        <span class="c">///</span><span class="c"> Note: Considers Diagnostics to be the same if they have the same Ids.  In the case of multiple diagnostics with the same Id in a row,</span>
+        <span class="c">///</span><span class="c"> this method may not necessarily return the new one.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r">diagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Diagnostics that existed in the code before the CodeFix was applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r5 r">newDiagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Diagnostics that exist in the code after the CodeFix was applied</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A list of Diagnostics that only surfaced in the code after the CodeFix was applied</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="i">Diagnostic</span>&gt; <a id="4a1e5847cc5a66e7" href="../R/4a1e5847cc5a66e7.html" target="n" data-glyph="76,1" class="i method">GetNewDiagnostics</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="i">Diagnostic</span>&gt; <span id="r4 rd" class="r4 r">diagnostics</span>, <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="i">Diagnostic</span>&gt; <span id="r5 rd" class="r5 r">newDiagnostics</span>)
+        {
+            <b>var</b> <span id="r6 rd" class="r6 r">oldArray</span> = <span class="r4 r">diagnostics</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r7 rd" class="r7 r">d</span> =&gt; <span class="r7 r">d</span>.<span class="i">Location</span>.<span class="i">SourceSpan</span>.<span class="i">Start</span>).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+            <b>var</b> <span id="r8 rd" class="r8 r">newArray</span> = <span class="r5 r">newDiagnostics</span>.<a href="@0@System.Core/A.html#e449fbc07f49dc52" class="i method">OrderBy</a>(<span id="r9 rd" class="r9 r">d</span> =&gt; <span class="r9 r">d</span>.<span class="i">Location</span>.<span class="i">SourceSpan</span>.<span class="i">Start</span>).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+            <b>int</b> <span id="r10 rd" class="r10 r">oldIndex</span> = 0;
+            <b>int</b> <span id="r11 rd" class="r11 r">newIndex</span> = 0;
+ 
+            <b>while</b> (<span class="r11 r">newIndex</span> &lt; <span class="r8 r">newArray</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>)
+            {
+                <b>if</b> (<span class="r10 r">oldIndex</span> &lt; <span class="r6 r">oldArray</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> &amp;&amp; <span class="r6 r">oldArray</span>[<span class="r10 r">oldIndex</span>].<span class="i">Id</span> == <span class="r8 r">newArray</span>[<span class="r11 r">newIndex</span>].<span class="i">Id</span>)
+                {
+                    ++<span class="r10 r">oldIndex</span>;
+                    ++<span class="r11 r">newIndex</span>;
+                }
+                <b>else</b>
+                {
+                    <b>yield return</b> <span class="r8 r">newArray</span>[<span class="r11 r">newIndex</span>++];
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Get the existing compiler diagnostics on the inputted document.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r12 r">document</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Document to run the compiler diagnostic analyzers on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The compiler diagnostics that were found in the code</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="i">Diagnostic</span>&gt; <a id="7a8729535a181660" href="../R/7a8729535a181660.html" target="n" data-glyph="76,1" class="i method">GetCompilerDiagnostics</a>(<span class="i">Document</span> <span id="r12 rd" class="r12 r">document</span>)
+        {
+            <b>return</b> <span class="r12 r">document</span>.<span class="i">GetSemanticModelAsync</span>().<span class="i">Result</span>.<span class="i">GetDiagnostics</span>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Given a document, turn it into a string based on the syntax root</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r13 r">document</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Document to be converted to a string</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">A string containing the syntax of the Document after formatting</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static string</b> <a id="699e775049150869" href="../R/699e775049150869.html" target="n" data-glyph="76,1" class="i method">GetStringFromDocument</a>(<span class="i">Document</span> <span id="r13 rd" class="r13 r">document</span>)
+        {
+            <b>var</b> <span id="r14 rd" class="r14 r">simplifiedDoc</span> = <span class="i">Simplifier</span>.<span class="i">ReduceAsync</span>(<span class="r13 r">document</span>, <span class="i">Simplifier</span>.<span class="i">Annotation</span>).<span class="i">Result</span>;
+            <b>var</b> <span id="r15 rd" class="r15 r">root</span> = <span class="r14 r">simplifiedDoc</span>.<span class="i">GetSyntaxRootAsync</span>().<span class="i">Result</span>;
+            <span class="r15 r">root</span> = <span class="i">Formatter</span>.<span class="i">Format</span>(<span class="r15 r">root</span>, <span class="i">Formatter</span>.<span class="i">Annotation</span>, <span class="r14 r">simplifiedDoc</span>.<span class="i">Project</span>.<span class="i">Solution</span>.<span class="i">Workspace</span>);
+            <b>return</b> <span class="r15 r">root</span>.<span class="i">GetText</span>().<span class="i">ToString</span>();
+        }
+    }
+}
+ 
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html><head><title>DisposableExtensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(20);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Disposables/DisposableExtensions.cs" target="_top">Disposables\DisposableExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="e426e231478915d0" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">DisposableExtensions</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Add disposable(self) to CompositeDisposable(or other ICollection). Return value is self disposable.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <span class="r0 r t">T</span> <a id="c51d3c66ab03fb0c" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AddTo</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">disposable</span>, <a href="@0@mscorlib/A.html#a9bf1395d3addc77" class="t t">ICollection</a>&lt;<a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r2 rd" class="r2 r">container</span>)
+            <b>where</b> <span class="r0 r t">T</span> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>if</b> (<span class="r1 r">disposable</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;disposable&quot;</span>);
+            <b>if</b> (<span class="r2 r">container</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;container&quot;</span>);
+ 
+            <span class="r2 r">container</span>.<a href="@0@mscorlib/A.html#a9319db8c62ae453" class="i method">Add</a>(<span class="r1 r">disposable</span>);
+ 
+            <b>return</b> <span class="r1 r">disposable</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

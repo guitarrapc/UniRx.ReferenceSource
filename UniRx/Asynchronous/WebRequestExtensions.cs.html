@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html><head><title>WebRequestExtensions.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(61);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Asynchronous/WebRequestExtensions.cs" target="_top">Asynchronous\WebRequestExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">IO</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Net</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static class</b> <a id="986af701af146fdd" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">WebRequestExtensions</a>
+    {
+        <b>static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">TResult</span>&gt; <a id="5cd14668771dc5e8" href="../R/5cd14668771dc5e8.html" target="n" data-glyph="76,1" class="i method">AbortableDeferredAsyncRequest</a>&lt;<span id="r0 rd t" class="r0 r t">TResult</span>&gt;(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#58aea74ca92df82e" class="t t">AsyncCallback</a>, <b>object</b>, <a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>&gt; <span id="r1 rd" class="r1 r">begin</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="@0@mscorlib/A.html#71a3deb2ea37ce06" class="t t">IAsyncResult</a>, <span class="r0 r t">TResult</span>&gt; <span id="r2 rd" class="r2 r">end</span>, <a href="@0@System/A.html#4a9454016805ca53" class="t t">WebRequest</a> <span id="r3 rd" class="r3 r">request</span>)
+        {
+            <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r4 rd" class="r4 r">result</span> = <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#0351c4239e8e6646" class="i method">Create</a>&lt;<span class="r0 r t">TResult</span>&gt;(<span id="r5 rd" class="r5 r">observer</span> =&gt;
+            {
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r6 rd" class="r6 r">isCompleted</span> = -1;
+                <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r7 rd" class="r7 r">subscription</span> = <a href="../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.FromAsync.cs.html#950883fffb69fdc2" class="i method">FromAsyncPattern</a>&lt;<span class="r0 r t">TResult</span>&gt;(<span class="r1 r">begin</span>,
+                    <span id="r8 rd" class="r8 r">ar</span> =&gt;
+                    {
+                        <b>try</b>
+                        {
+                            <a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <span class="r6 r">isCompleted</span>);
+                            <b>return</b> <span class="r2 r">end</span>(<span class="r8 r">ar</span>);
+                        }
+                        <b>catch</b> (<a href="@0@System/A.html#47e37066345d8b7c" class="t t">WebException</a> <span id="r9 rd" class="r9 r">ex</span>)
+                        {
+                            <b>if</b> (<span class="r9 r">ex</span>.<a href="@0@System/A.html#37bd78aa5a939b73" class="i property">Status</a> == <a href="@0@System/A.html#d6949242f885e5fd" class="t t">WebExceptionStatus</a>.<a href="@0@System/A.html#ca8ab924b969d4d1" class="i field">RequestCanceled</a>) <b>return default</b>(<span class="r0 r t">TResult</span>);
+                            <b>throw</b>;
+                        }
+                    })()
+                    .<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r5 r">observer</span>);
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#b275cfac3821c494" class="i method">Create</a>(() =&gt;
+                {
+                    <b>if</b> (<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#09bb1e21afd76cf2" class="i method">Increment</a>(<b>ref</b> <span class="r6 r">isCompleted</span>) == 0)
+                    {
+                        <span class="r7 r">subscription</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+                        <span class="r3 r">request</span>.<a href="@0@System/A.html#bd82a6ab70a4497a" class="i method">Abort</a>();
+                    }
+                });
+            });
+ 
+            <b>return</b> <span class="r4 r">result</span>;
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="@0@System/A.html#e02bd465307d4654" class="t t">WebResponse</a>&gt; <a id="a6c178a45f8232cc" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">GetResponseAsObservable</a>(<b>this</b> <a href="@0@System/A.html#4a9454016805ca53" class="t t">WebRequest</a> <span id="r10 rd" class="r10 r">request</span>)
+        {
+            <b>return</b> <a href="#5cd14668771dc5e8" class="i method">AbortableDeferredAsyncRequest</a>&lt;<a href="@0@System/A.html#e02bd465307d4654" class="t t">WebResponse</a>&gt;(<span class="r10 r">request</span>.<a href="@0@System/A.html#e64a46b76e113300" class="i method">BeginGetResponse</a>, <span class="r10 r">request</span>.<a href="@0@System/A.html#c4617671f6361f2c" class="i method">EndGetResponse</a>, <span class="r10 r">request</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="@0@System/A.html#b51bad13c30be1c4" class="t t">HttpWebResponse</a>&gt; <a id="0d557ce2d5e85ea5" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">GetResponseAsObservable</a>(<b>this</b> <a href="@0@System/A.html#f2ab2d685cb26f13" class="t t">HttpWebRequest</a> <span id="r11 rd" class="r11 r">request</span>)
+        {
+            <b>return</b> <a href="#5cd14668771dc5e8" class="i method">AbortableDeferredAsyncRequest</a>&lt;<a href="@0@System/A.html#b51bad13c30be1c4" class="t t">HttpWebResponse</a>&gt;(<span class="r11 r">request</span>.<a href="@0@System/A.html#613ffcf7266252eb" class="i method">BeginGetResponse</a>, <span id="r12 rd" class="r12 r">ar</span> =&gt; (<a href="@0@System/A.html#b51bad13c30be1c4" class="t t">HttpWebResponse</a>)<span class="r11 r">request</span>.<a href="@0@System/A.html#10e37e4a3f52a590" class="i method">EndGetResponse</a>(<span class="r12 r">ar</span>), <span class="r11 r">request</span>);
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="@0@mscorlib/A.html#f956b0c07e86df64" class="t t">Stream</a>&gt; <a id="49e8f7e44587a255" href="../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">GetRequestStreamAsObservable</a>(<b>this</b> <a href="@0@System/A.html#4a9454016805ca53" class="t t">WebRequest</a> <span id="r13 rd" class="r13 r">request</span>)
+        {
+            <b>return</b> <a href="#5cd14668771dc5e8" class="i method">AbortableDeferredAsyncRequest</a>&lt;<a href="@0@mscorlib/A.html#f956b0c07e86df64" class="t t">Stream</a>&gt;(<span class="r13 r">request</span>.<a href="@0@System/A.html#a7352ff1d6e1d625" class="i method">BeginGetRequestStream</a>, <span class="r13 r">request</span>.<a href="@0@System/A.html#4fa3e2b9208207a0" class="i method">EndGetRequestStream</a>, <span class="r13 r">request</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

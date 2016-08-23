@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html><head><title>AsyncOperationExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(74);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/AsyncOperationExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\AsyncOperationExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+<b>using</b> <span class="t">ObservableUnity</span> = <span class="i n">UniRx</span>.<a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>;
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="193dd12f473af859" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">AsyncOperationExtensions</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> If you needs return value, use AsAsyncOperationObservable instead.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">AsyncOperation</span>&gt; <a id="463c19d380cc0269" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>(<b>this</b> <span class="i">AsyncOperation</span> <span id="r0 rd" class="r0 r">asyncOperation</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r1 rd" class="r1 r">progress</span> = <b>null</b>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<a href="Observable.Unity.cs.html#b2bf6a9083d2cda1" class="i method">FromCoroutine</a>&lt;<span class="i">AsyncOperation</span>&gt;((<span id="r2 rd" class="r2 r">observer</span>, <span id="r3 rd" class="r3 r">cancellation</span>) =&gt; <a href="#8ac8a16cc89d080d" class="i method">AsObservableCore</a>(<span class="r0 r">asyncOperation</span>, <span class="r2 r">observer</span>, <span class="r1 r">progress</span>, <span class="r3 r">cancellation</span>));
+        }
+ 
+        <span class="c">// T: where T : AsyncOperation is ambigious with IObservable&lt;T&gt;.AsObservable</span>
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <a id="7e9df94ed9ddb10b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsAsyncOperationObservable</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<b>this</b> <span class="r4 r t">T</span> <span id="r5 rd" class="r5 r">asyncOperation</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r6 rd" class="r6 r">progress</span> = <b>null</b>)
+            <b>where</b> <span class="r4 r t">T</span> : <span class="i">AsyncOperation</span>
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">ObservableUnity</a>.<span class="i">FromCoroutine</span>&lt;<span class="r4 r t">T</span>&gt;((<span id="r7 rd" class="r7 r">observer</span>, <span id="r8 rd" class="r8 r">cancellation</span>) =&gt; <a href="#8ac8a16cc89d080d" class="i method">AsObservableCore</a>(<span class="r5 r">asyncOperation</span>, <span class="r7 r">observer</span>, <span class="r6 r">progress</span>, <span class="r8 r">cancellation</span>));
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="8ac8a16cc89d080d" href="../../../../../R/8ac8a16cc89d080d.html" target="n" data-glyph="76,1" class="i method">AsObservableCore</a>&lt;<span id="r9 rd t" class="r9 r t">T</span>&gt;(<span class="r9 r t">T</span> <span id="r10 rd" class="r10 r">asyncOperation</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r9 r t">T</span>&gt; <span id="r11 rd" class="r11 r">observer</span>, <a href="../System/IProgress.cs.html#c6d4ad037d1c8e44" class="t t">IProgress</a>&lt;<b>float</b>&gt; <span id="r12 rd" class="r12 r">reportProgress</span>, <a href="CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a> <span id="r13 rd" class="r13 r">cancel</span>)
+            <b>where</b> <span class="r9 r t">T</span> : <span class="i">AsyncOperation</span>
+        {
+            <b>if</b> (<span class="r12 r">reportProgress</span> != <b>null</b>)
+            {
+                <b>while</b> (!<span class="r10 r">asyncOperation</span>.<span class="i">isDone</span> &amp;&amp; !<span class="r13 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>)
+                {
+                    <b>try</b>
+                    {
+                        <span class="r12 r">reportProgress</span>.<span class="i">Report</span>(<span class="r10 r">asyncOperation</span>.<span class="i">progress</span>);
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r14 rd" class="r14 r">ex</span>)
+                    {
+                        <span class="r11 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r14 r">ex</span>);
+                        <b>yield break</b>;
+                    }
+                    <b>yield return null</b>;
+                }
+            }
+            <b>else</b>
+            {
+                <b>if</b> (!<span class="r10 r">asyncOperation</span>.<span class="i">isDone</span>)
+                {
+                    <b>yield return</b> <span class="r10 r">asyncOperation</span>;
+                }
+            }
+ 
+            <b>if</b> (<span class="r13 r">cancel</span>.<a href="CancellationToken.cs.html#ced6051dabbc4491" class="i property">IsCancellationRequested</a>) <b>yield break</b>;
+ 
+            <b>if</b> (<span class="r12 r">reportProgress</span> != <b>null</b>)
+            {
+                <b>try</b>
+                {
+                    <span class="r12 r">reportProgress</span>.<span class="i">Report</span>(<span class="r10 r">asyncOperation</span>.<span class="i">progress</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r15 rd" class="r15 r">ex</span>)
+                {
+                    <span class="r11 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r15 r">ex</span>);
+                    <b>yield break</b>;
+                }
+            }
+ 
+            <span class="r11 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r10 r">asyncOperation</span>);
+            <span class="r11 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+        }
+    }
+}</pre></td></tr></table></div></body></html>

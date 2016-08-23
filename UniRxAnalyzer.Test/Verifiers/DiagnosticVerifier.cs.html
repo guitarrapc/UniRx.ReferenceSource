@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html><head><title>DiagnosticVerifier.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(271);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer.Test/Verifiers/DiagnosticVerifier.cs" target="_top">Verifiers\DiagnosticVerifier.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer.Test" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer.Test\UniRxAnalyzer.Test.csproj</a> (UniRxAnalyzer.Test)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CSharp</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Diagnostics</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">TestHelper</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Superclass of all Unit Tests for DiagnosticAnalyzers</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public abstract</b> <a href="../P/59516b4495d86dfd.html" target="s" class="k">partial</a> <b>class</b> <a id="59516b4495d86dfd" href="../R/59516b4495d86dfd.html" target="n" data-glyph="0,0" class="t t"><span id="3a60ce3983f57f50">DiagnosticVerifier</span></a>
+    {
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> To be implemented by Test classes
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Get the CSharp analyzer being tested - to be implemented in non-abstract class</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual</b> <span class="i">DiagnosticAnalyzer</span> <a id="7b02f34d3a1d16ae" href="../R/7b02f34d3a1d16ae.html" target="n" data-glyph="75,1" class="i method">GetCSharpDiagnosticAnalyzer</a>()
+        {
+            <b>return null</b>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Get the Visual Basic analyzer being tested (C#) - to be implemented in non-abstract class</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>protected virtual</b> <span class="i">DiagnosticAnalyzer</span> <a id="57f01e4c2f0d36ab" href="../R/57f01e4c2f0d36ab.html" target="n" data-glyph="75,1" class="i method">GetBasicDiagnosticAnalyzer</a>()
+        {
+            <b>return null</b>;
+        }
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Verifier wrappers
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called to test a C# DiagnosticAnalyzer when applied on the single inputted string as a source</span>
+        <span class="c">///</span><span class="c"> Note: input a DiagnosticResult for each Diagnostic expected</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r0 r">source</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string to run the analyzer on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r1 r">expected</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c"> DiagnosticResults that should appear after the analyzer is run on the source</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="271ec0c2a0813121" href="../R/271ec0c2a0813121.html" target="n" data-glyph="75,1" class="i method">VerifyCSharpDiagnostic</a>(<b>string</b> <span id="r0 rd" class="r0 r">source</span>, <b>params</b> <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t t">DiagnosticResult</a>[] <span id="r1 rd" class="r1 r">expected</span>)
+        {
+            <span class="i">VerifyDiagnostics</span>(<b>new</b>[] { <span class="r0 r">source</span> }, <span class="i">LanguageNames</span>.<span class="i">CSharp</span>, <a href="#7b02f34d3a1d16ae" class="i method">GetCSharpDiagnosticAnalyzer</a>(), <span class="r1 r">expected</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called to test a VB DiagnosticAnalyzer when applied on the single inputted string as a source</span>
+        <span class="c">///</span><span class="c"> Note: input a DiagnosticResult for each Diagnostic expected</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r2 r">source</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">A class in the form of a string to run the analyzer on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r3 r">expected</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">DiagnosticResults that should appear after the analyzer is run on the source</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="900fca979c4b9e5a" href="../R/../../0000000000.html" target="n" data-glyph="75,1" class="i method">VerifyBasicDiagnostic</a>(<b>string</b> <span id="r2 rd" class="r2 r">source</span>, <b>params</b> <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t t">DiagnosticResult</a>[] <span id="r3 rd" class="r3 r">expected</span>)
+        {
+            <span class="i">VerifyDiagnostics</span>(<b>new</b>[] { <span class="r2 r">source</span> }, <span class="i">LanguageNames</span>.<span class="i">VisualBasic</span>, <a href="#57f01e4c2f0d36ab" class="i method">GetBasicDiagnosticAnalyzer</a>(), <span class="r3 r">expected</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called to test a C# DiagnosticAnalyzer when applied on the inputted strings as a source</span>
+        <span class="c">///</span><span class="c"> Note: input a DiagnosticResult for each Diagnostic expected</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r4 r">sources</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">An array of strings to create source documents from to run the analyzers on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r5 r">expected</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">DiagnosticResults that should appear after the analyzer is run on the sources</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="8c92f57a0f4c4fb1" href="../R/../../0000000000.html" target="n" data-glyph="75,1" class="i method">VerifyCSharpDiagnostic</a>(<b>string</b>[] <span id="r4 rd" class="r4 r">sources</span>, <b>params</b> <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t t">DiagnosticResult</a>[] <span id="r5 rd" class="r5 r">expected</span>)
+        {
+            <span class="i">VerifyDiagnostics</span>(<span class="r4 r">sources</span>, <span class="i">LanguageNames</span>.<span class="i">CSharp</span>, <a href="#7b02f34d3a1d16ae" class="i method">GetCSharpDiagnosticAnalyzer</a>(), <span class="r5 r">expected</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Called to test a VB DiagnosticAnalyzer when applied on the inputted strings as a source</span>
+        <span class="c">///</span><span class="c"> Note: input a DiagnosticResult for each Diagnostic expected</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r6 r">sources</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">An array of strings to create source documents from to run the analyzers on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r7 r">expected</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">DiagnosticResults that should appear after the analyzer is run on the sources</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>protected void</b> <a id="3057a4592a82537c" href="../R/../../0000000000.html" target="n" data-glyph="75,1" class="i method">VerifyBasicDiagnostic</a>(<b>string</b>[] <span id="r6 rd" class="r6 r">sources</span>, <b>params</b> <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t t">DiagnosticResult</a>[] <span id="r7 rd" class="r7 r">expected</span>)
+        {
+            <span class="i">VerifyDiagnostics</span>(<span class="r6 r">sources</span>, <span class="i">LanguageNames</span>.<span class="i">VisualBasic</span>, <a href="#57f01e4c2f0d36ab" class="i method">GetBasicDiagnosticAnalyzer</a>(), <span class="r7 r">expected</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> General method that gets a collection of actual diagnostics found in the source after the analyzer is run, </span>
+        <span class="c">///</span><span class="c"> then verifies each of them.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r8 r">sources</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">An array of strings to create source documents from to run the analyzers on</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r9 r">language</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The language of the classes represented by the source strings</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r10 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer to be run on the source code</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r11 r">expected</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">DiagnosticResults that should appear after the analyzer is run on the sources</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>private void</b> <a id="b0e5fc74a9580efb" href="../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">VerifyDiagnostics</a>(<b>string</b>[] <span id="r8 rd" class="r8 r">sources</span>, <b>string</b> <span id="r9 rd" class="r9 r">language</span>, <span class="i">DiagnosticAnalyzer</span> <span id="r10 rd" class="r10 r">analyzer</span>, <b>params</b> <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t t">DiagnosticResult</a>[] <span id="r11 rd" class="r11 r">expected</span>)
+        {
+            <b>var</b> <span id="r12 rd" class="r12 r">diagnostics</span> = <a href="../Helpers/DiagnosticVerifier.Helper.cs.html#5070ff51bd3170b6" class="i method">GetSortedDiagnostics</a>(<span class="r8 r">sources</span>, <span class="r9 r">language</span>, <span class="r10 r">analyzer</span>);
+            <a href="#0aae91c63b2b567a" class="i method">VerifyDiagnosticResults</a>(<span class="r12 r">diagnostics</span>, <span class="r10 r">analyzer</span>, <span class="r11 r">expected</span>);
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Actual comparisons and verifications
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Checks each of the actual Diagnostics found and compares them with the corresponding DiagnosticResult in the array of expected results.</span>
+        <span class="c">///</span><span class="c"> Diagnostics are considered equal only if the DiagnosticResultLocation, Id, Severity, and Message of the DiagnosticResult match the actual diagnostic.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r13 r">actualResults</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Diagnostics found by the compiler after running the analyzer on the source code</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r14 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer that was being run on the sources</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r15 r">expectedResults</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Diagnostic Results that should have appeared in the code</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>private static void</b> <a id="0aae91c63b2b567a" href="../R/0aae91c63b2b567a.html" target="n" data-glyph="76,1" class="i method">VerifyDiagnosticResults</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="i">Diagnostic</span>&gt; <span id="r13 rd" class="r13 r">actualResults</span>, <span class="i">DiagnosticAnalyzer</span> <span id="r14 rd" class="r14 r">analyzer</span>, <b>params</b> <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t t">DiagnosticResult</a>[] <span id="r15 rd" class="r15 r">expectedResults</span>)
+        {
+            <b>int</b> <span id="r16 rd" class="r16 r">expectedCount</span> = <span class="r15 r">expectedResults</span>.<a href="@0@System.Core/A.html#41ef9e39e54d0d0b" class="i method">Count</a>();
+            <b>int</b> <span id="r17 rd" class="r17 r">actualCount</span> = <span class="r13 r">actualResults</span>.<a href="@0@System.Core/A.html#41ef9e39e54d0d0b" class="i method">Count</a>();
+ 
+            <b>if</b> (<span class="r16 r">expectedCount</span> != <span class="r17 r">actualCount</span>)
+            {
+                <b>string</b> <span id="r18 rd" class="r18 r">diagnosticsOutput</span> = <span class="r13 r">actualResults</span>.<a href="@0@System.Core/A.html#8788153112b7ffd0" class="i method">Any</a>() ? <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r14 r">analyzer</span>, <span class="r13 r">actualResults</span>.<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>()) : <span class="s">&quot;    NONE.&quot;</span>;
+ 
+                <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                    <b>string</b>.<a href="@0@mscorlib/A.html#6e5f254563fed78e" class="i method">Format</a>(<span class="s">&quot;Mismatch between number of diagnostics returned, expected \&quot;{0}\&quot; actual \&quot;{1}\&quot;\r\n\r\nDiagnostics:\r\n{2}\r\n&quot;</span>, <span class="r16 r">expectedCount</span>, <span class="r17 r">actualCount</span>, <span class="r18 r">diagnosticsOutput</span>));
+            }
+ 
+            <b>for</b> (<b>int</b> <span id="r19 rd" class="r19 r">i</span> = 0; <span class="r19 r">i</span> &lt; <span class="r15 r">expectedResults</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r19 r">i</span>++)
+            {
+                <b>var</b> <span id="r20 rd" class="r20 r">actual</span> = <span class="r13 r">actualResults</span>.<a href="@0@System.Core/A.html#7db56d44563d8761" class="i method">ElementAt</a>(<span class="r19 r">i</span>);
+                <a href="../Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="k">var</a> <span id="r21 rd" class="r21 r">expected</span> = <span class="r15 r">expectedResults</span>[<span class="r19 r">i</span>];
+ 
+                <b>if</b> (<span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#c5e02913dabd5a69" class="i property">Line</a> == -1 &amp;&amp; <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#b01d37cb46b272e7" class="i property">Column</a> == -1)
+                {
+                    <b>if</b> (<span class="r20 r">actual</span>.<span class="i">Location</span> != <span class="i">Location</span>.<span class="i">None</span>)
+                    {
+                        <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                            <b>string</b>.<a href="@0@mscorlib/A.html#9d5604d4425b216f" class="i method">Format</a>(<span class="s">&quot;Expected:\nA project diagnostic with No location\nActual:\n{0}&quot;</span>,
+                            <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>)));
+                    }
+                }
+                <b>else</b>
+                {
+                    <span class="i">VerifyDiagnosticLocation</span>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>, <span class="r20 r">actual</span>.<span class="i">Location</span>, <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a>.<a href="@0@System.Core/A.html#bc8ae402a61dd9d6" class="i method">First</a>());
+                    <b>var</b> <span id="r22 rd" class="r22 r">additionalLocations</span> = <span class="r20 r">actual</span>.<span class="i">AdditionalLocations</span>.<span class="i">ToArray</span>();
+ 
+                    <b>if</b> (<span class="r22 r">additionalLocations</span>.<span class="i">Length</span> != <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> - 1)
+                    {
+                        <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                            <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected {0} additional locations but got {1} for Diagnostic:\r\n    {2}\r\n&quot;</span>,
+                                <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> - 1, <span class="r22 r">additionalLocations</span>.<span class="i">Length</span>,
+                                <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>)));
+                    }
+ 
+                    <b>for</b> (<b>int</b> <span id="r23 rd" class="r23 r">j</span> = 0; <span class="r23 r">j</span> &lt; <span class="r22 r">additionalLocations</span>.<span class="i">Length</span>; ++<span class="r23 r">j</span>)
+                    {
+                        <span class="i">VerifyDiagnosticLocation</span>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>, <span class="r22 r">additionalLocations</span>[<span class="r23 r">j</span>], <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a>[<span class="r23 r">j</span> + 1]);
+                    }
+                }
+ 
+                <b>if</b> (<span class="r20 r">actual</span>.<span class="i">Id</span> != <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#9e787d43fbb9d9a0" class="i property">Id</a>)
+                {
+                    <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                        <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected diagnostic id to be \&quot;{0}\&quot; was \&quot;{1}\&quot;\r\n\r\nDiagnostic:\r\n    {2}\r\n&quot;</span>,
+                            <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#9e787d43fbb9d9a0" class="i property">Id</a>, <span class="r20 r">actual</span>.<span class="i">Id</span>, <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>)));
+                }
+ 
+                <b>if</b> (<span class="r20 r">actual</span>.<span class="i">Severity</span> != <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#0ac4ec49810723c0" class="i property">Severity</a>)
+                {
+                    <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                        <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected diagnostic severity to be \&quot;{0}\&quot; was \&quot;{1}\&quot;\r\n\r\nDiagnostic:\r\n    {2}\r\n&quot;</span>,
+                            <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#0ac4ec49810723c0" class="i property">Severity</a>, <span class="r20 r">actual</span>.<span class="i">Severity</span>, <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>)));
+                }
+ 
+                <b>if</b> (<span class="r20 r">actual</span>.<span class="i">GetMessage</span>() != <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#a31ac224552b04ae" class="i property">Message</a>)
+                {
+                    <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                        <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected diagnostic message to be \&quot;{0}\&quot; was \&quot;{1}\&quot;\r\n\r\nDiagnostic:\r\n    {2}\r\n&quot;</span>,
+                            <span class="r21 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#a31ac224552b04ae" class="i property">Message</a>, <span class="r20 r">actual</span>.<span class="i">GetMessage</span>(), <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r14 r">analyzer</span>, <span class="r20 r">actual</span>)));
+                }
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Helper method to VerifyDiagnosticResult that checks the location of a diagnostic and compares it with the location in the expected DiagnosticResult.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r24 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer that was being run on the sources</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r25 r">diagnostic</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The diagnostic that was found in the code</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r26 r">actual</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Location of the Diagnostic found in the code</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r27 r">expected</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The DiagnosticResultLocation that should have been found</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <b>private static void</b> <a id="17be051520a0da37" href="../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">VerifyDiagnosticLocation</a>(<span class="i">DiagnosticAnalyzer</span> <span id="r24 rd" class="r24 r">analyzer</span>, <span class="i">Diagnostic</span> <span id="r25 rd" class="r25 r">diagnostic</span>, <span class="i">Location</span> <span id="r26 rd" class="r26 r">actual</span>, <a href="../Helpers/DiagnosticResult.cs.html#db0dc12f86bfb6f1" class="t t">DiagnosticResultLocation</a> <span id="r27 rd" class="r27 r">expected</span>)
+        {
+            <b>var</b> <span id="r28 rd" class="r28 r">actualSpan</span> = <span class="r26 r">actual</span>.<span class="i">GetLineSpan</span>();
+ 
+            <span class="t t">Assert</span>.<span class="i">IsTrue</span>(<span class="r28 r">actualSpan</span>.<span class="i">Path</span> == <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#4ebc35ee80c7fdcf" class="i property">Path</a> || (<span class="r28 r">actualSpan</span>.<span class="i">Path</span> != <b>null</b> &amp;&amp; <span class="r28 r">actualSpan</span>.<span class="i">Path</span>.<span class="i">Contains</span>(<span class="s">&quot;Test0.&quot;</span>) &amp;&amp; <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#4ebc35ee80c7fdcf" class="i property">Path</a>.<a href="@0@mscorlib/A.html#428c5c9954dea844" class="i method">Contains</a>(<span class="s">&quot;Test.&quot;</span>)),
+                <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected diagnostic to be in file \&quot;{0}\&quot; was actually in file \&quot;{1}\&quot;\r\n\r\nDiagnostic:\r\n    {2}\r\n&quot;</span>,
+                    <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#4ebc35ee80c7fdcf" class="i property">Path</a>, <span class="r28 r">actualSpan</span>.<span class="i">Path</span>, <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r24 r">analyzer</span>, <span class="r25 r">diagnostic</span>)));
+ 
+            <b>var</b> <span id="r29 rd" class="r29 r">actualLinePosition</span> = <span class="r28 r">actualSpan</span>.<span class="i">StartLinePosition</span>;
+ 
+            <span class="c">// Only check line position if there is an actual line in the real diagnostic</span>
+            <b>if</b> (<span class="r29 r">actualLinePosition</span>.<span class="i">Line</span> &gt; 0)
+            {
+                <b>if</b> (<span class="r29 r">actualLinePosition</span>.<span class="i">Line</span> + 1 != <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#19e5d5b0284e1b78" class="i property">Line</a>)
+                {
+                    <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                        <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected diagnostic to be on line \&quot;{0}\&quot; was actually on line \&quot;{1}\&quot;\r\n\r\nDiagnostic:\r\n    {2}\r\n&quot;</span>,
+                            <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#19e5d5b0284e1b78" class="i property">Line</a>, <span class="r29 r">actualLinePosition</span>.<span class="i">Line</span> + 1, <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r24 r">analyzer</span>, <span class="r25 r">diagnostic</span>)));
+                }
+            }
+ 
+            <span class="c">// Only check column position if there is an actual column position in the real diagnostic</span>
+            <b>if</b> (<span class="r29 r">actualLinePosition</span>.<span class="i">Character</span> &gt; 0)
+            {
+                <b>if</b> (<span class="r29 r">actualLinePosition</span>.<span class="i">Character</span> + 1 != <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#ebf9f01fa82d88b5" class="i property">Column</a>)
+                {
+                    <span class="t t">Assert</span>.<span class="i method">IsTrue</span>(<b>false</b>,
+                        <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Expected diagnostic to start at column \&quot;{0}\&quot; was actually at column \&quot;{1}\&quot;\r\n\r\nDiagnostic:\r\n    {2}\r\n&quot;</span>,
+                            <span class="r27 r">expected</span>.<a href="../Helpers/DiagnosticResult.cs.html#ebf9f01fa82d88b5" class="i property">Column</a>, <span class="r29 r">actualLinePosition</span>.<span class="i">Character</span> + 1, <a href="#d38ef2e42aa58d15" class="i method">FormatDiagnostics</a>(<span class="r24 r">analyzer</span>, <span class="r25 r">diagnostic</span>)));
+                }
+            }
+        }
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> Formatting Diagnostics
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Helper method to format a Diagnostic into an easily readable string</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r30 r">analyzer</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The analyzer that this verifier tests</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">param</span><span class="c"> </span><span class="c">name</span><span class="c">=</span><span class="c">&quot;</span><span class="r31 r">diagnostics</span><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">The Diagnostics to be formatted</span><span class="c">&lt;/</span><span class="c">param</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">returns</span><span class="c">&gt;</span><span class="c">The Diagnostics formatted as a string</span><span class="c">&lt;/</span><span class="c">returns</span><span class="c">&gt;</span>
+        <b>private static string</b> <a id="d38ef2e42aa58d15" href="../R/d38ef2e42aa58d15.html" target="n" data-glyph="76,1" class="i method">FormatDiagnostics</a>(<span class="i">DiagnosticAnalyzer</span> <span id="r30 rd" class="r30 r">analyzer</span>, <b>params</b> <span class="i">Diagnostic</span>[] <span id="r31 rd" class="r31 r">diagnostics</span>)
+        {
+            <a href="@0@mscorlib/A.html#adf60ee46ebd299f" class="k">var</a> <span id="r32 rd" class="r32 r">builder</span> = <b>new</b> <a href="@0@mscorlib/A.html#6e631639c1e2746b" class="t constructor">StringBuilder</a>();
+            <b>for</b> (<b>int</b> <span id="r33 rd" class="r33 r">i</span> = 0; <span class="r33 r">i</span> &lt; <span class="r31 r">diagnostics</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; ++<span class="r33 r">i</span>)
+            {
+                <span class="r32 r">builder</span>.<span class="i">AppendLine</span>(<span class="s">&quot;// &quot;</span> + <span class="r31 r">diagnostics</span>[<span class="r33 r">i</span>].<span class="i">ToString</span>());
+ 
+                <b>var</b> <span id="r34 rd" class="r34 r">analyzerType</span> = <span class="r30 r">analyzer</span>.<span class="i">GetType</span>();
+                <b>var</b> <span id="r35 rd" class="r35 r">rules</span> = <span class="r30 r">analyzer</span>.<span class="i">SupportedDiagnostics</span>;
+ 
+                <b>foreach</b> (<b>var</b> <span id="r36 rd" class="r36 r">rule</span> <b>in</b> <span class="r35 r">rules</span>)
+                {
+                    <b>if</b> (<span class="r36 r">rule</span> != <b>null</b> &amp;&amp; <span class="r36 r">rule</span>.<span class="i">Id</span> == <span class="r31 r">diagnostics</span>[<span class="r33 r">i</span>].<span class="i">Id</span>)
+                    {
+                        <b>var</b> <span id="r37 rd" class="r37 r">location</span> = <span class="r31 r">diagnostics</span>[<span class="r33 r">i</span>].<span class="i">Location</span>;
+                        <b>if</b> (<span class="r37 r">location</span> == <span class="i">Location</span>.<span class="i">None</span>)
+                        {
+                            <span class="r32 r">builder</span>.<span class="i">AppendFormat</span>(<span class="s">&quot;GetGlobalResult({0}.{1})&quot;</span>, <span class="r34 r">analyzerType</span>.<span class="i">Name</span>, <span class="r36 r">rule</span>.<span class="i">Id</span>);
+                        }
+                        <b>else</b>
+                        {
+                            <span class="t t">Assert</span>.<span class="i">IsTrue</span>(<span class="r37 r">location</span>.<span class="i">IsInSource</span>,
+                                <b>string</b>.<span class="i">Format</span>(<span class="s">&quot;Test base does not currently handle diagnostics in metadata locations. Diagnostic in metadata:\r\n&quot;</span>, <span class="r31 r">diagnostics</span>[<span class="r33 r">i</span>]));
+ 
+                            <b>string</b> <span id="r38 rd" class="r38 r">resultMethodName</span> = <span class="r31 r">diagnostics</span>[<span class="r33 r">i</span>].<span class="i">Location</span>.<span class="i">SourceTree</span>.<span class="i">FilePath</span>.<span class="i">EndsWith</span>(<span class="s">&quot;.cs&quot;</span>) ? <span class="s">&quot;GetCSharpResultAt&quot;</span> : <span class="s">&quot;GetBasicResultAt&quot;</span>;
+                            <b>var</b> <span id="r39 rd" class="r39 r">linePosition</span> = <span class="r31 r">diagnostics</span>[<span class="r33 r">i</span>].<span class="i">Location</span>.<span class="i">GetLineSpan</span>().<span class="i">StartLinePosition</span>;
+ 
+                            <span class="r32 r">builder</span>.<span class="i">AppendFormat</span>(<span class="s">&quot;{0}({1}, {2}, {3}.{4})&quot;</span>,
+                                <span class="r38 r">resultMethodName</span>,
+                                <span class="r39 r">linePosition</span>.<span class="i">Line</span> + 1,
+                                <span class="r39 r">linePosition</span>.<span class="i">Character</span> + 1,
+                                <span class="r34 r">analyzerType</span>.<span class="i">Name</span>,
+                                <span class="r36 r">rule</span>.<span class="i">Id</span>);
+                        }
+ 
+                        <b>if</b> (<span class="r33 r">i</span> != <span class="r31 r">diagnostics</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> - 1)
+                        {
+                            <span class="r32 r">builder</span>.<a href="@0@mscorlib/A.html#a2e7c78d85807da5" class="i method">Append</a>(<span class="s">&#39;,&#39;</span>);
+                        }
+ 
+                        <span class="r32 r">builder</span>.<a href="@0@mscorlib/A.html#c0554798fe05ba4f" class="i method">AppendLine</a>();
+                        <b>break</b>;
+                    }
+                }
+            }
+            <b>return</b> <span class="r32 r">builder</span>.<a href="@0@mscorlib/A.html#5a97da49a158a3c9" class="i method">ToString</a>();
+        }
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+    }
+}
+</pre></td></tr></table></div></body></html>

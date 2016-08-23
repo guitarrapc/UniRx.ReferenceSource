@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html><head><title>Microsoft.Portable.CurrentVersion.targets</title><link rel="stylesheet" href="../../../../../../../../styles.css"><script src="../../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="ix(165);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/Portable/VisualStudio/v14.0/Microsoft.Portable.CurrentVersion.targets" target="_top">C\ProgramFiles(x86)\MSBuild\Microsoft\Portable\VisualStudio\v14.0\Microsoft.Portable.CurrentVersion.targets</a><br/></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="xd">&lt;!--</span><span class="c">
+***********************************************************************************************
+Microsoft.Portable.CurrentVersion.targets
+ 
+Contains common targets that are shared by all portable library projects targeting a specific
+Visual Studio version.
+ 
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+ 
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+</span><span class="xd">--&gt;</span><span class="xd">
+&lt;</span><span class="xn">Project </span><span class="xan">xmlns</span><span class="xd">=</span>&quot;<span class="xav">http://schemas.microsoft.com/developer/msbuild/2003</span>&quot;<span class="xd">&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Import </span><span class="xan"><a href="/MSBuildFiles/C/ProgramFiles(x86)/MSBuild/Microsoft/WindowsXaml/v14.0/8.1/Microsoft.Windows.UI.Xaml.Common.targets.html" class="msbuildlink">Project</a></span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/WindowsUIXamlCommonTargets.html" target="n" class="msbuildlink">WindowsUIXamlCommonTargets</a>)</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/PortableEnableXamlTargets.html" target="n" class="msbuildlink">PortableEnableXamlTargets</a>)&#39;==&#39;true&#39; and Exists(&#39;$(<a href="/MSBuildProperties/R/WindowsUIXamlCommonTargets.html" target="n" class="msbuildlink">WindowsUIXamlCommonTargets</a>)&#39;)</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;!--</span><span class="c"> As there is not a good way to filter architectures/configurations from a VS perspective, we 
+             opt into all architectures, and then error when the user targets a platform that is not supported. 
+             NOTE: That Common targets blindly sets AvailablePlatforms, so we need to set it after them.
+         </span><span class="xd">--&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AvailablePlatforms.html" target="n" class="msbuildlink">AvailablePlatforms</a></span><span class="xd">&gt;</span>Any CPU,x86,x64,ARM<span class="xd">&lt;/</span><span class="xn">AvailablePlatforms</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+  
+    &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GetPlatformWinMDLocation.html" target="n" class="msbuildlink">UsingTask</a> </span><span class="xan">TaskName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/Microsoft.VisualStudio.PortableLibrary.Build.Tasks/A.html#a3e57eac8c517a9c" class="msbuildlink">Microsoft.VisualStudio.PortableLibrary.Build.Tasks.GetPlatformWinMDLocation</a></span>&quot; <span class="xan">AssemblyFile</span><span class="xd">=</span>&quot;<span class="xav">Microsoft.VisualStudio.PortableLibrary.Build.Tasks.dll</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ResolveReferencesDependsOn.html" target="n" class="msbuildlink">ResolveReferencesDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/ResolveReferencesDependsOn.html" target="n" class="msbuildlink">ResolveReferencesDependsOn</a>);
+            <a href="/MSBuildTargets/R/ImplicitlyExpandTargetPlatform.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatform</a>
+        <span class="xd">&lt;/</span><span class="xn">ResolveReferencesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/ImplicitlyExpandTargetPlatformDependsOn.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatformDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetPlatformDependsOn.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatformDependsOn</a>);
+            <a href="/MSBuildTargets/R/GetTargetPlatformWinMDLocation.html" target="n" class="msbuildlink">GetTargetPlatformWinMDLocation</a>
+        <span class="xd">&lt;/</span><span class="xn">ImplicitlyExpandTargetPlatformDependsOn</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/PrepareForRunDependsOn.html" target="n" class="msbuildlink">PrepareForRunDependsOn</a></span><span class="xd">&gt;</span>
+            <a href="/MSBuildTargets/R/DeterminePortablePlatformSdkPath.html" target="n" class="msbuildlink">DeterminePortablePlatformSdkPath</a>;
+            <a href="/MSBuildTargets/R/DeterminePortableBuildCapabilities.html" target="n" class="msbuildlink">DeterminePortableBuildCapabilities</a>;
+            $(<a href="/MSBuildProperties/R/PrepareForRunDependsOn.html" target="n" class="msbuildlink">PrepareForRunDependsOn</a>)
+        <span class="xd">&lt;/</span><span class="xn">PrepareForRunDependsOn</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DeterminePortablePlatformSdkPathDependsOn.html" target="n" class="msbuildlink">DeterminePortablePlatformSdkPathDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/DeterminePortablePlatformSdkPathDependsOn.html" target="n" class="msbuildlink">DeterminePortablePlatformSdkPathDependsOn</a>);
+            <a href="/MSBuildTargets/R/GetTargetPlatformWinMDLocation.html" target="n" class="msbuildlink">GetTargetPlatformWinMDLocation</a>
+        <span class="xd">&lt;/</span><span class="xn">DeterminePortablePlatformSdkPathDependsOn</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/DeterminePortableBuildCapabilitiesDependsOn.html" target="n" class="msbuildlink">DeterminePortableBuildCapabilitiesDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/DeterminePortableBuildCapabilitiesDependsOn.html" target="n" class="msbuildlink">DeterminePortableBuildCapabilitiesDependsOn</a>);
+            <a href="/MSBuildTargets/R/ImplicitlyExpandTargetFramework.html" target="n" class="msbuildlink">ImplicitlyExpandTargetFramework</a>;
+        <span class="xd">&lt;/</span><span class="xn">DeterminePortableBuildCapabilitiesDependsOn</span><span class="xd">&gt;</span><span class="xd">
+        
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/GetPackagingOutputsDependsOn.html" target="n" class="msbuildlink">GetPackagingOutputsDependsOn</a></span><span class="xd">&gt;</span>
+            $(<a href="/MSBuildProperties/R/GetPackagingOutputsDependsOn.html" target="n" class="msbuildlink">GetPackagingOutputsDependsOn</a>);
+            <a href="/MSBuildTargets/R/DeterminePortableBuildCapabilities.html" target="n" class="msbuildlink">DeterminePortableBuildCapabilities</a>
+        <span class="xd">&lt;/</span><span class="xn">GetPackagingOutputsDependsOn</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    
+ 
+    &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetPlatformRootPath.html" target="n" class="msbuildlink">TargetPlatformRootPath</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetPlatformRootPath.html" target="n" class="msbuildlink">TargetPlatformRootPath</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/PortableSDKRoot.html" target="n" class="msbuildlink">PortableSDKRoot</a>)<span class="xd">&lt;/</span><span class="xn">TargetPlatformRootPath</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c"> 
+        Given two or more targeted platforms, finds the location of the WinMDs 
+        that represent the intersection between those platforms.
+    </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/GetTargetPlatformWinMDLocation.html" target="n" class="msbuildlink">GetTargetPlatformWinMDLocation</a></span>&quot;<span class="xan">
+            Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;@(<a href="/MSBuildItems/R/TargetPlatform.html" target="n" class="msbuildlink">TargetPlatform</a>)&#39; != &#39;&#39; and $(<a href="/MSBuildProperties/R/TargetPlatformWinMDLocation.html" target="n" class="msbuildlink">TargetPlatformWinMDLocation</a>) == &#39;&#39;</span>&quot;<span class="xd">
+            &gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/GetPlatformWinMDLocation.html" target="n" class="msbuildlink">GetPlatformWinMDLocation</a> </span><span class="xan">
+            Platforms</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/TargetPlatform.html" target="n" class="msbuildlink">TargetPlatform</a>)</span>&quot;<span class="xan">
+            RootPath</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformRootPath.html" target="n" class="msbuildlink">TargetPlatformRootPath</a>)</span>&quot;<span class="xd">
+            &gt;</span><span class="xd">
+ 
+            &lt;</span><span class="xn">Output </span><span class="xan">TaskParameter</span><span class="xd">=</span>&quot;<span class="xav">PlatformWinMDLocation</span>&quot; <span class="xan">PropertyName</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildProperties/R/TargetPlatformWinMDLocation.html" target="n" class="msbuildlink">TargetPlatformWinMDLocation</a></span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;/</span><span class="xn">GetPlatformWinMDLocation</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c">
+        The ImplicitlyExpandTargetPlatform target will expand all of the winmd 
+        files in the Windows SDK and add them the the ReferencePath item which is 
+        the itemgroup which contains resolved items.
+    </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/ImplicitlyExpandTargetPlatform.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatform</a></span>&quot;<span class="xan">
+       Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetPlatform.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatform</a>)&#39; == &#39;true&#39;</span>&quot;<span class="xan">
+       DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/ImplicitlyExpandTargetPlatformDependsOn.html" target="n" class="msbuildlink">ImplicitlyExpandTargetPlatformDependsOn</a>)</span>&quot;<span class="xd">
+       &gt;</span><span class="xd">
+        
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformWinMDLocation.html" target="n" class="msbuildlink">TargetPlatformWinMDLocation</a>)\*.winmd</span>&quot;<span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">WinMDFile</span><span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">WinMDFile</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">CopyLocal</span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">CopyLocal</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">ReferenceGrouping</span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/TargetPlatformMoniker.html" target="n" class="msbuildlink">TargetPlatformMoniker</a>)<span class="xd">&lt;/</span><span class="xn">ReferenceGrouping</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">ReferenceGroupingDisplayName</span><span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/TargetPlatformMonikerDisplayName.html" target="n" class="msbuildlink">TargetPlatformMonikerDisplayName</a>)<span class="xd">&lt;/</span><span class="xn">ReferenceGroupingDisplayName</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">ResolvedFrom</span><span class="xd">&gt;</span>ImplicitlyExpandTargetPlatform<span class="xd">&lt;/</span><span class="xn">ResolvedFrom</span><span class="xd">&gt;</span><span class="xd">
+                &lt;</span><span class="xn">IsSystemReference</span><span class="xd">&gt;</span>True<span class="xd">&lt;/</span><span class="xn">IsSystemReference</span><span class="xd">&gt;</span><span class="xd">
+            &lt;/</span><span class="xn">ReferencePath</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Importance</span><span class="xd">=</span>&quot;<span class="xav">Low</span>&quot; <span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">Including @(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+          Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(ReferencePath.ResolvedFrom)&#39; == &#39;ImplicitlyExpandTargetPlatform&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/_ResolveAssemblyReferenceResolvedFiles.html" target="n" class="msbuildlink">_ResolveAssemblyReferenceResolvedFiles</a> </span><span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">@(<a href="/MSBuildItems/R/ReferencePath.html" target="n" class="msbuildlink">ReferencePath</a>)</span>&quot;<span class="xan">
+              Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(ReferencePath.ResolvedFrom)&#39; == &#39;ImplicitlyExpandTargetPlatform&#39;</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+    &lt;!--</span><span class="c">
+        Determines which path to use for PlatformSDK.
+     </span><span class="xd">--&gt;</span><span class="xd">
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/DeterminePortablePlatformSdkPath.html" target="n" class="msbuildlink">DeterminePortablePlatformSdkPath</a></span>&quot;<span class="xan">
+            DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DeterminePortablePlatformSdkPathDependsOn.html" target="n" class="msbuildlink">DeterminePortablePlatformSdkPathDependsOn</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;!--</span><span class="c">
+              Allow for SDK configuration next to the intersected WinMD, this enables scenarios where we
+              need different tool configuration based on the target platform combination.
+            </span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildItems/R/_PortableTargetPlatformSdkRootOverride.html" target="n" class="msbuildlink">_PortableTargetPlatformSdkRootOverride</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetPlatformWinMDLocation.html" target="n" class="msbuildlink">TargetPlatformWinMDLocation</a>)&#39; != &#39;&#39;</span>&quot; <span class="xan">Include</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/TargetPlatformWinMDLocation.html" target="n" class="msbuildlink">TargetPlatformWinMDLocation</a>)\**\windows.props</span>&quot;<span class="xd">/&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">ItemGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetPlatformSdkRootOverride.html" target="n" class="msbuildlink">TargetPlatformSdkRootOverride</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetPlatformSdkRootOverride.html" target="n" class="msbuildlink">TargetPlatformSdkRootOverride</a>)&#39; == &#39;&#39; and &#39;@(<a href="/MSBuildItems/R/_PortableTargetPlatformSdkRootOverride.html" target="n" class="msbuildlink">_PortableTargetPlatformSdkRootOverride</a>)&#39; != &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/TargetPlatformWinMDLocation.html" target="n" class="msbuildlink">TargetPlatformWinMDLocation</a>)<span class="xd">&lt;/</span><span class="xn">TargetPlatformSdkRootOverride</span><span class="xd">&gt;</span><span class="xd">
+            &lt;!--</span><span class="c"> Default to the per version root if we don&#39;t have per-intersection configuration </span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/TargetPlatformSdkRootOverride.html" target="n" class="msbuildlink">TargetPlatformSdkRootOverride</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/TargetPlatformSdkRootOverride.html" target="n" class="msbuildlink">TargetPlatformSdkRootOverride</a>)&#39; == &#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/PortableSDKRoot.html" target="n" class="msbuildlink">PortableSDKRoot</a>)<span class="xd">&lt;/</span><span class="xn">TargetPlatformSdkRootOverride</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+    
+    &lt;</span><span class="xn">Target </span><span class="xan">Name</span><span class="xd">=</span>&quot;<span class="xav"><a href="/MSBuildTargets/R/DeterminePortableBuildCapabilities.html" target="n" class="msbuildlink">DeterminePortableBuildCapabilities</a></span>&quot;<span class="xan">
+            DependsOnTargets</span><span class="xd">=</span>&quot;<span class="xav">$(<a href="/MSBuildProperties/R/DeterminePortableBuildCapabilitiesDependsOn.html" target="n" class="msbuildlink">DeterminePortableBuildCapabilitiesDependsOn</a>)</span>&quot;<span class="xd">&gt;</span><span class="xd">
+        &lt;</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+            &lt;!--</span><span class="c"> Use a heuristic to determine if resources are supported.  Currently this matches the check used by the project system.
+                 Ideally this would be the result of a type lookup in Windows.winmd </span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/_PortablePriResourcesEnabled.html" target="n" class="msbuildlink">_PortablePriResourcesEnabled</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;%(ReferencePath.FileName)&#39; == &#39;System.Runtime.WindowsRuntime.UI.Xaml&#39;</span>&quot;<span class="xd">&gt;</span>true<span class="xd">&lt;/</span><span class="xn">_PortablePriResourcesEnabled</span><span class="xd">&gt;</span><span class="xd">
+ 
+            &lt;!--</span><span class="c"> Use a heuristic to determine if we can enable references in GetPackageOutputs.
+                 Currently we use the same heuristic as we do for resources.
+                 Older platforms don&#39;t support conflict resolution for reference in packaging outputs,
+                 instead we&#39;ll rely on ResolveAssemblyReferences to flow the right refernces to the app. </span><span class="xd">--&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/PortableReferencePackagingEnabled.html" target="n" class="msbuildlink">PortableReferencePackagingEnabled</a> </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/PortableReferencePackagingEnabled.html" target="n" class="msbuildlink">PortableReferencePackagingEnabled</a>)&#39; ==&#39;&#39;</span>&quot;<span class="xd">&gt;</span>$(<a href="/MSBuildProperties/R/_PortablePriResourcesEnabled.html" target="n" class="msbuildlink">_PortablePriResourcesEnabled</a>)<span class="xd">&lt;/</span><span class="xn">PortableReferencePackagingEnabled</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Importance</span><span class="xd">=</span>&quot;<span class="xav">Low</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/_PortablePriResourcesEnabled.html" target="n" class="msbuildlink">_PortablePriResourcesEnabled</a>)&#39; != &#39;true&#39;</span>&quot; <span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">Disabling pri resource targets.</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/_PortablePriResourcesEnabled.html" target="n" class="msbuildlink">_PortablePriResourcesEnabled</a>)&#39; != &#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AppxGeneratePriEnabled.html" target="n" class="msbuildlink">AppxGeneratePriEnabled</a></span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">AppxGeneratePriEnabled</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AppxGeneratePrisForPortableLibrariesEnabled.html" target="n" class="msbuildlink">AppxGeneratePrisForPortableLibrariesEnabled</a></span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">AppxGeneratePrisForPortableLibrariesEnabled</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/AppxGetPackagePropertiesEnabled.html" target="n" class="msbuildlink">AppxGetPackagePropertiesEnabled</a></span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">AppxGetPackagePropertiesEnabled</span><span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/IncludeProjectPriFile.html" target="n" class="msbuildlink">IncludeProjectPriFile</a></span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">IncludeProjectPriFile</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn"><a href="/MSBuildTasks/R/Message.html" target="n" class="msbuildlink">Message</a> </span><span class="xan">Importance</span><span class="xd">=</span>&quot;<span class="xav">Low</span>&quot; <span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/PortableReferencePackagingEnabled.html" target="n" class="msbuildlink">PortableReferencePackagingEnabled</a>)&#39; != &#39;true&#39;</span>&quot; <span class="xan">Text</span><span class="xd">=</span>&quot;<span class="xav">Excluding copy local references from packaging output.</span>&quot; <span class="xd">/&gt;</span><span class="xd">
+ 
+        &lt;</span><span class="xn">PropertyGroup </span><span class="xan">Condition</span><span class="xd">=</span>&quot;<span class="xav">&#39;$(<a href="/MSBuildProperties/R/PortableReferencePackagingEnabled.html" target="n" class="msbuildlink">PortableReferencePackagingEnabled</a>)&#39; != &#39;true&#39;</span>&quot;<span class="xd">&gt;</span><span class="xd">
+            &lt;</span><span class="xn"><a href="/MSBuildProperties/R/IncludeCopyLocalFilesOutputGroup.html" target="n" class="msbuildlink">IncludeCopyLocalFilesOutputGroup</a></span><span class="xd">&gt;</span>false<span class="xd">&lt;/</span><span class="xn">IncludeCopyLocalFilesOutputGroup</span><span class="xd">&gt;</span><span class="xd">
+        &lt;/</span><span class="xn">PropertyGroup</span><span class="xd">&gt;</span><span class="xd">
+    &lt;/</span><span class="xn">Target</span><span class="xd">&gt;</span><span class="xd">
+ 
+&lt;/</span><span class="xn">Project</span><span class="xd">&gt;</span>
+</pre></td></tr></table></div></body></html>

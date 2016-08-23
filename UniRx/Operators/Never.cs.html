@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html><head><title>Never.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(32);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/Never.cs" target="_top">Operators\Never.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="16bbe543aed6ec42" href="../R/../../0000000000.html" target="n" data-glyph="2,0" class="t t">NeverObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>public</b> <a id="3468d2adade09144" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">NeverObservable</a>()
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="758add678f288d14" href="../R/758add678f288d14.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r2 rd" class="r2 r">cancel</span>)
+        {
+            <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+    }
+ 
+    <b>internal class</b> <a id="1e4945e4c07173d2" href="../R/1e4945e4c07173d2.html" target="n" data-glyph="2,0" class="t t"><span id="fc808bbf89ae101f">ImmutableNeverObservable</span></a>&lt;<span id="r3 rd t" class="r3 r t">T</span>&gt; : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">T</span>&gt;, <a href="../System/IOptimizedObservable.cs.html#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r3 r t">T</span>&gt;
+    {
+        <b>internal static</b> <a href="#1e4945e4c07173d2" class="t t">ImmutableNeverObservable</a>&lt;<span class="r3 r t">T</span>&gt; <a id="b7b0d030a0229d3d" href="../R/b7b0d030a0229d3d.html" target="n" data-glyph="44,1" class="i field">Instance</a> = <b>new</b> <a href="#1e4945e4c07173d2" class="t constructor">ImmutableNeverObservable</a>&lt;<span class="r3 r t">T</span>&gt;();
+ 
+        <b>public bool</b> <a id="5503e079d48d245c" href="../R/5503e079d48d245c.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>()
+        {
+            <b>return false</b>;
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="13b5d9ce1d802e84" href="../R/13b5d9ce1d802e84.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r3 r t">T</span>&gt; <span id="r4 rd" class="r4 r">observer</span>)
+        {
+            <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

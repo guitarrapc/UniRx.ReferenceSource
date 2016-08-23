@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html><head><title>Distinct.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(133);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Operators/Distinct.cs" target="_top">Assets\Plugins\UniRx\Scripts\Operators\Distinct.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="5f4af1f7eb5fef95" href="../../../../../R/5f4af1f7eb5fef95.html" target="n" data-glyph="2,0" class="t t">DistinctObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="86823ff16c51b0db" href="../../../../../R/86823ff16c51b0db.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt; <a id="609fe56330150075" href="../../../../../R/609fe56330150075.html" target="n" data-glyph="46,1" class="i field">comparer</a>;
+ 
+        <b>public</b> <a id="a1cacc8db2b70bfd" href="../../../../../R/a1cacc8db2b70bfd.html" target="n" data-glyph="72,1" class="i constructor">DistinctObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r2 rd" class="r2 r">comparer</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r1 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#5f4af1f7eb5fef95" class="k">this</a>.<a href="#86823ff16c51b0db" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#5f4af1f7eb5fef95" class="k">this</a>.<a href="#609fe56330150075" class="i field">comparer</a> = <span class="r2 r">comparer</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="927d83ba9e661d7e" href="../../../../../R/927d83ba9e661d7e.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r3 rd" class="r3 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r4 rd" class="r4 r">cancel</span>)
+        {
+            <b>return</b> <a href="#86823ff16c51b0db" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#39a1535c23c00a04" class="t constructor">Distinct</a>(<a href="#5f4af1f7eb5fef95" class="k">this</a>, <span class="r3 r">observer</span>, <span class="r4 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="219716780495fb5a" href="../../../../../R/219716780495fb5a.html" target="n" data-glyph="4,1" class="t t">Distinct</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="@0@System.Core/A.html#2d265edc718b158b" class="t t">HashSet</a>&lt;<span class="r0 r t">T</span>&gt; <a id="181866deb54ca702" href="../../../../../R/181866deb54ca702.html" target="n" data-glyph="46,2" class="i field">hashSet</a>;
+ 
+            <b>public</b> <a id="39a1535c23c00a04" href="../../../../../R/39a1535c23c00a04.html" target="n" data-glyph="72,2" class="i constructor">Distinct</a>(<a href="#5f4af1f7eb5fef95" class="t t">DistinctObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r5 rd" class="r5 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r6 rd" class="r6 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r6 r">observer</span>, <span class="r7 r">cancel</span>)
+            {
+                <a href="#181866deb54ca702" class="i field">hashSet</a> = (<span class="r5 r">parent</span>.<a href="#609fe56330150075" class="i field">comparer</a> == <b>null</b>)
+                    ? <b>new</b> <a href="@0@System.Core/A.html#eca9ea30fa3b2c28" class="t constructor">HashSet</a>&lt;<span class="r0 r t">T</span>&gt;()
+                    : <b>new</b> <a href="@0@System.Core/A.html#4398571cacc18ed5" class="t constructor">HashSet</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r5 r">parent</span>.<a href="#609fe56330150075" class="i field">comparer</a>);
+            }
+ 
+            <b>public override void</b> <a id="bd1b00bc04c89c2d" href="../../../../../R/bd1b00bc04c89c2d.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r8 rd" class="r8 r">value</span>)
+            {
+                <span class="r0 r t">var</span> <span id="r9 rd" class="r9 r">key</span> = <b>default</b>(<span class="r0 r t">T</span>);
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r10 rd" class="r10 r">isAdded</span> = <b>false</b>;
+                <b>try</b>
+                {
+                    <span class="r9 r">key</span> = <span class="r8 r">value</span>;
+                    <span class="r10 r">isAdded</span> = <a href="#181866deb54ca702" class="i field">hashSet</a>.<a href="@0@System.Core/A.html#43a2b651926474a7" class="i method">Add</a>(<span class="r9 r">key</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r11 rd" class="r11 r">exception</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r11 r">exception</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+ 
+                <b>if</b> (<span class="r10 r">isAdded</span>)
+                {
+                    <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r8 r">value</span>);
+                }
+            }
+ 
+            <b>public override void</b> <a id="33b8b9436404754a" href="../../../../../R/33b8b9436404754a.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r12 rd" class="r12 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r12 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="72b582329444b456" href="../../../../../R/72b582329444b456.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="66eecbd13774b958" href="../../../../../R/66eecbd13774b958.html" target="n" data-glyph="2,0" class="t t">DistinctObservable</a>&lt;<span id="r13 rd t" class="r13 r t">T</span>, <span id="r14 rd t" class="r14 r t">TKey</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r13 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r13 r t">T</span>&gt; <a id="bf0cc6be43aa0034" href="../../../../../R/bf0cc6be43aa0034.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r14 r t">TKey</span>&gt; <a id="13760ebd6363154b" href="../../../../../R/13760ebd6363154b.html" target="n" data-glyph="46,1" class="i field">comparer</a>;
+        <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r13 r t">T</span>, <span class="r14 r t">TKey</span>&gt; <a id="18069824676d3fa4" href="../../../../../R/18069824676d3fa4.html" target="n" data-glyph="46,1" class="i field">keySelector</a>;
+ 
+        <b>public</b> <a id="b83982e185815399" href="../../../../../R/b83982e185815399.html" target="n" data-glyph="72,1" class="i constructor">DistinctObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r13 r t">T</span>&gt; <span id="r15 rd" class="r15 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r13 r t">T</span>, <span class="r14 r t">TKey</span>&gt; <span id="r16 rd" class="r16 r">keySelector</span>, <a href="@0@mscorlib/A.html#66a06cfe895400c7" class="t t">IEqualityComparer</a>&lt;<span class="r14 r t">TKey</span>&gt; <span id="r17 rd" class="r17 r">comparer</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r15 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#66eecbd13774b958" class="k">this</a>.<a href="#bf0cc6be43aa0034" class="i field">source</a> = <span class="r15 r">source</span>;
+            <a href="#66eecbd13774b958" class="k">this</a>.<a href="#13760ebd6363154b" class="i field">comparer</a> = <span class="r17 r">comparer</span>;
+            <a href="#66eecbd13774b958" class="k">this</a>.<a href="#18069824676d3fa4" class="i field">keySelector</a> = <span class="r16 r">keySelector</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="b7458be69f3edf19" href="../../../../../R/b7458be69f3edf19.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r13 r t">T</span>&gt; <span id="r18 rd" class="r18 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r19 rd" class="r19 r">cancel</span>)
+        {
+            <b>return</b> <a href="#bf0cc6be43aa0034" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<b>new</b> <a href="#bddf5de32b956ff8" class="t constructor">Distinct</a>(<a href="#66eecbd13774b958" class="k">this</a>, <span class="r18 r">observer</span>, <span class="r19 r">cancel</span>));
+        }
+ 
+        <b>class</b> <a id="162509cdf6b7528f" href="../../../../../R/162509cdf6b7528f.html" target="n" data-glyph="4,1" class="t t">Distinct</a> : <a href="OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r13 r t">T</span>, <span class="r13 r t">T</span>&gt;
+        {
+            <b>readonly</b> <a href="#66eecbd13774b958" class="t t">DistinctObservable</a>&lt;<span class="r13 r t">T</span>, <span class="r14 r t">TKey</span>&gt; <a id="b9ce1da91fb5ce73" href="../../../../../R/b9ce1da91fb5ce73.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="@0@System.Core/A.html#2d265edc718b158b" class="t t">HashSet</a>&lt;<span class="r14 r t">TKey</span>&gt; <a id="39d2a8b2096fd5b1" href="../../../../../R/39d2a8b2096fd5b1.html" target="n" data-glyph="46,2" class="i field">hashSet</a>;
+ 
+            <b>public</b> <a id="bddf5de32b956ff8" href="../../../../../R/bddf5de32b956ff8.html" target="n" data-glyph="72,2" class="i constructor">Distinct</a>(<a href="#66eecbd13774b958" class="t t">DistinctObservable</a>&lt;<span class="r13 r t">T</span>, <span class="r14 r t">TKey</span>&gt; <span id="r20 rd" class="r20 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r13 r t">T</span>&gt; <span id="r21 rd" class="r21 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r22 rd" class="r22 r">cancel</span>)
+                : <a href="OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r21 r">observer</span>, <span class="r22 r">cancel</span>)
+            {
+                <a href="#162509cdf6b7528f" class="k">this</a>.<a href="#b9ce1da91fb5ce73" class="i field">parent</a> = <span class="r20 r">parent</span>;
+                <a href="#39d2a8b2096fd5b1" class="i field">hashSet</a> = (<span class="r20 r">parent</span>.<a href="#13760ebd6363154b" class="i field">comparer</a> == <b>null</b>)
+                    ? <b>new</b> <a href="@0@System.Core/A.html#eca9ea30fa3b2c28" class="t constructor">HashSet</a>&lt;<span class="r14 r t">TKey</span>&gt;()
+                    : <b>new</b> <a href="@0@System.Core/A.html#4398571cacc18ed5" class="t constructor">HashSet</a>&lt;<span class="r14 r t">TKey</span>&gt;(<span class="r20 r">parent</span>.<a href="#13760ebd6363154b" class="i field">comparer</a>);
+            }
+ 
+            <b>public override void</b> <a id="b5c17b0dfa8484e8" href="../../../../../R/b5c17b0dfa8484e8.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r13 r t">T</span> <span id="r23 rd" class="r23 r">value</span>)
+            {
+                <span class="r14 r t">var</span> <span id="r24 rd" class="r24 r">key</span> = <b>default</b>(<span class="r14 r t">TKey</span>);
+                <a href="@0@mscorlib/A.html#f1b135ff6c380b37" class="k">var</a> <span id="r25 rd" class="r25 r">isAdded</span> = <b>false</b>;
+                <b>try</b>
+                {
+                    <span class="r24 r">key</span> = <a href="#b9ce1da91fb5ce73" class="i field">parent</a>.<a href="#18069824676d3fa4" class="i field">keySelector</a>(<span class="r23 r">value</span>);
+                    <span class="r25 r">isAdded</span> = <a href="#39d2a8b2096fd5b1" class="i field">hashSet</a>.<a href="@0@System.Core/A.html#43a2b651926474a7" class="i method">Add</a>(<span class="r24 r">key</span>);
+                }
+                <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r26 rd" class="r26 r">exception</span>)
+                {
+                    <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r26 r">exception</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+                    <b>return</b>;
+                }
+ 
+                <b>if</b> (<span class="r25 r">isAdded</span>)
+                {
+                    <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r23 r">value</span>);
+                }
+            }
+ 
+            <b>public override void</b> <a id="47a28c1235ca795d" href="../../../../../R/47a28c1235ca795d.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r27 rd" class="r27 r">error</span>)
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r27 r">error</span>); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="2740bbe50eda6922" href="../../../../../R/2740bbe50eda6922.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); } <b>finally</b> { <a href="OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

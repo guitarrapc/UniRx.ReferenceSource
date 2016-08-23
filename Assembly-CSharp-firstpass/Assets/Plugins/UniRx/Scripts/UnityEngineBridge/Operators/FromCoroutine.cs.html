@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html><head><title>FromCoroutine.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(128);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Operators/FromCoroutine.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Operators\FromCoroutine.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="d4ecc6fa1b969c2f" href="../../../../../../R/d4ecc6fa1b969c2f.html" target="n" data-glyph="2,0" class="t t">FromCoroutineObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="../CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <a id="7d7c771d0bdd3018" href="../../../../../../R/7d7c771d0bdd3018.html" target="n" data-glyph="46,1" class="i field">coroutine</a>;
+ 
+        <b>public</b> <a id="fe332e665cab93ef" href="../../../../../../R/fe332e665cab93ef.html" target="n" data-glyph="72,1" class="i constructor">FromCoroutineObservable</a>(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="../CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r1 rd" class="r1 r">coroutine</span>)
+            : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#d4ecc6fa1b969c2f" class="k">this</a>.<a href="#7d7c771d0bdd3018" class="i field">coroutine</a> = <span class="r1 r">coroutine</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="7adcb3e502b81f79" href="../../../../../../R/7adcb3e502b81f79.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r2 rd" class="r2 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r3 rd" class="r3 r">cancel</span>)
+        {
+            <a href="#63cca9186d6eab7c" class="k">var</a> <span id="r4 rd" class="r4 r">fromCoroutineObserver</span> = <b>new</b> <a href="#2880101cb14eea71" class="t constructor">FromCoroutine</a>(<span class="r2 r">observer</span>, <span class="r3 r">cancel</span>);
+ 
+            <a href="../../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r5 rd" class="r5 r">moreCancel</span> = <b>new</b> <a href="../../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+ 
+            <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#4132c4557cdb710f" class="i method">SendStartCoroutine</a>(<a href="#7d7c771d0bdd3018" class="i field">coroutine</a>(<span class="r4 r">fromCoroutineObserver</span>, <b>new</b> <a href="../CancellationToken.cs.html#03432bf21b87b13f" class="t constructor">CancellationToken</a>(<span class="r5 r">moreCancel</span>)));
+ 
+            <b>return</b> <span class="r5 r">moreCancel</span>;
+        }
+ 
+        <b>class</b> <a id="63cca9186d6eab7c" href="../../../../../../R/63cca9186d6eab7c.html" target="n" data-glyph="4,1" class="t t">FromCoroutine</a> : <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r0 r t">T</span>, <span class="r0 r t">T</span>&gt;
+        {
+            <b>public</b> <a id="2880101cb14eea71" href="../../../../../../R/2880101cb14eea71.html" target="n" data-glyph="72,2" class="i constructor">FromCoroutine</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r6 rd" class="r6 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r7 rd" class="r7 r">cancel</span>) : <a href="../../Operators/OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r6 r">observer</span>, <span class="r7 r">cancel</span>)
+            {
+            }
+ 
+            <b>public override void</b> <a id="a2f0223b31b55dd1" href="../../../../../../R/a2f0223b31b55dd1.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r8 rd" class="r8 r">value</span>)
+            {
+                <b>try</b>
+                {
+                    <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r8 r">value</span>);
+                }
+                <b>catch</b>
+                {
+                    <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>();
+                    <b>throw</b>;
+                }
+            }
+ 
+            <b>public override void</b> <a id="cca039c02dca7b9b" href="../../../../../../R/cca039c02dca7b9b.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r9 rd" class="r9 r">error</span>)
+            {
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r9 r">error</span>); }
+                <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="12d822bc6c3e3bd1" href="../../../../../../R/12d822bc6c3e3bd1.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+ 
+    <b>internal class</b> <a id="9aca8871d240e0fa" href="../../../../../../R/9aca8871d240e0fa.html" target="n" data-glyph="2,0" class="t t">FromMicroCoroutineObservable</a>&lt;<span id="r10 rd t" class="r10 r t">T</span>&gt; : <a href="../../Operators/OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r10 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r10 r t">T</span>&gt;, <a href="../CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <a id="c0f5e64c4a3223eb" href="../../../../../../R/c0f5e64c4a3223eb.html" target="n" data-glyph="46,1" class="i field">coroutine</a>;
+        <b>readonly</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <a id="88de97ab0f83c27e" href="../../../../../../R/88de97ab0f83c27e.html" target="n" data-glyph="46,1" class="i field">frameCountType</a>;
+ 
+        <b>public</b> <a id="2e2160e29bc55d7b" href="../../../../../../R/2e2160e29bc55d7b.html" target="n" data-glyph="72,1" class="i constructor">FromMicroCoroutineObservable</a>(<a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r10 r t">T</span>&gt;, <a href="../CancellationToken.cs.html#fa175ac8b5b4fbf8" class="t t">CancellationToken</a>, <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a>&gt; <span id="r11 rd" class="r11 r">coroutine</span>, <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a> <span id="r12 rd" class="r12 r">frameCountType</span>)
+            : <a href="../../Operators/OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<b>false</b>)
+        {
+            <a href="#9aca8871d240e0fa" class="k">this</a>.<a href="#c0f5e64c4a3223eb" class="i field">coroutine</a> = <span class="r11 r">coroutine</span>;
+            <a href="#9aca8871d240e0fa" class="k">this</a>.<a href="#88de97ab0f83c27e" class="i field">frameCountType</a> = <span class="r12 r">frameCountType</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="7a351cba3019ca34" href="../../../../../../R/7a351cba3019ca34.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r10 r t">T</span>&gt; <span id="r13 rd" class="r13 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r14 rd" class="r14 r">cancel</span>)
+        {
+            <a href="#63e1aa77ea504353" class="k">var</a> <span id="r15 rd" class="r15 r">microCoroutineObserver</span> = <b>new</b> <a href="#f10f68d05d452897" class="t constructor">FromMicroCoroutine</a>(<span class="r13 r">observer</span>, <span class="r14 r">cancel</span>);
+ 
+            <a href="../../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="k">var</a> <span id="r16 rd" class="r16 r">moreCancel</span> = <b>new</b> <a href="../../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+ 
+            <b>switch</b> (<a href="#88de97ab0f83c27e" class="i field">frameCountType</a>)
+            {
+                <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#52219005ab7cec81" class="i field">Update</a>:
+                    <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#3d266550a8e4457b" class="i method">StartUpdateMicroCoroutine</a>(<a href="#c0f5e64c4a3223eb" class="i field">coroutine</a>(<span class="r15 r">microCoroutineObserver</span>, <b>new</b> <a href="../CancellationToken.cs.html#03432bf21b87b13f" class="t constructor">CancellationToken</a>(<span class="r16 r">moreCancel</span>)));
+                    <b>break</b>;
+                <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#08d4b64f87a05014" class="i field">FixedUpdate</a>:
+                    <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#ab8482527980dc38" class="i method">StartFixedUpdateMicroCoroutine</a>(<a href="#c0f5e64c4a3223eb" class="i field">coroutine</a>(<span class="r15 r">microCoroutineObserver</span>, <b>new</b> <a href="../CancellationToken.cs.html#03432bf21b87b13f" class="t constructor">CancellationToken</a>(<span class="r16 r">moreCancel</span>)));
+                    <b>break</b>;
+                <b>case</b> <a href="../Observable.Unity.cs.html#c67cb29c27a41895" class="t t">FrameCountType</a>.<a href="../Observable.Unity.cs.html#e49bfb0686659c35" class="i field">EndOfFrame</a>:
+                    <a href="../MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="../MainThreadDispatcher.cs.html#5d311e91b36ed9de" class="i method">StartEndOfFrameMicroCoroutine</a>(<a href="#c0f5e64c4a3223eb" class="i field">coroutine</a>(<span class="r15 r">microCoroutineObserver</span>, <b>new</b> <a href="../CancellationToken.cs.html#03432bf21b87b13f" class="t constructor">CancellationToken</a>(<span class="r16 r">moreCancel</span>)));
+                    <b>break</b>;
+                <b>default</b>:
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#eb98012a74461437" class="t constructor">ArgumentException</a>(<span class="s">&quot;Invalid FrameCountType:&quot;</span> + <a href="#88de97ab0f83c27e" class="i field">frameCountType</a>);
+            }
+ 
+            <b>return</b> <span class="r16 r">moreCancel</span>;
+        }
+ 
+        <b>class</b> <a id="63e1aa77ea504353" href="../../../../../../R/63e1aa77ea504353.html" target="n" data-glyph="4,1" class="t t">FromMicroCoroutine</a> : <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="t t">OperatorObserverBase</a>&lt;<span class="r10 r t">T</span>, <span class="r10 r t">T</span>&gt;
+        {
+            <b>public</b> <a id="f10f68d05d452897" href="../../../../../../R/f10f68d05d452897.html" target="n" data-glyph="72,2" class="i constructor">FromMicroCoroutine</a>(<a href="../../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r10 r t">T</span>&gt; <span id="r17 rd" class="r17 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r18 rd" class="r18 r">cancel</span>) : <a href="../../Operators/OperatorObserverBase.cs.html#cee4f7f9409f591b" class="k">base</a>(<span class="r17 r">observer</span>, <span class="r18 r">cancel</span>)
+            {
+            }
+ 
+            <b>public override void</b> <a id="850080481ba174ff" href="../../../../../../R/850080481ba174ff.html" target="n" data-glyph="72,2" class="i method">OnNext</a>(<span class="r10 r t">T</span> <span id="r19 rd" class="r19 r">value</span>)
+            {
+                <b>try</b>
+                {
+                    <a href="../../Operators/OperatorObserverBase.cs.html#eb6edb2414c1ab47" class="k">base</a>.<a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r19 r">value</span>);
+                }
+                <b>catch</b>
+                {
+                    <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>();
+                    <b>throw</b>;
+                }
+            }
+ 
+            <b>public override void</b> <a id="5159641b79bbdf7a" href="../../../../../../R/5159641b79bbdf7a.html" target="n" data-glyph="72,2" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r20 rd" class="r20 r">error</span>)
+            {
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r20 r">error</span>); }
+                <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+ 
+            <b>public override void</b> <a id="39f825b30f743ff0" href="../../../../../../R/39f825b30f743ff0.html" target="n" data-glyph="72,2" class="i method">OnCompleted</a>()
+            {
+                <b>try</b> { <a href="../../Operators/OperatorObserverBase.cs.html#3d54642bd52ac446" class="i field">observer</a>.<a href="../../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>(); }
+                <b>finally</b> { <a href="../../Operators/OperatorObserverBase.cs.html#de1551187eb4b6dd" class="i method">Dispose</a>(); }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

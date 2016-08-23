@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html><head><title>ImmutableList.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(61);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/InternalUtil/ImmutableList.cs" target="_top">Assets\Plugins\UniRx\Scripts\InternalUtil\ImmutableList.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>
+{
+    <span class="c">// ImmutableList is sometimes useful, use for public.</span>
+    <b>public class</b> <a id="58b31023c4d821bc" href="../../../../../R/58b31023c4d821bc.html" target="n" data-glyph="0,0" class="t t">ImmutableList</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;
+    {
+        <b>public static readonly</b> <a href="#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<span class="r0 r t">T</span>&gt; <a id="d4818b09742a8d04" href="../../../../../R/d4818b09742a8d04.html" target="n" data-glyph="42,1" class="i field">Empty</a> = <b>new</b> <a href="#63b907f5d505b471" class="t constructor">ImmutableList</a>&lt;<span class="r0 r t">T</span>&gt;();
+ 
+        <span class="r0 r t">T</span>[] <a id="7dca86f543e6a51a" href="../../../../../R/7dca86f543e6a51a.html" target="n" data-glyph="46,1" class="i field">data</a>;
+ 
+        <b>public</b> <span class="r0 r t">T</span>[] <a id="cc4b4805539f5ef9" href="../../../../../R/cc4b4805539f5ef9.html" target="n" data-glyph="102,1" class="i property">Data</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#7dca86f543e6a51a" class="i field">data</a>; }
+        }
+ 
+        <a id="63b907f5d505b471" href="../../../../../R/63b907f5d505b471.html" target="n" data-glyph="76,1" class="i constructor">ImmutableList</a>()
+        {
+            <a href="#7dca86f543e6a51a" class="i field">data</a> = <b>new</b> <span class="r0 r t">T</span>[0];
+        }
+ 
+        <b>public</b> <a id="2182b22b2e2f9d75" href="../../../../../R/2182b22b2e2f9d75.html" target="n" data-glyph="72,1" class="i constructor">ImmutableList</a>(<span class="r0 r t">T</span>[] <span id="r1 rd" class="r1 r">data</span>)
+        {
+            <a href="#58b31023c4d821bc" class="k">this</a>.<a href="#7dca86f543e6a51a" class="i field">data</a> = <span class="r1 r">data</span>;
+        }
+ 
+        <b>public</b> <a href="#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<span class="r0 r t">T</span>&gt; <a id="13acf5d91a8e1dab" href="../../../../../R/13acf5d91a8e1dab.html" target="n" data-glyph="72,1" class="i method">Add</a>(<span class="r0 r t">T</span> <span id="r2 rd" class="r2 r">value</span>)
+        {
+            <b>var</b> <span id="r3 rd" class="r3 r">newData</span> = <b>new</b> <span class="r0 r t">T</span>[<a href="#7dca86f543e6a51a" class="i field">data</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> + 1];
+            <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#1a86a6b8b02d0948" class="i method">Copy</a>(<a href="#7dca86f543e6a51a" class="i field">data</a>, <span class="r3 r">newData</span>, <a href="#7dca86f543e6a51a" class="i field">data</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>);
+            <span class="r3 r">newData</span>[<a href="#7dca86f543e6a51a" class="i field">data</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>] = <span class="r2 r">value</span>;
+            <b>return</b> <b>new</b> <a href="#2182b22b2e2f9d75" class="t constructor">ImmutableList</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r3 r">newData</span>);
+        }
+ 
+        <b>public</b> <a href="#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<span class="r0 r t">T</span>&gt; <a id="9e600300d8a7460b" href="../../../../../R/9e600300d8a7460b.html" target="n" data-glyph="72,1" class="i method">Remove</a>(<span class="r0 r t">T</span> <span id="r4 rd" class="r4 r">value</span>)
+        {
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r5 rd" class="r5 r">i</span> = <a href="#5fa25745ff495a5f" class="i method">IndexOf</a>(<span class="r4 r">value</span>);
+            <b>if</b> (<span class="r5 r">i</span> &lt; 0) <b>return</b> <a href="#58b31023c4d821bc" class="k">this</a>;
+ 
+            <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r6 rd" class="r6 r">length</span> = <a href="#7dca86f543e6a51a" class="i field">data</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>;
+            <b>if</b> (<span class="r6 r">length</span> == 1) <b>return</b> <a href="#d4818b09742a8d04" class="i field">Empty</a>;
+ 
+            <b>var</b> <span id="r7 rd" class="r7 r">newData</span> = <b>new</b> <span class="r0 r t">T</span>[<span class="r6 r">length</span> - 1];
+ 
+            <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#7441c6721593042c" class="i method">Copy</a>(<a href="#7dca86f543e6a51a" class="i field">data</a>, 0, <span class="r7 r">newData</span>, 0, <span class="r5 r">i</span>);
+            <a href="@0@mscorlib/A.html#156e066ecc4ccedf" class="t t">Array</a>.<a href="@0@mscorlib/A.html#7441c6721593042c" class="i method">Copy</a>(<a href="#7dca86f543e6a51a" class="i field">data</a>, <span class="r5 r">i</span> + 1, <span class="r7 r">newData</span>, <span class="r5 r">i</span>, <span class="r6 r">length</span> - <span class="r5 r">i</span> - 1);
+ 
+            <b>return</b> <b>new</b> <a href="#2182b22b2e2f9d75" class="t constructor">ImmutableList</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r7 r">newData</span>);
+        }
+ 
+        <b>public int</b> <a id="5fa25745ff495a5f" href="../../../../../R/5fa25745ff495a5f.html" target="n" data-glyph="72,1" class="i method">IndexOf</a>(<span class="r0 r t">T</span> <span id="r8 rd" class="r8 r">value</span>)
+        {
+            <b>for</b> (<a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r9 rd" class="r9 r">i</span> = 0; <span class="r9 r">i</span> &lt; <a href="#7dca86f543e6a51a" class="i field">data</a>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; ++<span class="r9 r">i</span>)
+            {
+                <span class="c">// ImmutableList only use for IObserver(no worry for boxed)</span>
+                <b>if</b> (<b>object</b>.<a href="@0@mscorlib/A.html#f2a579c50b414717" class="i method">Equals</a>(<a href="#7dca86f543e6a51a" class="i field">data</a>[<span class="r9 r">i</span>], <span class="r8 r">value</span>)) <b>return</b> <span class="r9 r">i</span>;
+            }
+            <b>return</b> -1;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

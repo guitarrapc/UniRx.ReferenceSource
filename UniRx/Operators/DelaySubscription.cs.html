@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html><head><title>DelaySubscription.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(56);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/DelaySubscription.cs" target="_top">Operators\DelaySubscription.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="9d38524d5e8614a2" href="../R/9d38524d5e8614a2.html" target="n" data-glyph="2,0" class="t t">DelaySubscriptionObservable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="OperatorObservableBase.cs.html#d79873c11f01da26" class="t t">OperatorObservableBase</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="5f40193fe3010b3f" href="../R/5f40193fe3010b3f.html" target="n" data-glyph="46,1" class="i field">source</a>;
+        <b>readonly</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="15014243c8aa405b" href="../R/15014243c8aa405b.html" target="n" data-glyph="46,1" class="i field">scheduler</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>? <a id="7566448c7cba0db0" href="../R/7566448c7cba0db0.html" target="n" data-glyph="46,1" class="i field">dueTimeT</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a>? <a id="bec466a52c59e616" href="../R/bec466a52c59e616.html" target="n" data-glyph="46,1" class="i field">dueTimeD</a>;
+ 
+        <b>public</b> <a id="cb120871e8553e34" href="../R/cb120871e8553e34.html" target="n" data-glyph="72,1" class="i constructor">DelaySubscriptionObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>,<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r2 rd" class="r2 r">dueTime</span>, <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r3 rd" class="r3 r">scheduler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r3 r">scheduler</span> == <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a> || <span class="r1 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#9d38524d5e8614a2" class="k">this</a>.<a href="#5f40193fe3010b3f" class="i field">source</a> = <span class="r1 r">source</span>;
+            <a href="#9d38524d5e8614a2" class="k">this</a>.<a href="#15014243c8aa405b" class="i field">scheduler</a> = <span class="r3 r">scheduler</span>;
+            <a href="#9d38524d5e8614a2" class="k">this</a>.<a href="#7566448c7cba0db0" class="i field">dueTimeT</a> = <span class="r2 r">dueTime</span>;
+        }
+ 
+        <b>public</b> <a id="2f04e79a471c97e2" href="../R/2f04e79a471c97e2.html" target="n" data-glyph="72,1" class="i constructor">DelaySubscriptionObservable</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r4 rd" class="r4 r">source</span>, <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <span id="r5 rd" class="r5 r">dueTime</span>, <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r6 rd" class="r6 r">scheduler</span>)
+            : <a href="OperatorObservableBase.cs.html#03d2e1fa88cb9bcf" class="k">base</a>(<span class="r6 r">scheduler</span> == <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a> || <span class="r4 r">source</span>.<a href="../System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>())
+        {
+            <a href="#9d38524d5e8614a2" class="k">this</a>.<a href="#5f40193fe3010b3f" class="i field">source</a> = <span class="r4 r">source</span>;
+            <a href="#9d38524d5e8614a2" class="k">this</a>.<a href="#15014243c8aa405b" class="i field">scheduler</a> = <span class="r6 r">scheduler</span>;
+            <a href="#9d38524d5e8614a2" class="k">this</a>.<a href="#bec466a52c59e616" class="i field">dueTimeD</a> = <span class="r5 r">dueTime</span>;
+        }
+ 
+        <b>protected override</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="210f5dc32835975d" href="../R/210f5dc32835975d.html" target="n" data-glyph="75,1" class="i method">SubscribeCore</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r7 rd" class="r7 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r8 rd" class="r8 r">cancel</span>)
+        {
+            <b>if</b> (<a href="#7566448c7cba0db0" class="i field">dueTimeT</a> != <b>null</b>)
+            {
+                <a href="../Disposables/MultipleAssignmentDisposable.cs.html#34d257b3f0ebdeee" class="k">var</a> <span id="r9 rd" class="r9 r">d</span> = <b>new</b> <a href="../Disposables/MultipleAssignmentDisposable.cs.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r10 rd" class="r10 r">dt</span> = <a href="../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<a href="#7566448c7cba0db0" class="i field">dueTimeT</a>.<a href="@0@mscorlib/A.html#7b38d1fa76071c95" class="i property">Value</a>);
+ 
+                <span class="r9 r">d</span>.<a href="../Disposables/MultipleAssignmentDisposable.cs.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <a href="#15014243c8aa405b" class="i field">scheduler</a>.<a href="../Schedulers/IScheduler.cs.html#68ca5be6e564eaa1" class="i method">Schedule</a>(<span class="r10 r">dt</span>, () =&gt;
+                {
+                    <span class="r9 r">d</span>.<a href="../Disposables/MultipleAssignmentDisposable.cs.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <a href="#5f40193fe3010b3f" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r7 r">observer</span>);
+                });
+ 
+                <b>return</b> <span class="r9 r">d</span>;
+            }
+            <b>else</b>
+            {
+                <a href="../Disposables/MultipleAssignmentDisposable.cs.html#34d257b3f0ebdeee" class="k">var</a> <span id="r11 rd" class="r11 r">d</span> = <b>new</b> <a href="../Disposables/MultipleAssignmentDisposable.cs.html#34d257b3f0ebdeee" class="t constructor">MultipleAssignmentDisposable</a>();
+ 
+                <span class="r11 r">d</span>.<a href="../Disposables/MultipleAssignmentDisposable.cs.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <a href="#15014243c8aa405b" class="i field">scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#cbd0d2ce69bc62cb" class="i method">Schedule</a>(<a href="#bec466a52c59e616" class="i field">dueTimeD</a>.<a href="@0@mscorlib/A.html#7b38d1fa76071c95" class="i property">Value</a>, () =&gt;
+                {
+                    <span class="r11 r">d</span>.<a href="../Disposables/MultipleAssignmentDisposable.cs.html#a340c8e5dd3c2d29" class="i property">Disposable</a> = <a href="#5f40193fe3010b3f" class="i field">source</a>.<a href="../System/IObservable.cs.html#fb6e6c4c05570441" class="i method">Subscribe</a>(<span class="r7 r">observer</span>);
+                });
+ 
+                <b>return</b> <span class="r11 r">d</span>;
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

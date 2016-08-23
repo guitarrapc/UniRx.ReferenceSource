@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.ErrorHandling.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(134);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Observable.ErrorHandling.cs" target="_top">Observable.ErrorHandling.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="89ea3b45237d80a5" href="R/89ea3b45237d80a5.html" target="n" data-glyph="220,1" class="i method">Finally</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r2 rd" class="r2 r">finallyAction</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Finally.cs.html#45bb854e83fa2e83" class="t constructor">FinallyObservable</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r1 r">source</span>, <span class="r2 r">finallyAction</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">T</span>&gt; <a id="0d6d0908bd43d7c3" href="R/0d6d0908bd43d7c3.html" target="n" data-glyph="220,1" class="i method">Catch</a>&lt;<span id="r3 rd t" class="r3 r t">T</span>, <span id="r4 rd t" class="r4 r t">TException</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">T</span>&gt; <span id="r5 rd" class="r5 r">source</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r4 r t">TException</span>, <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r3 r t">T</span>&gt;&gt; <span id="r6 rd" class="r6 r">errorHandler</span>)
+            <b>where</b> <span class="r4 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Catch.cs.html#4197f0477b068d19" class="t constructor">CatchObservable</a>&lt;<span class="r3 r t">T</span>, <span class="r4 r t">TException</span>&gt;(<span class="r5 r">source</span>, <span class="r6 r">errorHandler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r7 r t">TSource</span>&gt; <a id="fe43a3eb98952aac" href="R/fe43a3eb98952aac.html" target="n" data-glyph="220,1" class="i method">Catch</a>&lt;<span id="r7 rd t" class="r7 r t">TSource</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r7 r t">TSource</span>&gt;&gt; <span id="r8 rd" class="r8 r">sources</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Catch.cs.html#4b8339c9161aae8e" class="t constructor">CatchObservable</a>&lt;<span class="r7 r t">TSource</span>&gt;(<span class="r8 r">sources</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Catch exception and return Observable.Empty.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r9 r t">TSource</span>&gt; <a id="ad62adbd81cf5b7a" href="R/ad62adbd81cf5b7a.html" target="n" data-glyph="220,1" class="i method">CatchIgnore</a>&lt;<span id="r9 rd t" class="r9 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r9 r t">TSource</span>&gt; <span id="r10 rd" class="r10 r">source</span>)
+        {
+            <b>return</b> <span class="r10 r">source</span>.<a href="#0d6d0908bd43d7c3" class="i method">Catch</a>&lt;<span class="r9 r t">TSource</span>, <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>&gt;(<a href="Observer.cs.html#454c5c97f43f2dd3" class="t t">Stubs</a>.<a href="Observer.cs.html#e46336e8d6facd7b" class="i method">CatchIgnore</a>&lt;<span class="r9 r t">TSource</span>&gt;);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Catch exception and return Observable.Empty.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r11 r t">TSource</span>&gt; <a id="babeb55a0ea0ec31" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">CatchIgnore</a>&lt;<span id="r11 rd t" class="r11 r t">TSource</span>, <span id="r12 rd t" class="r12 r t">TException</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r11 r t">TSource</span>&gt; <span id="r13 rd" class="r13 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r12 r t">TException</span>&gt; <span id="r14 rd" class="r14 r">errorAction</span>)
+            <b>where</b> <span class="r12 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <a href="System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r15 rd" class="r15 r">result</span> = <span class="r13 r">source</span>.<a href="#0d6d0908bd43d7c3" class="i method">Catch</a>((<span class="r12 r t">TException</span> <span id="r16 rd" class="r16 r">ex</span>) =&gt;
+            {
+                <span class="r14 r">errorAction</span>(<span class="r16 r">ex</span>);
+                <b>return</b> <a href="P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#5f5f291b833cd2b9" class="i method">Empty</a>&lt;<span class="r11 r t">TSource</span>&gt;();
+            });
+            <b>return</b> <span class="r15 r">result</span>;
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r17 r t">TSource</span>&gt; <a id="1a222d260356958e" href="R/1a222d260356958e.html" target="n" data-glyph="220,1" class="i method">Retry</a>&lt;<span id="r17 rd t" class="r17 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r17 r t">TSource</span>&gt; <span id="r18 rd" class="r18 r">source</span>)
+        {
+            <b>return</b> <a href="Observable.Creation.cs.html#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r18 r">source</span>).<a href="#fe43a3eb98952aac" class="i method">Catch</a>();
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r19 r t">TSource</span>&gt; <a id="c576580f9b43d220" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">Retry</a>&lt;<span id="r19 rd t" class="r19 r t">TSource</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r19 r t">TSource</span>&gt; <span id="r20 rd" class="r20 r">source</span>, <b>int</b> <span id="r21 rd" class="r21 r">retryCount</span>)
+        {
+            <b>return</b> <span class="i n">System</span>.<span class="i n">Linq</span>.<a href="@0@System.Core/A.html#577032c8811e20d3" class="t t">Enumerable</a>.<a href="@0@System.Core/A.html#e2850cfe2b0cc87f" class="i method">Repeat</a>(<span class="r20 r">source</span>, <span class="r21 r">retryCount</span>).<a href="#fe43a3eb98952aac" class="i method">Catch</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">Repeats the source observable sequence until it successfully terminates.</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">para</span><span class="c">&gt;</span><span class="c">This is same as Retry().</span><span class="c">&lt;/</span><span class="c">para</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r22 r t">TSource</span>&gt; <a id="c50eb864e6c5b2a3" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnErrorRetry</a>&lt;<span id="r22 rd t" class="r22 r t">TSource</span>&gt;(
+            <b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r22 r t">TSource</span>&gt; <span id="r23 rd" class="r23 r">source</span>)
+        {
+            <a href="System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r24 rd" class="r24 r">result</span> = <span class="r23 r">source</span>.<a href="#1a222d260356958e" class="i method">Retry</a>();
+            <b>return</b> <span class="r24 r">result</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> When catched exception, do onError action and repeat observable sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r25 r t">TSource</span>&gt; <a id="ad4efade7e3deeb8" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnErrorRetry</a>&lt;<span id="r25 rd t" class="r25 r t">TSource</span>, <span id="r26 rd t" class="r26 r t">TException</span>&gt;(
+            <b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r25 r t">TSource</span>&gt; <span id="r27 rd" class="r27 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r26 r t">TException</span>&gt; <span id="r28 rd" class="r28 r">onError</span>)
+            <b>where</b> <span class="r26 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <b>return</b> <span class="r27 r">source</span>.<a href="#135e303d44565acd" class="i method">OnErrorRetry</a>(<span class="r28 r">onError</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> When catched exception, do onError action and repeat observable sequence after delay time.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r29 r t">TSource</span>&gt; <a id="135e303d44565acd" href="R/135e303d44565acd.html" target="n" data-glyph="220,1" class="i method">OnErrorRetry</a>&lt;<span id="r29 rd t" class="r29 r t">TSource</span>, <span id="r30 rd t" class="r30 r t">TException</span>&gt;(
+            <b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r29 r t">TSource</span>&gt; <span id="r31 rd" class="r31 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r30 r t">TException</span>&gt; <span id="r32 rd" class="r32 r">onError</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r33 rd" class="r33 r">delay</span>)
+            <b>where</b> <span class="r30 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <b>return</b> <span class="r31 r">source</span>.<a href="#3366148d2dbffc70" class="i method">OnErrorRetry</a>(<span class="r32 r">onError</span>, <b>int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>, <span class="r33 r">delay</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> When catched exception, do onError action and repeat observable sequence during within retryCount.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r34 r t">TSource</span>&gt; <a id="a1d9fd0ce1a2fdd9" href="R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">OnErrorRetry</a>&lt;<span id="r34 rd t" class="r34 r t">TSource</span>, <span id="r35 rd t" class="r35 r t">TException</span>&gt;(
+            <b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r34 r t">TSource</span>&gt; <span id="r36 rd" class="r36 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r35 r t">TException</span>&gt; <span id="r37 rd" class="r37 r">onError</span>, <b>int</b> <span id="r38 rd" class="r38 r">retryCount</span>)
+            <b>where</b> <span class="r35 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <b>return</b> <span class="r36 r">source</span>.<a href="#3366148d2dbffc70" class="i method">OnErrorRetry</a>(<span class="r37 r">onError</span>, <span class="r38 r">retryCount</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> When catched exception, do onError action and repeat observable sequence after delay time during within retryCount.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r39 r t">TSource</span>&gt; <a id="3366148d2dbffc70" href="R/3366148d2dbffc70.html" target="n" data-glyph="220,1" class="i method">OnErrorRetry</a>&lt;<span id="r39 rd t" class="r39 r t">TSource</span>, <span id="r40 rd t" class="r40 r t">TException</span>&gt;(
+            <b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r39 r t">TSource</span>&gt; <span id="r41 rd" class="r41 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r40 r t">TException</span>&gt; <span id="r42 rd" class="r42 r">onError</span>, <b>int</b> <span id="r43 rd" class="r43 r">retryCount</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r44 rd" class="r44 r">delay</span>)
+            <b>where</b> <span class="r40 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <b>return</b> <span class="r41 r">source</span>.<a href="#fe539e47a1f38d2a" class="i method">OnErrorRetry</a>(<span class="r42 r">onError</span>, <span class="r43 r">retryCount</span>, <span class="r44 r">delay</span>, <a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#5286974e9ab35679" class="i property">TimeBasedOperations</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> When catched exception, do onError action and repeat observable sequence after delay time(work on delayScheduler) during within retryCount.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r45 r t">TSource</span>&gt; <a id="fe539e47a1f38d2a" href="R/fe539e47a1f38d2a.html" target="n" data-glyph="220,1" class="i method">OnErrorRetry</a>&lt;<span id="r45 rd t" class="r45 r t">TSource</span>, <span id="r46 rd t" class="r46 r t">TException</span>&gt;(
+            <b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r45 r t">TSource</span>&gt; <span id="r47 rd" class="r47 r">source</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<span class="r46 r t">TException</span>&gt; <span id="r48 rd" class="r48 r">onError</span>, <b>int</b> <span id="r49 rd" class="r49 r">retryCount</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r50 rd" class="r50 r">delay</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r51 rd" class="r51 r">delayScheduler</span>)
+            <b>where</b> <span class="r46 r t">TException</span> : <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>
+        {
+            <a href="System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r52 rd" class="r52 r">result</span> = <a href="P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#913e9618edf29d57" class="i method">Defer</a>(() =&gt;
+            {
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r53 rd" class="r53 r">dueTime</span> = (<span class="r50 r">delay</span>.<a href="@0@mscorlib/A.html#45b3882f7cfdd300" class="i property">Ticks</a> &lt; 0) ? <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a> : <span class="r50 r">delay</span>;
+                <a href="@0@mscorlib/A.html#225942ed7b7a3252" class="k">var</a> <span id="r54 rd" class="r54 r">count</span> = 0;
+ 
+                <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r45 r t">TSource</span>&gt; <span id="r55 rd" class="r55 r">self</span> = <b>null</b>;
+                <span class="r55 r">self</span> = <span class="r47 r">source</span>.<a href="#0d6d0908bd43d7c3" class="i method">Catch</a>((<span class="r46 r t">TException</span> <span id="r56 rd" class="r56 r">ex</span>) =&gt;
+                {
+                    <span class="r48 r">onError</span>(<span class="r56 r">ex</span>);
+ 
+                    <b>return</b> (++<span class="r54 r">count</span> &lt; <span class="r49 r">retryCount</span>)
+                        ? (<span class="r53 r">dueTime</span> == <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>)
+                            ? <span class="r55 r">self</span>.<a href="Observable.Concurrency.cs.html#200890947d22dc1d" class="i method">SubscribeOn</a>(<a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>)
+                            : <span class="r55 r">self</span>.<a href="Observable.Concurrency.cs.html#1370dc7a73931ce8" class="i method">DelaySubscription</a>(<span class="r53 r">dueTime</span>, <span class="r51 r">delayScheduler</span>).<a href="Observable.Concurrency.cs.html#200890947d22dc1d" class="i method">SubscribeOn</a>(<a href="P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/CurrentThreadScheduler.cs.html#1a7109e09365a544" class="i field">CurrentThread</a>)
+                        : <a href="P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="Observable.Creation.cs.html#c78560d40c2f8c8f" class="i method">Throw</a>&lt;<span class="r45 r t">TSource</span>&gt;(<span class="r56 r">ex</span>);
+                });
+                <b>return</b> <span class="r55 r">self</span>;
+            });
+ 
+            <b>return</b> <span class="r52 r">result</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

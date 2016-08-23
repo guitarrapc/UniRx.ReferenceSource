@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html><head><title>RotateGameObject.cs</title><link rel="stylesheet" href="../../../styles.css"><script src="../../../scripts.js"></script></head>
+<body class="cB" onload="i(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp/Assets/ObjectTest/RotateGameObject.cs" target="_top">Assets\ObjectTest\RotateGameObject.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp" target="_top">UniRx.CSharp.csproj</a> (Assembly-CSharp)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">ObjectTest</span>
+{
+    <b>public class</b> <a id="bc392bbdc3d646a6" href="../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="3907583c71414b78">RotateGameObject</span></a> : <span class="i">MonoBehaviour</span>
+    {
+        <b>public</b> <span class="i">GameObject</span> <a id="bf30d665598ae52d" href="../../R/bf30d665598ae52d.html" target="n" data-glyph="42,1" class="i field">target</a>;
+        <b>public</b> <span class="i">Vector3</span> <a id="979062ad9ba08d0c" href="../../R/979062ad9ba08d0c.html" target="n" data-glyph="42,1" class="i field">angle</a>;
+ 
+        <b>void</b> <a id="9571f73a3a4aaeeb" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Awake</a>()
+        {
+            <b>if</b> (<a href="#979062ad9ba08d0c" class="i field">angle</a> == <span class="i">Vector3</span>.<span class="i">zero</span>)
+            {
+                <a href="#979062ad9ba08d0c" class="i field">angle</a> = <b>new</b> <span class="i">Vector3</span>(2, 4, 4);
+            }
+        }
+ 
+        <b>void</b> <a id="8c5badc3745a7e37" href="../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Start</a>()
+        {
+            <a href="/Assembly-CSharp-firstpass/A.html#eddc496e11ca2570" class="k">var</a> <span id="r0 rd" class="r0 r">interval</span> = <a href="/Assembly-CSharp-firstpass/A.html#d25079c101caf010" class="t t">Observable</a>
+                .<a href="/Assembly-CSharp-firstpass/A.html#5a83b602fef2c922" class="i method">Interval</a>(<span class="i n">System</span>.<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#668d91d771bce54b" class="i method">FromMilliseconds</a>(20))
+                .<a href="/Assembly-CSharp-firstpass/A.html#5cfa3f7295a92210" class="i method">Do</a>((<span id="r1 rd" class="r1 r">l</span>) =&gt; <a href="#bf30d665598ae52d" class="i field">target</a>.<span class="i">transform</span>.<span class="i">Rotate</span>(<a href="#979062ad9ba08d0c" class="i field">angle</a>));
+ 
+            <span class="r0 r">interval</span>
+                .<span class="i">CatchIgnore</span>((<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r2 rd" class="r2 r">ex</span>) =&gt; <span class="i">Debug</span>.<span class="i">LogWarning</span>(<span class="r2 r">ex</span>))
+                .<span class="i">Subscribe</span>();
+ 
+            <span class="c">/*
+                .Subscribe((s) =&gt;
+                {
+                    if (g != null)
+                        g.transform.Rotate(angle);
+                    else
+                        throw new Exception(&quot;Can&#39;t find GameObject `Cylinder`!&quot;);
+                });
+             */</span>
+        }
+    }
+}</pre></td></tr></table></div></body></html>

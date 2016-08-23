@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableEventTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(359);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableEventTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableEventTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">EventSystems</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="e62e99b11d3f2b72" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="361c40692b75e016">ObservableEventTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>, <span class="i">IEventSystemHandler</span>, <span class="i">IPointerEnterHandler</span>, <span class="i">IPointerExitHandler</span>, <span class="i">IPointerDownHandler</span>, <span class="i">IPointerUpHandler</span>, <span class="i">IPointerClickHandler</span>, <span class="i">IBeginDragHandler</span>, <span class="i">IInitializePotentialDragHandler</span>, <span class="i">IDragHandler</span>, <span class="i">IEndDragHandler</span>, <span class="i">IDropHandler</span>, <span class="i">IScrollHandler</span>, <span class="i">IUpdateSelectedHandler</span>, <span class="i">ISelectHandler</span>, <span class="i">IDeselectHandler</span>, <span class="i">IMoveHandler</span>, <span class="i">ISubmitHandler</span>, <span class="i">ICancelHandler</span>
+    {
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IDeselectHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="472fae82ef5c3584" href="../../../../../../R/472fae82ef5c3584.html" target="n" data-glyph="46,1" class="i field">onDeselect</a>;
+ 
+        <b>void</b> <span class="i">IDeselectHandler</span>.<a id="0500b63643f0fc59" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnDeselect</a>(<span class="i">BaseEventData</span> <span id="r0 rd" class="r0 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#472fae82ef5c3584" class="i field">onDeselect</a> != <b>null</b>) <a href="#472fae82ef5c3584" class="i field">onDeselect</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r0 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="c87cfa9be156d65e" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDeselectAsObservable</a>()
+        {
+            <b>return</b> <a href="#472fae82ef5c3584" class="i field">onDeselect</a> ?? (<a href="#472fae82ef5c3584" class="i field">onDeselect</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">BaseEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IMoveHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">AxisEventData</span>&gt; <a id="4afc3ac883fd0818" href="../../../../../../R/4afc3ac883fd0818.html" target="n" data-glyph="46,1" class="i field">onMove</a>;
+ 
+        <b>void</b> <span class="i">IMoveHandler</span>.<a id="d173c76feecf83d0" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnMove</a>(<span class="i">AxisEventData</span> <span id="r1 rd" class="r1 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#4afc3ac883fd0818" class="i field">onMove</a> != <b>null</b>) <a href="#4afc3ac883fd0818" class="i field">onMove</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r1 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">AxisEventData</span>&gt; <a id="589ff47b25826537" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnMoveAsObservable</a>()
+        {
+            <b>return</b> <a href="#4afc3ac883fd0818" class="i field">onMove</a> ?? (<a href="#4afc3ac883fd0818" class="i field">onMove</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">AxisEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IPointerDownHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="3afa51389a5b1d0a" href="../../../../../../R/3afa51389a5b1d0a.html" target="n" data-glyph="46,1" class="i field">onPointerDown</a>;
+ 
+        <b>void</b> <span class="i">IPointerDownHandler</span>.<a id="2c99c9b737880d4a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnPointerDown</a>(<span class="i">PointerEventData</span> <span id="r2 rd" class="r2 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#3afa51389a5b1d0a" class="i field">onPointerDown</a> != <b>null</b>) <a href="#3afa51389a5b1d0a" class="i field">onPointerDown</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="53807cf4a7d15133" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPointerDownAsObservable</a>()
+        {
+            <b>return</b> <a href="#3afa51389a5b1d0a" class="i field">onPointerDown</a> ?? (<a href="#3afa51389a5b1d0a" class="i field">onPointerDown</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IPointerEnterHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="e4ec9dad3ce29e9d" href="../../../../../../R/e4ec9dad3ce29e9d.html" target="n" data-glyph="46,1" class="i field">onPointerEnter</a>;
+ 
+        <b>void</b> <span class="i">IPointerEnterHandler</span>.<a id="7524e6c7e022f8ba" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnPointerEnter</a>(<span class="i">PointerEventData</span> <span id="r3 rd" class="r3 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#e4ec9dad3ce29e9d" class="i field">onPointerEnter</a> != <b>null</b>) <a href="#e4ec9dad3ce29e9d" class="i field">onPointerEnter</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r3 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="570347e4b524659d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPointerEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#e4ec9dad3ce29e9d" class="i field">onPointerEnter</a> ?? (<a href="#e4ec9dad3ce29e9d" class="i field">onPointerEnter</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IPointerExitHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="a506519afb2bc9df" href="../../../../../../R/a506519afb2bc9df.html" target="n" data-glyph="46,1" class="i field">onPointerExit</a>;
+ 
+        <b>void</b> <span class="i">IPointerExitHandler</span>.<a id="0f13833ee91b6de7" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnPointerExit</a>(<span class="i">PointerEventData</span> <span id="r4 rd" class="r4 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#a506519afb2bc9df" class="i field">onPointerExit</a> != <b>null</b>) <a href="#a506519afb2bc9df" class="i field">onPointerExit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r4 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="e99769602415f50f" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPointerExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#a506519afb2bc9df" class="i field">onPointerExit</a> ?? (<a href="#a506519afb2bc9df" class="i field">onPointerExit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IPointerUpHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="97f2214fb3d978fb" href="../../../../../../R/97f2214fb3d978fb.html" target="n" data-glyph="46,1" class="i field">onPointerUp</a>;
+ 
+        <b>void</b> <span class="i">IPointerUpHandler</span>.<a id="3fbf96cb28f0eb65" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnPointerUp</a>(<span class="i">PointerEventData</span> <span id="r5 rd" class="r5 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#97f2214fb3d978fb" class="i field">onPointerUp</a> != <b>null</b>) <a href="#97f2214fb3d978fb" class="i field">onPointerUp</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r5 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="47aad99a527173e0" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPointerUpAsObservable</a>()
+        {
+            <b>return</b> <a href="#97f2214fb3d978fb" class="i field">onPointerUp</a> ?? (<a href="#97f2214fb3d978fb" class="i field">onPointerUp</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ISelectHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="bd96630885a4e655" href="../../../../../../R/bd96630885a4e655.html" target="n" data-glyph="46,1" class="i field">onSelect</a>;
+ 
+        <b>void</b> <span class="i">ISelectHandler</span>.<a id="779362362042dabf" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnSelect</a>(<span class="i">BaseEventData</span> <span id="r6 rd" class="r6 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#bd96630885a4e655" class="i field">onSelect</a> != <b>null</b>) <a href="#bd96630885a4e655" class="i field">onSelect</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r6 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="760c781022a4a1e3" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnSelectAsObservable</a>()
+        {
+            <b>return</b> <a href="#bd96630885a4e655" class="i field">onSelect</a> ?? (<a href="#bd96630885a4e655" class="i field">onSelect</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">BaseEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IPointerClickHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="d1a6de1beb299218" href="../../../../../../R/d1a6de1beb299218.html" target="n" data-glyph="46,1" class="i field">onPointerClick</a>;
+ 
+        <b>void</b> <span class="i">IPointerClickHandler</span>.<a id="fc39ed0b55bb523e" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnPointerClick</a>(<span class="i">PointerEventData</span> <span id="r7 rd" class="r7 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#d1a6de1beb299218" class="i field">onPointerClick</a> != <b>null</b>) <a href="#d1a6de1beb299218" class="i field">onPointerClick</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r7 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="62932de5abe65d30" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnPointerClickAsObservable</a>()
+        {
+            <b>return</b> <a href="#d1a6de1beb299218" class="i field">onPointerClick</a> ?? (<a href="#d1a6de1beb299218" class="i field">onPointerClick</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ISubmitHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="02ecdd213f7017ac" href="../../../../../../R/02ecdd213f7017ac.html" target="n" data-glyph="46,1" class="i field">onSubmit</a>;
+ 
+        <b>void</b> <span class="i">ISubmitHandler</span>.<a id="ebcfa2108c3da55d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnSubmit</a>(<span class="i">BaseEventData</span> <span id="r8 rd" class="r8 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#02ecdd213f7017ac" class="i field">onSubmit</a> != <b>null</b>) <a href="#02ecdd213f7017ac" class="i field">onSubmit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r8 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="fe6f9f1902f8bd3d" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnSubmitAsObservable</a>()
+        {
+            <b>return</b> <a href="#02ecdd213f7017ac" class="i field">onSubmit</a> ?? (<a href="#02ecdd213f7017ac" class="i field">onSubmit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">BaseEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IDragHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="a8489c1492854cd2" href="../../../../../../R/a8489c1492854cd2.html" target="n" data-glyph="46,1" class="i field">onDrag</a>;
+ 
+        <b>void</b> <span class="i">IDragHandler</span>.<a id="4cddc3432df12647" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnDrag</a>(<span class="i">PointerEventData</span> <span id="r9 rd" class="r9 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#a8489c1492854cd2" class="i field">onDrag</a> != <b>null</b>) <a href="#a8489c1492854cd2" class="i field">onDrag</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r9 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="4c099828c2e11bc7" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDragAsObservable</a>()
+        {
+            <b>return</b> <a href="#a8489c1492854cd2" class="i field">onDrag</a> ?? (<a href="#a8489c1492854cd2" class="i field">onDrag</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IBeginDragHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="efbfb8497bc314c3" href="../../../../../../R/efbfb8497bc314c3.html" target="n" data-glyph="46,1" class="i field">onBeginDrag</a>;
+ 
+        <b>void</b> <span class="i">IBeginDragHandler</span>.<a id="c0750959370d5be3" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnBeginDrag</a>(<span class="i">PointerEventData</span> <span id="r10 rd" class="r10 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#efbfb8497bc314c3" class="i field">onBeginDrag</a> != <b>null</b>) <a href="#efbfb8497bc314c3" class="i field">onBeginDrag</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r10 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="6c741fb4206640be" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnBeginDragAsObservable</a>()
+        {
+            <b>return</b> <a href="#efbfb8497bc314c3" class="i field">onBeginDrag</a> ?? (<a href="#efbfb8497bc314c3" class="i field">onBeginDrag</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IEndDragHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="c05958db9cd606b9" href="../../../../../../R/c05958db9cd606b9.html" target="n" data-glyph="46,1" class="i field">onEndDrag</a>;
+ 
+        <b>void</b> <span class="i">IEndDragHandler</span>.<a id="0f812dd96cbab14b" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnEndDrag</a>(<span class="i">PointerEventData</span> <span id="r11 rd" class="r11 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#c05958db9cd606b9" class="i field">onEndDrag</a> != <b>null</b>) <a href="#c05958db9cd606b9" class="i field">onEndDrag</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r11 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="b7a6968db8da27a2" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnEndDragAsObservable</a>()
+        {
+            <b>return</b> <a href="#c05958db9cd606b9" class="i field">onEndDrag</a> ?? (<a href="#c05958db9cd606b9" class="i field">onEndDrag</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IDropHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="0d870bd777ef170f" href="../../../../../../R/0d870bd777ef170f.html" target="n" data-glyph="46,1" class="i field">onDrop</a>;
+ 
+        <b>void</b> <span class="i">IDropHandler</span>.<a id="a86996d51e7d4288" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnDrop</a>(<span class="i">PointerEventData</span> <span id="r12 rd" class="r12 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#0d870bd777ef170f" class="i field">onDrop</a> != <b>null</b>) <a href="#0d870bd777ef170f" class="i field">onDrop</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r12 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="7709226e03d4a67a" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnDropAsObservable</a>()
+        {
+            <b>return</b> <a href="#0d870bd777ef170f" class="i field">onDrop</a> ?? (<a href="#0d870bd777ef170f" class="i field">onDrop</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IUpdateSelectedHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="71e587c365ae375a" href="../../../../../../R/71e587c365ae375a.html" target="n" data-glyph="46,1" class="i field">onUpdateSelected</a>;
+ 
+        <b>void</b> <span class="i">IUpdateSelectedHandler</span>.<a id="935d2e790ac80732" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnUpdateSelected</a>(<span class="i">BaseEventData</span> <span id="r13 rd" class="r13 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#71e587c365ae375a" class="i field">onUpdateSelected</a> != <b>null</b>) <a href="#71e587c365ae375a" class="i field">onUpdateSelected</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r13 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="592681e0b49dcd89" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnUpdateSelectedAsObservable</a>()
+        {
+            <b>return</b> <a href="#71e587c365ae375a" class="i field">onUpdateSelected</a> ?? (<a href="#71e587c365ae375a" class="i field">onUpdateSelected</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">BaseEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IInitializePotentialDragHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="a0cdb821e64474d0" href="../../../../../../R/a0cdb821e64474d0.html" target="n" data-glyph="46,1" class="i field">onInitializePotentialDrag</a>;
+ 
+        <b>void</b> <span class="i">IInitializePotentialDragHandler</span>.<a id="4015ba883d121c40" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnInitializePotentialDrag</a>(<span class="i">PointerEventData</span> <span id="r14 rd" class="r14 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#a0cdb821e64474d0" class="i field">onInitializePotentialDrag</a> != <b>null</b>) <a href="#a0cdb821e64474d0" class="i field">onInitializePotentialDrag</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r14 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="443b6efb42780321" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnInitializePotentialDragAsObservable</a>()
+        {
+            <b>return</b> <a href="#a0cdb821e64474d0" class="i field">onInitializePotentialDrag</a> ?? (<a href="#a0cdb821e64474d0" class="i field">onInitializePotentialDrag</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> ICancelHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="08107b70b46c54bd" href="../../../../../../R/08107b70b46c54bd.html" target="n" data-glyph="46,1" class="i field">onCancel</a>;
+ 
+        <b>void</b> <span class="i">ICancelHandler</span>.<a id="b4cc734566c71291" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCancel</a>(<span class="i">BaseEventData</span> <span id="r15 rd" class="r15 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#08107b70b46c54bd" class="i field">onCancel</a> != <b>null</b>) <a href="#08107b70b46c54bd" class="i field">onCancel</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r15 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">BaseEventData</span>&gt; <a id="56a7af01804fd7b5" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnCancelAsObservable</a>()
+        {
+            <b>return</b> <a href="#08107b70b46c54bd" class="i field">onCancel</a> ?? (<a href="#08107b70b46c54bd" class="i field">onCancel</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">BaseEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">region</span> IScrollHandler
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="0d0dd6cd500cd217" href="../../../../../../R/0d0dd6cd500cd217.html" target="n" data-glyph="46,1" class="i field">onScroll</a>;
+ 
+        <b>void</b> <span class="i">IScrollHandler</span>.<a id="3438b2749996fbc6" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnScroll</a>(<span class="i">PointerEventData</span> <span id="r16 rd" class="r16 r">eventData</span>)
+        {
+            <b>if</b> (<a href="#0d0dd6cd500cd217" class="i field">onScroll</a> != <b>null</b>) <a href="#0d0dd6cd500cd217" class="i field">onScroll</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r16 r">eventData</span>);
+        }
+ 
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">PointerEventData</span>&gt; <a id="34315730230b4641" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OnScrollAsObservable</a>()
+        {
+            <b>return</b> <a href="#0d0dd6cd500cd217" class="i field">onScroll</a> ?? (<a href="#0d0dd6cd500cd217" class="i field">onScroll</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">PointerEventData</span>&gt;());
+        }
+ 
+        <span class="k preprocess">#</span><span class="k preprocess">endregion</span>
+ 
+        <b>protected override void</b> <a id="d5fafd66c8005fab" href="../../../../../../R/d5fafd66c8005fab.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#472fae82ef5c3584" class="i field">onDeselect</a> != <b>null</b>)
+            {
+                <a href="#472fae82ef5c3584" class="i field">onDeselect</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#4afc3ac883fd0818" class="i field">onMove</a> != <b>null</b>)
+            {
+                <a href="#4afc3ac883fd0818" class="i field">onMove</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#3afa51389a5b1d0a" class="i field">onPointerDown</a> != <b>null</b>)
+            {
+                <a href="#3afa51389a5b1d0a" class="i field">onPointerDown</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#e4ec9dad3ce29e9d" class="i field">onPointerEnter</a> != <b>null</b>)
+            {
+                <a href="#e4ec9dad3ce29e9d" class="i field">onPointerEnter</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#a506519afb2bc9df" class="i field">onPointerExit</a> != <b>null</b>)
+            {
+                <a href="#a506519afb2bc9df" class="i field">onPointerExit</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#97f2214fb3d978fb" class="i field">onPointerUp</a> != <b>null</b>)
+            {
+                <a href="#97f2214fb3d978fb" class="i field">onPointerUp</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#bd96630885a4e655" class="i field">onSelect</a> != <b>null</b>)
+            {
+                <a href="#bd96630885a4e655" class="i field">onSelect</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#d1a6de1beb299218" class="i field">onPointerClick</a> != <b>null</b>)
+            {
+                <a href="#d1a6de1beb299218" class="i field">onPointerClick</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#02ecdd213f7017ac" class="i field">onSubmit</a> != <b>null</b>)
+            {
+                <a href="#02ecdd213f7017ac" class="i field">onSubmit</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#a8489c1492854cd2" class="i field">onDrag</a> != <b>null</b>)
+            {
+                <a href="#a8489c1492854cd2" class="i field">onDrag</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#efbfb8497bc314c3" class="i field">onBeginDrag</a> != <b>null</b>)
+            {
+                <a href="#efbfb8497bc314c3" class="i field">onBeginDrag</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#c05958db9cd606b9" class="i field">onEndDrag</a> != <b>null</b>)
+            {
+                <a href="#c05958db9cd606b9" class="i field">onEndDrag</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#0d870bd777ef170f" class="i field">onDrop</a> != <b>null</b>)
+            {
+                <a href="#0d870bd777ef170f" class="i field">onDrop</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#71e587c365ae375a" class="i field">onUpdateSelected</a> != <b>null</b>)
+            {
+                <a href="#71e587c365ae375a" class="i field">onUpdateSelected</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#a0cdb821e64474d0" class="i field">onInitializePotentialDrag</a> != <b>null</b>)
+            {
+                <a href="#a0cdb821e64474d0" class="i field">onInitializePotentialDrag</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#08107b70b46c54bd" class="i field">onCancel</a> != <b>null</b>)
+            {
+                <a href="#08107b70b46c54bd" class="i field">onCancel</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#0d0dd6cd500cd217" class="i field">onScroll</a> != <b>null</b>)
+            {
+                <a href="#0d0dd6cd500cd217" class="i field">onScroll</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

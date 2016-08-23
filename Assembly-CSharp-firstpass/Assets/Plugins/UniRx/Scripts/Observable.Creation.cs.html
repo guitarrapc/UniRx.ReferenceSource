@@ -1,0 +1,376 @@
+﻿<!DOCTYPE html>
+<html><head><title>Observable.Creation.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(367);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Observable.Creation.cs" target="_top">Assets\Plugins\UniRx\Scripts\Observable.Creation.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <a href="../../../../P/d25079c101caf010.html" target="s" class="k">partial</a> <b>class</b> <a id="d25079c101caf010" href="../../../../R/d25079c101caf010.html" target="n" data-glyph="0,0" class="t t">Observable</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create anonymous observable. Observer has exception durability. This is recommended for make operator and event like generator. </span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="0351c4239e8e6646" href="../../../../R/0351c4239e8e6646.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r1 rd" class="r1 r">subscribe</span>)
+        {
+            <b>if</b> (<span class="r1 r">subscribe</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;subscribe&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Create.cs.html#b3fd8b341d301634" class="t constructor">CreateObservable</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r1 r">subscribe</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create anonymous observable. Observer has exception durability. This is recommended for make operator and event like generator(HotObservable). </span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <a id="a7ad60cb2e32d8f1" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Create</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r2 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r3 rd" class="r3 r">subscribe</span>, <b>bool</b> <span id="r4 rd" class="r4 r">isRequiredSubscribeOnCurrentThread</span>)
+        {
+            <b>if</b> (<span class="r3 r">subscribe</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;subscribe&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Create.cs.html#561765aa66d0e513" class="t constructor">CreateObservable</a>&lt;<span class="r2 r t">T</span>&gt;(<span class="r3 r">subscribe</span>, <span class="r4 r">isRequiredSubscribeOnCurrentThread</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create anonymous observable. Observer has exception durability. This is recommended for make operator and event like generator. </span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r5 r t">T</span>&gt; <a id="00bc10304e76b6b6" href="../../../../R/00bc10304e76b6b6.html" target="n" data-glyph="72,1" class="i method">CreateWithState</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>, <span id="r6 rd t" class="r6 r t">TState</span>&gt;(<span class="r6 r t">TState</span> <span id="r7 rd" class="r7 r">state</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r6 r t">TState</span>, <a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r5 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r8 rd" class="r8 r">subscribe</span>)
+        {
+            <b>if</b> (<span class="r8 r">subscribe</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;subscribe&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Create.cs.html#405be4c74b438f4a" class="t constructor">CreateObservable</a>&lt;<span class="r5 r t">T</span>, <span class="r6 r t">TState</span>&gt;(<span class="r7 r">state</span>, <span class="r8 r">subscribe</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create anonymous observable. Observer has exception durability. This is recommended for make operator and event like generator(HotObservable). </span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r9 r t">T</span>&gt; <a id="f65a93c655dc9bc5" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CreateWithState</a>&lt;<span id="r9 rd t" class="r9 r t">T</span>, <span id="r10 rd t" class="r10 r t">TState</span>&gt;(<span class="r10 r t">TState</span> <span id="r11 rd" class="r11 r">state</span>, <a href="@0@System.Core/A.html#8adbe0476ca899db" class="t t">Func</a>&lt;<span class="r10 r t">TState</span>, <a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r9 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r12 rd" class="r12 r">subscribe</span>, <b>bool</b> <span id="r13 rd" class="r13 r">isRequiredSubscribeOnCurrentThread</span>)
+        {
+            <b>if</b> (<span class="r12 r">subscribe</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;subscribe&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Create.cs.html#cc86c9a89d1506ac" class="t constructor">CreateObservable</a>&lt;<span class="r9 r t">T</span>, <span class="r10 r t">TState</span>&gt;(<span class="r11 r">state</span>, <span class="r12 r">subscribe</span>, <span class="r13 r">isRequiredSubscribeOnCurrentThread</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create anonymous observable. Safe means auto detach when error raised in onNext pipeline. This is recommended for make generator (ColdObservable).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r14 r t">T</span>&gt; <a id="448dcafb9b174ba4" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CreateSafe</a>&lt;<span id="r14 rd t" class="r14 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r14 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r15 rd" class="r15 r">subscribe</span>)
+        {
+            <b>if</b> (<span class="r15 r">subscribe</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;subscribe&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Create.cs.html#4d52fcef5f78b9f6" class="t constructor">CreateSafeObservable</a>&lt;<span class="r14 r t">T</span>&gt;(<span class="r15 r">subscribe</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create anonymous observable. Safe means auto detach when error raised in onNext pipeline. This is recommended for make generator (ColdObservable).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r16 r t">T</span>&gt; <a id="85be3117c54c29c0" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CreateSafe</a>&lt;<span id="r16 rd t" class="r16 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r16 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>&gt; <span id="r17 rd" class="r17 r">subscribe</span>, <b>bool</b> <span id="r18 rd" class="r18 r">isRequiredSubscribeOnCurrentThread</span>)
+        {
+            <b>if</b> (<span class="r17 r">subscribe</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;subscribe&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Create.cs.html#b2e8a353fb1bbd3f" class="t constructor">CreateSafeObservable</a>&lt;<span class="r16 r t">T</span>&gt;(<span class="r17 r">subscribe</span>, <span class="r18 r">isRequiredSubscribeOnCurrentThread</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only OnCompleted.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r19 r t">T</span>&gt; <a id="5f5f291b833cd2b9" href="../../../../R/5f5f291b833cd2b9.html" target="n" data-glyph="72,1" class="i method">Empty</a>&lt;<span id="r19 rd t" class="r19 r t">T</span>&gt;()
+        {
+            <b>return</b> <a href="#5b55399e0d1d6819" class="i method">Empty</a>&lt;<span class="r19 r t">T</span>&gt;(<a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only OnCompleted on specified scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r20 r t">T</span>&gt; <a id="5b55399e0d1d6819" href="../../../../R/5b55399e0d1d6819.html" target="n" data-glyph="72,1" class="i method">Empty</a>&lt;<span id="r20 rd t" class="r20 r t">T</span>&gt;(<a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r21 rd" class="r21 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r21 r">scheduler</span> == <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>)
+            {
+                <b>return</b> <a href="Operators/Empty.cs.html#ed1277ac00437b6a" class="t t">ImmutableEmptyObservable</a>&lt;<span class="r20 r t">T</span>&gt;.<a href="Operators/Empty.cs.html#68401e24c18c98a9" class="i field">Instance</a>;
+            }
+            <b>else</b>
+            {
+                <b>return</b> <b>new</b> <a href="Operators/Empty.cs.html#8fc23074342a8614" class="t constructor">EmptyObservable</a>&lt;<span class="r20 r t">T</span>&gt;(<span class="r21 r">scheduler</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only OnCompleted. witness is for type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r22 r t">T</span>&gt; <a id="afb6d44380f50bb3" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Empty</a>&lt;<span id="r22 rd t" class="r22 r t">T</span>&gt;(<span class="r22 r t">T</span> <span id="r23 rd" class="r23 r">witness</span>)
+        {
+            <b>return</b> <a href="#5b55399e0d1d6819" class="i method">Empty</a>&lt;<span class="r22 r t">T</span>&gt;(<a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only OnCompleted on specified scheduler. witness is for type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r24 r t">T</span>&gt; <a id="0ccb7951d538aea1" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Empty</a>&lt;<span id="r24 rd t" class="r24 r t">T</span>&gt;(<a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r25 rd" class="r25 r">scheduler</span>, <span class="r24 r t">T</span> <span id="r26 rd" class="r26 r">witness</span>)
+        {
+            <b>return</b> <a href="#5b55399e0d1d6819" class="i method">Empty</a>&lt;<span class="r24 r t">T</span>&gt;(<span class="r25 r">scheduler</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Non-Terminating Observable. It&#39;s no returns, never finish.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r27 r t">T</span>&gt; <a id="a7a1b29b7f6e0d3b" href="../../../../R/a7a1b29b7f6e0d3b.html" target="n" data-glyph="72,1" class="i method">Never</a>&lt;<span id="r27 rd t" class="r27 r t">T</span>&gt;()
+        {
+            <b>return</b> <a href="Operators/Never.cs.html#1e4945e4c07173d2" class="t t">ImmutableNeverObservable</a>&lt;<span class="r27 r t">T</span>&gt;.<a href="Operators/Never.cs.html#b7b0d030a0229d3d" class="i field">Instance</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Non-Terminating Observable. It&#39;s no returns, never finish. witness is for type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r28 r t">T</span>&gt; <a id="672aaa999f7be640" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Never</a>&lt;<span id="r28 rd t" class="r28 r t">T</span>&gt;(<span class="r28 r t">T</span> <span id="r29 rd" class="r29 r">witness</span>)
+        {
+            <b>return</b> <a href="Operators/Never.cs.html#1e4945e4c07173d2" class="t t">ImmutableNeverObservable</a>&lt;<span class="r28 r t">T</span>&gt;.<a href="Operators/Never.cs.html#b7b0d030a0229d3d" class="i field">Instance</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Return single sequence Immediately.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r30 r t">T</span>&gt; <a id="2843d6a6f424ac6b" href="../../../../R/2843d6a6f424ac6b.html" target="n" data-glyph="72,1" class="i method">Return</a>&lt;<span id="r30 rd t" class="r30 r t">T</span>&gt;(<span class="r30 r t">T</span> <span id="r31 rd" class="r31 r">value</span>)
+        {
+            <b>return</b> <a href="#d861eb6db69cb114" class="i method">Return</a>&lt;<span class="r30 r t">T</span>&gt;(<span class="r31 r">value</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Return single sequence on specified scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r32 r t">T</span>&gt; <a id="d861eb6db69cb114" href="../../../../R/d861eb6db69cb114.html" target="n" data-glyph="72,1" class="i method">Return</a>&lt;<span id="r32 rd t" class="r32 r t">T</span>&gt;(<span class="r32 r t">T</span> <span id="r33 rd" class="r33 r">value</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r34 rd" class="r34 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r34 r">scheduler</span> == <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/ImmediateScheduler.cs.html#313dd3b562665646" class="i field">Immediate</a>)
+            {
+                <b>return</b> <b>new</b> <a href="Operators/Return.cs.html#53315d9e5b528e02" class="t constructor">ImmediateReturnObservable</a>&lt;<span class="r32 r t">T</span>&gt;(<span class="r33 r">value</span>);
+            }
+            <b>else</b>
+            {
+                <b>return</b> <b>new</b> <a href="Operators/Return.cs.html#9ac97c79243109e1" class="t constructor">ReturnObservable</a>&lt;<span class="r32 r t">T</span>&gt;(<span class="r33 r">value</span>, <span class="r34 r">scheduler</span>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Return single sequence Immediately, optimized for Unit(no allocate memory).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a4ad56ba27ef2310" href="../../../../R/a4ad56ba27ef2310.html" target="n" data-glyph="72,1" class="i method">Return</a>(<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a> <span id="r35 rd" class="r35 r">value</span>)
+        {
+            <b>return</b> <a href="Operators/Return.cs.html#fef461519bd4fd9c" class="t t">ImmutableReturnUnitObservable</a>.<a href="Operators/Return.cs.html#46378a2e3b4c21ae" class="i field">Instance</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Return single sequence Immediately, optimized for Boolean(no allocate memory).</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <a id="5090b4725be17cac" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Return</a>(<b>bool</b> <span id="r36 rd" class="r36 r">value</span>)
+        {
+            <b>return</b> (<span class="r36 r">value</span> == <b>true</b>)
+                ? (<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt;)<a href="Operators/Return.cs.html#55436180422107c7" class="t t">ImmutableReturnTrueObservable</a>.<a href="Operators/Return.cs.html#ca0ad713834da7bd" class="i field">Instance</a>
+                : (<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt;)<a href="Operators/Return.cs.html#a96f987cac56c506" class="t t">ImmutableReturnFalseObservable</a>.<a href="Operators/Return.cs.html#4e4d0074ad4ca71b" class="i field">Instance</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as Observable.Return(Unit.Default); but no allocate memory.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="5a94a3189575c5a6" href="../../../../R/5a94a3189575c5a6.html" target="n" data-glyph="72,1" class="i method">ReturnUnit</a>()
+        {
+            <b>return</b> <a href="Operators/Return.cs.html#fef461519bd4fd9c" class="t t">ImmutableReturnUnitObservable</a>.<a href="Operators/Return.cs.html#46378a2e3b4c21ae" class="i field">Instance</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only onError.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r37 r t">T</span>&gt; <a id="c78560d40c2f8c8f" href="../../../../R/c78560d40c2f8c8f.html" target="n" data-glyph="72,1" class="i method">Throw</a>&lt;<span id="r37 rd t" class="r37 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r38 rd" class="r38 r">error</span>)
+        {
+            <b>return</b> <a href="#8f63aab25286a4a7" class="i method">Throw</a>&lt;<span class="r37 r t">T</span>&gt;(<span class="r38 r">error</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only onError. witness if for Type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r39 r t">T</span>&gt; <a id="f52311ec62244276" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Throw</a>&lt;<span id="r39 rd t" class="r39 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r40 rd" class="r40 r">error</span>, <span class="r39 r t">T</span> <span id="r41 rd" class="r41 r">witness</span>)
+        {
+            <b>return</b> <a href="#8f63aab25286a4a7" class="i method">Throw</a>&lt;<span class="r39 r t">T</span>&gt;(<span class="r40 r">error</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#522b1e3e9dc51d84" class="i property">ConstantTimeOperations</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only onError on specified scheduler.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r42 r t">T</span>&gt; <a id="8f63aab25286a4a7" href="../../../../R/8f63aab25286a4a7.html" target="n" data-glyph="72,1" class="i method">Throw</a>&lt;<span id="r42 rd t" class="r42 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r43 rd" class="r43 r">error</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r44 rd" class="r44 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Throw.cs.html#451cbefd2659d0a7" class="t constructor">ThrowObservable</a>&lt;<span class="r42 r t">T</span>&gt;(<span class="r43 r">error</span>, <span class="r44 r">scheduler</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Empty Observable. Returns only onError on specified scheduler. witness if for Type inference.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r45 r t">T</span>&gt; <a id="15d6cc760e99c5fd" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Throw</a>&lt;<span id="r45 rd t" class="r45 r t">T</span>&gt;(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r46 rd" class="r46 r">error</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r47 rd" class="r47 r">scheduler</span>, <span class="r45 r t">T</span> <span id="r48 rd" class="r48 r">witness</span>)
+        {
+            <b>return</b> <a href="#8f63aab25286a4a7" class="i method">Throw</a>&lt;<span class="r45 r t">T</span>&gt;(<span class="r46 r">error</span>, <span class="r47 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="72da3db51047e6df" href="../../../../R/72da3db51047e6df.html" target="n" data-glyph="72,1" class="i method">Range</a>(<b>int</b> <span id="r49 rd" class="r49 r">start</span>, <b>int</b> <span id="r50 rd" class="r50 r">count</span>)
+        {
+            <b>return</b> <a href="#d1261c08daba850d" class="i method">Range</a>(<span class="r49 r">start</span>, <span class="r50 r">count</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>int</b>&gt; <a id="d1261c08daba850d" href="../../../../R/d1261c08daba850d.html" target="n" data-glyph="72,1" class="i method">Range</a>(<b>int</b> <span id="r51 rd" class="r51 r">start</span>, <b>int</b> <span id="r52 rd" class="r52 r">count</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r53 rd" class="r53 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Range.cs.html#8f681f73aa47887c" class="t constructor">RangeObservable</a>(<span class="r51 r">start</span>, <span class="r52 r">count</span>, <span class="r53 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r54 r t">T</span>&gt; <a id="41c6221eb9a14849" href="../../../../R/41c6221eb9a14849.html" target="n" data-glyph="72,1" class="i method">Repeat</a>&lt;<span id="r54 rd t" class="r54 r t">T</span>&gt;(<span class="r54 r t">T</span> <span id="r55 rd" class="r55 r">value</span>)
+        {
+            <b>return</b> <a href="#529bbf9466bea857" class="i method">Repeat</a>(<span class="r55 r">value</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r56 r t">T</span>&gt; <a id="529bbf9466bea857" href="../../../../R/529bbf9466bea857.html" target="n" data-glyph="72,1" class="i method">Repeat</a>&lt;<span id="r56 rd t" class="r56 r t">T</span>&gt;(<span class="r56 r t">T</span> <span id="r57 rd" class="r57 r">value</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r58 rd" class="r58 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r58 r">scheduler</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;scheduler&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Repeat.cs.html#5b1d77229d6054ab" class="t constructor">RepeatObservable</a>&lt;<span class="r56 r t">T</span>&gt;(<span class="r57 r">value</span>, <b>null</b>, <span class="r58 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r59 r t">T</span>&gt; <a id="83c7775a8675cfa1" href="../../../../R/83c7775a8675cfa1.html" target="n" data-glyph="72,1" class="i method">Repeat</a>&lt;<span id="r59 rd t" class="r59 r t">T</span>&gt;(<span class="r59 r t">T</span> <span id="r60 rd" class="r60 r">value</span>, <b>int</b> <span id="r61 rd" class="r61 r">repeatCount</span>)
+        {
+            <b>return</b> <a href="#6d2e2dd917c50668" class="i method">Repeat</a>(<span class="r60 r">value</span>, <span class="r61 r">repeatCount</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r62 r t">T</span>&gt; <a id="6d2e2dd917c50668" href="../../../../R/6d2e2dd917c50668.html" target="n" data-glyph="72,1" class="i method">Repeat</a>&lt;<span id="r62 rd t" class="r62 r t">T</span>&gt;(<span class="r62 r t">T</span> <span id="r63 rd" class="r63 r">value</span>, <b>int</b> <span id="r64 rd" class="r64 r">repeatCount</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r65 rd" class="r65 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r64 r">repeatCount</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;repeatCount&quot;</span>);
+            <b>if</b> (<span class="r65 r">scheduler</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;scheduler&quot;</span>);
+ 
+            <b>return</b> <b>new</b> <a href="Operators/Repeat.cs.html#5b1d77229d6054ab" class="t constructor">RepeatObservable</a>&lt;<span class="r62 r t">T</span>&gt;(<span class="r63 r">value</span>, <span class="r64 r">repeatCount</span>, <span class="r65 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r66 r t">T</span>&gt; <a id="87e41fab00550215" href="../../../../R/87e41fab00550215.html" target="n" data-glyph="220,1" class="i method">Repeat</a>&lt;<span id="r66 rd t" class="r66 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r66 r t">T</span>&gt; <span id="r67 rd" class="r67 r">source</span>)
+        {
+            <b>return</b> <a href="#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r67 r">source</span>).<a href="Observable.Concatenate.cs.html#a4984a2800c36a73" class="i method">Concat</a>();
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r68 r t">T</span>&gt;&gt; <a id="da064fe584e4d9da" href="../../../../R/da064fe584e4d9da.html" target="n" data-glyph="76,1" class="i method">RepeatInfinite</a>&lt;<span id="r68 rd t" class="r68 r t">T</span>&gt;(<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r68 r t">T</span>&gt; <span id="r69 rd" class="r69 r">source</span>)
+        {
+            <b>while</b> (<b>true</b>)
+            {
+                <b>yield return</b> <span class="r69 r">source</span>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Same as Repeat() but if arriving contiguous &quot;OnComplete&quot; Repeat stops.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r70 r t">T</span>&gt; <a id="12a23b825943a616" href="../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">RepeatSafe</a>&lt;<span id="r70 rd t" class="r70 r t">T</span>&gt;(<b>this</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r70 r t">T</span>&gt; <span id="r71 rd" class="r71 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/RepeatSafe.cs.html#bf74d7d795488456" class="t constructor">RepeatSafeObservable</a>&lt;<span class="r70 r t">T</span>&gt;(<a href="#da064fe584e4d9da" class="i method">RepeatInfinite</a>(<span class="r71 r">source</span>), <span class="r71 r">source</span>.<a href="System/IOptimizedObservable.cs.html#b9fe99af9671789e" class="i method">IsRequiredSubscribeOnCurrentThread</a>());
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r72 r t">T</span>&gt; <a id="913e9618edf29d57" href="../../../../R/913e9618edf29d57.html" target="n" data-glyph="72,1" class="i method">Defer</a>&lt;<span id="r72 rd t" class="r72 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r72 r t">T</span>&gt;&gt; <span id="r73 rd" class="r73 r">observableFactory</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Defer.cs.html#568016b4aa4ea0e1" class="t constructor">DeferObservable</a>&lt;<span class="r72 r t">T</span>&gt;(<span class="r73 r">observableFactory</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r74 r t">T</span>&gt; <a id="4b9eec812b962b8f" href="../../../../R/4b9eec812b962b8f.html" target="n" data-glyph="72,1" class="i method">Start</a>&lt;<span id="r74 rd t" class="r74 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r74 r t">T</span>&gt; <span id="r75 rd" class="r75 r">function</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#d25817ca89829123" class="t constructor">StartObservable</a>&lt;<span class="r74 r t">T</span>&gt;(<span class="r75 r">function</span>, <b>null</b>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r76 r t">T</span>&gt; <a id="aadd7da86766d805" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>&lt;<span id="r76 rd t" class="r76 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r76 r t">T</span>&gt; <span id="r77 rd" class="r77 r">function</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r78 rd" class="r78 r">timeSpan</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#d25817ca89829123" class="t constructor">StartObservable</a>&lt;<span class="r76 r t">T</span>&gt;(<span class="r77 r">function</span>, <span class="r78 r">timeSpan</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r79 r t">T</span>&gt; <a id="fc7b5225231ffcf1" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>&lt;<span id="r79 rd t" class="r79 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r79 r t">T</span>&gt; <span id="r80 rd" class="r80 r">function</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r81 rd" class="r81 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#d25817ca89829123" class="t constructor">StartObservable</a>&lt;<span class="r79 r t">T</span>&gt;(<span class="r80 r">function</span>, <b>null</b>, <span class="r81 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r82 r t">T</span>&gt; <a id="97d12370a14f6737" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>&lt;<span id="r82 rd t" class="r82 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r82 r t">T</span>&gt; <span id="r83 rd" class="r83 r">function</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r84 rd" class="r84 r">timeSpan</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r85 rd" class="r85 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#d25817ca89829123" class="t constructor">StartObservable</a>&lt;<span class="r82 r t">T</span>&gt;(<span class="r83 r">function</span>, <span class="r84 r">timeSpan</span>, <span class="r85 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="e090be6e5e3cf408" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r86 rd" class="r86 r">action</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#160594e4237efbb5" class="t constructor">StartObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span class="r86 r">action</span>, <b>null</b>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="da9f0cfa49441815" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r87 rd" class="r87 r">action</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r88 rd" class="r88 r">timeSpan</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#160594e4237efbb5" class="t constructor">StartObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span class="r87 r">action</span>, <span class="r88 r">timeSpan</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="a45e67c40cb9c013" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r89 rd" class="r89 r">action</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r90 rd" class="r90 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#160594e4237efbb5" class="t constructor">StartObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span class="r89 r">action</span>, <b>null</b>, <span class="r90 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="14007f345ec6ec14" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Start</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r91 rd" class="r91 r">action</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r92 rd" class="r92 r">timeSpan</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r93 rd" class="r93 r">scheduler</span>)
+        {
+            <b>return</b> <b>new</b> <a href="Operators/Start.cs.html#160594e4237efbb5" class="t constructor">StartObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;(<span class="r91 r">action</span>, <span class="r92 r">timeSpan</span>, <span class="r93 r">scheduler</span>);
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r94 r t">T</span>&gt;&gt; <a id="2a94074b83cbff82" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ToAsync</a>&lt;<span id="r94 rd t" class="r94 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r94 r t">T</span>&gt; <span id="r95 rd" class="r95 r">function</span>)
+        {
+            <b>return</b> <a href="#c2009ef4bebc523b" class="i method">ToAsync</a>(<span class="r95 r">function</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r96 r t">T</span>&gt;&gt; <a id="c2009ef4bebc523b" href="../../../../R/c2009ef4bebc523b.html" target="n" data-glyph="72,1" class="i method">ToAsync</a>&lt;<span id="r96 rd t" class="r96 r t">T</span>&gt;(<a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<span class="r96 r t">T</span>&gt; <span id="r97 rd" class="r97 r">function</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r98 rd" class="r98 r">scheduler</span>)
+        {
+            <b>return</b> () =&gt;
+            {
+                <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="k">var</a> <span id="r99 rd" class="r99 r">subject</span> = <b>new</b> <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="t constructor">AsyncSubject</a>&lt;<span class="r96 r t">T</span>&gt;();
+ 
+                <span class="r98 r">scheduler</span>.<a href="Schedulers/IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt;
+                {
+                    <span class="r96 r t">var</span> <span id="r100 rd" class="r100 r">result</span> = <b>default</b>(<span class="r96 r t">T</span>);
+                    <b>try</b>
+                    {
+                        <span class="r100 r">result</span> = <span class="r97 r">function</span>();
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r101 rd" class="r101 r">exception</span>)
+                    {
+                        <span class="r99 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#cefae23e795da878" class="i method">OnError</a>(<span class="r101 r">exception</span>);
+                        <b>return</b>;
+                    }
+                    <span class="r99 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#fb8fe68424d2cb76" class="i method">OnNext</a>(<span class="r100 r">result</span>);
+                    <span class="r99 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#48f07d1bfb5d534d" class="i method">OnCompleted</a>();
+                });
+ 
+                <b>return</b> <span class="r99 r">subject</span>.<a href="Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+            };
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="89a0560bc62ce9f9" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ToAsync</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r102 rd" class="r102 r">action</span>)
+        {
+            <b>return</b> <a href="#5c7b8c51562975c8" class="i method">ToAsync</a>(<span class="r102 r">action</span>, <a href="../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="Schedulers/Scheduler.cs.html#b7e585547b0e1c95" class="i property">AsyncConversions</a>);
+        }
+ 
+        <b>public static</b> <a href="@0@System.Core/A.html#87d60abb7092d5a4" class="t t">Func</a>&lt;<a href="System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="5c7b8c51562975c8" href="../../../../R/5c7b8c51562975c8.html" target="n" data-glyph="72,1" class="i method">ToAsync</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r103 rd" class="r103 r">action</span>, <a href="Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r104 rd" class="r104 r">scheduler</span>)
+        {
+            <b>return</b> () =&gt;
+            {
+                <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="k">var</a> <span id="r105 rd" class="r105 r">subject</span> = <b>new</b> <a href="Subjects/AsyncSubject.cs.html#7ba2daab5e6a0086" class="t constructor">AsyncSubject</a>&lt;<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;();
+ 
+                <span class="r104 r">scheduler</span>.<a href="Schedulers/IScheduler.cs.html#e0dd22c68ad50c68" class="i method">Schedule</a>(() =&gt;
+                {
+                    <b>try</b>
+                    {
+                        <span class="r103 r">action</span>();
+                    }
+                    <b>catch</b> (<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r106 rd" class="r106 r">exception</span>)
+                    {
+                        <span class="r105 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#cefae23e795da878" class="i method">OnError</a>(<span class="r106 r">exception</span>);
+                        <b>return</b>;
+                    }
+                    <span class="r105 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#fb8fe68424d2cb76" class="i method">OnNext</a>(<a href="System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+                    <span class="r105 r">subject</span>.<a href="Subjects/AsyncSubject.cs.html#48f07d1bfb5d534d" class="i method">OnCompleted</a>();
+                });
+ 
+                <b>return</b> <span class="r105 r">subject</span>.<a href="Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+            };
+        }
+    }
+}</pre></td></tr></table></div></body></html>

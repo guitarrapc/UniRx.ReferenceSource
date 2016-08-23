@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html><head><title>HandleObservableAnalyzer.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(94);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer/HandleObservableAnalyzer.cs" target="_top">HandleObservableAnalyzer.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer\UniRxAnalyzer.csproj</a> (UniRxAnalyzer)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i">Immutable</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CSharp</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CSharp</span>.<span class="i">Syntax</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Diagnostics</span>;
+ 
+<b>namespace</b> <span class="i n">UniRxAnalyzer</span>
+{
+    [<span class="i">DiagnosticAnalyzer</span>(<span class="i">LanguageNames</span>.<span class="i">CSharp</span>)]
+    <b>public class</b> <a id="25329baa2825fc74" href="R/25329baa2825fc74.html" target="n" data-glyph="0,0" class="t t"><span id="3d5c4435c34e4138">HandleObservableAnalyzer</span></a> : <span class="i">DiagnosticAnalyzer</span>
+    {
+        <b>public const string</b> <a id="e38a1b8fafc93786" href="R/e38a1b8fafc93786.html" target="n" data-glyph="6,1" class="i field">DiagnosticId</a> = <span class="s">&quot;HandleObservable&quot;</span>;
+ 
+        <b>internal const string</b> <a id="37baad2ee701828a" href="R/37baad2ee701828a.html" target="n" data-glyph="8,1" class="i field">Title</a> = <span class="s">&quot;IObservable&lt;T&gt; does not handled.&quot;</span>;
+        <b>internal const string</b> <a id="887010596fc143df" href="R/887010596fc143df.html" target="n" data-glyph="8,1" class="i field">MessageFormat</a> = <span class="s">&quot;This call does not handle IObservable&lt;T&gt;.&quot;</span>;
+        <b>internal const string</b> <a id="2bedc8753b477582" href="R/2bedc8753b477582.html" target="n" data-glyph="8,1" class="i field">Description</a> = <span class="s">&quot;IObservable&lt;T&gt; should be handled(assign, subscribe, chain operator).&quot;</span>;
+        <b>internal const string</b> <a id="4f31910d7367dd56" href="R/4f31910d7367dd56.html" target="n" data-glyph="8,1" class="i field">Category</a> = <span class="s">&quot;Usage&quot;</span>;
+ 
+        <b>internal static</b> <span class="i">DiagnosticDescriptor</span> <a id="94151ae88a760b71" href="R/94151ae88a760b71.html" target="n" data-glyph="44,1" class="i field">Rule</a> = <b>new</b> <span class="i">DiagnosticDescriptor</span>(<a href="#e38a1b8fafc93786" class="i field">DiagnosticId</a>, <a href="#37baad2ee701828a" class="i field">Title</a>, <a href="#887010596fc143df" class="i field">MessageFormat</a>, <a href="#4f31910d7367dd56" class="i field">Category</a>, <span class="i">DiagnosticSeverity</span>.<span class="i">Warning</span>, <span class="i">isEnabledByDefault</span>: <b>true</b>, <span class="i">description</span>: <a href="#2bedc8753b477582" class="i field">Description</a>);
+ 
+        <b>public override</b> <span class="i">ImmutableArray</span>&lt;<span class="i">DiagnosticDescriptor</span>&gt; <a id="84996e30d93fd676" href="R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">SupportedDiagnostics</a> { <b>get</b> { <b>return</b> <span class="i">ImmutableArray</span>.<span class="i">Create</span>(<a href="#94151ae88a760b71" class="i field">Rule</a>); } }
+ 
+        <b>public override void</b> <a id="828f51dd2d096c03" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Initialize</a>(<span class="i">AnalysisContext</span> <span id="r0 rd" class="r0 r">context</span>)
+        {
+            <span class="r0 r">context</span>.<span class="i">RegisterSyntaxNodeAction</span>(<span class="i">AnalyzeMethodDeclaration</span>, <span class="i">SyntaxKind</span>.<span class="i">MethodDeclaration</span>);
+        }
+ 
+        <b>private static void</b> <a id="517b212af5fdf100" href="R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">AnalyzeMethodDeclaration</a>(<span class="i">SyntaxNodeAnalysisContext</span> <span id="r1 rd" class="r1 r">context</span>)
+        {
+            <b>var</b> <span id="r2 rd" class="r2 r">invocationExpressions</span> = <span class="r1 r">context</span>.<span class="i">Node</span>
+                .<span class="i">DescendantNodes</span>()
+                .<span class="i">OfType</span>&lt;<span class="i">InvocationExpressionSyntax</span>&gt;();
+ 
+            <b>foreach</b> (<b>var</b> <span id="r3 rd" class="r3 r">expr</span> <b>in</b> <span class="r2 r">invocationExpressions</span>)
+            {
+                <b>var</b> <span id="r4 rd" class="r4 r">type</span> = <span class="r1 r">context</span>.<span class="i">SemanticModel</span>.<span class="i">GetTypeInfo</span>(<span class="r3 r">expr</span>).<span class="i">Type</span>;
+                <span class="c">// UniRx.IObservable? System.IObservable?</span>
+                <b>if</b> (<b>new</b>[] { <span class="r4 r">type</span> }.<span class="i">Concat</span>(<span class="r4 r">type</span>.<span class="i">AllInterfaces</span>).<span class="i">Any</span>(<span id="r5 rd" class="r5 r">x</span> =&gt; <span class="r5 r">x</span>.<span class="i">Name</span> == <span class="s">&quot;IObservable&quot;</span>))
+                {
+                    <b>if</b> (<span class="i">ValidateInvocation</span>(<span class="r3 r">expr</span>)) <b>continue</b>;
+ 
+                    <span class="c">// Report Warning</span>
+                    <b>var</b> <span id="r6 rd" class="r6 r">diagnostic</span> = <span class="i">Diagnostic</span>.<span class="i">Create</span>(<a href="#94151ae88a760b71" class="i field">Rule</a>, <span class="r3 r">expr</span>.<span class="i">GetLocation</span>());
+                    <span class="r1 r">context</span>.<span class="i">ReportDiagnostic</span>(<span class="r6 r">diagnostic</span>);
+                }
+            }
+        }
+ 
+        <b>static bool</b> <a id="d5177a38952df965" href="R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">ValidateInvocation</a>(<span class="i">InvocationExpressionSyntax</span> <span id="r7 rd" class="r7 r">expr</span>)
+        {
+            <b>bool</b> <span id="r8 rd" class="r8 r">allAncestorsIsParenthes</span> = <b>true</b>;
+            <b>foreach</b> (<b>var</b> <span id="r9 rd" class="r9 r">x</span> <b>in</b> <span class="r7 r">expr</span>.<span class="i">Ancestors</span>())
+            {
+                <span class="c">// scope is in lambda, method</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">SimpleLambdaExpression</span>) || <span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ParenthesizedLambdaExpression</span>) || <span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ArrowExpressionClause</span>))
+                {
+                    <span class="c">// () =&gt; M()</span>
+                    <b>if</b> (<span class="r8 r">allAncestorsIsParenthes</span>) <b>return true</b>;
+                    <b>break</b>;
+                }
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">MethodDeclaration</span>)) <b>break</b>;
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">PropertyDeclaration</span>)) <b>break</b>;
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ConstructorDeclaration</span>)) <b>break</b>;
+ 
+                <span class="c">// x = M()</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">SimpleAssignmentExpression</span>)) <b>return true</b>;
+                <span class="c">// var x = M()</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">VariableDeclarator</span>)) <b>return true</b>;
+                <span class="c">// return M()</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ReturnStatement</span>)) <b>return true</b>;
+                <span class="c">// from x in M()</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">FromClause</span>)) <b>return true</b>;
+                <span class="c">// (bool) ? M() : M()</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ConditionalExpression</span>)) <b>return true</b>;
+                <span class="c">// M(M())</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">InvocationExpression</span>)) <b>return true</b>;
+                <span class="c">// new C(M())</span>
+                <b>if</b> (<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ObjectCreationExpression</span>)) <b>return true</b>;
+ 
+                <span class="c">// (((((M()))))</span>
+                <b>if</b> (!<span class="r9 r">x</span>.<span class="i">IsKind</span>(<span class="i">SyntaxKind</span>.<span class="i">ParenthesizedExpression</span>))
+                {
+                    <span class="r8 r">allAncestorsIsParenthes</span> = <b>false</b>;
+                }
+            }
+ 
+            <span class="c">// Okay =&gt; M().M()</span>
+            <b>if</b> (<span class="r7 r">expr</span>.<span class="i">DescendantNodes</span>().<span class="i">OfType</span>&lt;<span class="i">InvocationExpressionSyntax</span>&gt;().<span class="i">Any</span>()) <b>return true</b>;
+ 
+            <b>return false</b>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

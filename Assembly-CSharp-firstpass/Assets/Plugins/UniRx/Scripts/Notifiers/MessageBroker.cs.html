@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html><head><title>MessageBroker.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(209);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Notifiers/MessageBroker.cs" target="_top">Assets\Plugins\UniRx\Scripts\Notifiers\MessageBroker.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="8fd0e8850ea1683d" href="../../../../../R/8fd0e8850ea1683d.html" target="n" data-glyph="48,0" class="t t">IMessagePublisher</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Send Message to all receiver.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="0830b973be11ba59" href="../../../../../R/0830b973be11ba59.html" target="n" data-glyph="72,1" class="i method">Publish</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">message</span>);
+    }
+ 
+    <b>public interface</b> <a id="a5d3cfcb26584097" href="../../../../../R/a5d3cfcb26584097.html" target="n" data-glyph="48,0" class="t t">IMessageReceiver</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Subscribe typed message.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r2 r t">T</span>&gt; <a id="28db25a6d3da79a8" href="../../../../../R/28db25a6d3da79a8.html" target="n" data-glyph="72,1" class="i method">Receive</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;();
+    }
+ 
+    <b>public interface</b> <a id="2c9e2191a2a455a4" href="../../../../../R/2c9e2191a2a455a4.html" target="n" data-glyph="48,0" class="t t">IMessageBroker</a> : <a href="#8fd0e8850ea1683d" class="t t">IMessagePublisher</a>, <a href="#a5d3cfcb26584097" class="t t">IMessageReceiver</a>
+    {
+    }
+ 
+    <b>public interface</b> <a id="50c4567898a9ec92" href="../../../../../R/50c4567898a9ec92.html" target="n" data-glyph="48,0" class="t t">IAsyncMessagePublisher</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Send Message to all receiver and await complete.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="bc88c236424bcd49" href="../../../../../R/bc88c236424bcd49.html" target="n" data-glyph="72,1" class="i method">PublishAsync</a>&lt;<span id="r3 rd t" class="r3 r t">T</span>&gt;(<span class="r3 r t">T</span> <span id="r4 rd" class="r4 r">message</span>);
+    }
+ 
+    <b>public interface</b> <a id="c7d9850d45541e82" href="../../../../../R/c7d9850d45541e82.html" target="n" data-glyph="48,0" class="t t">IAsyncMessageReceiver</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Subscribe typed message.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="db9d4539ecdc458a" href="../../../../../R/db9d4539ecdc458a.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>&lt;<span id="r5 rd t" class="r5 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r5 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r6 rd" class="r6 r">asyncMessageReceiver</span>);
+    }
+ 
+    <b>public interface</b> <a id="cb1ddd90313840e5" href="../../../../../R/cb1ddd90313840e5.html" target="n" data-glyph="48,0" class="t t">IAsyncMessageBroker</a> : <a href="#50c4567898a9ec92" class="t t">IAsyncMessagePublisher</a>, <a href="#c7d9850d45541e82" class="t t">IAsyncMessageReceiver</a>
+    {
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> In-Memory PubSub filtered by Type.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="32bdce6be6901dbd" href="../../../../../R/32bdce6be6901dbd.html" target="n" data-glyph="0,0" class="t t"><span id="6dfb15fa2e2288c5">MessageBroker</span></a> : <a href="#2c9e2191a2a455a4" class="t t">IMessageBroker</a>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> MessageBroker in Global scope.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static readonly</b> <a href="#2c9e2191a2a455a4" class="t t">IMessageBroker</a> <a id="1fc541869d823be8" href="../../../../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">Default</a> = <b>new</b> <a href="#32bdce6be6901dbd" class="t constructor">MessageBroker</a>();
+ 
+        <b>bool</b> <a id="ff703bf131dc88f7" href="../../../../../R/ff703bf131dc88f7.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = <b>false</b>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>, <b>object</b>&gt; <a id="76c288a8687ef3bb" href="../../../../../R/76c288a8687ef3bb.html" target="n" data-glyph="46,1" class="i field">notifiers</a> = <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Dictionary</a>&lt;<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>, <b>object</b>&gt;();
+ 
+        <b>public void</b> <a id="1696ad8a72423f98" href="../../../../../R/1696ad8a72423f98.html" target="n" data-glyph="72,1" class="i method">Publish</a>&lt;<span id="r7 rd t" class="r7 r t">T</span>&gt;(<span class="r7 r t">T</span> <span id="r8 rd" class="r8 r">message</span>)
+        {
+            <b>object</b> <span id="r9 rd" class="r9 r">notifier</span>;
+            <b>lock</b> (<a href="#76c288a8687ef3bb" class="i field">notifiers</a>)
+            {
+                <b>if</b> (<a href="#ff703bf131dc88f7" class="i field">isDisposed</a>) <b>return</b>;
+ 
+                <b>if</b> (!<a href="#76c288a8687ef3bb" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<b>typeof</b>(<span class="r7 r t">T</span>), <b>out</b> <span class="r9 r">notifier</span>))
+                {
+                    <b>return</b>;
+                }
+            }
+            ((<a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r7 r t">T</span>&gt;)<span class="r9 r">notifier</span>).<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r8 r">message</span>);
+        }
+ 
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r10 r t">T</span>&gt; <a id="c8051e617255db64" href="../../../../../R/c8051e617255db64.html" target="n" data-glyph="72,1" class="i method">Receive</a>&lt;<span id="r10 rd t" class="r10 r t">T</span>&gt;()
+        {
+            <b>object</b> <span id="r11 rd" class="r11 r">notifier</span>;
+            <b>lock</b> (<a href="#76c288a8687ef3bb" class="i field">notifiers</a>)
+            {
+                <b>if</b> (<a href="#ff703bf131dc88f7" class="i field">isDisposed</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;MessageBroker&quot;</span>);
+ 
+                <b>if</b> (!<a href="#76c288a8687ef3bb" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<b>typeof</b>(<span class="r10 r t">T</span>), <b>out</b> <span class="r11 r">notifier</span>))
+                {
+                    <a href="../Subjects/ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r10 r t">T</span>&gt; <span id="r12 rd" class="r12 r">n</span> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r10 r t">T</span>&gt;().<a href="../Subjects/SubjectExtensions.cs.html#de89131eb3e94f50" class="i method">Synchronize</a>();
+                    <span class="r11 r">notifier</span> = <span class="r12 r">n</span>;
+                    <a href="#76c288a8687ef3bb" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#a7861da7aaa500fe" class="i method">Add</a>(<b>typeof</b>(<span class="r10 r t">T</span>), <span class="r11 r">notifier</span>);
+                }
+            }
+ 
+            <b>return</b> ((<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r10 r t">T</span>&gt;)<span class="r11 r">notifier</span>).<a href="../Observable.Conversions.cs.html#13fe208f7fd2ab90" class="i method">AsObservable</a>();
+        }
+ 
+        <b>public void</b> <a id="b086e4a55688c619" href="../../../../../R/b086e4a55688c619.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>lock</b> (<a href="#76c288a8687ef3bb" class="i field">notifiers</a>)
+            {
+                <b>if</b> (!<a href="#ff703bf131dc88f7" class="i field">isDisposed</a>)
+                {
+                    <a href="#ff703bf131dc88f7" class="i field">isDisposed</a> = <b>true</b>;
+                    <a href="#76c288a8687ef3bb" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#36b30e4c0708a88c" class="i method">Clear</a>();
+                }
+            }
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> In-Memory PubSub filtered by Type.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="b3728ac788c5637d" href="../../../../../R/b3728ac788c5637d.html" target="n" data-glyph="0,0" class="t t"><span id="8175cecdbf4d3569">AsyncMessageBroker</span></a> : <a href="#cb1ddd90313840e5" class="t t">IAsyncMessageBroker</a>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> AsyncMessageBroker in Global scope.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static readonly</b> <a href="#cb1ddd90313840e5" class="t t">IAsyncMessageBroker</a> <a id="708a6d89c986158e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="42,1" class="i field">Default</a> = <b>new</b> <a href="#b3728ac788c5637d" class="t constructor">AsyncMessageBroker</a>();
+ 
+        <b>bool</b> <a id="e47dfa8e524a6d0a" href="../../../../../R/e47dfa8e524a6d0a.html" target="n" data-glyph="46,1" class="i field">isDisposed</a> = <b>false</b>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#d3599058f8d79be0" class="t t">Dictionary</a>&lt;<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>, <b>object</b>&gt; <a id="9eac7470ea876d13" href="../../../../../R/9eac7470ea876d13.html" target="n" data-glyph="46,1" class="i field">notifiers</a> = <b>new</b> <a href="@0@mscorlib/A.html#bf6849e410b43c4c" class="t constructor">Dictionary</a>&lt;<a href="@0@mscorlib/A.html#3d00eeab9feb80f3" class="t t">Type</a>, <b>object</b>&gt;();
+ 
+        <b>public</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="c655217d9e5c4a38" href="../../../../../R/c655217d9e5c4a38.html" target="n" data-glyph="72,1" class="i method">PublishAsync</a>&lt;<span id="r13 rd t" class="r13 r t">T</span>&gt;(<span class="r13 r t">T</span> <span id="r14 rd" class="r14 r">message</span>)
+        {
+            <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r13 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt; <span id="r15 rd" class="r15 r">notifier</span>;
+            <b>lock</b> (<a href="#9eac7470ea876d13" class="i field">notifiers</a>)
+            {
+                <b>if</b> (<a href="#e47dfa8e524a6d0a" class="i field">isDisposed</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;AsyncMessageBroker&quot;</span>);
+ 
+                <b>object</b> <span id="r16 rd" class="r16 r">_notifier</span>;
+                <b>if</b> (<a href="#9eac7470ea876d13" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<b>typeof</b>(<span class="r13 r t">T</span>), <b>out</b> <span class="r16 r">_notifier</span>))
+                {
+                    <span class="r15 r">notifier</span> = (<span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r13 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt;)<span class="r16 r">_notifier</span>;
+                }
+                <b>else</b>
+                {
+                    <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5a94a3189575c5a6" class="i method">ReturnUnit</a>();
+                }
+            }
+ 
+            <b>var</b> <span id="r17 rd" class="r17 r">data</span> = <span class="r15 r">notifier</span>.<a href="../InternalUtil/ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>;
+            <b>var</b> <span id="r18 rd" class="r18 r">awaiter</span> = <b>new</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;[<span class="r17 r">data</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>];
+            <b>for</b> (<b>int</b> <span id="r19 rd" class="r19 r">i</span> = 0; <span class="r19 r">i</span> &lt; <span class="r17 r">data</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r19 r">i</span>++)
+            {
+                <span class="r18 r">awaiter</span>[<span class="r19 r">i</span>] = <span class="r17 r">data</span>[<span class="r19 r">i</span>].<a href="@0@System.Core/A.html#3c17e52b9e2c8f81" class="i method">Invoke</a>(<span class="r14 r">message</span>);
+            }
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Concatenate.cs.html#31132660576ae3ec" class="i method">WhenAll</a>(<span class="r18 r">awaiter</span>);
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="85a34876094f3439" href="../../../../../R/85a34876094f3439.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>&lt;<span id="r20 rd t" class="r20 r t">T</span>&gt;(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r20 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r21 rd" class="r21 r">asyncMessageReceiver</span>)
+        {
+            <b>lock</b> (<a href="#9eac7470ea876d13" class="i field">notifiers</a>)
+            {
+                <b>if</b> (<a href="#e47dfa8e524a6d0a" class="i field">isDisposed</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;AsyncMessageBroker&quot;</span>);
+ 
+                <b>object</b> <span id="r22 rd" class="r22 r">_notifier</span>;
+                <b>if</b> (!<a href="#9eac7470ea876d13" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<b>typeof</b>(<span class="r20 r t">T</span>), <b>out</b> <span class="r22 r">_notifier</span>))
+                {
+                    <a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="k">var</a> <span id="r23 rd" class="r23 r">notifier</span> = <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r20 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt;.<a href="../InternalUtil/ImmutableList.cs.html#d4818b09742a8d04" class="i field">Empty</a>;
+                    <span class="r23 r">notifier</span> = <span class="r23 r">notifier</span>.<a href="../InternalUtil/ImmutableList.cs.html#13acf5d91a8e1dab" class="i method">Add</a>(<span class="r21 r">asyncMessageReceiver</span>);
+                    <a href="#9eac7470ea876d13" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#a7861da7aaa500fe" class="i method">Add</a>(<b>typeof</b>(<span class="r20 r t">T</span>), <span class="r23 r">notifier</span>);
+                }
+                <b>else</b>
+                {
+                    <a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="k">var</a> <span id="r24 rd" class="r24 r">notifier</span> = (<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r20 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt;)<span class="r22 r">_notifier</span>;
+                    <span class="r24 r">notifier</span> = <span class="r24 r">notifier</span>.<a href="../InternalUtil/ImmutableList.cs.html#13acf5d91a8e1dab" class="i method">Add</a>(<span class="r21 r">asyncMessageReceiver</span>);
+                    <a href="#9eac7470ea876d13" class="i field">notifiers</a><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><b>typeof</b>(<span class="r20 r t">T</span>)] = <span class="r24 r">notifier</span>;
+                }
+            }
+ 
+            <b>return</b> <b>new</b> <a href="#bcd01993c6158251" class="t constructor">Subscription</a>&lt;<span class="r20 r t">T</span>&gt;(<a href="#b3728ac788c5637d" class="k">this</a>, <span class="r21 r">asyncMessageReceiver</span>);
+        }
+ 
+        <b>public void</b> <a id="d1e9f9a9c52320f1" href="../../../../../R/d1e9f9a9c52320f1.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>lock</b> (<a href="#9eac7470ea876d13" class="i field">notifiers</a>)
+            {
+                <b>if</b> (!<a href="#e47dfa8e524a6d0a" class="i field">isDisposed</a>)
+                {
+                    <a href="#e47dfa8e524a6d0a" class="i field">isDisposed</a> = <b>true</b>;
+                    <a href="#9eac7470ea876d13" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#36b30e4c0708a88c" class="i method">Clear</a>();
+                }
+            }
+        }
+ 
+        <b>class</b> <a id="e98a02e9fef0c8ac" href="../../../../../R/e98a02e9fef0c8ac.html" target="n" data-glyph="4,1" class="t t">Subscription</a>&lt;<span id="r25 rd t" class="r25 r t">T</span>&gt; : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#b3728ac788c5637d" class="t t">AsyncMessageBroker</a> <a id="45cc4e2276a2c5d6" href="../../../../../R/45cc4e2276a2c5d6.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r25 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="e6f1471bba0afecb" href="../../../../../R/e6f1471bba0afecb.html" target="n" data-glyph="46,2" class="i field">asyncMessageReceiver</a>;
+ 
+            <b>public</b> <a id="bcd01993c6158251" href="../../../../../R/bcd01993c6158251.html" target="n" data-glyph="72,2" class="i constructor">Subscription</a>(<a href="#b3728ac788c5637d" class="t t">AsyncMessageBroker</a> <span id="r26 rd" class="r26 r">parent</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r25 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r27 rd" class="r27 r">asyncMessageReceiver</span>)
+            {
+                <a href="#e98a02e9fef0c8ac" class="k">this</a>.<a href="#45cc4e2276a2c5d6" class="i field">parent</a> = <span class="r26 r">parent</span>;
+                <a href="#e98a02e9fef0c8ac" class="k">this</a>.<a href="#e6f1471bba0afecb" class="i field">asyncMessageReceiver</a> = <span class="r27 r">asyncMessageReceiver</span>;
+            }
+ 
+            <b>public void</b> <a id="2f6cd1f14bd08f45" href="../../../../../R/2f6cd1f14bd08f45.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>lock</b> (<a href="#45cc4e2276a2c5d6" class="i field">parent</a>.<a href="#9eac7470ea876d13" class="i field">notifiers</a>)
+                {
+                    <b>object</b> <span id="r28 rd" class="r28 r">_notifier</span>;
+                    <b>if</b> (<a href="#45cc4e2276a2c5d6" class="i field">parent</a>.<a href="#9eac7470ea876d13" class="i field">notifiers</a>.<a href="@0@mscorlib/A.html#2e5bc6d8c0f21e67" class="i method">TryGetValue</a>(<b>typeof</b>(<span class="r25 r t">T</span>), <b>out</b> <span class="r28 r">_notifier</span>))
+                    {
+                        <a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="k">var</a> <span id="r29 rd" class="r29 r">notifier</span> = (<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r25 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt;)<span class="r28 r">_notifier</span>;
+                        <span class="r29 r">notifier</span> = <span class="r29 r">notifier</span>.<a href="../InternalUtil/ImmutableList.cs.html#9e600300d8a7460b" class="i method">Remove</a>(<a href="#e6f1471bba0afecb" class="i field">asyncMessageReceiver</a>);
+ 
+                        <a href="#45cc4e2276a2c5d6" class="i field">parent</a>.<a href="#9eac7470ea876d13" class="i field">notifiers</a><a href="@0@mscorlib/A.html#49962975508e2d83">[</a><b>typeof</b>(<span class="r25 r t">T</span>)] = <span class="r29 r">notifier</span>;
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

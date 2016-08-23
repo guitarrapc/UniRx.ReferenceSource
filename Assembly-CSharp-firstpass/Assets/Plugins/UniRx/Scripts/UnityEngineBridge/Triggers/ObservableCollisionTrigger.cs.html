@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableCollisionTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(67);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableCollisionTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableCollisionTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="a3d41e89f83e7565" href="../../../../../../R/a3d41e89f83e7565.html" target="n" data-glyph="0,0" class="t t"><span id="90b13441d1b3e3cd">ObservableCollisionTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>
+    {
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision</span>&gt; <a id="1d1733564410b990" href="../../../../../../R/1d1733564410b990.html" target="n" data-glyph="46,1" class="i field">onCollisionEnter</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="b4b026a803038093" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCollisionEnter</a>(<span class="i">Collision</span> <span id="r0 rd" class="r0 r">collision</span>)
+        {
+            <b>if</b> (<a href="#1d1733564410b990" class="i field">onCollisionEnter</a> != <b>null</b>) <a href="#1d1733564410b990" class="i field">onCollisionEnter</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r0 r">collision</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="32eadc87c8c41bfe" href="../../../../../../R/32eadc87c8c41bfe.html" target="n" data-glyph="72,1" class="i method">OnCollisionEnterAsObservable</a>()
+        {
+            <b>return</b> <a href="#1d1733564410b990" class="i field">onCollisionEnter</a> ?? (<a href="#1d1733564410b990" class="i field">onCollisionEnter</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision</span>&gt; <a id="e24748c8177f8a82" href="../../../../../../R/e24748c8177f8a82.html" target="n" data-glyph="46,1" class="i field">onCollisionExit</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionExit is called when this collider/rigidbody has stopped touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="cb47f7f134061890" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCollisionExit</a>(<span class="i">Collision</span> <span id="r1 rd" class="r1 r">collisionInfo</span>)
+        {
+            <b>if</b> (<a href="#e24748c8177f8a82" class="i field">onCollisionExit</a> != <b>null</b>) <a href="#e24748c8177f8a82" class="i field">onCollisionExit</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r1 r">collisionInfo</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionExit is called when this collider/rigidbody has stopped touching another rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="e6f6fc1fb92ac638" href="../../../../../../R/e6f6fc1fb92ac638.html" target="n" data-glyph="72,1" class="i method">OnCollisionExitAsObservable</a>()
+        {
+            <b>return</b> <a href="#e24748c8177f8a82" class="i field">onCollisionExit</a> ?? (<a href="#e24748c8177f8a82" class="i field">onCollisionExit</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision</span>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="i">Collision</span>&gt; <a id="b802ab0a4ca80e9b" href="../../../../../../R/b802ab0a4ca80e9b.html" target="n" data-glyph="46,1" class="i field">onCollisionStay</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionStay is called once per frame for every collider/rigidbody that is touching rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+         <b>void</b> <a id="e49a120d63bc6f93" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnCollisionStay</a>(<span class="i">Collision</span> <span id="r2 rd" class="r2 r">collisionInfo</span>)
+        {
+            <b>if</b> (<a href="#b802ab0a4ca80e9b" class="i field">onCollisionStay</a> != <b>null</b>) <a href="#b802ab0a4ca80e9b" class="i field">onCollisionStay</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r2 r">collisionInfo</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnCollisionStay is called once per frame for every collider/rigidbody that is touching rigidbody/collider.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="i">Collision</span>&gt; <a id="744b659c16215e9b" href="../../../../../../R/744b659c16215e9b.html" target="n" data-glyph="72,1" class="i method">OnCollisionStayAsObservable</a>()
+        {
+            <b>return</b> <a href="#b802ab0a4ca80e9b" class="i field">onCollisionStay</a> ?? (<a href="#b802ab0a4ca80e9b" class="i field">onCollisionStay</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="i">Collision</span>&gt;());
+        }
+ 
+        <b>protected override void</b> <a id="c2c8cc1caa3e0614" href="../../../../../../R/c2c8cc1caa3e0614.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#1d1733564410b990" class="i field">onCollisionEnter</a> != <b>null</b>)
+            {
+                <a href="#1d1733564410b990" class="i field">onCollisionEnter</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#e24748c8177f8a82" class="i field">onCollisionExit</a> != <b>null</b>)
+            {
+                <a href="#e24748c8177f8a82" class="i field">onCollisionExit</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#b802ab0a4ca80e9b" class="i field">onCollisionStay</a> != <b>null</b>)
+            {
+                <a href="#b802ab0a4ca80e9b" class="i field">onCollisionStay</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

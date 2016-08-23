@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html><head><title>Sample11_Logger.cs</title><link rel="stylesheet" href="../../../../../styles.css"><script src="../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Examples/Sample11_Logger.cs" target="_top">Assets\Plugins\UniRx\Examples\Sample11_Logger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>;
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Examples</span>
+{
+    <b>public class</b> <a id="c1fbe941609f525c" href="../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="4fe8f3d43bf49d77">Sample11_Logger</span></a>
+    {
+        <span class="c">// UniRx.Diagnostics.Logger</span>
+        <span class="c">// logger is threadsafe, define per class with name.</span>
+		<b>static readonly</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>.<a href="../Scripts/UnityEngineBridge/Diagnostics/Logger.cs.html#5edfe68a15b571a3" class="t t">Logger</a> <a id="72e33b086888a870" href="../../../../R/72e33b086888a870.html" target="n" data-glyph="46,1" class="i field">logger</a> = <b>new</b> <span class="i n">UniRx</span>.<span class="i n">Diagnostics</span>.<a href="../Scripts/UnityEngineBridge/Diagnostics/Logger.cs.html#1b18fc7f400182b9" class="t constructor">Logger</a>(<span class="s">&quot;Sample11&quot;</span>);
+ 
+        <span class="c">// call once at applicationinit</span>
+        <b>public void</b> <a id="9f9974f1265c2b67" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ApplicationInitialize</a>()
+        {
+            <span class="c">// Log as Stream, UniRx.Diagnostics.ObservableLogger.Listener is IObservable&lt;LogEntry&gt;</span>
+            <span class="c">// You can subscribe and output to any place.</span>
+            <a href="../Scripts/UnityEngineBridge/Diagnostics/ObservableLogger.cs.html#84ef72fca7011312" class="t t">ObservableLogger</a>.<a href="../Scripts/UnityEngineBridge/Diagnostics/ObservableLogger.cs.html#9841e5b4591d8c1f" class="i field">Listener</a>.<a href="../Scripts/UnityEngineBridge/Diagnostics/LogEntryExtensions.cs.html#d0bb151e7fa1ef5f" class="i method">LogToUnityDebug</a>();
+ 
+            <span class="c">// for example, filter only Exception and upload to web.</span>
+            <span class="c">// (make custom sink(IObserver&lt;EventEntry&gt;) is better to use)</span>
+            <a href="../Scripts/UnityEngineBridge/Diagnostics/ObservableLogger.cs.html#84ef72fca7011312" class="t t">ObservableLogger</a>.<a href="../Scripts/UnityEngineBridge/Diagnostics/ObservableLogger.cs.html#9841e5b4591d8c1f" class="i field">Listener</a>
+                .<span class="i">Where</span>(<span id="r0 rd" class="r0 r">x</span> =&gt; <span class="r0 r">x</span>.<a href="../Scripts/UnityEngineBridge/Diagnostics/LogEntry.cs.html#5a2c592b41d3b76a" class="i property">LogType</a> == <span class="i">LogType</span>.<span class="i">Exception</span>)
+                .<a href="../Scripts/Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span id="r1 rd" class="r1 r">x</span> =&gt;
+                {
+                    <span class="c">// ObservableWWW.Post(&quot;&quot;, null).Subscribe();</span>
+                });
+        }
+ 
+        <b>public void</b> <a id="62c1de6692206f7e" href="../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Run</a>()
+        {
+            <span class="c">// Debug is write only DebugBuild.</span>
+            <a href="#72e33b086888a870" class="i field">logger</a>.<a href="../Scripts/UnityEngineBridge/Diagnostics/Logger.cs.html#205c071f6f2206e9" class="i method">Debug</a>(<span class="s">&quot;Debug Message&quot;</span>);
+ 
+            <span class="c">// or other logging methods</span>
+            <a href="#72e33b086888a870" class="i field">logger</a>.<a href="../Scripts/UnityEngineBridge/Diagnostics/Logger.cs.html#be01e50e93a9f903" class="i method">Log</a>(<span class="s">&quot;Message&quot;</span>);
+            <a href="#72e33b086888a870" class="i field">logger</a>.<a href="../Scripts/UnityEngineBridge/Diagnostics/Logger.cs.html#f47bf89f550fc150" class="i method">Exception</a>(<b>new</b> <a href="@0@mscorlib/A.html#df2d82d91ca29e40" class="t constructor">Exception</a>(<span class="s">&quot;test exception&quot;</span>));
+        }
+    }
+}</pre></td></tr></table></div></body></html>

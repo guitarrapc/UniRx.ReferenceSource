@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html><head><title>CurrentThreadScheduler.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(136);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Schedulers/CurrentThreadScheduler.cs" target="_top">Assets\Plugins\UniRx\Scripts\Schedulers\CurrentThreadScheduler.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// this code is borrowed from RxOfficial(rx.codeplex.com) and modified</span>
+ 
+<span class="c">// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.</span>
+ 
+<b>using</b> <span class="i n">System</span>.<span class="i n">ComponentModel</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+<b>using</b> <span class="i n">UniRx</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Diagnostics</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+ 
+    <b>public static</b> <a href="../../../../../P/48627f587bfa2dac.html" target="s" class="k">partial</a> <b>class</b> <a id="48627f587bfa2dac" href="../../../../../R/48627f587bfa2dac.html" target="n" data-glyph="0,0" class="t t">Scheduler</a>
+    {
+        <b>public static readonly</b> <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="1a7109e09365a544" href="../../../../../R/1a7109e09365a544.html" target="n" data-glyph="42,1" class="i field">CurrentThread</a> = <b>new</b> <a href="#bff4b8cf67f002b6" class="t constructor">CurrentThreadScheduler</a>();
+ 
+        <b>public static bool</b> <a id="390ac689c3b13477" href="../../../../../R/390ac689c3b13477.html" target="n" data-glyph="102,1" class="i property">IsCurrentThreadSchedulerScheduleRequired</a> { <b>get</b> { <b>return</b> <a href="#bff4b8cf67f002b6" class="t t">CurrentThreadScheduler</a>.<a href="#28e626e9f2944541" class="i property">IsScheduleRequired</a>; } }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Represents an object that schedules units of work on the current thread.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">seealso</span><span class="c"> </span><span class="c">cref</span><span class="c">=</span><span class="c">&quot;</span><a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="#1a7109e09365a544" class="i field">CurrentThread</a><span class="c">&quot;</span><span class="c">&gt;</span><span class="c">Singleton instance of this type exposed through this static property.</span><span class="c">&lt;/</span><span class="c">seealso</span><span class="c">&gt;</span>
+        <b>class</b> <a id="bff4b8cf67f002b6" href="../../../../../R/bff4b8cf67f002b6.html" target="n" data-glyph="4,1" class="t t"><span id="b342a504592a81ee">CurrentThreadScheduler</span></a> : <a href="IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a>
+        {
+            [<a href="@0@mscorlib/A.html#b0c23fc7e6f66cf4" class="t constructor">ThreadStatic</a>]
+            <b>static</b> <a href="../InternalUtil/ScheduledItem.cs.html#5f9de32c50a55162" class="t t">SchedulerQueue</a> <a id="a428a68b2c54aeab" href="../../../../../R/a428a68b2c54aeab.html" target="n" data-glyph="46,2" class="i field">s_threadLocalQueue</a>;
+ 
+            [<a href="@0@mscorlib/A.html#b0c23fc7e6f66cf4" class="t constructor">ThreadStatic</a>]
+            <b>static</b> <a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a> <a id="b15b61824521e651" href="../../../../../R/b15b61824521e651.html" target="n" data-glyph="46,2" class="i field">s_clock</a>;
+ 
+            <b>private static</b> <a href="../InternalUtil/ScheduledItem.cs.html#5f9de32c50a55162" class="t t">SchedulerQueue</a> <a id="5f52a689faf341fd" href="../../../../../R/5f52a689faf341fd.html" target="n" data-glyph="76,2" class="i method">GetQueue</a>()
+            {
+                <b>return</b> <a href="#a428a68b2c54aeab" class="i field">s_threadLocalQueue</a>;
+            }
+ 
+            <b>private static void</b> <a id="bac17c50c20ab954" href="../../../../../R/bac17c50c20ab954.html" target="n" data-glyph="76,2" class="i method">SetQueue</a>(<a href="../InternalUtil/ScheduledItem.cs.html#5f9de32c50a55162" class="t t">SchedulerQueue</a> <span id="r0 rd" class="r0 r">newQueue</span>)
+            {
+                <a href="#a428a68b2c54aeab" class="i field">s_threadLocalQueue</a> = <span class="r0 r">newQueue</span>;
+            }
+ 
+            <b>private static</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="87d545a5d426eaa8" href="../../../../../R/87d545a5d426eaa8.html" target="n" data-glyph="106,2" class="i property">Time</a>
+            {
+                <b>get</b>
+                {
+                    <b>if</b> (<a href="#b15b61824521e651" class="i field">s_clock</a> == <b>null</b>)
+                        <a href="#b15b61824521e651" class="i field">s_clock</a> = <a href="@0@System/A.html#ceb0ba9cc88de82e" class="t t">Stopwatch</a>.<a href="@0@System/A.html#dc0a41ceabc92682" class="i method">StartNew</a>();
+ 
+                    <b>return</b> <a href="#b15b61824521e651" class="i field">s_clock</a>.<a href="@0@System/A.html#60e03fb80c10ec79" class="i property">Elapsed</a>;
+                }
+            }
+ 
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+            <span class="c">///</span><span class="c"> Gets a value that indicates whether the caller must call a Schedule method.</span>
+            <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+            [<a href="@0@System/A.html#ab67c52c634f618d" class="t constructor">EditorBrowsable</a>(<a href="@0@System/A.html#1a60f7b04af02e88" class="t t">EditorBrowsableState</a>.<a href="@0@System/A.html#84b0e79ecc0004a1" class="i field">Advanced</a>)]
+            <b>public static bool</b> <a id="28e626e9f2944541" href="../../../../../R/28e626e9f2944541.html" target="n" data-glyph="102,2" class="i property">IsScheduleRequired</a>
+            {
+                <b>get</b>
+                {
+                    <b>return</b> <a href="#5f52a689faf341fd" class="i method">GetQueue</a>() == <b>null</b>;
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="3083bdc549a135f6" href="../../../../../R/3083bdc549a135f6.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r1 rd" class="r1 r">action</span>)
+            {
+                <b>return</b> <a href="#8cc7b29b4e5da99a" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>, <span class="r1 r">action</span>);
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="8cc7b29b4e5da99a" href="../../../../../R/8cc7b29b4e5da99a.html" target="n" data-glyph="72,2" class="i method">Schedule</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r2 rd" class="r2 r">dueTime</span>, <a href="@0@System.Core/A.html#9147ae6f76643aae" class="t t">Action</a> <span id="r3 rd" class="r3 r">action</span>)
+            {
+                <b>if</b> (<span class="r3 r">action</span> == <b>null</b>)
+                    <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;action&quot;</span>);
+ 
+                <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r4 rd" class="r4 r">dt</span> = <a href="#87d545a5d426eaa8" class="i property">Time</a> + <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<span class="r2 r">dueTime</span>);
+ 
+                <a href="../InternalUtil/ScheduledItem.cs.html#bf12c0aed76edf31" class="k">var</a> <span id="r5 rd" class="r5 r">si</span> = <b>new</b> <a href="../InternalUtil/ScheduledItem.cs.html#b862531abb1e8fc7" class="t constructor">ScheduledItem</a>(<span class="r3 r">action</span>, <span class="r4 r">dt</span>);
+ 
+                <a href="../InternalUtil/ScheduledItem.cs.html#5f9de32c50a55162" class="k">var</a> <span id="r6 rd" class="r6 r">queue</span> = <a href="#5f52a689faf341fd" class="i method">GetQueue</a>();
+ 
+                <b>if</b> (<span class="r6 r">queue</span> == <b>null</b>)
+                {
+                    <span class="r6 r">queue</span> = <b>new</b> <a href="../InternalUtil/ScheduledItem.cs.html#29b132b1eab04adc" class="t constructor">SchedulerQueue</a>(4);
+                    <span class="r6 r">queue</span>.<a href="../InternalUtil/ScheduledItem.cs.html#e1c16f0bd9648d0f" class="i method">Enqueue</a>(<span class="r5 r">si</span>);
+ 
+                    <a href="#bff4b8cf67f002b6" class="t t">CurrentThreadScheduler</a>.<a href="#bac17c50c20ab954" class="i method">SetQueue</a>(<span class="r6 r">queue</span>);
+                    <b>try</b>
+                    {
+                        <a href="#bd214890b42b8704" class="t t">Trampoline</a>.<a href="#288e784ba0a96f6c" class="i method">Run</a>(<span class="r6 r">queue</span>);
+                    }
+                    <b>finally</b>
+                    {
+                        <a href="#bff4b8cf67f002b6" class="t t">CurrentThreadScheduler</a>.<a href="#bac17c50c20ab954" class="i method">SetQueue</a>(<b>null</b>);
+                    }
+                }
+                <b>else</b>
+                {
+                    <span class="r6 r">queue</span>.<a href="../InternalUtil/ScheduledItem.cs.html#e1c16f0bd9648d0f" class="i method">Enqueue</a>(<span class="r5 r">si</span>);
+                }
+ 
+                <b>return</b> <span class="r5 r">si</span>.<a href="../InternalUtil/ScheduledItem.cs.html#a1193d5c7038f83a" class="i property">Cancellation</a>;
+            }
+ 
+            <b>static class</b> <a id="bd214890b42b8704" href="../../../../../R/bd214890b42b8704.html" target="n" data-glyph="4,2" class="t t">Trampoline</a>
+            {
+                <b>public static void</b> <a id="288e784ba0a96f6c" href="../../../../../R/288e784ba0a96f6c.html" target="n" data-glyph="72,3" class="i method">Run</a>(<a href="../InternalUtil/ScheduledItem.cs.html#5f9de32c50a55162" class="t t">SchedulerQueue</a> <span id="r7 rd" class="r7 r">queue</span>)
+                {
+                    <b>while</b> (<span class="r7 r">queue</span>.<a href="../InternalUtil/ScheduledItem.cs.html#8e0987aa4f3d6685" class="i property">Count</a> &gt; 0)
+                    {
+                        <a href="../InternalUtil/ScheduledItem.cs.html#bf12c0aed76edf31" class="k">var</a> <span id="r8 rd" class="r8 r">item</span> = <span class="r7 r">queue</span>.<a href="../InternalUtil/ScheduledItem.cs.html#eef34282455930e3" class="i method">Dequeue</a>();
+                        <b>if</b> (!<span class="r8 r">item</span>.<a href="../InternalUtil/ScheduledItem.cs.html#58456e6fb8582658" class="i property">IsCanceled</a>)
+                        {
+                            <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r9 rd" class="r9 r">wait</span> = <span class="r8 r">item</span>.<a href="../InternalUtil/ScheduledItem.cs.html#9ff9df8d563a41b5" class="i property">DueTime</a> - <a href="#bff4b8cf67f002b6" class="t t">CurrentThreadScheduler</a>.<a href="#87d545a5d426eaa8" class="i property">Time</a>;
+                            <b>if</b> (<span class="r9 r">wait</span>.<a href="@0@mscorlib/A.html#45b3882f7cfdd300" class="i property">Ticks</a> &gt; 0)
+                            {
+                                <a href="@0@mscorlib/A.html#3980e012bae82e96" class="t t">Thread</a>.<a href="@0@mscorlib/A.html#82aedb56cecde82c" class="i method">Sleep</a>(<span class="r9 r">wait</span>);
+                            }
+ 
+                            <b>if</b> (!<span class="r8 r">item</span>.<a href="../InternalUtil/ScheduledItem.cs.html#58456e6fb8582658" class="i property">IsCanceled</a>)
+                                <span class="r8 r">item</span>.<a href="../InternalUtil/ScheduledItem.cs.html#7c6d37f01901bb55" class="i method">Invoke</a>();
+                        }
+                    }
+                }
+            }
+ 
+            <b>public</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="e40308f65ad13c8d" href="../../../../../R/e40308f65ad13c8d.html" target="n" data-glyph="102,2" class="i property">Now</a>
+            {
+                <b>get</b> { <b>return</b> <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="Scheduler.cs.html#1deb8bb158a1d92b" class="i property">Now</a>; }
+            }
+        }
+    }
+}
+ 
+</pre></td></tr></table></div></body></html>

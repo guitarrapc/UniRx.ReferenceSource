@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html><head><title>ISubject</title><link rel="stylesheet" href="../../styles.css"/><script src="../../scripts.js"></script></head><body onload="ro();">
+<div class="rH">5 implementations of ISubject</div><div class="rA">Assembly-CSharp-firstpass (5)</div><div class="rG" id="Assembly-CSharp-firstpass"><div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\AsyncSubject.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/AsyncSubject.cs.html#7"><b>7</b>public sealed class AsyncSubject&lt;T&gt; : <i>ISubject</i>&lt;T&gt;, IOptimizedObservable&lt;T&gt;, IDisposable</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\BehaviorSubject.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/BehaviorSubject.cs.html#6"><b>6</b>public sealed class BehaviorSubject&lt;T&gt; : <i>ISubject</i>&lt;T&gt;, IDisposable, IOptimizedObservable&lt;T&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\ReplaySubject.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/ReplaySubject.cs.html#7"><b>7</b>public sealed class ReplaySubject&lt;T&gt; : <i>ISubject</i>&lt;T&gt;, IOptimizedObservable&lt;T&gt;, IDisposable</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\Subject.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/Subject.cs.html#8"><b>8</b>public sealed class Subject&lt;T&gt; : <i>ISubject</i>&lt;T&gt;, IDisposable, IOptimizedObservable&lt;T&gt;</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\SubjectExtensions.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/SubjectExtensions.cs.html#53"><b>53</b>class AnonymousSubject&lt;T&gt; : AnonymousSubject&lt;T, T&gt;, <i>ISubject</i>&lt;T&gt;</a>
+</div>
+</div>
+<div class="rH">18 references to ISubject</div><div class="rA">Assembly-CSharp-firstpass (18)</div><div class="rG" id="Assembly-CSharp-firstpass"><div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Notifiers\MessageBroker.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Notifiers/MessageBroker.cs.html#72"><b>72</b>((<i>ISubject</i>&lt;T&gt;)notifier).OnNext(message);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Notifiers/MessageBroker.cs.html#84"><b>84</b><i>ISubject</i>&lt;T&gt; n = new Subject&lt;T&gt;().Synchronize();</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Observable.Binding.cs (1)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Observable.Binding.cs.html#8"><b>8</b>public static IConnectableObservable&lt;T&gt; Multicast&lt;T&gt;(this IObservable&lt;T&gt; source, <i>ISubject</i>&lt;T&gt; subject)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Operators\GroupBy.cs (9)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#18"><b>18</b>public GroupedObservable(TKey key, <i>ISubject</i>&lt;TElement&gt; subject, RefCountDisposable refCount)</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#59"><b>59</b>readonly Dictionary&lt;TKey, <i>ISubject</i>&lt;TElement&gt;&gt; map;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#60"><b>60</b><i>ISubject</i>&lt;TElement&gt; nullKeySubject;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#71"><b>71</b>map = new Dictionary&lt;TKey, <i>ISubject</i>&lt;TElement&gt;&gt;(parent.capacity.Value, parent.comparer);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#75"><b>75</b>map = new Dictionary&lt;TKey, <i>ISubject</i>&lt;TElement&gt;&gt;(parent.comparer);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#103"><b>103</b><i>var</i> writer = default(<i>ISubject</i>&lt;TElement&gt;);</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#163"><b>163</b>foreach (<i>var</i> s in map.Values)</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Operators/GroupBy.cs.html#182"><b>182</b>foreach (<i>var</i> s in map.Values)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\ConnectableObservable.cs (2)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/ConnectableObservable.cs.html#15"><b>15</b>readonly <i>ISubject</i>&lt;T&gt; subject;</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/ConnectableObservable.cs.html#19"><b>19</b>public ConnectableObservable(IObservable&lt;T&gt; source, <i>ISubject</i>&lt;T&gt; subject)</a>
+</div>
+<div class="rF"><div class="rN">Assets\Plugins\UniRx\Scripts\Subjects\SubjectExtensions.cs (4)</div>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/SubjectExtensions.cs.html#7"><b>7</b>public static <i>ISubject</i>&lt;T&gt; Synchronize&lt;T&gt;(this <i>ISubject</i>&lt;T&gt; subject)</a>
+<a href="../Assets/Plugins/UniRx/Scripts/Subjects/SubjectExtensions.cs.html#12"><b>12</b>public static <i>ISubject</i>&lt;T&gt; Synchronize&lt;T&gt;(this <i>ISubject</i>&lt;T&gt; subject, object gate)</a>
+</div>
+</div>
+</body></html>

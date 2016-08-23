@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html><head><title>OperatorObserverBase.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(33);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/OperatorObserverBase.cs" target="_top">Operators\OperatorObserverBase.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Threading</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>public abstract class</b> <a id="eb6edb2414c1ab47" href="../R/eb6edb2414c1ab47.html" target="n" data-glyph="0,0" class="t t">OperatorObserverBase</a>&lt;<span id="r0 rd t" class="r0 r t">TSource</span>, <span id="r1 rd t" class="r1 r t">TResult</span>&gt; : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">TSource</span>&gt;
+    {
+        <b>protected internal volatile</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r1 r t">TResult</span>&gt; <a id="3d54642bd52ac446" href="../R/3d54642bd52ac446.html" target="n" data-glyph="45,1" class="i field">observer</a>;
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="8a13aa51add41318" href="../R/8a13aa51add41318.html" target="n" data-glyph="46,1" class="i field">cancel</a>;
+ 
+        <b>public</b> <a id="cee4f7f9409f591b" href="../R/cee4f7f9409f591b.html" target="n" data-glyph="72,1" class="i constructor">OperatorObserverBase</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r1 r t">TResult</span>&gt; <span id="r2 rd" class="r2 r">observer</span>, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <span id="r3 rd" class="r3 r">cancel</span>)
+        {
+            <a href="#eb6edb2414c1ab47" class="k">this</a>.<a href="#3d54642bd52ac446" class="i field">observer</a> = <span class="r2 r">observer</span>;
+            <a href="#eb6edb2414c1ab47" class="k">this</a>.<a href="#8a13aa51add41318" class="i field">cancel</a> = <span class="r3 r">cancel</span>;
+        }
+ 
+        <b>public abstract void</b> <a id="85ca74cd4ce6d3b2" href="../R/85ca74cd4ce6d3b2.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">TSource</span> <span id="r4 rd" class="r4 r">value</span>);
+ 
+        <b>public abstract void</b> <a id="b2f34e3c8989bb45" href="../R/b2f34e3c8989bb45.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r5 rd" class="r5 r">error</span>);
+ 
+        <b>public abstract void</b> <a id="27b1296910d4a752" href="../R/27b1296910d4a752.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>();
+ 
+        <b>public void</b> <a id="de1551187eb4b6dd" href="../R/de1551187eb4b6dd.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <a href="#3d54642bd52ac446" class="i field">observer</a> = <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r1 r t">TResult</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r6 rd" class="r6 r">target</span> = <span class="i n">System</span>.<span class="i n">Threading</span>.<a href="@0@mscorlib/A.html#8792520ddc6dadcb" class="t t">Interlocked</a>.<a href="@0@mscorlib/A.html#19d00939423c949f" class="i method">Exchange</a>(<b>ref</b> <a href="#8a13aa51add41318" class="i field">cancel</a>, <b>null</b>);
+            <b>if</b> (<span class="r6 r">target</span> != <b>null</b>)
+            {
+                <span class="r6 r">target</span>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

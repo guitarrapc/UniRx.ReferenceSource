@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html><head><title>AotSafeExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(21);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/AotSafeExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\AotSafeExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static class</b> <a id="3b811010efca7c66" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">AotSafeExtensions</a>
+    {
+        <b>public static</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r0 r t">T</span>&gt; <a id="9ee8f794a41316e7" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsSafeEnumerable</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<b>this</b> <a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">source</span>)
+        {
+            <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="k">var</a> <span id="r2 rd" class="r2 r">e</span> = ((<a href="@0@mscorlib/A.html#9be451ac13d86a97" class="t t">IEnumerable</a>)<span class="r1 r">source</span>).<a href="@0@mscorlib/A.html#02a44b09e26b964f" class="i method">GetEnumerator</a>();
+            <b>using</b> (<span class="r2 r">e</span> <b>as</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>)
+            {
+                <b>while</b> (<span class="r2 r">e</span>.<a href="@0@mscorlib/A.html#116c28c0f6355e3f" class="i method">MoveNext</a>())
+                {
+                    <b>yield return</b> (<span class="r0 r t">T</span>)<span class="r2 r">e</span>.<a href="@0@mscorlib/A.html#3f12a86aa5b0da2b" class="i property">Current</a>;
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

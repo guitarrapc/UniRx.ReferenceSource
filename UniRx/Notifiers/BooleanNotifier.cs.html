@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html><head><title>BooleanNotifier.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(73);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Notifiers/BooleanNotifier.cs" target="_top">Notifiers\BooleanNotifier.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+﻿<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Notify boolean flag.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="7792897ca3d434fe" href="../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">BooleanNotifier</a> : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt;
+    {
+        <b>readonly</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<b>bool</b>&gt; <a id="90c7adb05ebf0384" href="../R/90c7adb05ebf0384.html" target="n" data-glyph="46,1" class="i field">boolTrigger</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<b>bool</b>&gt;();
+ 
+        <b>bool</b> <a id="885642ab95831412" href="../R/885642ab95831412.html" target="n" data-glyph="46,1" class="i field">boolValue</a>;
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Current flag value</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="c8e8d7cc4cec3ecc" href="../R/c8e8d7cc4cec3ecc.html" target="n" data-glyph="102,1" class="i property">Value</a>
+        {
+            <b>get</b> { <b>return</b> <a href="#885642ab95831412" class="i field">boolValue</a>; }
+            <b>set</b>
+            {
+                <a href="#885642ab95831412" class="i field">boolValue</a> = <b>value</b>;
+                <a href="#90c7adb05ebf0384" class="i field">boolTrigger</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<b>value</b>);
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Setup initial flag.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="e7fc63f01496c77c" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">BooleanNotifier</a>(<b>bool</b> <span id="r0 rd" class="r0 r">initialValue</span> = <b>false</b>)
+        {
+            <a href="#7792897ca3d434fe" class="k">this</a>.<a href="#c8e8d7cc4cec3ecc" class="i property">Value</a> = <span class="r0 r">initialValue</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Set and raise true if current value isn&#39;t true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="ae3048dcf1d1892b" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">TurnOn</a>()
+        {
+            <b>if</b> (<a href="#c8e8d7cc4cec3ecc" class="i property">Value</a> != <b>true</b>)
+            {
+                <a href="#c8e8d7cc4cec3ecc" class="i property">Value</a> = <b>true</b>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Set and raise false if current value isn&#39;t false.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="24b90f4e7f0adf4b" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">TurnOff</a>()
+        {
+            <b>if</b> (<a href="#c8e8d7cc4cec3ecc" class="i property">Value</a> != <b>false</b>)
+            {
+                <a href="#c8e8d7cc4cec3ecc" class="i property">Value</a> = <b>false</b>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Set and raise reverse value.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="b776681bcf25135d" href="../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">SwitchValue</a>()
+        {
+            <a href="#c8e8d7cc4cec3ecc" class="i property">Value</a> = !<a href="#c8e8d7cc4cec3ecc" class="i property">Value</a>;
+        }
+ 
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Subscribe observer.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="4a0f66c760e27904" href="../R/4a0f66c760e27904.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<b>bool</b>&gt; <span id="r1 rd" class="r1 r">observer</span>)
+        {
+            <b>return</b> <a href="#90c7adb05ebf0384" class="i field">boolTrigger</a>.<a href="../Subjects/Subject.cs.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r1 r">observer</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

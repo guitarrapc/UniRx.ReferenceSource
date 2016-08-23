@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html><head><title>Unit.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(43);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/System/Unit.cs" target="_top">Assets\Plugins\UniRx\Scripts\System\Unit.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// from Rx Official, but convert struct to class(for iOS AOT issue)</span>
+ 
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    [<a href="@0@mscorlib/A.html#e971d5381ca60183" class="t constructor">Serializable</a>]
+    <b>public struct</b> <a id="16821e3ff91ab941" href="../../../../../R/16821e3ff91ab941.html" target="n" data-glyph="108,0" class="t t"><span id="5d2dcf8d64690b58">Unit</span></a> : <a href="@0@mscorlib/A.html#91a17479daaada86" class="t t">IEquatable</a>&lt;<a href="#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <b>static readonly</b> <a href="#16821e3ff91ab941" class="t t">Unit</a> <a id="2e3ac66133f37f3a" href="../../../../../R/2e3ac66133f37f3a.html" target="n" data-glyph="46,1" class="i field">@default</a> = <b>new</b> <a href="#16821e3ff91ab941" class="t constructor">Unit</a>();
+ 
+        <b>public static</b> <a href="#16821e3ff91ab941" class="t t">Unit</a> <a id="e18d6ffbae9cfbc4" href="../../../../../R/e18d6ffbae9cfbc4.html" target="n" data-glyph="102,1" class="i property">Default</a> { <b>get</b> { <b>return</b> <a href="#2e3ac66133f37f3a" class="i field">@default</a>; } }
+ 
+        <b>public static bool operator</b> ==(<a href="#16821e3ff91ab941" class="t t">Unit</a> <span id="r0 rd" class="r0 r">first</span>, <a href="#16821e3ff91ab941" class="t t">Unit</a> <span id="r1 rd" class="r1 r">second</span>)
+        {
+            <b>return true</b>;
+        }
+ 
+        <b>public static bool operator</b> !=(<a href="#16821e3ff91ab941" class="t t">Unit</a> <span id="r2 rd" class="r2 r">first</span>, <a href="#16821e3ff91ab941" class="t t">Unit</a> <span id="r3 rd" class="r3 r">second</span>)
+        {
+            <b>return false</b>;
+        }
+ 
+        <b>public bool</b> <a id="878df82b5bef2917" href="../../../../../R/878df82b5bef2917.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<a href="#16821e3ff91ab941" class="t t">Unit</a> <span id="r4 rd" class="r4 r">other</span>)
+        {
+            <b>return true</b>;
+        }
+        <b>public override bool</b> <a id="7b72059d5049ab5f" href="../../../../../R/7b72059d5049ab5f.html" target="n" data-glyph="72,1" class="i method">Equals</a>(<b>object</b> <span id="r5 rd" class="r5 r">obj</span>)
+        {
+            <b>return</b> <span class="r5 r">obj</span> <b>is</b> <a href="#16821e3ff91ab941" class="t t">Unit</a>;
+        }
+ 
+        <b>public override int</b> <a id="0363453a3472c42c" href="../../../../../R/0363453a3472c42c.html" target="n" data-glyph="72,1" class="i method">GetHashCode</a>()
+        {
+            <b>return</b> 0;
+        }
+ 
+        <b>public override string</b> <a id="a3533fbb723faae8" href="../../../../../R/a3533fbb723faae8.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>return</b> <span class="s">&quot;()&quot;</span>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

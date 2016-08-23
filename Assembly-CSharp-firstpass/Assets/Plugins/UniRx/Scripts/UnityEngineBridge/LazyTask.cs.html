@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html><head><title>LazyTask.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(137);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/LazyTask.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\LazyTask.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Linq</span>; <span class="c">// in future, should remove LINQ</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public abstract class</b> <a id="1eddabcb13ac2f9f" href="../../../../../R/1eddabcb13ac2f9f.html" target="n" data-glyph="0,0" class="t t"><span id="fc6e7f682b83e439">LazyTask</span></a>
+    {
+        <b>public enum</b> <a id="8e5a89239c20cc0a" href="../../../../../R/8e5a89239c20cc0a.html" target="n" data-glyph="18,1" class="t t"><span id="3d953a9ee86c68d3">TaskStatus</span></a>
+        {
+            <a id="f56b882205eaeb66" href="../../../../../R/f56b882205eaeb66.html" target="n" data-glyph="24,2" class="i field">WaitingToRun</a>,
+            <a id="895f9004d1c11410" href="../../../../../R/895f9004d1c11410.html" target="n" data-glyph="24,2" class="i field">Running</a>,
+            <a id="48687c0bf2057f24" href="../../../../../R/48687c0bf2057f24.html" target="n" data-glyph="24,2" class="i field">Completed</a>,
+            <a id="4d28b5703a4ff4d1" href="../../../../../R/4d28b5703a4ff4d1.html" target="n" data-glyph="24,2" class="i field">Canceled</a>,
+            <a id="3e8c8860779aab04" href="../../../../../R/3e8c8860779aab04.html" target="n" data-glyph="24,2" class="i field">Faulted</a>
+        }
+ 
+        <b>public</b> <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a> <a id="446abfeaccc0f724" href="../../../../../R/446abfeaccc0f724.html" target="n" data-glyph="102,1" class="i property">Status</a> { <b>get</b>; <b>protected set</b>; }
+ 
+        <b>protected readonly</b> <a href="../Disposables/BooleanDisposable.cs.html#45b9c7444c27222b" class="t t">BooleanDisposable</a> <a id="c3094ab4ed67db09" href="../../../../../R/c3094ab4ed67db09.html" target="n" data-glyph="45,1" class="i field">cancellation</a> = <b>new</b> <a href="../Disposables/BooleanDisposable.cs.html#3802264e4ce255c7" class="t constructor">BooleanDisposable</a>();
+ 
+        <b>public abstract</b> <span class="i">Coroutine</span> <a id="b816d82da24026ff" href="../../../../../R/b816d82da24026ff.html" target="n" data-glyph="72,1" class="i method">Start</a>();
+ 
+        <b>public void</b> <a id="cabf19cc53111040" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Cancel</a>()
+        {
+            <b>if</b> (<a href="#446abfeaccc0f724" class="i property">Status</a> == <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#f56b882205eaeb66" class="i field">WaitingToRun</a> || <a href="#446abfeaccc0f724" class="i property">Status</a> == <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#895f9004d1c11410" class="i field">Running</a>)
+            {
+                <a href="#446abfeaccc0f724" class="i property">Status</a> = <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#4d28b5703a4ff4d1" class="i field">Canceled</a>;
+                <a href="#c3094ab4ed67db09" class="i field">cancellation</a>.<a href="../Disposables/BooleanDisposable.cs.html#424d82cc13c375f8" class="i method">Dispose</a>();
+            }
+        }
+ 
+        <b>public static</b> <a href="#3aa64a7907508101" class="t t">LazyTask</a>&lt;<span class="r0 r t">T</span>&gt; <a id="cd835afa36f9071b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">FromResult</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt;(<span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">value</span>)
+        {
+            <b>return</b> <a href="#3aa64a7907508101" class="t t">LazyTask</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="#ced3657a8447c1be" class="i method">FromResult</a>(<span class="r1 r">value</span>);
+        }
+ 
+ 
+        <b>public static</b> <span class="i">Coroutine</span> <a id="278bce53321021c1" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">WhenAll</a>(<b>params</b> <a href="#1eddabcb13ac2f9f" class="t t">LazyTask</a>[] <span id="r2 rd" class="r2 r">tasks</span>)
+        {
+            <b>return</b> <a href="#fe7681e5b58af292" class="i method">WhenAll</a>(<span class="r2 r">tasks</span>.<a href="@0@System.Core/A.html#3ee4ab000402fbeb" class="i method">AsEnumerable</a>());
+        }
+ 
+        <b>public static</b> <span class="i">Coroutine</span> <a id="fe7681e5b58af292" href="../../../../../R/fe7681e5b58af292.html" target="n" data-glyph="72,1" class="i method">WhenAll</a>(<a href="@0@mscorlib/A.html#3acf01620172c7f0" class="t t">IEnumerable</a>&lt;<a href="#1eddabcb13ac2f9f" class="t t">LazyTask</a>&gt; <span id="r3 rd" class="r3 r">tasks</span>)
+        {
+            <b>var</b> <span id="r4 rd" class="r4 r">coroutines</span> = <span class="r3 r">tasks</span>.<a href="@0@System.Core/A.html#5c652c53e80df013" class="i method">Select</a>(<span id="r5 rd" class="r5 r">x</span> =&gt; <span class="r5 r">x</span>.<a href="#b816d82da24026ff" class="i method">Start</a>()).<a href="@0@System.Core/A.html#783a052330e7d48d" class="i method">ToArray</a>();
+ 
+            <b>return</b> <a href="MainThreadDispatcher.cs.html#84b62633a19a03a2" class="t t">MainThreadDispatcher</a>.<a href="MainThreadDispatcher.cs.html#9ec383d3102b14f7" class="i method">StartCoroutine</a>(<a href="#39934bf7b90ef0de" class="i method">WhenAllCore</a>(<span class="r4 r">coroutines</span>));
+        }
+ 
+        <b>static</b> <a href="@0@mscorlib/A.html#6624f38cb955bfe0" class="t t">IEnumerator</a> <a id="39934bf7b90ef0de" href="../../../../../R/39934bf7b90ef0de.html" target="n" data-glyph="76,1" class="i method">WhenAllCore</a>(<span class="i">Coroutine</span>[] <span id="r6 rd" class="r6 r">coroutines</span>)
+        {
+            <b>foreach</b> (<b>var</b> <span id="r7 rd" class="r7 r">item</span> <b>in</b> <span class="r6 r">coroutines</span>)
+            {
+                <span class="c">// wait sequential, but all coroutine is already started, it&#39;s parallel</span>
+                <b>yield return</b> <span class="r7 r">item</span>;
+            }
+        }
+    }
+ 
+    <b>public class</b> <a id="3aa64a7907508101" href="../../../../../R/3aa64a7907508101.html" target="n" data-glyph="0,0" class="t t">LazyTask</a>&lt;<span id="r8 rd t" class="r8 r t">T</span>&gt; : <a href="#1eddabcb13ac2f9f" class="t t">LazyTask</a>
+    {
+        <b>readonly</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">T</span>&gt; <a id="0ed16ffbadde9986" href="../../../../../R/0ed16ffbadde9986.html" target="n" data-glyph="46,1" class="i field">source</a>;
+ 
+        <span class="r8 r t">T</span> <a id="c909100b0c1c96be" href="../../../../../R/c909100b0c1c96be.html" target="n" data-glyph="46,1" class="i field">result</a>;
+        <b>public</b> <span class="r8 r t">T</span> <a id="81c3985a5df919e5" href="../../../../../R/81c3985a5df919e5.html" target="n" data-glyph="102,1" class="i property">Result</a>
+        {
+            <b>get</b>
+            {
+                <b>if</b> (<a href="#446abfeaccc0f724" class="i property">Status</a> != <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#48687c0bf2057f24" class="i field">Completed</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;Task is not completed&quot;</span>);
+                <b>return</b> <a href="#c909100b0c1c96be" class="i field">result</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> If faulted stock error. If completed or canceld, returns null.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="0e0ed2bbb44f8bf0" href="../../../../../R/0e0ed2bbb44f8bf0.html" target="n" data-glyph="102,1" class="i property">Exception</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="5aa5412bf6695508" href="../../../../../R/5aa5412bf6695508.html" target="n" data-glyph="72,1" class="i constructor">LazyTask</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r8 r t">T</span>&gt; <span id="r9 rd" class="r9 r">source</span>)
+        {
+            <a href="#3aa64a7907508101" class="k">this</a>.<a href="#0ed16ffbadde9986" class="i field">source</a> = <span class="r9 r">source</span>;
+            <a href="#3aa64a7907508101" class="k">this</a>.<a href="#446abfeaccc0f724" class="i property">Status</a> = <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#f56b882205eaeb66" class="i field">WaitingToRun</a>;
+        }
+ 
+        <b>public override</b> <span class="i">Coroutine</span> <a id="448607533b42ce3c" href="../../../../../R/448607533b42ce3c.html" target="n" data-glyph="72,1" class="i method">Start</a>()
+        {
+            <b>if</b> (<a href="#446abfeaccc0f724" class="i property">Status</a> != <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#f56b882205eaeb66" class="i field">WaitingToRun</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#265d72f49e915224" class="t constructor">InvalidOperationException</a>(<span class="s">&quot;Task already started&quot;</span>);
+ 
+            <a href="#446abfeaccc0f724" class="i property">Status</a> = <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#895f9004d1c11410" class="i field">Running</a>;
+ 
+            <b>var</b> <span id="r10 rd" class="r10 r">coroutine</span> = <a href="#0ed16ffbadde9986" class="i field">source</a>.<a href="Observable.Unity.cs.html#edbc4f9f3bde5f80" class="i method">StartAsCoroutine</a>(
+                <span class="r11 r">onResult</span>: <span id="r12 rd" class="r12 r">x</span> =&gt; { <a href="#c909100b0c1c96be" class="i field">result</a> = <span class="r12 r">x</span>; <a href="#446abfeaccc0f724" class="i property">Status</a> = <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#48687c0bf2057f24" class="i field">Completed</a>; },
+                <span class="r13 r">onError</span>: <span id="r14 rd" class="r14 r">ex</span> =&gt; { <a href="#0e0ed2bbb44f8bf0" class="i property">Exception</a> = <span class="r14 r">ex</span>; <a href="#446abfeaccc0f724" class="i property">Status</a> = <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#3e8c8860779aab04" class="i field">Faulted</a>; },
+                <span class="r15 r">cancel</span>: <b>new</b> <a href="CancellationToken.cs.html#03432bf21b87b13f" class="t constructor">CancellationToken</a>(<a href="#c3094ab4ed67db09" class="i field">cancellation</a>));
+ 
+            <b>return</b> <span class="r10 r">coroutine</span>;
+        }
+ 
+        <b>public override string</b> <a id="247049952ad57ee2" href="../../../../../R/247049952ad57ee2.html" target="n" data-glyph="72,1" class="i method">ToString</a>()
+        {
+            <b>switch</b> (<a href="#446abfeaccc0f724" class="i property">Status</a>)
+            {
+                <b>case</b> <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#f56b882205eaeb66" class="i field">WaitingToRun</a>:
+                    <b>return</b> <span class="s">&quot;Status:WaitingToRun&quot;</span>;
+                <b>case</b> <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#895f9004d1c11410" class="i field">Running</a>:
+                    <b>return</b> <span class="s">&quot;Status:Running&quot;</span>;
+                <b>case</b> <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#48687c0bf2057f24" class="i field">Completed</a>:
+                    <b>return</b> <span class="s">&quot;Status:Completed, Result:&quot;</span> + <a href="#81c3985a5df919e5" class="i property">Result</a>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>();
+                <b>case</b> <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#4d28b5703a4ff4d1" class="i field">Canceled</a>:
+                    <b>return</b> <span class="s">&quot;Status:Canceled&quot;</span>;
+                <b>case</b> <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#3e8c8860779aab04" class="i field">Faulted</a>:
+                    <b>return</b> <span class="s">&quot;Status:Faulted, Result:&quot;</span> + <a href="#81c3985a5df919e5" class="i property">Result</a>.<a href="@0@mscorlib/A.html#ff31a6bf27c58f89" class="i method">ToString</a>();
+                <b>default</b>:
+                    <b>return</b> <span class="s">&quot;&quot;</span>;
+            }
+        }
+ 
+        <b>public static</b> <a href="#3aa64a7907508101" class="t t">LazyTask</a>&lt;<span class="r8 r t">T</span>&gt; <a id="ced3657a8447c1be" href="../../../../../R/ced3657a8447c1be.html" target="n" data-glyph="72,1" class="i method">FromResult</a>(<span class="r8 r t">T</span> <span id="r16 rd" class="r16 r">value</span>)
+        {
+            <a href="#3aa64a7907508101" class="k">var</a> <span id="r17 rd" class="r17 r">t</span> = <b>new</b> <a href="#5aa5412bf6695508" class="t constructor">LazyTask</a>&lt;<span class="r8 r t">T</span>&gt;(<b>null</b>);
+            <span class="r17 r">t</span>.<a href="#c909100b0c1c96be" class="i field">result</a> = <span class="r16 r">value</span>; ;
+            <span class="r17 r">t</span>.<a href="#446abfeaccc0f724" class="i property">Status</a> = <a href="#8e5a89239c20cc0a" class="t t">TaskStatus</a>.<a href="#48687c0bf2057f24" class="i field">Completed</a>;
+            <b>return</b> <span class="r17 r">t</span>;
+        }
+    }
+ 
+    <b>public static class</b> <a id="5ee3a3af136665c4" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">LazyTaskExtensions</a>
+    {
+        <b>public static</b> <a href="#3aa64a7907508101" class="t t">LazyTask</a>&lt;<span class="r18 r t">T</span>&gt; <a id="272fd9bd77455f0e" href="../../../../../R/272fd9bd77455f0e.html" target="n" data-glyph="220,1" class="i method">ToLazyTask</a>&lt;<span id="r18 rd t" class="r18 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r18 r t">T</span>&gt; <span id="r19 rd" class="r19 r">source</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#5aa5412bf6695508" class="t constructor">LazyTask</a>&lt;<span class="r18 r t">T</span>&gt;(<span class="r19 r">source</span>);
+        }
+    }
+}</pre></td></tr></table></div></body></html>

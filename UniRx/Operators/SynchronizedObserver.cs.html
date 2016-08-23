@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html><head><title>SynchronizedObserver.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(41);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Operators/SynchronizedObserver.cs" target="_top">Operators\SynchronizedObserver.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Operators</span>
+{
+    <b>internal class</b> <a id="1fd37134fbf93175" href="../R/1fd37134fbf93175.html" target="n" data-glyph="2,0" class="t t">SynchronizedObserver</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <b>readonly</b> <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="195ad158823acc8f" href="../R/195ad158823acc8f.html" target="n" data-glyph="46,1" class="i field">observer</a>;
+        <b>readonly object</b> <a id="f2818c9367a6733f" href="../R/f2818c9367a6733f.html" target="n" data-glyph="46,1" class="i field">gate</a>;
+ 
+        <b>public</b> <a id="3ca52e3a187153cc" href="../R/3ca52e3a187153cc.html" target="n" data-glyph="72,1" class="i constructor">SynchronizedObserver</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r1 rd" class="r1 r">observer</span>, <b>object</b> <span id="r2 rd" class="r2 r">gate</span>)
+        {
+            <a href="#1fd37134fbf93175" class="k">this</a>.<a href="#195ad158823acc8f" class="i field">observer</a> = <span class="r1 r">observer</span>;
+            <a href="#1fd37134fbf93175" class="k">this</a>.<a href="#f2818c9367a6733f" class="i field">gate</a> = <span class="r2 r">gate</span>;
+        }
+ 
+        <b>public void</b> <a id="8e99e89da46c098d" href="../R/8e99e89da46c098d.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r3 rd" class="r3 r">value</span>)
+        {
+            <b>lock</b> (<a href="#f2818c9367a6733f" class="i field">gate</a>)
+            {
+                <a href="#195ad158823acc8f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r3 r">value</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="3c9fbc180365f480" href="../R/3c9fbc180365f480.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r4 rd" class="r4 r">error</span>)
+        {
+            <b>lock</b> (<a href="#f2818c9367a6733f" class="i field">gate</a>)
+            {
+                <a href="#195ad158823acc8f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r4 r">error</span>);
+            }
+        }
+ 
+        <b>public void</b> <a id="f3f8f076df29f023" href="../R/f3f8f076df29f023.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <b>lock</b> (<a href="#f2818c9367a6733f" class="i field">gate</a>)
+            {
+                <a href="#195ad158823acc8f" class="i field">observer</a>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}
+</pre></td></tr></table></div></body></html>

@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html><head><title>UnityEventExtensions.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(58);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/UnityEventExtensions.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\UnityEventExtensions.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Text</span>;
+<b>using</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public static</b> <b>partial</b> <b>class</b> <a id="2e17915e86d659d5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">UnityEventExtensions</a>
+    {
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="1542d80b985edd9f" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>.<span class="i">UnityEvent</span> <span id="r0 rd" class="r0 r">unityEvent</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">UnityAction</span>&gt;(<span id="r1 rd" class="r1 r">h</span> =&gt; <b>new</b> <span class="i">UnityAction</span>(<span class="r1 r">h</span>), <span id="r2 rd" class="r2 r">h</span> =&gt; <span class="r0 r">unityEvent</span>.<span class="i">AddListener</span>(<span class="r2 r">h</span>), <span id="r3 rd" class="r3 r">h</span> =&gt; <span class="r0 r">unityEvent</span>.<span class="i">RemoveListener</span>(<span class="r3 r">h</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r4 r t">T</span>&gt; <a id="d3c0c5beb8310bb8" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>&lt;<span id="r4 rd t" class="r4 r t">T</span>&gt;(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>.<span class="i">UnityEvent</span>&lt;<span class="r4 r t">T</span>&gt; <span id="r5 rd" class="r5 r">unityEvent</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">UnityAction</span>&lt;<span class="r4 r t">T</span>&gt;, <span class="r4 r t">T</span>&gt;(<span id="r6 rd" class="r6 r">h</span> =&gt; <b>new</b> <span class="i">UnityAction</span>&lt;<span class="r4 r t">T</span>&gt;(<span class="r6 r">h</span>), <span id="r7 rd" class="r7 r">h</span> =&gt; <span class="r5 r">unityEvent</span>.<span class="i">AddListener</span>(<span class="r7 r">h</span>), <span id="r8 rd" class="r8 r">h</span> =&gt; <span class="r5 r">unityEvent</span>.<span class="i">RemoveListener</span>(<span class="r8 r">h</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r9 r t">T0</span>, <span class="r10 r t">T1</span>&gt;&gt; <a id="2930866ec85a0105" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>&lt;<span id="r9 rd t" class="r9 r t">T0</span>, <span id="r10 rd t" class="r10 r t">T1</span>&gt;(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>.<span class="i">UnityEvent</span>&lt;<span class="r9 r t">T0</span>, <span class="r10 r t">T1</span>&gt; <span id="r11 rd" class="r11 r">unityEvent</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">UnityAction</span>&lt;<span class="r9 r t">T0</span>, <span class="r10 r t">T1</span>&gt;, <a href="../System/Tuple.cs.html#d6f2a77320b4d449" class="t t">Tuple</a>&lt;<span class="r9 r t">T0</span>, <span class="r10 r t">T1</span>&gt;&gt;(<span id="r12 rd" class="r12 r">h</span> =&gt;
+            {
+                <b>return</b> <b>new</b> <span class="i">UnityAction</span>&lt;<span class="r9 r t">T0</span>, <span class="r10 r t">T1</span>&gt;((<span id="r13 rd" class="r13 r">t0</span>, <span id="r14 rd" class="r14 r">t1</span>) =&gt;
+                {
+                    <span class="r12 r">h</span>(<a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<span class="i">Create</span>(<span class="r13 r">t0</span>, <span class="r14 r">t1</span>));
+                });
+            }, <span id="r15 rd" class="r15 r">h</span> =&gt; <span class="r11 r">unityEvent</span>.<span class="i">AddListener</span>(<span class="r15 r">h</span>), <span id="r16 rd" class="r16 r">h</span> =&gt; <span class="r11 r">unityEvent</span>.<span class="i">RemoveListener</span>(<span class="r16 r">h</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Tuple.cs.html#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r17 r t">T0</span>, <span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>&gt;&gt; <a id="2f8af16f952147eb" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>&lt;<span id="r17 rd t" class="r17 r t">T0</span>, <span id="r18 rd t" class="r18 r t">T1</span>, <span id="r19 rd t" class="r19 r t">T2</span>&gt;(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>.<span class="i">UnityEvent</span>&lt;<span class="r17 r t">T0</span>, <span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>&gt; <span id="r20 rd" class="r20 r">unityEvent</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">UnityAction</span>&lt;<span class="r17 r t">T0</span>, <span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>&gt;, <a href="../System/Tuple.cs.html#97e818b182c67e67" class="t t">Tuple</a>&lt;<span class="r17 r t">T0</span>, <span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>&gt;&gt;(<span id="r21 rd" class="r21 r">h</span> =&gt;
+            {
+                <b>return</b> <b>new</b> <span class="i">UnityAction</span>&lt;<span class="r17 r t">T0</span>, <span class="r18 r t">T1</span>, <span class="r19 r t">T2</span>&gt;((<span id="r22 rd" class="r22 r">t0</span>, <span id="r23 rd" class="r23 r">t1</span>, <span id="r24 rd" class="r24 r">t2</span>) =&gt;
+                {
+                    <span class="r21 r">h</span>(<a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<span class="i">Create</span>(<span class="r22 r">t0</span>, <span class="r23 r">t1</span>, <span class="r24 r">t2</span>));
+                });
+            }, <span id="r25 rd" class="r25 r">h</span> =&gt; <span class="r20 r">unityEvent</span>.<span class="i">AddListener</span>(<span class="r25 r">h</span>), <span id="r26 rd" class="r26 r">h</span> =&gt; <span class="r20 r">unityEvent</span>.<span class="i">RemoveListener</span>(<span class="r26 r">h</span>));
+        }
+ 
+        <b>public static</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Tuple.cs.html#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r27 r t">T0</span>, <span class="r28 r t">T1</span>, <span class="r29 r t">T2</span>, <span class="r30 r t">T3</span>&gt;&gt; <a id="d1bdca18065d180c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">AsObservable</a>&lt;<span id="r27 rd t" class="r27 r t">T0</span>, <span id="r28 rd t" class="r28 r t">T1</span>, <span id="r29 rd t" class="r29 r t">T2</span>, <span id="r30 rd t" class="r30 r t">T3</span>&gt;(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">Events</span>.<span class="i">UnityEvent</span>&lt;<span class="r27 r t">T0</span>, <span class="r28 r t">T1</span>, <span class="r29 r t">T2</span>, <span class="r30 r t">T3</span>&gt; <span id="r31 rd" class="r31 r">unityEvent</span>)
+        {
+            <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<span class="i">FromEvent</span>&lt;<span class="i">UnityAction</span>&lt;<span class="r27 r t">T0</span>, <span class="r28 r t">T1</span>, <span class="r29 r t">T2</span>, <span class="r30 r t">T3</span>&gt;, <a href="../System/Tuple.cs.html#abccc3c871bb7231" class="t t">Tuple</a>&lt;<span class="r27 r t">T0</span>, <span class="r28 r t">T1</span>, <span class="r29 r t">T2</span>, <span class="r30 r t">T3</span>&gt;&gt;(<span id="r32 rd" class="r32 r">h</span> =&gt;
+            {
+                <b>return</b> <b>new</b> <span class="i">UnityAction</span>&lt;<span class="r27 r t">T0</span>, <span class="r28 r t">T1</span>, <span class="r29 r t">T2</span>, <span class="r30 r t">T3</span>&gt;((<span id="r33 rd" class="r33 r">t0</span>, <span id="r34 rd" class="r34 r">t1</span>, <span id="r35 rd" class="r35 r">t2</span>, <span id="r36 rd" class="r36 r">t3</span>) =&gt;
+                {
+                    <span class="r32 r">h</span>(<a href="../System/Tuple.cs.html#3e2d90c4fd750003" class="t t">Tuple</a>.<span class="i">Create</span>(<span class="r33 r">t0</span>, <span class="r34 r">t1</span>, <span class="r35 r">t2</span>, <span class="r36 r">t3</span>));
+                });
+            }, <span id="r37 rd" class="r37 r">h</span> =&gt; <span class="r31 r">unityEvent</span>.<span class="i">AddListener</span>(<span class="r37 r">h</span>), <span id="r38 rd" class="r38 r">h</span> =&gt; <span class="r31 r">unityEvent</span>.<span class="i">RemoveListener</span>(<span class="r38 r">h</span>));
+        }
+    }
+}
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span></pre></td></tr></table></div></body></html>

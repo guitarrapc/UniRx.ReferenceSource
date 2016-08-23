@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html><head><title>ObservableVisibleTrigger.cs</title><link rel="stylesheet" href="../../../../../../../styles.css"><script src="../../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(49);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/Triggers/ObservableVisibleTrigger.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\Triggers\ObservableVisibleTrigger.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>; <span class="c">// require keep for Windows Universal App</span>
+<b>using</b> <span class="i">UnityEngine</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>.<span class="i n">Triggers</span>
+{
+    [<span class="i">DisallowMultipleComponent</span>]
+    <b>public class</b> <a id="5f3622d10dd7bd71" href="../../../../../../R/5f3622d10dd7bd71.html" target="n" data-glyph="0,0" class="t t"><span id="d5a236beaf76ab7e">ObservableVisibleTrigger</span></a> : <a href="ObservableTriggerBase.cs.html#8b268817a4a0e1e1" class="t t">ObservableTriggerBase</a>
+    {
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="45f04da36b07c53c" href="../../../../../../R/45f04da36b07c53c.html" target="n" data-glyph="46,1" class="i field">onBecameInvisible</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameInvisible is called when the renderer is no longer visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="889487ae671fa43c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnBecameInvisible</a>()
+        {
+            <b>if</b> (<a href="#45f04da36b07c53c" class="i field">onBecameInvisible</a> != <b>null</b>) <a href="#45f04da36b07c53c" class="i field">onBecameInvisible</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameInvisible is called when the renderer is no longer visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="dbfecc0bf695d1b4" href="../../../../../../R/dbfecc0bf695d1b4.html" target="n" data-glyph="72,1" class="i method">OnBecameInvisibleAsObservable</a>()
+        {
+            <b>return</b> <a href="#45f04da36b07c53c" class="i field">onBecameInvisible</a> ?? (<a href="#45f04da36b07c53c" class="i field">onBecameInvisible</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="ec0e8e7baf9ea6d5" href="../../../../../../R/ec0e8e7baf9ea6d5.html" target="n" data-glyph="46,1" class="i field">onBecameVisible</a>;
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameVisible is called when the renderer became visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>void</b> <a id="44b2de430ff7222c" href="../../../../../../R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">OnBecameVisible</a>()
+        {
+            <b>if</b> (<a href="#ec0e8e7baf9ea6d5" class="i field">onBecameVisible</a> != <b>null</b>) <a href="#ec0e8e7baf9ea6d5" class="i field">onBecameVisible</a>.<a href="../../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">OnBecameVisible is called when the renderer became visible by any camera.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="../../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <a id="b2d13f99c0273531" href="../../../../../../R/b2d13f99c0273531.html" target="n" data-glyph="72,1" class="i method">OnBecameVisibleAsObservable</a>()
+        {
+            <b>return</b> <a href="#ec0e8e7baf9ea6d5" class="i field">onBecameVisible</a> ?? (<a href="#ec0e8e7baf9ea6d5" class="i field">onBecameVisible</a> = <b>new</b> <a href="../../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<a href="../../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;());
+        }
+ 
+        <b>protected override void</b> <a id="cfd41908db56b509" href="../../../../../../R/cfd41908db56b509.html" target="n" data-glyph="75,1" class="i method">RaiseOnCompletedOnDestroy</a>()
+        {
+            <b>if</b> (<a href="#45f04da36b07c53c" class="i field">onBecameInvisible</a> != <b>null</b>)
+            {
+                <a href="#45f04da36b07c53c" class="i field">onBecameInvisible</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+            <b>if</b> (<a href="#ec0e8e7baf9ea6d5" class="i field">onBecameVisible</a> != <b>null</b>)
+            {
+                <a href="#ec0e8e7baf9ea6d5" class="i field">onBecameVisible</a>.<a href="../../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

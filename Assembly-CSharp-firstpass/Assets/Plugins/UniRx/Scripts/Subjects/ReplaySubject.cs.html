@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReplaySubject.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(251);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/Subjects/ReplaySubject.cs" target="_top">Assets\Plugins\UniRx\Scripts\Subjects\ReplaySubject.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>.<span class="i n">Generic</span>;
+<b>using</b> <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="e198528b1faadf14" href="../../../../../R/e198528b1faadf14.html" target="n" data-glyph="0,0" class="t t">ReplaySubject</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="ISubject.cs.html#9f28674db2093954" class="t t">ISubject</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="../System/IOptimizedObservable.cs.html#7849a264b3164ac0" class="t t">IOptimizedObservable</a>&lt;<span class="r0 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        <b>object</b> <a id="3b9c6abcdeb793c0" href="../../../../../R/3b9c6abcdeb793c0.html" target="n" data-glyph="46,1" class="i field">observerLock</a> = <b>new</b> <b>object</b>();
+ 
+        <b>bool</b> <a id="bcb872dfe08b2d22" href="../../../../../R/bcb872dfe08b2d22.html" target="n" data-glyph="46,1" class="i field">isStopped</a>;
+        <b>bool</b> <a id="c6e42fd1b4ee78cd" href="../../../../../R/c6e42fd1b4ee78cd.html" target="n" data-glyph="46,1" class="i field">isDisposed</a>;
+        <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <a id="92ac3bea25968987" href="../../../../../R/92ac3bea25968987.html" target="n" data-glyph="46,1" class="i field">lastError</a>;
+        <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="39f8ceefcb4c3b02" href="../../../../../R/39f8ceefcb4c3b02.html" target="n" data-glyph="46,1" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+ 
+        <b>readonly int</b> <a id="1602c68c2101ab48" href="../../../../../R/1602c68c2101ab48.html" target="n" data-glyph="46,1" class="i field">bufferSize</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <a id="f8bb520c44f3ac25" href="../../../../../R/f8bb520c44f3ac25.html" target="n" data-glyph="46,1" class="i field">window</a>;
+        <b>readonly</b> <a href="@0@mscorlib/A.html#68b4bb83ce8d1c31" class="t t">DateTimeOffset</a> <a id="cf010411062e1430" href="../../../../../R/cf010411062e1430.html" target="n" data-glyph="46,1" class="i field">startTime</a>;
+        <b>readonly</b> <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <a id="e82ed998040ec0c3" href="../../../../../R/e82ed998040ec0c3.html" target="n" data-glyph="46,1" class="i field">scheduler</a>;
+        <a href="@0@System/A.html#aa3beab99b2e0db2" class="t t">Queue</a>&lt;<a href="../TimeInterval.cs.html#92d2b7cdb34901ec" class="t t">TimeInterval</a>&lt;<span class="r0 r t">T</span>&gt;&gt; <a id="a9f64178db8b4eb9" href="../../../../../R/a9f64178db8b4eb9.html" target="n" data-glyph="46,1" class="i field">queue</a> = <b>new</b> <a href="@0@System/A.html#a09109def640b7b1" class="t constructor">Queue</a>&lt;<a href="../TimeInterval.cs.html#92d2b7cdb34901ec" class="t t">TimeInterval</a>&lt;<span class="r0 r t">T</span>&gt;&gt;();
+ 
+ 
+        <b>public</b> <a id="3e81797da863d480" href="../../../../../R/3e81797da863d480.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>()
+            : <a href="#a3a8f6ac887c045e" class="k">this</a>(<b>int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#49db92dcef47a7a4" class="i field">MaxValue</a>, <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>)
+        {
+        }
+ 
+        <b>public</b> <a id="cba084109fea78df" href="../../../../../R/cba084109fea78df.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>(<a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r1 rd" class="r1 r">scheduler</span>)
+            : <a href="#a3a8f6ac887c045e" class="k">this</a>(<b>int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#49db92dcef47a7a4" class="i field">MaxValue</a>, <span class="r1 r">scheduler</span>)
+        {
+        }
+ 
+        <b>public</b> <a id="590cb5eca33a8438" href="../../../../../R/590cb5eca33a8438.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>(<b>int</b> <span id="r2 rd" class="r2 r">bufferSize</span>)
+            : <a href="#a3a8f6ac887c045e" class="k">this</a>(<span class="r2 r">bufferSize</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#49db92dcef47a7a4" class="i field">MaxValue</a>, <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>)
+        {
+        }
+ 
+        <b>public</b> <a id="96888f5db357eab5" href="../../../../../R/96888f5db357eab5.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>(<b>int</b> <span id="r3 rd" class="r3 r">bufferSize</span>, <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r4 rd" class="r4 r">scheduler</span>)
+            : <a href="#a3a8f6ac887c045e" class="k">this</a>(<span class="r3 r">bufferSize</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#49db92dcef47a7a4" class="i field">MaxValue</a>, <span class="r4 r">scheduler</span>)
+        {
+        }
+ 
+        <b>public</b> <a id="bd4159a27f399b15" href="../../../../../R/bd4159a27f399b15.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r5 rd" class="r5 r">window</span>)
+            : <a href="#a3a8f6ac887c045e" class="k">this</a>(<b>int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>, <span class="r5 r">window</span>, <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#9e8a9c8c24cebd7c" class="t t">DefaultSchedulers</a>.<a href="../Schedulers/Scheduler.cs.html#cf51429aa7326cee" class="i property">Iteration</a>)
+        {
+        }
+ 
+        <b>public</b> <a id="bb1facec3ca2715f" href="../../../../../R/bb1facec3ca2715f.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>(<a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r6 rd" class="r6 r">window</span>, <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r7 rd" class="r7 r">scheduler</span>)
+            : <a href="#a3a8f6ac887c045e" class="k">this</a>(<b>int</b>.<a href="@0@mscorlib/A.html#c45153c0501d7122" class="i field">MaxValue</a>, <span class="r6 r">window</span>, <span class="r7 r">scheduler</span>)
+        {
+        }
+ 
+        <span class="c">// full constructor</span>
+        <b>public</b> <a id="a3a8f6ac887c045e" href="../../../../../R/a3a8f6ac887c045e.html" target="n" data-glyph="72,1" class="i constructor">ReplaySubject</a>(<b>int</b> <span id="r8 rd" class="r8 r">bufferSize</span>, <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a> <span id="r9 rd" class="r9 r">window</span>, <a href="../Schedulers/IScheduler.cs.html#23ddc6164c5c4a05" class="t t">IScheduler</a> <span id="r10 rd" class="r10 r">scheduler</span>)
+        {
+            <b>if</b> (<span class="r8 r">bufferSize</span> &lt; 0) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;bufferSize&quot;</span>);
+            <b>if</b> (<span class="r9 r">window</span> &lt; <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="t t">TimeSpan</a>.<a href="@0@mscorlib/A.html#225346b4cd3a8300" class="i field">Zero</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#5fec5e06371b1f6c" class="t constructor">ArgumentOutOfRangeException</a>(<span class="s">&quot;window&quot;</span>);
+            <b>if</b> (<span class="r10 r">scheduler</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;scheduler&quot;</span>);
+ 
+            <a href="#e198528b1faadf14" class="k">this</a>.<a href="#1602c68c2101ab48" class="i field">bufferSize</a> = <span class="r8 r">bufferSize</span>;
+            <a href="#e198528b1faadf14" class="k">this</a>.<a href="#f8bb520c44f3ac25" class="i field">window</a> = <span class="r9 r">window</span>;
+            <a href="#e198528b1faadf14" class="k">this</a>.<a href="#e82ed998040ec0c3" class="i field">scheduler</a> = <span class="r10 r">scheduler</span>;
+            <a href="#cf010411062e1430" class="i field">startTime</a> = <span class="r10 r">scheduler</span>.<a href="../Schedulers/IScheduler.cs.html#26e5447b3b301f2d" class="i property">Now</a>;
+        }
+ 
+        <b>void</b> <a id="2c3a9f295d49028b" href="../../../../../R/2c3a9f295d49028b.html" target="n" data-glyph="76,1" class="i method">Trim</a>()
+        {
+            <a href="@0@mscorlib/A.html#865ef7b89f41b632" class="k">var</a> <span id="r11 rd" class="r11 r">elapsedTime</span> = <a href="../../../../../P/48627f587bfa2dac.html#48627f587bfa2dac" class="t t">Scheduler</a>.<a href="../Schedulers/Scheduler.cs.html#f0c23e4562d46bd4" class="i method">Normalize</a>(<a href="#e82ed998040ec0c3" class="i field">scheduler</a>.<a href="../Schedulers/IScheduler.cs.html#26e5447b3b301f2d" class="i property">Now</a> - <a href="#cf010411062e1430" class="i field">startTime</a>);
+ 
+            <b>while</b> (<a href="#a9f64178db8b4eb9" class="i field">queue</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; <a href="#1602c68c2101ab48" class="i field">bufferSize</a>)
+            {
+                <a href="#a9f64178db8b4eb9" class="i field">queue</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+            }
+            <b>while</b> (<a href="#a9f64178db8b4eb9" class="i field">queue</a>.<a href="@0@System/A.html#2d2504e4ca700843" class="i property">Count</a> &gt; 0 &amp;&amp; <span class="r11 r">elapsedTime</span>.<a href="@0@mscorlib/A.html#ff480b49f090b86e" class="i method">Subtract</a>(<a href="#a9f64178db8b4eb9" class="i field">queue</a>.<a href="@0@System/A.html#78966d115c02d2f2" class="i method">Peek</a>().<a href="../TimeInterval.cs.html#755ec92b7912b4b0" class="i property">Interval</a>).<a href="@0@mscorlib/A.html#6cb8793c29bacac5" class="i method">CompareTo</a>(<a href="#f8bb520c44f3ac25" class="i field">window</a>) &gt; 0)
+            {
+                <a href="#a9f64178db8b4eb9" class="i field">queue</a>.<a href="@0@System/A.html#e68caf2d91344411" class="i method">Dequeue</a>();
+            }
+        }
+ 
+        <b>public void</b> <a id="44d63241d57a99b5" href="../../../../../R/44d63241d57a99b5.html" target="n" data-glyph="72,1" class="i method">OnCompleted</a>()
+        {
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r12 rd" class="r12 r">old</span>;
+            <b>lock</b> (<a href="#3b9c6abcdeb793c0" class="i field">observerLock</a>)
+            {
+                <a href="#5e61372b1da4d809" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (<a href="#bcb872dfe08b2d22" class="i field">isStopped</a>) <b>return</b>;
+ 
+                <span class="r12 r">old</span> = <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a>;
+                <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+                <a href="#bcb872dfe08b2d22" class="i field">isStopped</a> = <b>true</b>;
+                <a href="#2c3a9f295d49028b" class="i method">Trim</a>();
+            }
+ 
+            <span class="r12 r">old</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+        }
+ 
+        <b>public void</b> <a id="84c7631bd25fdc15" href="../../../../../R/84c7631bd25fdc15.html" target="n" data-glyph="72,1" class="i method">OnError</a>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a> <span id="r13 rd" class="r13 r">error</span>)
+        {
+            <b>if</b> (<span class="r13 r">error</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;error&quot;</span>);
+ 
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r14 rd" class="r14 r">old</span>;
+            <b>lock</b> (<a href="#3b9c6abcdeb793c0" class="i field">observerLock</a>)
+            {
+                <a href="#5e61372b1da4d809" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (<a href="#bcb872dfe08b2d22" class="i field">isStopped</a>) <b>return</b>;
+ 
+                <span class="r14 r">old</span> = <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a>;
+                <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+                <a href="#bcb872dfe08b2d22" class="i field">isStopped</a> = <b>true</b>;
+                <a href="#92ac3bea25968987" class="i field">lastError</a> = <span class="r13 r">error</span>;
+                <a href="#2c3a9f295d49028b" class="i method">Trim</a>();
+            }
+ 
+            <span class="r14 r">old</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r13 r">error</span>);
+        }
+ 
+        <b>public void</b> <a id="ab3e8c0cd1a32f76" href="../../../../../R/ab3e8c0cd1a32f76.html" target="n" data-glyph="72,1" class="i method">OnNext</a>(<span class="r0 r t">T</span> <span id="r15 rd" class="r15 r">value</span>)
+        {
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r16 rd" class="r16 r">current</span>;
+            <b>lock</b> (<a href="#3b9c6abcdeb793c0" class="i field">observerLock</a>)
+            {
+                <a href="#5e61372b1da4d809" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (<a href="#bcb872dfe08b2d22" class="i field">isStopped</a>) <b>return</b>;
+ 
+                <span class="c">// enQ</span>
+                <a href="#a9f64178db8b4eb9" class="i field">queue</a>.<a href="@0@System/A.html#14c3cc45ceaf1566" class="i method">Enqueue</a>(<b>new</b> <a href="../TimeInterval.cs.html#fc02f36916bff8ce" class="t constructor">TimeInterval</a>&lt;<span class="r0 r t">T</span>&gt;(<span class="r15 r">value</span>, <a href="#e82ed998040ec0c3" class="i field">scheduler</a>.<a href="../Schedulers/IScheduler.cs.html#26e5447b3b301f2d" class="i property">Now</a> - <a href="#cf010411062e1430" class="i field">startTime</a>));
+                <a href="#2c3a9f295d49028b" class="i method">Trim</a>();
+ 
+                <span class="r16 r">current</span> = <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a>;
+            }
+ 
+            <span class="r16 r">current</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r15 r">value</span>);
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="e5895501ee4555dd" href="../../../../../R/e5895501ee4555dd.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r17 rd" class="r17 r">observer</span>)
+        {
+            <b>if</b> (<span class="r17 r">observer</span> == <b>null</b>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#8314938388254d5a" class="t constructor">ArgumentNullException</a>(<span class="s">&quot;observer&quot;</span>);
+ 
+            <a href="@0@mscorlib/A.html#f092fb2b893a0162" class="k">var</a> <span id="r18 rd" class="r18 r">ex</span> = <b>default</b>(<a href="@0@mscorlib/A.html#f092fb2b893a0162" class="t t">Exception</a>);
+            <a href="#11c2e8018734f1c0" class="k">var</a> <span id="r19 rd" class="r19 r">subscription</span> = <b>default</b>(<a href="#11c2e8018734f1c0" class="t t">Subscription</a>);
+ 
+            <b>lock</b> (<a href="#3b9c6abcdeb793c0" class="i field">observerLock</a>)
+            {
+                <a href="#5e61372b1da4d809" class="i method">ThrowIfDisposed</a>();
+                <b>if</b> (!<a href="#bcb872dfe08b2d22" class="i field">isStopped</a>)
+                {
+                    <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="k">var</a> <span id="r20 rd" class="r20 r">listObserver</span> = <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> <b>as</b> <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="t t">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;;
+                    <b>if</b> (<span class="r20 r">listObserver</span> != <b>null</b>)
+                    {
+                        <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <span class="r20 r">listObserver</span>.<a href="../InternalUtil/ListObserver.cs.html#68c71fee4b650776" class="i method">Add</a>(<span class="r17 r">observer</span>);
+                    }
+                    <b>else</b>
+                    {
+                        <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="k">var</a> <span id="r21 rd" class="r21 r">current</span> = <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a>;
+                        <b>if</b> (<span class="r21 r">current</span> <b>is</b> <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;)
+                        {
+                            <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <span class="r17 r">observer</span>;
+                        }
+                        <b>else</b>
+                        {
+                            <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <b>new</b> <a href="../InternalUtil/ListObserver.cs.html#51d639679a0129ad" class="t constructor">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;(<b>new</b> <a href="../InternalUtil/ImmutableList.cs.html#2182b22b2e2f9d75" class="t constructor">ImmutableList</a>&lt;<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt;&gt;(<b>new</b>[] { <span class="r21 r">current</span>, <span class="r17 r">observer</span> }));
+                        }
+                    }
+ 
+                    <span class="r19 r">subscription</span> = <b>new</b> <a href="#ec0e12e5ed72c926" class="t constructor">Subscription</a>(<a href="#e198528b1faadf14" class="k">this</a>, <span class="r17 r">observer</span>);
+                }
+ 
+                <span class="r18 r">ex</span> = <a href="#92ac3bea25968987" class="i field">lastError</a>;
+                <a href="#2c3a9f295d49028b" class="i method">Trim</a>();
+                <b>foreach</b> (<a href="../TimeInterval.cs.html#92d2b7cdb34901ec" class="k">var</a> <span id="r22 rd" class="r22 r">item</span> <b>in</b> <a href="#a9f64178db8b4eb9" class="i field">queue</a>)
+                {
+                    <span class="r17 r">observer</span>.<a href="../System/IObserver.cs.html#75b2ea1929bc1aa1" class="i method">OnNext</a>(<span class="r22 r">item</span>.<a href="../TimeInterval.cs.html#59ff0e57e2578a36" class="i property">Value</a>);
+                }
+            }
+ 
+            <b>if</b> (<span class="r19 r">subscription</span> != <b>null</b>)
+            {
+                <b>return</b> <span class="r19 r">subscription</span>;
+            }
+            <b>else if</b> (<span class="r18 r">ex</span> != <b>null</b>)
+            {
+                <span class="r17 r">observer</span>.<a href="../System/IObserver.cs.html#4d8c377fc74ba9d4" class="i method">OnError</a>(<span class="r18 r">ex</span>);
+            }
+            <b>else</b>
+            {
+                <span class="r17 r">observer</span>.<a href="../System/IObserver.cs.html#85809097aee93ca2" class="i method">OnCompleted</a>();
+            }
+ 
+            <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <b>public void</b> <a id="7a5a1115c14183cb" href="../../../../../R/7a5a1115c14183cb.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>lock</b> (<a href="#3b9c6abcdeb793c0" class="i field">observerLock</a>)
+            {
+                <a href="#c6e42fd1b4ee78cd" class="i field">isDisposed</a> = <b>true</b>;
+                <a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#3935b7140bd22864" class="t t">DisposedObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#115281850ddc85a7" class="i field">Instance</a>;
+                <a href="#92ac3bea25968987" class="i field">lastError</a> = <b>null</b>;
+                <a href="#a9f64178db8b4eb9" class="i field">queue</a> = <b>null</b>;
+            }
+        }
+ 
+        <b>void</b> <a id="5e61372b1da4d809" href="../../../../../R/5e61372b1da4d809.html" target="n" data-glyph="76,1" class="i method">ThrowIfDisposed</a>()
+        {
+            <b>if</b> (<a href="#c6e42fd1b4ee78cd" class="i field">isDisposed</a>) <b>throw</b> <b>new</b> <a href="@0@mscorlib/A.html#53515c848f859933" class="t constructor">ObjectDisposedException</a>(<span class="s">&quot;&quot;</span>);
+        }
+ 
+        <b>public bool</b> <a id="114d917cba6c7792" href="../../../../../R/114d917cba6c7792.html" target="n" data-glyph="72,1" class="i method">IsRequiredSubscribeOnCurrentThread</a>()
+        {
+            <b>return false</b>;
+        }
+ 
+        <b>class</b> <a id="11c2e8018734f1c0" href="../../../../../R/11c2e8018734f1c0.html" target="n" data-glyph="4,1" class="t t">Subscription</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly object</b> <a id="96b996aa5f4c8b52" href="../../../../../R/96b996aa5f4c8b52.html" target="n" data-glyph="46,2" class="i field">gate</a> = <b>new</b> <b>object</b>();
+            <a href="#e198528b1faadf14" class="t t">ReplaySubject</a>&lt;<span class="r0 r t">T</span>&gt; <a id="9da661e267c8e1c6" href="../../../../../R/9da661e267c8e1c6.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <a id="1e577528eba4083d" href="../../../../../R/1e577528eba4083d.html" target="n" data-glyph="46,2" class="i field">unsubscribeTarget</a>;
+ 
+            <b>public</b> <a id="ec0e12e5ed72c926" href="../../../../../R/ec0e12e5ed72c926.html" target="n" data-glyph="72,2" class="i constructor">Subscription</a>(<a href="#e198528b1faadf14" class="t t">ReplaySubject</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r23 rd" class="r23 r">parent</span>, <a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r0 r t">T</span>&gt; <span id="r24 rd" class="r24 r">unsubscribeTarget</span>)
+            {
+                <a href="#11c2e8018734f1c0" class="k">this</a>.<a href="#9da661e267c8e1c6" class="i field">parent</a> = <span class="r23 r">parent</span>;
+                <a href="#11c2e8018734f1c0" class="k">this</a>.<a href="#1e577528eba4083d" class="i field">unsubscribeTarget</a> = <span class="r24 r">unsubscribeTarget</span>;
+            }
+ 
+            <b>public void</b> <a id="5e7b3ff7030f165d" href="../../../../../R/5e7b3ff7030f165d.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>lock</b> (<a href="#96b996aa5f4c8b52" class="i field">gate</a>)
+                {
+                    <b>if</b> (<a href="#9da661e267c8e1c6" class="i field">parent</a> != <b>null</b>)
+                    {
+                        <b>lock</b> (<a href="#9da661e267c8e1c6" class="i field">parent</a>.<a href="#3b9c6abcdeb793c0" class="i field">observerLock</a>)
+                        {
+                            <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="k">var</a> <span id="r25 rd" class="r25 r">listObserver</span> = <a href="#9da661e267c8e1c6" class="i field">parent</a>.<a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> <b>as</b> <a href="../InternalUtil/ListObserver.cs.html#53d92869808a5775" class="t t">ListObserver</a>&lt;<span class="r0 r t">T</span>&gt;;
+                            <b>if</b> (<span class="r25 r">listObserver</span> != <b>null</b>)
+                            {
+                                <a href="#9da661e267c8e1c6" class="i field">parent</a>.<a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <span class="r25 r">listObserver</span>.<a href="../InternalUtil/ListObserver.cs.html#32cb63dd18624969" class="i method">Remove</a>(<a href="#1e577528eba4083d" class="i field">unsubscribeTarget</a>);
+                            }
+                            <b>else</b>
+                            {
+                                <a href="#9da661e267c8e1c6" class="i field">parent</a>.<a href="#39f8ceefcb4c3b02" class="i field">outObserver</a> = <a href="../InternalUtil/ListObserver.cs.html#1059bf6cf47f025d" class="t t">EmptyObserver</a>&lt;<span class="r0 r t">T</span>&gt;.<a href="../InternalUtil/ListObserver.cs.html#2050ad21eaa4c4ed" class="i field">Instance</a>;
+                            }
+ 
+                            <a href="#1e577528eba4083d" class="i field">unsubscribeTarget</a> = <b>null</b>;
+                            <a href="#9da661e267c8e1c6" class="i field">parent</a> = <b>null</b>;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}</pre></td></tr></table></div></body></html>

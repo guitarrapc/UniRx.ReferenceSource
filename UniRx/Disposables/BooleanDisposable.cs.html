@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html><head><title>BooleanDisposable.cs</title><link rel="stylesheet" href="../../styles.css"><script src="../../scripts.js"></script></head>
+<body class="cB" onload="i(25);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRx/Disposables/BooleanDisposable.cs" target="_top">Disposables\BooleanDisposable.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRx" target="_top">Dlls\UniRx.Library\UniRx.Library.csproj</a> (UniRx)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">System</span>.<span class="i n">Collections</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public sealed class</b> <a id="45b9c7444c27222b" href="../R/45b9c7444c27222b.html" target="n" data-glyph="0,0" class="t t">BooleanDisposable</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>, <a href="ICancelable.cs.html#b51fe2ec06b16970" class="t t">ICancelable</a>
+    {
+        <b>public bool</b> <a id="b764ec70b21ab894" href="../R/b764ec70b21ab894.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <b>public</b> <a id="3802264e4ce255c7" href="../R/3802264e4ce255c7.html" target="n" data-glyph="72,1" class="i constructor">BooleanDisposable</a>()
+        {
+ 
+        }
+ 
+        <b>internal</b> <a id="88739c7f5f8c7727" href="../R/88739c7f5f8c7727.html" target="n" data-glyph="74,1" class="i constructor">BooleanDisposable</a>(<b>bool</b> <span id="r0 rd" class="r0 r">isDisposed</span>)
+        {
+            <a href="#b764ec70b21ab894" class="i property">IsDisposed</a> = <span class="r0 r">isDisposed</span>;
+        }
+ 
+        <b>public void</b> <a id="424d82cc13c375f8" href="../R/424d82cc13c375f8.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>if</b> (!<a href="#b764ec70b21ab894" class="i property">IsDisposed</a>) <a href="#b764ec70b21ab894" class="i property">IsDisposed</a> = <b>true</b>;
+        }
+    }
+}</pre></td></tr></table></div></body></html>

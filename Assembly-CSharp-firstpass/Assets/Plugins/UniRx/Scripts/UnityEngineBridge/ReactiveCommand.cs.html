@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<html><head><title>ReactiveCommand.cs</title><link rel="stylesheet" href="../../../../../../styles.css"><script src="../../../../../../scripts.js"></script></head>
+<body class="cB" onload="i(409);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#Assembly-CSharp-firstpass/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveCommand.cs" target="_top">Assets\Plugins\UniRx\Scripts\UnityEngineBridge\ReactiveCommand.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#Assembly-CSharp-firstpass" target="_top">UniRx.CSharp.Plugins.csproj</a> (Assembly-CSharp-firstpass)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">System</span>;
+ 
+<b>namespace</b> <span class="i n">UniRx</span>
+{
+    <b>public interface</b> <a id="7061dd83b29887cb" href="../../../../../R/7061dd83b29887cb.html" target="n" data-glyph="48,0" class="t t">IReactiveCommand</a>&lt;<span id="r0 rd t" class="r0 r t">T</span>&gt; : <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<span class="r0 r t">T</span>&gt;
+    {
+        <a href="ReactiveProperty.cs.html#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="9939a02b4eac4d1e" href="../../../../../R/9939a02b4eac4d1e.html" target="n" data-glyph="102,1" class="i property">CanExecute</a> { <b>get</b>; }
+        <b>bool</b> <a id="4416615511f152de" href="../../../../../R/4416615511f152de.html" target="n" data-glyph="72,1" class="i method">Execute</a>(<span class="r0 r t">T</span> <span id="r1 rd" class="r1 r">parameter</span>);
+    }
+ 
+    <b>public interface</b> <a id="57cd697a995f7a2b" href="../../../../../R/57cd697a995f7a2b.html" target="n" data-glyph="48,0" class="t t">IAsyncReactiveCommand</a>&lt;<span id="r2 rd t" class="r2 r t">T</span>&gt;
+    {
+        <a href="ReactiveProperty.cs.html#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="b3c141c4a3cd7dda" href="../../../../../R/b3c141c4a3cd7dda.html" target="n" data-glyph="102,1" class="i property">CanExecute</a> { <b>get</b>; }
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="882ddde7b58cd70a" href="../../../../../R/882ddde7b58cd70a.html" target="n" data-glyph="72,1" class="i method">Execute</a>(<span class="r2 r t">T</span> <span id="r3 rd" class="r3 r">parameter</span>);
+        <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="477503e647f70c89" href="../../../../../R/477503e647f70c89.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r2 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r4 rd" class="r4 r">asyncAction</span>);
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Represents ReactiveCommand</span><span class="c">&amp;lt;</span><span class="c">Unit</span><span class="c">&amp;gt;</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="0b8b570c49bc3f56" href="../../../../../R/0b8b570c49bc3f56.html" target="n" data-glyph="0,0" class="t t">ReactiveCommand</a> : <a href="#0b61079d413f41e8" class="t t">ReactiveCommand</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is always true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="2130e97f55cb8e9a" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCommand</a>()
+            : <a href="#1f29dd2f7f533b56" class="k">base</a>()
+        { }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is changed from canExecute sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="f19ada0e3e1423a0" href="../../../../../R/f19ada0e3e1423a0.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCommand</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r5 rd" class="r5 r">canExecuteSource</span>, <b>bool</b> <span id="r6 rd" class="r6 r">initialValue</span> = <b>true</b>)
+            : <a href="#813805fceae60de5" class="k">base</a>(<span class="r5 r">canExecuteSource</span>, <span class="r6 r">initialValue</span>)
+        {
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Push null to subscribers.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="9b509ffcb0df5642" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Execute</a>()
+        {
+            <b>return</b> <a href="#2f8f29734557883e" class="i method">Execute</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Force push parameter to subscribers.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="9d35c4f60ebda690" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">ForceExecute</a>()
+        {
+            <a href="#b290e4b4de69c3fc" class="i method">ForceExecute</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+    }
+ 
+    <b>public class</b> <a id="0b61079d413f41e8" href="../../../../../R/0b61079d413f41e8.html" target="n" data-glyph="0,0" class="t t">ReactiveCommand</a>&lt;<span id="r7 rd t" class="r7 r t">T</span>&gt; : <a href="#7061dd83b29887cb" class="t t">IReactiveCommand</a>&lt;<span class="r7 r t">T</span>&gt;, <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+    {
+        <b>readonly</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t t">Subject</a>&lt;<span class="r7 r t">T</span>&gt; <a id="f8119c566a4e6be0" href="../../../../../R/f8119c566a4e6be0.html" target="n" data-glyph="46,1" class="i field">trigger</a> = <b>new</b> <a href="../Subjects/Subject.cs.html#e84fb44e794ec78c" class="t constructor">Subject</a>&lt;<span class="r7 r t">T</span>&gt;();
+        <b>readonly</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="564186cf6f8b19d1" href="../../../../../R/564186cf6f8b19d1.html" target="n" data-glyph="46,1" class="i field">canExecuteSubscription</a>;
+ 
+        <a href="ReactiveProperty.cs.html#15792ff57f70fe8c" class="t t">ReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="4fb6d43213e94bd6" href="../../../../../R/4fb6d43213e94bd6.html" target="n" data-glyph="46,1" class="i field">canExecute</a>;
+        <b>public</b> <a href="ReactiveProperty.cs.html#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="72789f3e4d61728f" href="../../../../../R/72789f3e4d61728f.html" target="n" data-glyph="102,1" class="i property">CanExecute</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#4fb6d43213e94bd6" class="i field">canExecute</a>;
+            }
+        }
+ 
+        <b>public bool</b> <a id="e99619863a7b057d" href="../../../../../R/e99619863a7b057d.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is always true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="1f29dd2f7f533b56" href="../../../../../R/1f29dd2f7f533b56.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCommand</a>()
+        {
+            <a href="#0b61079d413f41e8" class="k">this</a>.<a href="#4fb6d43213e94bd6" class="i field">canExecute</a> = <b>new</b> <a href="ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>bool</b>&gt;(<b>true</b>);
+            <a href="#0b61079d413f41e8" class="k">this</a>.<a href="#564186cf6f8b19d1" class="i field">canExecuteSubscription</a> = <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is changed from canExecute sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="813805fceae60de5" href="../../../../../R/813805fceae60de5.html" target="n" data-glyph="72,1" class="i constructor">ReactiveCommand</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r8 rd" class="r8 r">canExecuteSource</span>, <b>bool</b> <span id="r9 rd" class="r9 r">initialValue</span> = <b>true</b>)
+        {
+            <a href="#0b61079d413f41e8" class="k">this</a>.<a href="#4fb6d43213e94bd6" class="i field">canExecute</a> = <b>new</b> <a href="ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>bool</b>&gt;(<span class="r9 r">initialValue</span>);
+            <a href="#0b61079d413f41e8" class="k">this</a>.<a href="#564186cf6f8b19d1" class="i field">canExecuteSubscription</a> = <span class="r8 r">canExecuteSource</span>
+                .<a href="../Observable.cs.html#89cd1697f204a69c" class="i method">DistinctUntilChanged</a>()
+                .<a href="../Observer.cs.html#b0dc74ef835bd488" class="i method">SubscribeWithState</a>(<a href="#4fb6d43213e94bd6" class="i field">canExecute</a>, (<span id="r10 rd" class="r10 r">b</span>, <span id="r11 rd" class="r11 r">c</span>) =&gt; <span class="r11 r">c</span>.<a href="ReactiveProperty.cs.html#989001a432e3dbdd" class="i property">Value</a> = <span class="r10 r">b</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Push parameter to subscribers when CanExecute.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public bool</b> <a id="2f8f29734557883e" href="../../../../../R/2f8f29734557883e.html" target="n" data-glyph="72,1" class="i method">Execute</a>(<span class="r7 r t">T</span> <span id="r12 rd" class="r12 r">parameter</span>)
+        {
+            <b>if</b> (<a href="#4fb6d43213e94bd6" class="i field">canExecute</a>.<a href="ReactiveProperty.cs.html#989001a432e3dbdd" class="i property">Value</a>)
+            {
+                <a href="#f8119c566a4e6be0" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r12 r">parameter</span>);
+                <b>return true</b>;
+            }
+            <b>else</b>
+            {
+                <b>return false</b>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Force push parameter to subscribers.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="b290e4b4de69c3fc" href="../../../../../R/b290e4b4de69c3fc.html" target="n" data-glyph="72,1" class="i method">ForceExecute</a>(<span class="r7 r t">T</span> <span id="r13 rd" class="r13 r">parameter</span>)
+        {
+            <a href="#f8119c566a4e6be0" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#eb9ca668135f9655" class="i method">OnNext</a>(<span class="r13 r">parameter</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Subscribe execute.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1f07f568136770c3" href="../../../../../R/1f07f568136770c3.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="../System/IObserver.cs.html#c627c8e1a935dce3" class="t t">IObserver</a>&lt;<span class="r7 r t">T</span>&gt; <span id="r14 rd" class="r14 r">observer</span>)
+        {
+            <b>return</b> <a href="#f8119c566a4e6be0" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#04b6b0a3ab880230" class="i method">Subscribe</a>(<span class="r14 r">observer</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Stop all subscription and lock CanExecute is false.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public void</b> <a id="48b2443b50ade2c5" href="../../../../../R/48b2443b50ade2c5.html" target="n" data-glyph="72,1" class="i method">Dispose</a>()
+        {
+            <b>if</b> (<a href="#e99619863a7b057d" class="i property">IsDisposed</a>) <b>return</b>;
+ 
+            <a href="#e99619863a7b057d" class="i property">IsDisposed</a> = <b>true</b>;
+            <a href="#4fb6d43213e94bd6" class="i field">canExecute</a>.<a href="ReactiveProperty.cs.html#862c22b037ac7323" class="i method">Dispose</a>();
+            <a href="#f8119c566a4e6be0" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#519e9dfb8c056031" class="i method">OnCompleted</a>();
+            <a href="#f8119c566a4e6be0" class="i field">trigger</a>.<a href="../Subjects/Subject.cs.html#9aa899d2278a4ad0" class="i method">Dispose</a>();
+            <a href="#564186cf6f8b19d1" class="i field">canExecuteSubscription</a>.<a href="@0@mscorlib/A.html#4e23fed29bd598fa" class="i method">Dispose</a>();
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Variation of ReactiveCommand, when executing command then CanExecute = false after CanExecute = true.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="6cf46d1cdad06087" href="../../../../../R/6cf46d1cdad06087.html" target="n" data-glyph="0,0" class="t t">AsyncReactiveCommand</a> : <a href="#539e115ba3d33bb8" class="t t">AsyncReactiveCommand</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is automatically changed when executing to false and finished to true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="27f59de196130640" href="../../../../../R/27f59de196130640.html" target="n" data-glyph="72,1" class="i constructor">AsyncReactiveCommand</a>()
+            : <a href="#68c8b617cd0739ff" class="k">base</a>()
+        {
+ 
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is automatically changed when executing to false and finished to true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="74bcc75ec413bd82" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i constructor">AsyncReactiveCommand</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r15 rd" class="r15 r">canExecuteSource</span>)
+            : <a href="#a26f71e27150590a" class="k">base</a>(<span class="r15 r">canExecuteSource</span>)
+        {
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is automatically changed when executing to false and finished to true.</span>
+        <span class="c">///</span><span class="c"> The source is shared between other AsyncReactiveCommand.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="ae0611b1d2bd10ad" href="../../../../../R/ae0611b1d2bd10ad.html" target="n" data-glyph="72,1" class="i constructor">AsyncReactiveCommand</a>(<a href="ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <span id="r16 rd" class="r16 r">sharedCanExecute</span>)
+            : <a href="#fb83ce46aa417385" class="k">base</a>(<span class="r16 r">sharedCanExecute</span>)
+        {
+        }
+ 
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="9cc29e032a664347" href="../../../../../R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Execute</a>()
+        {
+            <b>return</b> <a href="#539e115ba3d33bb8" class="k">base</a>.<a href="#eb2b2bcb54d36f6f" class="i method">Execute</a>(<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>.<a href="../System/Unit.cs.html#e18d6ffbae9cfbc4" class="i property">Default</a>);
+        }
+    }
+ 
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+    <span class="c">///</span><span class="c"> Variation of ReactiveCommand, canExecute is changed when executing command then CanExecute = false after CanExecute = true.</span>
+    <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+    <b>public class</b> <a id="539e115ba3d33bb8" href="../../../../../R/539e115ba3d33bb8.html" target="n" data-glyph="0,0" class="t t">AsyncReactiveCommand</a>&lt;<span id="r17 rd t" class="r17 r t">T</span>&gt; : <a href="#57cd697a995f7a2b" class="t t">IAsyncReactiveCommand</a>&lt;<span class="r17 r t">T</span>&gt;
+    {
+        <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r17 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt; <a id="de66f56ecf6ee6fb" href="../../../../../R/de66f56ecf6ee6fb.html" target="n" data-glyph="46,1" class="i field">asyncActions</a> = <span class="i n">UniRx</span>.<span class="i n">InternalUtil</span>.<a href="../InternalUtil/ImmutableList.cs.html#58b31023c4d821bc" class="t t">ImmutableList</a>&lt;<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r17 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt;&gt;.<a href="../InternalUtil/ImmutableList.cs.html#d4818b09742a8d04" class="i field">Empty</a>;
+ 
+        <b>readonly object</b> <a id="a21537c4bd2531d7" href="../../../../../R/a21537c4bd2531d7.html" target="n" data-glyph="46,1" class="i field">gate</a> = <b>new</b> <b>object</b>();
+        <b>readonly</b> <a href="ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="949585c1405dea2f" href="../../../../../R/949585c1405dea2f.html" target="n" data-glyph="46,1" class="i field">canExecuteSource</a>;
+        <b>readonly</b> <a href="ReactiveProperty.cs.html#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="e8e8a7eadebda1f2" href="../../../../../R/e8e8a7eadebda1f2.html" target="n" data-glyph="46,1" class="i field">canExecute</a>;
+ 
+        <b>public</b> <a href="ReactiveProperty.cs.html#c3c2f6824f02e021" class="t t">IReadOnlyReactiveProperty</a>&lt;<b>bool</b>&gt; <a id="5ae8e6e151bf205c" href="../../../../../R/5ae8e6e151bf205c.html" target="n" data-glyph="102,1" class="i property">CanExecute</a>
+        {
+            <b>get</b>
+            {
+                <b>return</b> <a href="#e8e8a7eadebda1f2" class="i field">canExecute</a>;
+            }
+        }
+ 
+        <b>public bool</b> <a id="533aa98352de2f2c" href="../../../../../R/../../0000000000.html" target="n" data-glyph="102,1" class="i property">IsDisposed</a> { <b>get</b>; <b>private set</b>; }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is automatically changed when executing to false and finished to true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="68c8b617cd0739ff" href="../../../../../R/68c8b617cd0739ff.html" target="n" data-glyph="72,1" class="i constructor">AsyncReactiveCommand</a>()
+        {
+            <a href="#539e115ba3d33bb8" class="k">this</a>.<a href="#949585c1405dea2f" class="i field">canExecuteSource</a> = <b>new</b> <a href="ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>bool</b>&gt;(<b>true</b>);
+            <a href="#539e115ba3d33bb8" class="k">this</a>.<a href="#e8e8a7eadebda1f2" class="i field">canExecute</a> = <a href="#949585c1405dea2f" class="i field">canExecuteSource</a>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is automatically changed when executing to false and finished to true.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="a26f71e27150590a" href="../../../../../R/a26f71e27150590a.html" target="n" data-glyph="72,1" class="i constructor">AsyncReactiveCommand</a>(<a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r18 rd" class="r18 r">canExecuteSource</span>)
+        {
+            <a href="#539e115ba3d33bb8" class="k">this</a>.<a href="#949585c1405dea2f" class="i field">canExecuteSource</a> = <b>new</b> <a href="ReactiveProperty.cs.html#690c4a961d36d179" class="t constructor">ReactiveProperty</a>&lt;<b>bool</b>&gt;(<b>true</b>);
+            <a href="#539e115ba3d33bb8" class="k">this</a>.<a href="#e8e8a7eadebda1f2" class="i field">canExecute</a> = <a href="#e8e8a7eadebda1f2" class="i field">canExecute</a>.<a href="../Observable.Concatenate.cs.html#b2126ced3afcecc6" class="i method">CombineLatest</a>(<span class="r18 r">canExecuteSource</span>, (<span id="r19 rd" class="r19 r">x</span>, <span id="r20 rd" class="r20 r">y</span>) =&gt; <span class="r19 r">x</span> &amp;&amp; <span class="r20 r">y</span>).<a href="ReactiveProperty.cs.html#0aaec21b70bdea4b" class="i method">ToReactiveProperty</a>();
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> CanExecute is automatically changed when executing to false and finished to true.</span>
+        <span class="c">///</span><span class="c"> The source is shared between other AsyncReactiveCommand.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a id="fb83ce46aa417385" href="../../../../../R/fb83ce46aa417385.html" target="n" data-glyph="72,1" class="i constructor">AsyncReactiveCommand</a>(<a href="ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <span id="r21 rd" class="r21 r">sharedCanExecute</span>)
+        {
+            <a href="#539e115ba3d33bb8" class="k">this</a>.<a href="#949585c1405dea2f" class="i field">canExecuteSource</a> = <span class="r21 r">sharedCanExecute</span>;
+            <a href="#539e115ba3d33bb8" class="k">this</a>.<a href="#e8e8a7eadebda1f2" class="i field">canExecute</a> = <span class="r21 r">sharedCanExecute</span>;
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Push parameter to subscribers when CanExecute.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="eb2b2bcb54d36f6f" href="../../../../../R/eb2b2bcb54d36f6f.html" target="n" data-glyph="72,1" class="i method">Execute</a>(<span class="r17 r t">T</span> <span id="r22 rd" class="r22 r">parameter</span>)
+        {
+            <b>if</b> (<a href="#e8e8a7eadebda1f2" class="i field">canExecute</a>.<a href="ReactiveProperty.cs.html#65ac625d5f2078d2" class="i property">Value</a>)
+            {
+                <a href="#949585c1405dea2f" class="i field">canExecuteSource</a>.<a href="ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <b>false</b>;
+                <b>var</b> <span id="r23 rd" class="r23 r">a</span> = <a href="#de66f56ecf6ee6fb" class="i field">asyncActions</a>.<a href="../InternalUtil/ImmutableList.cs.html#cc4b4805539f5ef9" class="i property">Data</a>;
+                <b>if</b> (<span class="r23 r">a</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a> == 1)
+                {
+                    <b>try</b>
+                    {
+                        <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="k">var</a> <span id="r24 rd" class="r24 r">asyncState</span> = <span class="r23 r">a</span>[0].<a href="@0@System.Core/A.html#3c17e52b9e2c8f81" class="i method">Invoke</a>(<span class="r22 r">parameter</span>) ?? <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5a94a3189575c5a6" class="i method">ReturnUnit</a>();
+                        <b>return</b> <span class="r24 r">asyncState</span>.<a href="../Observable.ErrorHandling.cs.html#89ea3b45237d80a5" class="i method">Finally</a>(() =&gt; <a href="#949585c1405dea2f" class="i field">canExecuteSource</a>.<a href="ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <b>true</b>).<a href="../Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+                    }
+                    <b>catch</b>
+                    {
+                        <a href="#949585c1405dea2f" class="i field">canExecuteSource</a>.<a href="ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <b>true</b>;
+                        <b>throw</b>;
+                    }
+                }
+                <b>else</b>
+                {
+                    <b>var</b> <span id="r25 rd" class="r25 r">xs</span> = <b>new</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;[<span class="r23 r">a</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>];
+                    <b>try</b>
+                    {
+                        <b>for</b> (<b>int</b> <span id="r26 rd" class="r26 r">i</span> = 0; <span class="r26 r">i</span> &lt; <span class="r23 r">a</span>.<a href="@0@mscorlib/A.html#42e9b7616956cf94" class="i property">Length</a>; <span class="r26 r">i</span>++)
+                        {
+                            <span class="r25 r">xs</span>[<span class="r26 r">i</span>] = <span class="r23 r">a</span>[<span class="r26 r">i</span>].<a href="@0@System.Core/A.html#3c17e52b9e2c8f81" class="i method">Invoke</a>(<span class="r22 r">parameter</span>) ?? <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Creation.cs.html#5a94a3189575c5a6" class="i method">ReturnUnit</a>();
+                        }
+                    }
+                    <b>catch</b>
+                    {
+                        <a href="#949585c1405dea2f" class="i field">canExecuteSource</a>.<a href="ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <b>true</b>;
+                        <b>throw</b>;
+                    }
+ 
+                    <b>return</b> <a href="../../../../../P/d25079c101caf010.html#d25079c101caf010" class="t t">Observable</a>.<a href="../Observable.Concatenate.cs.html#31132660576ae3ec" class="i method">WhenAll</a>(<span class="r25 r">xs</span>).<a href="../Observable.ErrorHandling.cs.html#89ea3b45237d80a5" class="i method">Finally</a>(() =&gt; <a href="#949585c1405dea2f" class="i field">canExecuteSource</a>.<a href="ReactiveProperty.cs.html#f7b8ae965d258cc9" class="i property">Value</a> = <b>true</b>).<a href="../Observer.cs.html#7f137680ea9f8245" class="i method">Subscribe</a>();
+                }
+            }
+            <b>else</b>
+            {
+                <b>return</b> <a href="../Disposables/Disposable.cs.html#c3a12a687132a528" class="t t">Disposable</a>.<a href="../Disposables/Disposable.cs.html#3fefdbd38ef98838" class="i field">Empty</a>;
+            }
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span><span class="c">Subscribe execute.</span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="859eef1896e6eef8" href="../../../../../R/859eef1896e6eef8.html" target="n" data-glyph="72,1" class="i method">Subscribe</a>(<a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r17 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r27 rd" class="r27 r">asyncAction</span>)
+        {
+            <b>lock</b> (<a href="#a21537c4bd2531d7" class="i field">gate</a>)
+            {
+                <a href="#de66f56ecf6ee6fb" class="i field">asyncActions</a> = <a href="#de66f56ecf6ee6fb" class="i field">asyncActions</a>.<a href="../InternalUtil/ImmutableList.cs.html#13acf5d91a8e1dab" class="i method">Add</a>(<span class="r27 r">asyncAction</span>);
+            }
+ 
+            <b>return</b> <b>new</b> <a href="#aa9da3a0266f9f5c" class="t constructor">Subscription</a>(<a href="#539e115ba3d33bb8" class="k">this</a>, <span class="r27 r">asyncAction</span>);
+        }
+ 
+        <b>class</b> <a id="a402f8fc859caf0a" href="../../../../../R/a402f8fc859caf0a.html" target="n" data-glyph="4,1" class="t t">Subscription</a> : <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a>
+        {
+            <b>readonly</b> <a href="#539e115ba3d33bb8" class="t t">AsyncReactiveCommand</a>&lt;<span class="r17 r t">T</span>&gt; <a id="84490709ed450176" href="../../../../../R/84490709ed450176.html" target="n" data-glyph="46,2" class="i field">parent</a>;
+            <b>readonly</b> <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r17 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <a id="acfbaff17cb79753" href="../../../../../R/acfbaff17cb79753.html" target="n" data-glyph="46,2" class="i field">asyncAction</a>;
+ 
+            <b>public</b> <a id="aa9da3a0266f9f5c" href="../../../../../R/aa9da3a0266f9f5c.html" target="n" data-glyph="72,2" class="i constructor">Subscription</a>(<a href="#539e115ba3d33bb8" class="t t">AsyncReactiveCommand</a>&lt;<span class="r17 r t">T</span>&gt; <span id="r28 rd" class="r28 r">parent</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<span class="r17 r t">T</span>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r29 rd" class="r29 r">asyncAction</span>)
+            {
+                <a href="#a402f8fc859caf0a" class="k">this</a>.<a href="#84490709ed450176" class="i field">parent</a> = <span class="r28 r">parent</span>;
+                <a href="#a402f8fc859caf0a" class="k">this</a>.<a href="#acfbaff17cb79753" class="i field">asyncAction</a> = <span class="r29 r">asyncAction</span>;
+            }
+ 
+            <b>public void</b> <a id="8014e5e111bd6eaf" href="../../../../../R/8014e5e111bd6eaf.html" target="n" data-glyph="72,2" class="i method">Dispose</a>()
+            {
+                <b>lock</b> (<a href="#84490709ed450176" class="i field">parent</a>.<a href="#a21537c4bd2531d7" class="i field">gate</a>)
+                {
+                    <a href="#84490709ed450176" class="i field">parent</a>.<a href="#de66f56ecf6ee6fb" class="i field">asyncActions</a> = <a href="#84490709ed450176" class="i field">parent</a>.<a href="#de66f56ecf6ee6fb" class="i field">asyncActions</a>.<a href="../InternalUtil/ImmutableList.cs.html#9e600300d8a7460b" class="i method">Remove</a>(<a href="#acfbaff17cb79753" class="i field">asyncAction</a>);
+                }
+            }
+        }
+    }
+ 
+    <b>public static class</b> <a id="92dee9382ad2518b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">ReactiveCommandExtensions</a>
+    {
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create non parameter commands. CanExecute is changed from canExecute sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#0b8b570c49bc3f56" class="t t">ReactiveCommand</a> <a id="d3c80ec1b3a02e82" href="../../../../../R/d3c80ec1b3a02e82.html" target="n" data-glyph="220,1" class="i method">ToReactiveCommand</a>(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r30 rd" class="r30 r">canExecuteSource</span>, <b>bool</b> <span id="r31 rd" class="r31 r">initialValue</span> = <b>true</b>)
+        {
+            <b>return</b> <b>new</b> <a href="#f19ada0e3e1423a0" class="t constructor">ReactiveCommand</a>(<span class="r30 r">canExecuteSource</span>, <span class="r31 r">initialValue</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create parametered comamnds. CanExecute is changed from canExecute sequence.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="#0b61079d413f41e8" class="t t">ReactiveCommand</a>&lt;<span class="r32 r t">T</span>&gt; <a id="ffe1fbb1f5908519" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToReactiveCommand</a>&lt;<span id="r32 rd t" class="r32 r t">T</span>&gt;(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r33 rd" class="r33 r">canExecuteSource</span>, <b>bool</b> <span id="r34 rd" class="r34 r">initialValue</span> = <b>true</b>)
+        {
+            <b>return</b> <b>new</b> <a href="#813805fceae60de5" class="t constructor">ReactiveCommand</a>&lt;<span class="r32 r t">T</span>&gt;(<span class="r33 r">canExecuteSource</span>, <span class="r34 r">initialValue</span>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+ 
+        <span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Bind RaectiveCommand to button&#39;s interactable and onClick.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="31884f100fc068e5" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BindTo</a>(<b>this</b> <a href="#0b61079d413f41e8" class="t t">ReactiveCommand</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r35 rd" class="r35 r">command</span>, <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r36 rd" class="r36 r">button</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r37 rd" class="r37 r">d1</span> = <span class="r35 r">command</span>.<a href="#72789f3e4d61728f" class="i property">CanExecute</a>.<span class="i">SubscribeToInteractable</span>(<span class="r36 r">button</span>);
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r38 rd" class="r38 r">d2</span> = <span class="r36 r">button</span>.<span class="i">OnClickAsObservable</span>().<a href="../Observer.cs.html#b0dc74ef835bd488" class="i method">SubscribeWithState</a>(<span class="r35 r">command</span>, (<span id="r39 rd" class="r39 r">x</span>, <span id="r40 rd" class="r40 r">c</span>) =&gt; <span class="r40 r">c</span>.<a href="#2f8f29734557883e" class="i method">Execute</a>(<span class="r39 r">x</span>));
+            <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<span class="r37 r">d1</span>, <span class="r38 r">d2</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Bind RaectiveCommand to button&#39;s interactable and onClick and register onClick action to command.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="0f0714bc09c449ae" href="../../../../../R/0f0714bc09c449ae.html" target="n" data-glyph="220,1" class="i method">BindToOnClick</a>(<b>this</b> <a href="#0b61079d413f41e8" class="t t">ReactiveCommand</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r41 rd" class="r41 r">command</span>, <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r42 rd" class="r42 r">button</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r43 rd" class="r43 r">onClick</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r44 rd" class="r44 r">d1</span> = <span class="r41 r">command</span>.<a href="#72789f3e4d61728f" class="i property">CanExecute</a>.<span class="i">SubscribeToInteractable</span>(<span class="r42 r">button</span>);
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r45 rd" class="r45 r">d2</span> = <span class="r42 r">button</span>.<span class="i">OnClickAsObservable</span>().<a href="../Observer.cs.html#b0dc74ef835bd488" class="i method">SubscribeWithState</a>(<span class="r41 r">command</span>, (<span id="r46 rd" class="r46 r">x</span>, <span id="r47 rd" class="r47 r">c</span>) =&gt; <span class="r47 r">c</span>.<a href="#2f8f29734557883e" class="i method">Execute</a>(<span class="r46 r">x</span>));
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r48 rd" class="r48 r">d3</span> = <span class="r41 r">command</span>.<a href="../Observer.cs.html#18663c1931581649" class="i method">Subscribe</a>(<span class="r43 r">onClick</span>);
+ 
+            <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#53510a8871897d70" class="i method">Create</a>(<span class="r44 r">d1</span>, <span class="r45 r">d2</span>, <span class="r48 r">d3</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Bind canExecuteSource to button&#39;s interactable and onClick and register onClick action to command.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="1fcdf5968fa1b37e" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BindToButtonOnClick</a>(<b>this</b> <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<b>bool</b>&gt; <span id="r49 rd" class="r49 r">canExecuteSource</span>, <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r50 rd" class="r50 r">button</span>, <a href="@0@mscorlib/A.html#486d58da4553e12d" class="t t">Action</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r51 rd" class="r51 r">onClick</span>, <b>bool</b> <span id="r52 rd" class="r52 r">initialValue</span> = <b>true</b>)
+        {
+            <b>return</b> <a href="#d3c80ec1b3a02e82" class="i method">ToReactiveCommand</a>(<span class="r49 r">canExecuteSource</span>, <span class="r52 r">initialValue</span>).<a href="#0f0714bc09c449ae" class="i method">BindToOnClick</a>(<span class="r50 r">button</span>, <span class="r51 r">onClick</span>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+ 
+    <b>public static class</b> <a id="123b2ed12e56c479" href="../../../../../R/../../0000000000.html" target="n" data-glyph="0,0" class="t t">AsyncReactiveCommandExtensions</a>
+    {
+        <b>public static</b> <a href="#6cf46d1cdad06087" class="t t">AsyncReactiveCommand</a> <a id="b9a9af4b85344a90" href="../../../../../R/b9a9af4b85344a90.html" target="n" data-glyph="220,1" class="i method">ToAsyncReactiveCommand</a>(<b>this</b> <a href="ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <span id="r53 rd" class="r53 r">sharedCanExecuteSource</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#ae0611b1d2bd10ad" class="t constructor">AsyncReactiveCommand</a>(<span class="r53 r">sharedCanExecuteSource</span>);
+        }
+ 
+        <b>public static</b> <a href="#539e115ba3d33bb8" class="t t">AsyncReactiveCommand</a>&lt;<span class="r54 r t">T</span>&gt; <a id="467a0a20d36b53cf" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">ToAsyncReactiveCommand</a>&lt;<span id="r54 rd t" class="r54 r t">T</span>&gt;(<b>this</b> <a href="ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <span id="r55 rd" class="r55 r">sharedCanExecuteSource</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#fb83ce46aa417385" class="t constructor">AsyncReactiveCommand</a>&lt;<span class="r54 r t">T</span>&gt;(<span class="r55 r">sharedCanExecuteSource</span>);
+        }
+ 
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !<span class="i">UniRxLibrary</span>
+ 
+        <span class="c">// for uGUI(from 4.6)</span>
+<span class="k preprocess">#</span><span class="k preprocess">if</span> !(<span class="i">UNITY_4_0</span> || <span class="i">UNITY_4_1</span> || <span class="i">UNITY_4_2</span> || <span class="i">UNITY_4_3</span> || <span class="i">UNITY_4_4</span> || <span class="i">UNITY_4_5</span>)
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Bind AsyncRaectiveCommand to button&#39;s interactable and onClick.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="5fdcec6cb25dc41d" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BindTo</a>(<b>this</b> <a href="#539e115ba3d33bb8" class="t t">AsyncReactiveCommand</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r56 rd" class="r56 r">command</span>, <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r57 rd" class="r57 r">button</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r58 rd" class="r58 r">d1</span> = <span class="r56 r">command</span>.<a href="#5ae8e6e151bf205c" class="i property">CanExecute</a>.<span class="i">SubscribeToInteractable</span>(<span class="r57 r">button</span>);
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r59 rd" class="r59 r">d2</span> = <span class="r57 r">button</span>.<span class="i">OnClickAsObservable</span>().<a href="../Observer.cs.html#b0dc74ef835bd488" class="i method">SubscribeWithState</a>(<span class="r56 r">command</span>, (<span id="r60 rd" class="r60 r">x</span>, <span id="r61 rd" class="r61 r">c</span>) =&gt; <span class="r61 r">c</span>.<a href="#eb2b2bcb54d36f6f" class="i method">Execute</a>(<span class="r60 r">x</span>));
+            
+            <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#393dd3f08715b4a7" class="i method">Create</a>(<span class="r58 r">d1</span>, <span class="r59 r">d2</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Bind AsyncRaectiveCommand to button&#39;s interactable and onClick and register async action to command.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="40cb451c57f0321b" href="../../../../../R/40cb451c57f0321b.html" target="n" data-glyph="220,1" class="i method">BindToOnClick</a>(<b>this</b> <a href="#539e115ba3d33bb8" class="t t">AsyncReactiveCommand</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt; <span id="r62 rd" class="r62 r">command</span>, <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r63 rd" class="r63 r">button</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r64 rd" class="r64 r">asyncOnClick</span>)
+        {
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r65 rd" class="r65 r">d1</span> = <span class="r62 r">command</span>.<a href="#5ae8e6e151bf205c" class="i property">CanExecute</a>.<span class="i">SubscribeToInteractable</span>(<span class="r63 r">button</span>);
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r66 rd" class="r66 r">d2</span> = <span class="r63 r">button</span>.<span class="i">OnClickAsObservable</span>().<a href="../Observer.cs.html#b0dc74ef835bd488" class="i method">SubscribeWithState</a>(<span class="r62 r">command</span>, (<span id="r67 rd" class="r67 r">x</span>, <span id="r68 rd" class="r68 r">c</span>) =&gt; <span class="r68 r">c</span>.<a href="#eb2b2bcb54d36f6f" class="i method">Execute</a>(<span class="r67 r">x</span>));
+            <a href="@0@mscorlib/A.html#1f55292c3174123d" class="k">var</a> <span id="r69 rd" class="r69 r">d3</span> = <span class="r62 r">command</span>.<a href="#859eef1896e6eef8" class="i method">Subscribe</a>(<span class="r64 r">asyncOnClick</span>);
+ 
+            <b>return</b> <a href="../Disposables/StableCompositeDisposable.cs.html#471cc53ba427553f" class="t t">StableCompositeDisposable</a>.<a href="../Disposables/StableCompositeDisposable.cs.html#53510a8871897d70" class="i method">Create</a>(<span class="r65 r">d1</span>, <span class="r66 r">d2</span>, <span class="r69 r">d3</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create AsyncReactiveCommand and bind to button&#39;s interactable and onClick and register async action to command.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="08ba85cbffa57bd0" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BindToOnClick</a>(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r70 rd" class="r70 r">button</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r71 rd" class="r71 r">asyncOnClick</span>)
+        {
+            <b>return</b> <b>new</b> <a href="#27f59de196130640" class="t constructor">AsyncReactiveCommand</a>().<a href="#40cb451c57f0321b" class="i method">BindToOnClick</a>(<span class="r70 r">button</span>, <span class="r71 r">asyncOnClick</span>);
+        }
+ 
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;</span><span class="c">summary</span><span class="c">&gt;</span>
+        <span class="c">///</span><span class="c"> Create AsyncReactiveCommand and bind sharedCanExecuteSource source to button&#39;s interactable and onClick and register async action to command.</span>
+        <span class="c">///</span><span class="c"> </span><span class="c">&lt;/</span><span class="c">summary</span><span class="c">&gt;</span>
+        <b>public static</b> <a href="@0@mscorlib/A.html#1f55292c3174123d" class="t t">IDisposable</a> <a id="eb5addfdeea8803b" href="../../../../../R/../../0000000000.html" target="n" data-glyph="220,1" class="i method">BindToOnClick</a>(<b>this</b> <span class="i">UnityEngine</span>.<span class="i">UI</span>.<span class="i">Button</span> <span id="r72 rd" class="r72 r">button</span>, <a href="ReactiveProperty.cs.html#afa1dce75bfe3975" class="t t">IReactiveProperty</a>&lt;<b>bool</b>&gt; <span id="r73 rd" class="r73 r">sharedCanExecuteSource</span>, <a href="@0@System.Core/A.html#7a86aba051da82dd" class="t t">Func</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>, <a href="../System/IObservable.cs.html#eddc496e11ca2570" class="t t">IObservable</a>&lt;<a href="../System/Unit.cs.html#16821e3ff91ab941" class="t t">Unit</a>&gt;&gt; <span id="r74 rd" class="r74 r">asyncOnClick</span>)
+        {
+            <b>return</b> <span class="r73 r">sharedCanExecuteSource</span>.<a href="#b9a9af4b85344a90" class="i method">ToAsyncReactiveCommand</a>().<a href="#40cb451c57f0321b" class="i method">BindToOnClick</a>(<span class="r72 r">button</span>, <span class="r74 r">asyncOnClick</span>);
+        }
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+ 
+<span class="k preprocess">#</span><span class="k preprocess">endif</span>
+    }
+}
+</pre></td></tr></table></div></body></html>

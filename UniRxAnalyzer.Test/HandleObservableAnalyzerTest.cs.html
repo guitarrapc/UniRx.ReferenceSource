@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+<html><head><title>HandleObservableAnalyzerTest.cs</title><link rel="stylesheet" href="../styles.css"><script src="../scripts.js"></script></head>
+<body class="cB" onload="i(302);"><div class="dH">
+<table style="width: 100%">
+<tr><td>File: <a id="filePath" class="blueLink" href="/#UniRxAnalyzer.Test/HandleObservableAnalyzerTest.cs" target="_top">HandleObservableAnalyzerTest.cs</a><br/></td><td></td></tr>
+<tr><td>Project: <a id="projectPath" class="blueLink" href="/#UniRxAnalyzer.Test" target="_top">Analyzer\UniRxAnalyzer\UniRxAnalyzer.Test\UniRxAnalyzer.Test.csproj</a> (UniRxAnalyzer.Test)</td><td></td></tr>
+</table>
+</div>
+<div class="cz"><table class="tb" cellpadding="0" cellspacing="0"><tr><td valign="top" align="right"><pre id="ln"></pre></td><td valign="top" align="left"><pre id="code">
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">CodeFixes</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i">CodeAnalysis</span>.<span class="i">Diagnostics</span>;
+<b>using</b> <span class="i n">Microsoft</span>.<span class="i n">VisualStudio</span>.<span class="i n">TestTools</span>.<span class="i n">UnitTesting</span>;
+<b>using</b> <span class="i n">System</span>;
+<b>using</b> <span class="i n">TestHelper</span>;
+<b>using</b> <span class="i n">UniRxAnalyzer</span>;
+ 
+<b>namespace</b> <span class="i n">UniRxAnalyzer</span>.<span class="i n">Test</span>
+{
+    [<span class="t constructor">TestClass</span>]
+    <b>public class</b> <a id="e7c30cd9b612245a" href="R/../../0000000000.html" target="n" data-glyph="0,0" class="t t"><span id="b2ec04034176e007">HandleObservableAnalyzerTest</span></a> : <a href="P/59516b4495d86dfd.html#59516b4495d86dfd" class="t t">DiagnosticVerifier</a>
+    {
+        <b>protected override</b> <span class="i">DiagnosticAnalyzer</span> <a id="9ce346ab55ee110c" href="R/9ce346ab55ee110c.html" target="n" data-glyph="75,1" class="i method">GetCSharpDiagnosticAnalyzer</a>()
+        {
+            <b>return</b> <b>new</b> <span class="i n">UniRxAnalyzer</span>.<a href="/UniRxAnalyzer/A.html#25329baa2825fc74" class="t constructor">HandleObservableAnalyzer</a>();
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="a4550db4faeb868e" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">UnHandle</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r0 rd" class="r0 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        GetObservable();
+    }
+}&quot;</span>;
+            <a href="Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="k">var</a> <span id="r1 rd" class="r1 r">expected</span> = <b>new</b> <a href="Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t constructor">DiagnosticResult</a>
+            {
+                <a href="Helpers/DiagnosticResult.cs.html#9e787d43fbb9d9a0" class="i property">Id</a> = <span class="i n">UniRxAnalyzer</span>.<a href="/UniRxAnalyzer/A.html#25329baa2825fc74" class="t t">HandleObservableAnalyzer</a>.<a href="/UniRxAnalyzer/A.html#e38a1b8fafc93786" class="i field">DiagnosticId</a>,
+                <a href="Helpers/DiagnosticResult.cs.html#a31ac224552b04ae" class="i property">Message</a> = <span class="s">&quot;This call does not handle IObservable&lt;T&gt;.&quot;</span>,
+                <a href="Helpers/DiagnosticResult.cs.html#0ac4ec49810723c0" class="i property">Severity</a> = <span class="i">DiagnosticSeverity</span>.<span class="i">Warning</span>,
+                <a href="Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a> = <b>new</b>[]
+                {
+                    <b>new</b> <a href="Helpers/DiagnosticResult.cs.html#721419f0a1f92da9" class="t constructor">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 10, 9)
+                }
+            };
+ 
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r0 r">source</span>, <span class="r1 r">expected</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="9b3aa72d0887a33f" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">HandleConditional</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r2 rd" class="r2 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        var x = (true) ? GetObservable() : GetObservable();
+    }
+}&quot;</span>;
+            
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r2 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="298102cfbe91a5cf" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OkayReturn</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r3 rd" class="r3 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    IObservable&lt;int&gt; Hoge()
+    {
+        return GetObservable();
+    }
+}&quot;</span>;
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r3 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="6aa9b7227a0ec4c0" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OkayAssignLocal</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r4 rd" class="r4 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        var x = GetObservable();
+    }
+}&quot;</span>;
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r4 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="5e066b35c044e65a" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OkayAssignField</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r5 rd" class="r5 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    IObservable&lt;int&gt; x;
+ 
+    void Hoge()
+    {
+        x = GetObservable();
+    }
+}&quot;</span>;
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r5 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="a6e265c5913d2c59" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OkayMethodChain</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r6 rd" class="r6 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Huga(IObservable&lt;int&gt; x) { }
+ 
+    void Hoge()
+    {
+        Huga(GetObservable());
+    }
+}&quot;</span>;
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r6 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="de9be4ad1ca1cb90" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">OkayLINQ</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r7 rd" class="r7 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        var q = from x in GetObservable()
+                select x;
+    }
+}&quot;</span>;
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r7 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="8e3468345ef6e87d" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">NgAfterLINQ</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r8 rd" class="r8 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        var q = from x in GetObservable()
+                select x;
+ 
+        GetObservable();
+    }
+}&quot;</span>;
+ 
+            <a href="Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="k">var</a> <span id="r9 rd" class="r9 r">expected</span> = <b>new</b> <a href="Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t constructor">DiagnosticResult</a>
+            {
+                <a href="Helpers/DiagnosticResult.cs.html#9e787d43fbb9d9a0" class="i property">Id</a> = <span class="i n">UniRxAnalyzer</span>.<a href="/UniRxAnalyzer/A.html#25329baa2825fc74" class="t t">HandleObservableAnalyzer</a>.<a href="/UniRxAnalyzer/A.html#e38a1b8fafc93786" class="i field">DiagnosticId</a>,
+                <a href="Helpers/DiagnosticResult.cs.html#a31ac224552b04ae" class="i property">Message</a> = <span class="s">&quot;This call does not handle IObservable&lt;T&gt;.&quot;</span>,
+                <a href="Helpers/DiagnosticResult.cs.html#0ac4ec49810723c0" class="i property">Severity</a> = <span class="i">DiagnosticSeverity</span>.<span class="i">Warning</span>,
+                <a href="Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a> = <b>new</b>[]
+            {
+                    <b>new</b> <a href="Helpers/DiagnosticResult.cs.html#721419f0a1f92da9" class="t constructor">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 13, 9)
+                }
+            };
+ 
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r8 r">source</span>, <span class="r9 r">expected</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="d29b4171f651441f" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">CallMethod</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r10 rd" class="r10 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Huga(IObservable&lt;int&gt; source)
+    {
+    }
+ 
+    void Hoge()
+    {
+        Huga(GetObservable());
+    }
+}&quot;</span>;
+ 
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r10 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="4c076de20c04114a" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">Constructor</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r11 rd" class="r11 r">source</span> = <span class="s">@&quot;
+using System;
+ 
+class Test2
+{
+    readonly IObservable&lt;int&gt; source;
+ 
+    public Test2(IObservable&lt;int&gt; source)
+    {
+        this.source = source;
+    }
+}
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        var _ = new Test2(GetObservable());
+    }
+}&quot;</span>;
+ 
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r11 r">source</span>);
+        }
+ 
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="d4cdfb89a72f874a" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">LambdaReturn</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r12 rd" class="r12 r">source</span> = <span class="s">@&quot;
+using System;
+ 
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        Func&lt;IObservable&lt;int&gt;&gt; _ = () =&gt; GetObservable();
+    }
+}&quot;</span>;
+ 
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r12 r">source</span>);
+        }
+ 
+        [<span class="t constructor">TestMethod</span>]
+        <b>public void</b> <a id="25bb7da8b2c2ce12" href="R/../../0000000000.html" target="n" data-glyph="72,1" class="i method">NgInlambda</a>()
+        {
+            <a href="@0@mscorlib/A.html#8281103e6f23cb5c" class="k">var</a> <span id="r13 rd" class="r13 r">source</span> = <span class="s">@&quot;
+using System;
+   
+class Test
+{
+    IObservable&lt;int&gt; GetObservable() =&gt; null;
+ 
+    void Hoge()
+    {
+        var lambda = new Func&lt;int, int&gt;(x =&gt;
+        {
+            GetObservable();
+            return 0;
+        });
+    }
+}&quot;</span>;
+            <a href="Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="k">var</a> <span id="r14 rd" class="r14 r">expected</span> = <b>new</b> <a href="Helpers/DiagnosticResult.cs.html#5c4f2723301334e4" class="t constructor">DiagnosticResult</a>
+            {
+                <a href="Helpers/DiagnosticResult.cs.html#9e787d43fbb9d9a0" class="i property">Id</a> = <span class="i n">UniRxAnalyzer</span>.<a href="/UniRxAnalyzer/A.html#25329baa2825fc74" class="t t">HandleObservableAnalyzer</a>.<a href="/UniRxAnalyzer/A.html#e38a1b8fafc93786" class="i field">DiagnosticId</a>,
+                <a href="Helpers/DiagnosticResult.cs.html#a31ac224552b04ae" class="i property">Message</a> = <span class="s">&quot;This call does not handle IObservable&lt;T&gt;.&quot;</span>,
+                <a href="Helpers/DiagnosticResult.cs.html#0ac4ec49810723c0" class="i property">Severity</a> = <span class="i">DiagnosticSeverity</span>.<span class="i">Warning</span>,
+                <a href="Helpers/DiagnosticResult.cs.html#ec6b3b1aad9a4c20" class="i property">Locations</a> = <b>new</b>[]
+                {
+                    <b>new</b> <a href="Helpers/DiagnosticResult.cs.html#721419f0a1f92da9" class="t constructor">DiagnosticResultLocation</a>(<span class="s">&quot;Test0.cs&quot;</span>, 12, 13)
+                }
+            };
+ 
+            <a href="#e7c30cd9b612245a" class="k">this</a>.<a href="Verifiers/DiagnosticVerifier.cs.html#271ec0c2a0813121" class="i method">VerifyCSharpDiagnostic</a>(<span class="r13 r">source</span>, <span class="r14 r">expected</span>);
+        }
+ 
+        <b>int</b> <a id="7da8cf8ce8378435" href="R/../../0000000000.html" target="n" data-glyph="76,1" class="i method">Hoge</a>() =&gt; 3;
+    }
+}</pre></td></tr></table></div></body></html>
