@@ -1,4 +1,4 @@
-[UniRx ReferenceSource](https://unitx-referencesource.azurewebsites.net/)
+[UniRx ReferenceSource](https://unirx-referencesource.azurewebsites.net/)
 ----
 
 Is available on AzureWebApps
